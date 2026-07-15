@@ -1,0 +1,11 @@
+.DS_Store
+**/.DS_Store
+node_modules/
+tools/node_modules/
+site/artifacts/
+site/dist/
+site/.dist-stage-*/
+site/.dist-backup-*/
+media/motion/.motion-stage-*/
+IMG_5100.MP4
+*.log

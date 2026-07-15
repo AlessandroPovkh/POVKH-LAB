@@ -1,0 +1,17 @@
+{
+  "name": "povkh-lab-site",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Dependency-free static site for POVKH LAB",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "node tools/build.mjs",
+    "serve": "node tools/serve.mjs",
+    "check": "node tools/check.mjs",
+    "qa": "node tools/qa.mjs",
+    "test": "npm run build && npm run check && npm run qa"
+  }
+}

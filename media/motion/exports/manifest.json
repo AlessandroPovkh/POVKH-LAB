@@ -1,0 +1,308 @@
+{
+  "schemaVersion": 1,
+  "fps": 24,
+  "verticalDeliveryFps": 30,
+  "renderer": "Playwright + ffmpeg",
+  "sourceSha256": "6dbb35026012c4b5fafbf2f22c3b9a4eebc755016b2cb2b0387c8d14e7c33293",
+  "placeholders": [
+    "lower-third",
+    "story"
+  ],
+  "assets": [
+    {
+      "scene": "ident",
+      "file": "PVKH_MOTION_IDENT_1080x1080_v1.mp4",
+      "width": 1080,
+      "height": 1080,
+      "durationSeconds": 4,
+      "fps": 24,
+      "format": "mp4",
+      "placeholder": false,
+      "sha256": "d50de920563ea4ed227283dd9ba0f1b00f61f8380450cd9a872913e7993567dc"
+    },
+    {
+      "scene": "ident",
+      "file": "PVKH_MOTION_IDENT_1080x1080_v1.webm",
+      "width": 1080,
+      "height": 1080,
+      "durationSeconds": 4,
+      "fps": 24,
+      "format": "webm",
+      "placeholder": false,
+      "sha256": "250fce51e251c8107d36c98411d3731da6dcf1ae036d6b1a94f1f5269e75af15"
+    },
+    {
+      "scene": "ident",
+      "file": "PVKH_MOTION_IDENT_PREVIEW_540x540_v1.gif",
+      "width": 540,
+      "height": 540,
+      "durationSeconds": 4,
+      "fps": 12,
+      "format": "gif",
+      "placeholder": false,
+      "sha256": "696625d8667641c768437c4c1f34149116b80facd577015e766a463f08305777"
+    },
+    {
+      "scene": "ident",
+      "file": "PVKH_MOTION_IDENT_KEYFRAME_v1.png",
+      "width": 1080,
+      "height": 1080,
+      "format": "png",
+      "placeholder": false,
+      "sha256": "3f718b774fc35407a168d3cdf1b647c83f84797663ebe333ce765d2cea8f72ff"
+    },
+    {
+      "scene": "transition",
+      "file": "PVKH_MOTION_TRANSITION_1920x1080_v1.mp4",
+      "width": 1920,
+      "height": 1080,
+      "durationSeconds": 1,
+      "fps": 24,
+      "format": "mp4",
+      "placeholder": false,
+      "sha256": "b38224ceac19c8f0d8c7e31f5dd64061b26b7aa1c16cf09d18f9186a4cbef11c"
+    },
+    {
+      "scene": "loop",
+      "file": "PVKH_MOTION_LOOP_1920x1080_v1.mp4",
+      "width": 1920,
+      "height": 1080,
+      "durationSeconds": 4,
+      "fps": 24,
+      "format": "mp4",
+      "placeholder": false,
+      "sha256": "3a417e8d811091de3dd9c65bfa65d25c3e7aae5827b81c50cb2c8c80cdaf4900"
+    },
+    {
+      "scene": "loop",
+      "file": "PVKH_MOTION_LOOP_1920x1080_v1.webm",
+      "width": 1920,
+      "height": 1080,
+      "durationSeconds": 4,
+      "fps": 24,
+      "format": "webm",
+      "placeholder": false,
+      "sha256": "615145398edb2b622dde5ce24a6b040b35ead87e4595a5b81bbccb11cb4fcc20"
+    },
+    {
+      "scene": "blob-sound",
+      "file": "PVKH_MOTION_BLOB_SOUND_1920x1080_v1.mp4",
+      "width": 1920,
+      "height": 1080,
+      "durationSeconds": 3,
+      "fps": 30,
+      "format": "mp4",
+      "placeholder": false,
+      "sha256": "f16f6ee5eef4cfb3830e0156e79fa964913c34e52abe844c29de37c7f46d4782"
+    },
+    {
+      "scene": "blob-sound",
+      "file": "PVKH_MOTION_BLOB_SOUND_1920x1080_v1.webm",
+      "width": 1920,
+      "height": 1080,
+      "durationSeconds": 3,
+      "fps": 30,
+      "format": "webm",
+      "placeholder": false,
+      "sha256": "b4068a43781dafaa1596ef77d30cb7264c0617869d2cede0194e87c25742f647"
+    },
+    {
+      "scene": "blob-process",
+      "file": "PVKH_MOTION_BLOB_PROCESS_1920x1080_v1.mp4",
+      "width": 1920,
+      "height": 1080,
+      "durationSeconds": 3,
+      "fps": 30,
+      "format": "mp4",
+      "placeholder": false,
+      "sha256": "b1d38e1db6f744866eaebd3b7d7f40c78a4aa7318d1bd3fa7addbf2ed6e4fc8b"
+    },
+    {
+      "scene": "blob-process",
+      "file": "PVKH_MOTION_BLOB_PROCESS_1920x1080_v1.webm",
+      "width": 1920,
+      "height": 1080,
+      "durationSeconds": 3,
+      "fps": 30,
+      "format": "webm",
+      "placeholder": false,
+      "sha256": "69398af8c81cb2db496593fa2727da145d1ab988d11c119cd58f722b376c1a08"
+    },
+    {
+      "scene": "blob-archive",
+      "file": "PVKH_MOTION_BLOB_ARCHIVE_1920x1080_v1.mp4",
+      "width": 1920,
+      "height": 1080,
+      "durationSeconds": 3,
+      "fps": 30,
+      "format": "mp4",
+      "placeholder": false,
+      "sha256": "295980de945aa3b45b2120253e53d260ac9c265c1d43ec481c36e6833e010131"
+    },
+    {
+      "scene": "blob-archive",
+      "file": "PVKH_MOTION_BLOB_ARCHIVE_1920x1080_v1.webm",
+      "width": 1920,
+      "height": 1080,
+      "durationSeconds": 3,
+      "fps": 30,
+      "format": "webm",
+      "placeholder": false,
+      "sha256": "493a5a59aaa8c38e4d7112ab5943c3b1afa6755a90bf12f3809f33c6c81b5c4a"
+    },
+    {
+      "scene": "blob-team",
+      "file": "PVKH_MOTION_BLOB_TEAM_1920x1080_v1.mp4",
+      "width": 1920,
+      "height": 1080,
+      "durationSeconds": 3,
+      "fps": 30,
+      "format": "mp4",
+      "placeholder": false,
+      "sha256": "c26b4c204ed891a2d309ac64d100c444d31f3a3a7ab64e57be908e0bdcb6cd2f"
+    },
+    {
+      "scene": "blob-team",
+      "file": "PVKH_MOTION_BLOB_TEAM_1920x1080_v1.webm",
+      "width": 1920,
+      "height": 1080,
+      "durationSeconds": 3,
+      "fps": 30,
+      "format": "webm",
+      "placeholder": false,
+      "sha256": "46f71026897817fc413c858309082c1b9cb0b292824056db9002e7885bdbe028"
+    },
+    {
+      "scene": "blob-origin",
+      "file": "PVKH_MOTION_BLOB_ORIGIN_1920x1080_v1.mp4",
+      "width": 1920,
+      "height": 1080,
+      "durationSeconds": 3,
+      "fps": 30,
+      "format": "mp4",
+      "placeholder": false,
+      "sha256": "d304f86897813fce53a8325f70a515d4f86107f144edde163592e2c792d1200e"
+    },
+    {
+      "scene": "blob-origin",
+      "file": "PVKH_MOTION_BLOB_ORIGIN_1920x1080_v1.webm",
+      "width": 1920,
+      "height": 1080,
+      "durationSeconds": 3,
+      "fps": 30,
+      "format": "webm",
+      "placeholder": false,
+      "sha256": "34305b573d0914d4c8f087a51afa9dfcab039f423c9fa6291a22de6847d40543"
+    },
+    {
+      "scene": "blob-signal",
+      "file": "PVKH_MOTION_BLOB_SIGNAL_1920x1080_v1.mp4",
+      "width": 1920,
+      "height": 1080,
+      "durationSeconds": 3,
+      "fps": 30,
+      "format": "mp4",
+      "placeholder": false,
+      "sha256": "a646b87a16ce2f5322cfacdccd87f7cab2c46ec556ff506fe931247a3feb310f"
+    },
+    {
+      "scene": "blob-signal",
+      "file": "PVKH_MOTION_BLOB_SIGNAL_1920x1080_v1.webm",
+      "width": 1920,
+      "height": 1080,
+      "durationSeconds": 3,
+      "fps": 30,
+      "format": "webm",
+      "placeholder": false,
+      "sha256": "ea4467acb707ef1164b42efacb1443211850436034c075395e41165ffd07f6e9"
+    },
+    {
+      "scene": "blob-link",
+      "file": "PVKH_MOTION_BLOB_LINK_1920x1080_v1.mp4",
+      "width": 1920,
+      "height": 1080,
+      "durationSeconds": 3,
+      "fps": 30,
+      "format": "mp4",
+      "placeholder": false,
+      "sha256": "e268611ebfc05989ce88e5d5ed4f6a0a6b223340ae3913a06f9fc8df6b384d60"
+    },
+    {
+      "scene": "blob-link",
+      "file": "PVKH_MOTION_BLOB_LINK_1920x1080_v1.webm",
+      "width": 1920,
+      "height": 1080,
+      "durationSeconds": 3,
+      "fps": 30,
+      "format": "webm",
+      "placeholder": false,
+      "sha256": "3224f3d9925efa0f50e3a199063a4aef3f3b59ca5a96690f7d3d5b2e43076bc5"
+    },
+    {
+      "scene": "blob-prime",
+      "file": "PVKH_MOTION_BLOB_PRIME_1920x1080_v1.mp4",
+      "width": 1920,
+      "height": 1080,
+      "durationSeconds": 3,
+      "fps": 30,
+      "format": "mp4",
+      "placeholder": false,
+      "sha256": "b9d860dc7d624bf1083d907dabb161052b669cd2c909699f1dc1a776bf35fd17"
+    },
+    {
+      "scene": "blob-prime",
+      "file": "PVKH_MOTION_BLOB_PRIME_1920x1080_v1.webm",
+      "width": 1920,
+      "height": 1080,
+      "durationSeconds": 3,
+      "fps": 30,
+      "format": "webm",
+      "placeholder": false,
+      "sha256": "e2bc7d12ca36b858f891e2a7e8143a4584277c3267837239de8155317a5f1d97"
+    },
+    {
+      "scene": "ambient-field",
+      "file": "PVKH_MOTION_AMBIENT_FIELD_1280x720_v1.mp4",
+      "width": 1280,
+      "height": 720,
+      "durationSeconds": 4,
+      "fps": 24,
+      "format": "mp4",
+      "placeholder": false,
+      "sha256": "6e08f372066d835069c4fdbf3b801d85ec21fbd631b47fb4647dfb0840e38991"
+    },
+    {
+      "scene": "ambient-field",
+      "file": "PVKH_MOTION_AMBIENT_FIELD_1280x720_v1.webm",
+      "width": 1280,
+      "height": 720,
+      "durationSeconds": 4,
+      "fps": 24,
+      "format": "webm",
+      "placeholder": false,
+      "sha256": "030b34a4a1006eaebb13a704f63de041560c721e89224813148f21e999ec5ecc"
+    },
+    {
+      "scene": "lower-third",
+      "file": "PVKH_MOTION_LOWER_THIRD_1920x1080_v1.mp4",
+      "width": 1920,
+      "height": 1080,
+      "durationSeconds": 4,
+      "fps": 24,
+      "format": "mp4",
+      "placeholder": true,
+      "sha256": "be6df39e764b9e872a1679f13dd6a687259978fbd1f700890d5672685e795ad4"
+    },
+    {
+      "scene": "story",
+      "file": "PVKH_MOTION_STORY_1080x1920_v1.mp4",
+      "width": 1080,
+      "height": 1920,
+      "durationSeconds": 5,
+      "fps": 30,
+      "format": "mp4",
+      "placeholder": true,
+      "sha256": "b0f753f4ced33a143e1acc5fd7d3225397895dd7602fdcdb62374c144b8d2799"
+    }
+  ]
+}

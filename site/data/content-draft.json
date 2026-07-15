@@ -1,0 +1,505 @@
+{
+  "_meta": {
+    "status": "production-ready editorial draft",
+    "preparedFor": "Povkh Lab Recordings",
+    "displayMark": "POVKH LAB",
+    "locales": ["en", "it", "ru"],
+    "editorialPolicy": "Statements supplied by the founder are treated as source facts. Where no creation history or audio analysis was supplied, the copy is explicitly framed through the title or release concept and does not invent production details.",
+    "genrePolicy": "Genres marked artist_supplied can be published. Genres marked editorial_suggestion should be confirmed by the artist after listening before they are used as platform metadata."
+  },
+  "label": {
+    "officialName": "Povkh Lab Recordings",
+    "displayMark": "POVKH LAB",
+    "founded": 2025,
+    "location": "Brescia (BS), Italia",
+    "founder": "Aleksandr Babenko (Povkh)",
+    "locales": {
+      "en": {
+        "shortDescription": "Povkh Lab Recordings is an independent electronic music label founded in Brescia in 2025 by Aleksandr Babenko (Povkh). It operates across IDM, ambient, cinematic composition and forward-leaning bass music, with sound design, emotional precision and artistic identity at its core.",
+        "longDescription": "Povkh Lab Recordings was founded in Brescia in 2025 to give evolving electronic work a precise and coherent setting. The word Lab describes a method rather than a fixed aesthetic: sound is tested, reduced and rebuilt until each release establishes its own internal logic. From intricate rhythm and low-frequency pressure to ambient space, degraded texture and cinematic narrative, the catalogue remains open in form but selective in intent. POVKH LAB does not chase genre formulas or short trend cycles. It supports music with a recognisable point of view, treating the master, artwork, typography and release text as parts of one work. Based in Italy and connected outward, the label is building a durable archive of personal, risk-aware electronic music.",
+        "mission": "To give singular electronic music the time, structure and visual language it needs to become a complete work—and to build a lasting catalogue in which experimentation carries emotional meaning.",
+        "principles": [
+          {
+            "title": "Voice before formula",
+            "body": "A distinct artistic point of view matters more than compliance with a genre template or current trend."
+          },
+          {
+            "title": "Sound as architecture",
+            "body": "Rhythm, silence, texture, dynamics and low end are treated as structural decisions, not decoration."
+          },
+          {
+            "title": "One work, one language",
+            "body": "Music, artwork, typography, motion and text should belong to the same conceptual system."
+          },
+          {
+            "title": "Experiment with intent",
+            "body": "Risk is valuable when it clarifies an idea. Revision, restraint and precision remain part of the process."
+          },
+          {
+            "title": "Independence with memory",
+            "body": "Every release should work in the present while strengthening a transparent, coherent and durable catalogue."
+          }
+        ]
+      },
+      "it": {
+        "shortDescription": "Povkh Lab Recordings è un’etichetta indipendente di musica elettronica fondata a Brescia nel 2025 da Aleksandr Babenko (Povkh). Si muove tra IDM, ambient, composizione cinematica e bass music di ricerca, mettendo al centro sound design, precisione emotiva e identità artistica.",
+        "longDescription": "Povkh Lab Recordings nasce a Brescia nel 2025 per offrire alla musica elettronica in continua evoluzione uno spazio preciso e coerente. La parola Lab descrive un metodo, non un’estetica fissa: il suono viene messo alla prova, ridotto e ricostruito finché ogni uscita non trova una propria logica interna. Dai ritmi complessi e dalla pressione delle basse frequenze agli spazi ambient, alle texture degradate e alla narrazione cinematica, il catalogo resta aperto nelle forme ma selettivo nelle intenzioni. POVKH LAB non insegue formule di genere né cicli effimeri. Sostiene musica dotata di un punto di vista riconoscibile e considera master, artwork, tipografia e testo editoriale come parti di un’unica opera. Con base in Italia e uno sguardo rivolto oltre i confini, l’etichetta costruisce un archivio duraturo di elettronica personale e consapevole del rischio.",
+        "mission": "Dare alla musica elettronica più personale il tempo, la struttura e il linguaggio visivo necessari per diventare un’opera completa, costruendo un catalogo duraturo in cui la sperimentazione abbia un significato emotivo.",
+        "principles": [
+          {
+            "title": "La voce prima della formula",
+            "body": "Un punto di vista artistico riconoscibile conta più dell’adesione a un modello di genere o alla tendenza del momento."
+          },
+          {
+            "title": "Il suono come architettura",
+            "body": "Ritmo, silenzio, texture, dinamica e basse frequenze sono decisioni strutturali, non elementi decorativi."
+          },
+          {
+            "title": "Un’opera, un linguaggio",
+            "body": "Musica, artwork, tipografia, movimento e testo devono appartenere allo stesso sistema concettuale."
+          },
+          {
+            "title": "Sperimentare con intenzione",
+            "body": "Il rischio ha valore quando rende un’idea più chiara. Revisione, misura e precisione restano parte del processo."
+          },
+          {
+            "title": "Indipendenza con memoria",
+            "body": "Ogni uscita deve funzionare nel presente e, allo stesso tempo, rafforzare un catalogo trasparente, coerente e duraturo."
+          }
+        ]
+      },
+      "ru": {
+        "shortDescription": "Povkh Lab Recordings — независимый лейбл электронной музыки, основанный в Брешии в 2025 году Александром Бабенко (Povkh). Он работает на пересечении IDM, эмбиента, кинематографической композиции и экспериментальной бас-музыки, ставя в центр саунд-дизайн, эмоциональную точность и авторскую идентичность.",
+        "longDescription": "Povkh Lab Recordings основан в Брешии в 2025 году как точная и цельная среда для развивающейся электронной музыки. Слово Lab обозначает не фиксированную эстетику, а метод: звук проверяется, сокращается и пересобирается до тех пор, пока каждый релиз не обретёт собственную внутреннюю логику. Сложный ритм и давление низких частот, пространство эмбиента, деградированные текстуры и кинематографическая драматургия могут существовать в одном каталоге, открытом по форме, но избирательном по намерению. POVKH LAB не следует жанровым формулам и коротким циклам трендов. Лейбл поддерживает музыку с узнаваемой точкой зрения и рассматривает мастер, обложку, типографику и текст как части единого произведения. Находясь в Италии и оставаясь открытым внешнему миру, лейбл создаёт долговечный архив личной электронной музыки, не избегающей риска.",
+        "mission": "Давать самобытной электронной музыке время, структуру и визуальный язык, необходимые для превращения в цельное произведение, и строить долговечный каталог, в котором эксперимент несёт эмоциональный смысл.",
+        "principles": [
+          {
+            "title": "Голос важнее формулы",
+            "body": "Узнаваемая авторская позиция важнее соответствия жанровому шаблону или текущему тренду."
+          },
+          {
+            "title": "Звук как архитектура",
+            "body": "Ритм, тишина, фактура, динамика и низкие частоты — это структурные решения, а не украшение."
+          },
+          {
+            "title": "Одно произведение — один язык",
+            "body": "Музыка, обложка, типографика, движение и текст должны принадлежать одной концептуальной системе."
+          },
+          {
+            "title": "Эксперимент с намерением",
+            "body": "Риск ценен, когда он проясняет идею. Пересмотр, сдержанность и точность остаются частью процесса."
+          },
+          {
+            "title": "Независимость с памятью",
+            "body": "Каждый релиз должен работать в настоящем и одновременно укреплять прозрачный, цельный и долговечный каталог."
+          }
+        ]
+      }
+    }
+  },
+  "releases": [
+    {
+      "catalogNo": "PVKH-001",
+      "title": "Overdose",
+      "artists": ["DEV", "Alessandro Povkh"],
+      "contentBasis": "artist_statement",
+      "genreBasis": "artist_supplied_with_editorial_normalisation",
+      "reviewRequired": false,
+      "locales": {
+        "en": {
+          "shortDescription": "Overdose compresses five years of experimentation into a decisive first statement: intimate, physically charged electronica shaped by change, honesty and a newly claimed artistic identity.",
+          "storyContext": "The release marks a threshold after five years spent testing sounds, working methods and the wider structures around music. What emerged was not a final answer but enough material—and enough clarity—to recognise a personal language. Overdose presents the decision to move forward, connecting the artist’s new name with the place and the chapter of life that now feel like home.",
+          "moodIdeas": "Restless, confessional and pressurised, with a transitional tension between overload and clarity, exhaustion and resolve.",
+          "audience": "For listeners drawn to left-field trap, dark electronica and personal narratives carried by physical low-end weight.",
+          "genres": ["Experimental electronica", "Left-field trap", "Electronic"]
+        },
+        "it": {
+          "shortDescription": "Overdose concentra cinque anni di sperimentazione in una prima dichiarazione netta: elettronica intima e fisica, modellata dal cambiamento, dall’onestà e da una nuova identità artistica.",
+          "storyContext": "L’uscita segna una soglia dopo cinque anni trascorsi a mettere alla prova suoni, metodi di lavoro e tutto ciò che circonda la musica. Non è emersa una risposta definitiva, ma abbastanza materiale e lucidità per riconoscere un linguaggio personale. Overdose racconta la scelta di andare avanti, legando il nuovo nome dell’artista al luogo e alla fase della vita che oggi sente come casa.",
+          "moodIdeas": "Irrequieto, confessionale e sotto pressione, attraversato dalla tensione tra sovraccarico e chiarezza, stanchezza e determinazione.",
+          "audience": "Per chi cerca left-field trap, elettronica scura e narrazioni personali sostenute da un impatto fisico sulle basse frequenze.",
+          "genres": ["Elettronica sperimentale", "Left-field trap", "Elettronica"]
+        },
+        "ru": {
+          "shortDescription": "Overdose сжимает пять лет экспериментов в первое решительное высказывание — интимную и физически ощутимую электронику о переменах, честности и заново обретённой авторской идентичности.",
+          "storyContext": "Релиз обозначает рубеж после пяти лет поисков звука, методов работы и способов существования музыки за пределами самой композиции. Итогом стал не окончательный ответ, а достаточная ясность, чтобы распознать собственный язык. Overdose фиксирует решение двигаться дальше и связывает новое имя артиста с местом и этапом жизни, которые теперь ощущаются домом.",
+          "moodIdeas": "Беспокойное, исповедальное и напряжённое состояние на границе перегрузки и ясности, истощения и решимости.",
+          "audience": "Для слушателей нестандартного трэпа, тёмной электроники и личных историй, сохраняющих физическую силу низких частот.",
+          "genres": ["Экспериментальная электроника", "Left-field trap", "Электроника"]
+        }
+      }
+    },
+    {
+      "catalogNo": "PVKH-002",
+      "title": "Dichotomy",
+      "artists": ["Alessandro Povkh"],
+      "contentBasis": "artist_tagline_with_editorial_expansion",
+      "genreBasis": "artist_supplied_with_editorial_normalisation",
+      "reviewRequired": false,
+      "locales": {
+        "en": {
+          "shortDescription": "Dichotomy turns a simple paradox into electronic tension: to fear sorrow is also to close the door on genuine happiness.",
+          "storyContext": "The supplied line—“To fear sorrow is to never know true happiness”—forms the conceptual centre of the release. Rather than choosing one side, Dichotomy keeps both states present and treats emotional contrast not as a problem to solve, but as the condition that makes either feeling real.",
+          "moodIdeas": "Bittersweet, reflective and suspended between vulnerability and release; intimate, lucid and unresolved.",
+          "audience": "For listeners who value emotionally direct IDM, introspective electronica and ideas expressed through contrast rather than exposition.",
+          "genres": ["IDM", "Experimental electronica", "Electronic"]
+        },
+        "it": {
+          "shortDescription": "Dichotomy trasforma un semplice paradosso in tensione elettronica: temere il dolore significa anche chiudere la porta a una felicità autentica.",
+          "storyContext": "La frase fornita—“To fear sorrow is to never know true happiness”—costituisce il centro concettuale dell’uscita. Invece di scegliere un lato, Dichotomy mantiene entrambi gli stati presenti e considera il contrasto emotivo non come un problema da risolvere, ma come la condizione che rende reale ciascun sentimento.",
+          "moodIdeas": "Agrodolce, riflessivo e sospeso tra vulnerabilità e liberazione; intimo, lucido e irrisolto.",
+          "audience": "Per chi apprezza IDM emotivamente diretta, elettronica introspettiva e idee espresse attraverso il contrasto anziché la spiegazione.",
+          "genres": ["IDM", "Elettronica sperimentale", "Elettronica"]
+        },
+        "ru": {
+          "shortDescription": "Dichotomy превращает простой парадокс в электронное напряжение: бояться печали — значит одновременно закрываться от подлинного счастья.",
+          "storyContext": "Фраза «To fear sorrow is to never know true happiness» становится смысловым центром релиза. Dichotomy не выбирает одну из сторон, а удерживает оба состояния одновременно, показывая эмоциональный контраст не как проблему, которую нужно решить, а как условие, благодаря которому каждое из чувств становится настоящим.",
+          "moodIdeas": "Горько-сладкое, рефлексивное и зависшее между уязвимостью и освобождением; интимное, ясное и неразрешённое.",
+          "audience": "Для слушателей эмоционально прямого IDM, интроспективной электроники и идей, раскрывающихся через контраст, а не объяснение.",
+          "genres": ["IDM", "Экспериментальная электроника", "Электроника"]
+        }
+      }
+    },
+    {
+      "catalogNo": "PVKH-003",
+      "title": "Red 2",
+      "artists": ["Alessandro Povkh", "k/smokin"],
+      "contentBasis": "artist_statement",
+      "genreBasis": "artist_supplied_with_editorial_normalisation",
+      "reviewRequired": false,
+      "locales": {
+        "en": {
+          "shortDescription": "Red 2 captures a work-in-progress state: an intimate, cinematic electronic fragment shaped alongside a modular system still finding its voice.",
+          "storyContext": "The piece emerged during several quiet weeks devoted to new sounds—some deeply personal, others intended for people close to the artists. At the same time, a custom modular rig was slowly taking shape and beginning to find its role within a larger mixtape. Red 2 preserves that moment of emergence rather than pretending the wider process was already complete.",
+          "moodIdeas": "Private, anticipatory and cinematic; tactile, restrained and deliberately unresolved.",
+          "audience": "For listeners interested in modular electronics, IDM, film-score sensibility and sketches that retain the energy of discovery.",
+          "genres": ["IDM", "Cinematic electronica", "Electronic score", "Experimental electronic"]
+        },
+        "it": {
+          "shortDescription": "Red 2 cattura uno stato ancora in divenire: un frammento elettronico intimo e cinematografico, nato accanto a un sistema modulare che sta ancora trovando la propria voce.",
+          "storyContext": "Il brano è emerso durante alcune settimane di silenzio dedicate a nuovi suoni, alcuni profondamente personali e altri pensati per persone vicine agli artisti. Nello stesso periodo prendeva forma un sistema modulare costruito su misura, che iniziava a trovare il proprio ruolo all’interno di un mixtape più ampio. Red 2 conserva quel momento di emersione senza fingere che il processo complessivo fosse già concluso.",
+          "moodIdeas": "Privato, anticipatorio e cinematografico; tattile, misurato e volutamente irrisolto.",
+          "audience": "Per chi è interessato all’elettronica modulare, all’IDM, alla sensibilità da colonna sonora e agli schizzi che conservano l’energia della scoperta.",
+          "genres": ["IDM", "Elettronica cinematica", "Colonna sonora elettronica", "Elettronica sperimentale"]
+        },
+        "ru": {
+          "shortDescription": "Red 2 фиксирует незавершённое состояние — интимный кинематографический электронный фрагмент, созданный рядом с модульной системой, которая ещё только обретает собственный голос.",
+          "storyContext": "Композиция появилась в течение нескольких тихих недель, посвящённых новым звукам — глубоко личным и предназначенным для близкого круга. Параллельно постепенно складывалась собственная модульная система и находила своё место внутри более крупного микстейпа. Red 2 сохраняет момент возникновения идеи, не выдавая продолжающийся процесс за завершённый.",
+          "moodIdeas": "Личное, предчувствующее и кинематографичное состояние; тактильное, сдержанное и намеренно неразрешённое.",
+          "audience": "Для слушателей модульной электроники, IDM, музыки с логикой саундтрека и набросков, сохраняющих энергию открытия.",
+          "genres": ["IDM", "Кинематографическая электроника", "Электронный саундтрек", "Экспериментальная электроника"]
+        }
+      }
+    },
+    {
+      "catalogNo": "PVKH-004",
+      "title": "Office",
+      "artists": ["Alessandro Povkh", "k/smokin"],
+      "contentBasis": "artist_statement",
+      "genreBasis": "artist_supplied_with_ambient_confirmed_in_statement",
+      "reviewRequired": false,
+      "locales": {
+        "en": {
+          "shortDescription": "Office listens to what remains after a workplace empties: voices, pressure, plans and routine lingering inside a room that has gone quiet.",
+          "storyContext": "When the lights go out and the last person leaves, a room does not become empty at once. It continues to hold fragments of movement, unfinished thoughts, coffee, deadlines, arguments born from ideas, first victories and abandoned plans. Office treats architecture as a container for memory—the way a shell seems to preserve the sea long after the water is gone.",
+          "moodIdeas": "Liminal, nostalgic and ghostly, with restrained tension and a trace of warmth beneath the stillness.",
+          "audience": "For ambient and IDM listeners, late-night headphone sessions, empty interiors and reflective moments after activity has stopped.",
+          "genres": ["Ambient", "Experimental ambient", "IDM", "Cinematic electronica"]
+        },
+        "it": {
+          "shortDescription": "Office ascolta ciò che rimane quando un luogo di lavoro si svuota: voci, pressione, progetti e gesti quotidiani sospesi in una stanza tornata silenziosa.",
+          "storyContext": "Quando le luci si spengono e l’ultima persona se ne va, una stanza non diventa vuota all’istante. Continua a trattenere frammenti di movimento, pensieri incompiuti, caffè, scadenze, discussioni nate dalle idee, prime vittorie e progetti abbandonati. Office considera l’architettura come un contenitore della memoria, simile a una conchiglia che sembra custodire il mare anche quando l’acqua non c’è più.",
+          "moodIdeas": "Liminale, nostalgico e spettrale, con una tensione trattenuta e una traccia di calore sotto l’immobilità.",
+          "audience": "Per chi ascolta ambient e IDM, per sessioni notturne in cuffia, interni vuoti e momenti di riflessione dopo la fine dell’attività.",
+          "genres": ["Ambient", "Ambient sperimentale", "IDM", "Elettronica cinematica"]
+        },
+        "ru": {
+          "shortDescription": "Office вслушивается в то, что остаётся после опустевшего рабочего пространства: голоса, давление, планы и повседневные движения, задержавшиеся в затихшей комнате.",
+          "storyContext": "Когда гаснет свет и уходит последний человек, помещение не становится пустым мгновенно. Оно ещё удерживает обрывки движений, незаконченные мысли, запах кофе, сроки, споры, рождённые идеями, первые победы и оставленные планы. Office рассматривает архитектуру как вместилище памяти — подобно раковине, в которой море будто продолжает звучать после исчезновения воды.",
+          "moodIdeas": "Лиминальное, ностальгическое и призрачное состояние со сдержанным напряжением и остаточным теплом под поверхностью тишины.",
+          "audience": "Для слушателей эмбиента и IDM, ночного прослушивания в наушниках, пустых интерьеров и рефлексии после завершившейся активности.",
+          "genres": ["Эмбиент", "Экспериментальный эмбиент", "IDM", "Кинематографическая электроника"]
+        }
+      }
+    },
+    {
+      "catalogNo": "PVKH-005",
+      "title": "Azimuth",
+      "artists": ["Alessandro Povkh", "k/smokin"],
+      "contentBasis": "artist_tagline_with_editorial_expansion",
+      "genreBasis": "artist_supplied_with_editorial_normalisation",
+      "reviewRequired": false,
+      "locales": {
+        "en": {
+          "shortDescription": "Azimuth treats direction not as geography but as an inner decision: intention becoming movement through choice and will.",
+          "storyContext": "An azimuth is a coordinate used to establish direction. Here it becomes a compact metaphor for the moment when possibility is reduced to a chosen line. The release is framed around orientation, agency and the discipline required to keep moving once a course has been set.",
+          "moodIdeas": "Focused, propulsive and lucid, with controlled tension and a sense of forward resolve.",
+          "audience": "For listeners drawn to purposeful IDM and electronica suited to concentrated listening, movement and moments of decision.",
+          "genres": ["IDM", "Experimental electronica", "Electronic"]
+        },
+        "it": {
+          "shortDescription": "Azimuth interpreta la direzione non come geografia, ma come decisione interiore: l’intenzione che diventa movimento attraverso scelta e volontà.",
+          "storyContext": "L’azimut è una coordinata utilizzata per stabilire una direzione. Qui diventa una metafora essenziale del momento in cui le possibilità si restringono a una linea scelta. L’uscita ruota attorno a orientamento, volontà d’azione e disciplina necessaria per continuare a muoversi una volta definita la rotta.",
+          "moodIdeas": "Concentrato, propulsivo e lucido, con tensione controllata e una chiara determinazione ad avanzare.",
+          "audience": "Per chi cerca IDM ed elettronica intenzionali, adatte all’ascolto concentrato, al movimento e ai momenti di scelta.",
+          "genres": ["IDM", "Elettronica sperimentale", "Elettronica"]
+        },
+        "ru": {
+          "shortDescription": "Azimuth понимает направление не как географию, а как внутреннее решение: намерение превращается в движение через выбор и волю.",
+          "storyContext": "Азимут — это координата, задающая направление. Здесь он становится лаконичной метафорой момента, когда множество возможностей сводится к одной выбранной линии. Релиз выстраивает смысл вокруг ориентации, способности действовать и дисциплины, необходимой, чтобы продолжать движение после определения курса.",
+          "moodIdeas": "Сосредоточенное, поступательное и ясное состояние с контролируемым напряжением и ощущением твёрдого движения вперёд.",
+          "audience": "Для слушателей целенаправленного IDM и электроники, подходящей для внимательного прослушивания, движения и моментов принятия решения.",
+          "genres": ["IDM", "Экспериментальная электроника", "Электроника"]
+        }
+      }
+    },
+    {
+      "catalogNo": "PVKH-006",
+      "title": "Redline Malice",
+      "artists": ["Alessandro Povkh", "k/smokin"],
+      "contentBasis": "artist_teaser_with_editorial_expansion",
+      "genreBasis": "artist_supplied_plus_editorial_suggestion",
+      "reviewRequired": true,
+      "locales": {
+        "en": {
+          "shortDescription": "Redline Malice pushes friendship into a sharper register: a collaborative electronic piece framed by pressure, acceleration and controlled hostility.",
+          "storyContext": "The track was first introduced through a preview of Alessandro Povkh’s collaboration with his friend k/smokin, also known as @sntnpower. Its title places the piece at the edge of a system’s tolerance: the redline suggests maximum strain, while malice supplies the emotional charge.",
+          "moodIdeas": "Tense, kinetic, abrasive and concentrated; built conceptually around escalation, friction and the instant before control gives way.",
+          "audience": "For listeners of darker IDM, industrial-leaning electronica and high-pressure electronic music with a collaborative edge.",
+          "genres": ["IDM", "Experimental electronica", "Industrial-leaning electronic"]
+        },
+        "it": {
+          "shortDescription": "Redline Malice porta l’amicizia su un registro più affilato: una collaborazione elettronica inquadrata da pressione, accelerazione e ostilità controllata.",
+          "storyContext": "Il brano è stato presentato per la prima volta attraverso un’anteprima della collaborazione tra Alessandro Povkh e il suo amico k/smokin, noto anche come @sntnpower. Il titolo colloca il pezzo al limite di tolleranza di un sistema: redline suggerisce lo sforzo massimo, mentre malice fornisce la carica emotiva.",
+          "moodIdeas": "Teso, cinetico, abrasivo e concentrato; concettualmente legato a escalation, attrito e all’istante che precede la perdita del controllo.",
+          "audience": "Per chi ascolta IDM più scura, elettronica dalle venature industriali e musica ad alta pressione con un’identità collaborativa.",
+          "genres": ["IDM", "Elettronica sperimentale", "Elettronica dalle venature industriali"]
+        },
+        "ru": {
+          "shortDescription": "Redline Malice переводит дружеское сотрудничество в более острый регистр — электронную работу, осмысленную через давление, ускорение и контролируемую враждебность.",
+          "storyContext": "Трек впервые был представлен в коротком превью совместной работы Alessandro Povkh и его друга k/smokin, также известного как @sntnpower. Название помещает композицию на границу допустимой нагрузки: redline обозначает предельный режим, а malice задаёт эмоциональный заряд.",
+          "moodIdeas": "Напряжённое, кинетическое, абразивное и концентрированное состояние; смысловой центр — нарастание, трение и мгновение перед потерей контроля.",
+          "audience": "Для слушателей тёмного IDM, электроники с индустриальными оттенками и музыки высокого давления с выраженной коллаборативной энергией.",
+          "genres": ["IDM", "Экспериментальная электроника", "Электроника с индустриальными оттенками"]
+        }
+      }
+    },
+    {
+      "catalogNo": "PVKH-007",
+      "title": "Opportunist",
+      "artists": ["Alessandro Povkh", "k/smokin"],
+      "contentBasis": "title_led_editorial_interpretation",
+      "genreBasis": "ambient_artist_supplied_other_terms_editorial",
+      "reviewRequired": true,
+      "locales": {
+        "en": {
+          "shortDescription": "Opportunist is an ambient study of presence and absence, where patience can be read as attention—or as calculation.",
+          "storyContext": "The title creates an unresolved moral space. Waiting may be survival, adaptation or exploitation, and the release does not force a verdict. Instead, Opportunist leaves the listener with a figure at the edge of action, attentive to a moment that may never arrive.",
+          "moodIdeas": "Still, watchful, nocturnal and ambiguous; cool in tone, with fragile warmth held at a distance.",
+          "audience": "For deep ambient listening, solitary night-time sessions and listeners who prefer open narratives to fixed conclusions.",
+          "genres": ["Ambient", "Experimental ambient", "Electronica", "IDM-adjacent"]
+        },
+        "it": {
+          "shortDescription": "Opportunist è uno studio ambient sulla presenza e sull’assenza, dove la pazienza può essere letta come attenzione oppure come calcolo.",
+          "storyContext": "Il titolo apre uno spazio morale irrisolto. L’attesa può significare sopravvivenza, adattamento o sfruttamento, e l’uscita non impone un verdetto. Opportunist lascia invece l’ascoltatore davanti a una figura sul margine dell’azione, attenta a un momento che potrebbe non arrivare mai.",
+          "moodIdeas": "Immobile, vigile, notturno e ambiguo; freddo nel tono, con un calore fragile mantenuto a distanza.",
+          "audience": "Per l’ascolto ambient profondo, le sessioni solitarie notturne e chi preferisce narrazioni aperte a conclusioni prestabilite.",
+          "genres": ["Ambient", "Ambient sperimentale", "Elettronica", "IDM-adjacent"]
+        },
+        "ru": {
+          "shortDescription": "Opportunist — эмбиент-исследование присутствия и отсутствия, где терпение можно принять и за внимание, и за расчёт.",
+          "storyContext": "Название создаёт неразрешённое моральное пространство. Ожидание может быть способом выжить, приспособиться или воспользоваться моментом, и релиз не навязывает окончательный вывод. Opportunist оставляет слушателя рядом с фигурой на границе действия, внимательно следящей за мгновением, которое может так и не наступить.",
+          "moodIdeas": "Неподвижное, настороженное, ночное и двусмысленное состояние; холодный тон с хрупким теплом, удерживаемым на расстоянии.",
+          "audience": "Для глубокого эмбиент-прослушивания, одиноких ночных сессий и слушателей, предпочитающих открытый сюжет готовому выводу.",
+          "genres": ["Эмбиент", "Экспериментальный эмбиент", "Электроника", "IDM-adjacent"]
+        }
+      }
+    },
+    {
+      "catalogNo": "PVKH-008",
+      "title": "Robert",
+      "artists": ["Levo.mp3"],
+      "contentBasis": "title_only_editorial_interpretation",
+      "genreBasis": "broad_public_metadata_only",
+      "reviewRequired": true,
+      "locales": {
+        "en": {
+          "shortDescription": "Robert treats a familiar name like an unidentified signal: personal enough to suggest a portrait, abstract enough to resist a fixed biography.",
+          "storyContext": "A title reduced to a single name turns identity into an open question. Rather than assigning Robert a history, the release leaves the figure deliberately undefined, allowing the listener to decide whether they are meeting a person, a memory or a projection.",
+          "moodIdeas": "Intimate, enigmatic, observational and understated; a conceptual portrait with its subject kept just outside focus.",
+          "audience": "For listeners of open-form electronica who enjoy character studies, ambiguous titles and narratives completed through listening.",
+          "genres": ["Electronic", "Electronica"]
+        },
+        "it": {
+          "shortDescription": "Robert tratta un nome familiare come un segnale non identificato: abbastanza personale da suggerire un ritratto, abbastanza astratto da rifiutare una biografia definita.",
+          "storyContext": "Un titolo ridotto a un solo nome trasforma l’identità in una domanda aperta. Invece di attribuire a Robert una storia, l’uscita lascia la figura volutamente indefinita, permettendo a chi ascolta di decidere se stia incontrando una persona, un ricordo o una proiezione.",
+          "moodIdeas": "Intimo, enigmatico, osservativo e misurato; un ritratto concettuale il cui soggetto rimane appena fuori fuoco.",
+          "audience": "Per chi ama l’elettronica dalle forme aperte, gli studi di carattere, i titoli ambigui e le narrazioni completate attraverso l’ascolto.",
+          "genres": ["Elettronica", "Electronica"]
+        },
+        "ru": {
+          "shortDescription": "Robert обращается со знакомым именем как с неопознанным сигналом: достаточно личным, чтобы напоминать портрет, и достаточно абстрактным, чтобы не складываться в готовую биографию.",
+          "storyContext": "Название, сведённое к одному имени, превращает идентичность в открытый вопрос. Релиз намеренно не наделяет Robert готовой историей и оставляет слушателю возможность решить, кто перед ним: человек, воспоминание или проекция.",
+          "moodIdeas": "Интимное, загадочное, наблюдательное и сдержанное состояние; концептуальный портрет, чей герой остаётся чуть вне фокуса.",
+          "audience": "Для слушателей электроники открытой формы, которым близки исследования характера, неоднозначные названия и истории, завершаемые самим прослушиванием.",
+          "genres": ["Электроника", "Electronica"]
+        }
+      }
+    },
+    {
+      "catalogNo": "PVKH-009",
+      "title": "Near (Slowed)",
+      "artists": ["Levo.mp3"],
+      "contentBasis": "title_and_version_led_editorial_interpretation",
+      "genreBasis": "electronic_confirmed_downtempo_editorial_suggestion",
+      "reviewRequired": true,
+      "locales": {
+        "en": {
+          "shortDescription": "Near (Slowed) stretches proximity until it becomes uncertain: what feels close in space can remain distant in time.",
+          "storyContext": "As the slowed counterpart to Near, this version changes the temporal frame rather than imposing a new story. Its editorial reading centres on duration: a familiar idea is allowed to linger, and closeness becomes less immediate, more suspended and more difficult to define.",
+          "moodIdeas": "Suspended, intimate, hazy and melancholic, with a sense of weight created by extended time.",
+          "audience": "For late-night headphone listening and audiences drawn to slowed electronic music, downtempo space and emotionally ambiguous atmosphere.",
+          "genres": ["Electronic", "Electronica", "Downtempo electronic"]
+        },
+        "it": {
+          "shortDescription": "Near (Slowed) dilata la prossimità fino a renderla incerta: ciò che sembra vicino nello spazio può restare lontano nel tempo.",
+          "storyContext": "Come controparte rallentata di Near, questa versione modifica la cornice temporale senza imporre una nuova storia. La lettura editoriale si concentra sulla durata: un’idea familiare viene lasciata persistere e la vicinanza diventa meno immediata, più sospesa e più difficile da definire.",
+          "moodIdeas": "Sospeso, intimo, velato e malinconico, con un senso di peso generato dal tempo dilatato.",
+          "audience": "Per l’ascolto notturno in cuffia e per chi cerca elettronica rallentata, spazi downtempo e atmosfere emotivamente ambigue.",
+          "genres": ["Elettronica", "Electronica", "Elettronica downtempo"]
+        },
+        "ru": {
+          "shortDescription": "Near (Slowed) растягивает близость до состояния неопределённости: то, что рядом в пространстве, может оставаться далёким во времени.",
+          "storyContext": "Как замедленная версия Near, эта работа меняет прежде всего временную рамку, а не навязывает новый сюжет. Редакционное прочтение сосредоточено на длительности: знакомая идея задерживается дольше, а близость становится менее непосредственной, более зависшей и трудно определимой.",
+          "moodIdeas": "Зависшее, интимное, затуманенное и меланхоличное состояние, в котором вес возникает благодаря растянутому времени.",
+          "audience": "Для ночного прослушивания в наушниках и слушателей замедленной электроники, даунтемпо-пространства и эмоционально неоднозначной атмосферы.",
+          "genres": ["Электроника", "Electronica", "Электронный даунтемпо"]
+        }
+      }
+    },
+    {
+      "catalogNo": "PVKH-010",
+      "title": "Near",
+      "artists": ["Levo.mp3"],
+      "contentBasis": "title_only_editorial_interpretation",
+      "genreBasis": "broad_public_metadata_only",
+      "reviewRequired": true,
+      "locales": {
+        "en": {
+          "shortDescription": "Near explores closeness as a changing distance—between people, memories and sounds that seem almost within reach.",
+          "storyContext": "The title is intentionally minimal and leaves the object of proximity unnamed. That absence becomes the conceptual frame: Near can describe physical distance, emotional access or a memory returning with unusual clarity, without forcing any one interpretation.",
+          "moodIdeas": "Immediate yet unresolved, intimate, attentive and quietly tense; closeness without certainty.",
+          "audience": "For listeners who prefer concise electronic pieces, open emotional narratives and meanings that remain flexible after the track ends.",
+          "genres": ["Electronic", "Electronica"]
+        },
+        "it": {
+          "shortDescription": "Near esplora la vicinanza come distanza mutevole, tra persone, ricordi e suoni che sembrano quasi a portata di mano.",
+          "storyContext": "Il titolo è volutamente minimale e non nomina l’oggetto della prossimità. Questa assenza diventa la cornice concettuale: Near può indicare una distanza fisica, un accesso emotivo o un ricordo che ritorna con insolita chiarezza, senza imporre un’unica interpretazione.",
+          "moodIdeas": "Immediato ma irrisolto, intimo, attento e silenziosamente teso; vicinanza senza certezza.",
+          "audience": "Per chi preferisce brani elettronici concisi, narrazioni emotive aperte e significati che restano mobili anche dopo la fine del pezzo.",
+          "genres": ["Elettronica", "Electronica"]
+        },
+        "ru": {
+          "shortDescription": "Near исследует близость как меняющееся расстояние — между людьми, воспоминаниями и звуками, которые кажутся почти достижимыми.",
+          "storyContext": "Намеренно минималистичное название не уточняет, что именно находится рядом. Это отсутствие становится смысловой рамкой: Near может означать физическую дистанцию, эмоциональную доступность или воспоминание, вернувшееся с необычной ясностью, не закрепляя единственное прочтение.",
+          "moodIdeas": "Непосредственное, но неразрешённое; интимное, внимательное и тихо напряжённое состояние — близость без уверенности.",
+          "audience": "Для слушателей лаконичных электронных работ, открытых эмоциональных историй и смыслов, которые продолжают меняться после окончания трека.",
+          "genres": ["Электроника", "Electronica"]
+        }
+      }
+    },
+    {
+      "catalogNo": "PVKH-011",
+      "title": "Dreamulator",
+      "artists": ["Levo.mp3", "Alessandro Povkh"],
+      "contentBasis": "title_led_editorial_interpretation",
+      "genreBasis": "electronic_confirmed_other_terms_editorial_suggestion",
+      "reviewRequired": true,
+      "locales": {
+        "en": {
+          "shortDescription": "Dreamulator imagines a machine that does not reproduce reality, but generates unstable versions of a dream.",
+          "storyContext": "The title fuses the language of dreaming with that of an emulator or simulator, providing a conceptual frame for the collaboration between Levo.mp3 and Alessandro Povkh. Instead of defining the machine, the release asks what happens when memory, invention and synthetic repetition become impossible to separate.",
+          "moodIdeas": "Lucid, synthetic, surreal and soft-edged, with instability beneath an apparently weightless surface.",
+          "audience": "For listeners of conceptual electronica, IDM-adjacent sound, dreamlike ambient electronics and collaborative world-building.",
+          "genres": ["Electronic", "Experimental electronica", "IDM-adjacent", "Ambient electronic"]
+        },
+        "it": {
+          "shortDescription": "Dreamulator immagina una macchina che non riproduce la realtà, ma genera versioni instabili di un sogno.",
+          "storyContext": "Il titolo unisce il linguaggio del sogno a quello di un emulatore o simulatore, offrendo una cornice concettuale alla collaborazione tra Levo.mp3 e Alessandro Povkh. Invece di definire la macchina, l’uscita domanda cosa accada quando memoria, invenzione e ripetizione sintetica non possono più essere separate.",
+          "moodIdeas": "Lucido, sintetico, surreale e dai contorni morbidi, con un’instabilità nascosta sotto una superficie apparentemente priva di peso.",
+          "audience": "Per chi ascolta elettronica concettuale, sonorità IDM-adjacent, ambient elettronica onirica e costruzione collaborativa di mondi.",
+          "genres": ["Elettronica", "Elettronica sperimentale", "IDM-adjacent", "Elettronica ambient"]
+        },
+        "ru": {
+          "shortDescription": "Dreamulator представляет машину, которая не воспроизводит реальность, а генерирует нестабильные версии сна.",
+          "storyContext": "Название соединяет язык сновидения с идеей эмулятора или симулятора и задаёт концептуальную рамку сотрудничеству Levo.mp3 и Alessandro Povkh. Не определяя устройство этой машины, релиз задаёт вопрос о моменте, когда память, вымысел и синтетическое повторение уже невозможно разделить.",
+          "moodIdeas": "Ясное и сновидческое, синтетическое, сюрреалистичное и мягко очерченное состояние с нестабильностью под почти невесомой поверхностью.",
+          "audience": "Для слушателей концептуальной электроники, IDM-adjacent звучания, сновидческого электронного эмбиента и совместного построения звуковых миров.",
+          "genres": ["Электроника", "Экспериментальная электроника", "IDM-adjacent", "Электронный эмбиент"]
+        }
+      }
+    },
+    {
+      "catalogNo": "PVKH-012",
+      "title": "Runway",
+      "artists": ["Levo.mp3"],
+      "contentBasis": "title_only_editorial_interpretation",
+      "genreBasis": "electronica_artist_supplied_cinematic_editorial_suggestion",
+      "reviewRequired": true,
+      "locales": {
+        "en": {
+          "shortDescription": "Runway holds two forms of departure in one word: a body entering view and a machine gathering speed before flight.",
+          "storyContext": "The title remains deliberately ambiguous between display and take-off. That double meaning creates the editorial frame—a route that can suggest exposure, preparation, acceleration or escape without fixing the track to a literal scene.",
+          "moodIdeas": "Kinetic, anticipatory, streamlined and open-ended, with tension concentrated in the moment before motion becomes irreversible.",
+          "audience": "For listeners of visual and cinematic electronica, as well as contexts shaped by movement, design, travel and forward momentum.",
+          "genres": ["Electronic", "Electronica", "Cinematic electronic"]
+        },
+        "it": {
+          "shortDescription": "Runway racchiude in una parola due forme di partenza: un corpo che entra nello sguardo e una macchina che prende velocità prima del volo.",
+          "storyContext": "Il titolo resta volutamente ambiguo tra esposizione e decollo. Questo doppio significato costruisce la cornice editoriale: un percorso che può suggerire visibilità, preparazione, accelerazione o fuga senza legare il brano a una scena letterale.",
+          "moodIdeas": "Cinetico, anticipatorio, essenziale e aperto, con la tensione concentrata nell’istante prima che il movimento diventi irreversibile.",
+          "audience": "Per chi ascolta elettronica visiva e cinematica e per contesti legati a movimento, design, viaggio e slancio in avanti.",
+          "genres": ["Elettronica", "Electronica", "Elettronica cinematica"]
+        },
+        "ru": {
+          "shortDescription": "Runway соединяет в одном слове два вида выхода: тело, появляющееся в поле зрения, и машину, набирающую скорость перед взлётом.",
+          "storyContext": "Название намеренно сохраняет двусмысленность между показом и взлётом. Это двойное значение становится редакционной рамкой: маршрут может означать публичность, подготовку, ускорение или бегство, не привязывая композицию к буквальной сцене.",
+          "moodIdeas": "Кинетическое, предвосхищающее, точно выстроенное и открытое состояние; напряжение сосредоточено в мгновении перед тем, как движение станет необратимым.",
+          "audience": "Для слушателей визуальной и кинематографической электроники, а также контекстов, связанных с движением, дизайном, путешествием и импульсом вперёд.",
+          "genres": ["Электроника", "Electronica", "Кинематографическая электроника"]
+        }
+      }
+    },
+    {
+      "catalogNo": "PVKH-013",
+      "title": "Все сон",
+      "artists": ["SUBMRN"],
+      "contentBasis": "intentional_title_form_with_editorial_interpretation",
+      "genreBasis": "rap_artist_supplied_other_terms_editorial_suggestion",
+      "reviewRequired": true,
+      "locales": {
+        "en": {
+          "shortDescription": "Все сон turns an intentionally displaced Russian phrase into a state between declaration and malfunction, as if reality had already begun to come apart inside a dream.",
+          "storyContext": "The title must remain exactly Все сон; its unconventional form is intentional and should not be corrected to Всё — сон. That grammatical instability becomes the conceptual frame: language appears familiar but slightly altered, opening a space for rap that can move between perception, detachment and oneiric uncertainty without prescribing a literal story.",
+          "moodIdeas": "Dreamlike, disoriented, intimate and nocturnal, with a detached surface and tension underneath.",
+          "audience": "For listeners of alternative rap, experimental hip-hop and Russian-language music that uses ambiguity as part of its identity.",
+          "genres": ["Rap", "Alternative rap", "Experimental hip-hop"]
+        },
+        "it": {
+          "shortDescription": "Все сон trasforma una frase russa volutamente disallineata in uno stato sospeso tra affermazione ed errore, come se la realtà avesse già iniziato a disfarsi dentro un sogno.",
+          "storyContext": "Il titolo deve restare esattamente Все сон: la forma non convenzionale è intenzionale e non va corretta in Всё — сон. Questa instabilità grammaticale diventa la cornice concettuale: il linguaggio appare familiare ma leggermente alterato, aprendo uno spazio per un rap che può muoversi tra percezione, distacco e incertezza onirica senza imporre una storia letterale.",
+          "moodIdeas": "Onirico, disorientato, intimo e notturno, con una superficie distaccata e una tensione sottostante.",
+          "audience": "Per chi ascolta rap alternativo, hip-hop sperimentale e musica in lingua russa che usa l’ambiguità come parte della propria identità.",
+          "genres": ["Rap", "Rap alternativo", "Hip-hop sperimentale"]
+        },
+        "ru": {
+          "shortDescription": "«Все сон» превращает намеренно смещённую русскую фразу в состояние между утверждением и сбоем — будто реальность уже начала распадаться внутри сна.",
+          "storyContext": "Название необходимо сохранять в точной форме «Все сон»: его необычная грамматика намеренна, и исправлять её на «Всё — сон» не следует. Эта языковая нестабильность становится смысловой рамкой: знакомые слова звучат слегка изменённо и открывают пространство для рэпа между восприятием, отстранением и сновидческой неопределённостью, не навязывая буквальный сюжет.",
+          "moodIdeas": "Сновидческое, дезориентированное, интимное и ночное состояние с отстранённой поверхностью и скрытым напряжением.",
+          "audience": "Для слушателей альтернативного рэпа, экспериментального хип-хопа и русскоязычной музыки, использующей неоднозначность как часть собственной идентичности.",
+          "genres": ["Рэп", "Альтернативный рэп", "Экспериментальный хип-хоп"]
+        }
+      }
+    }
+  ]
+}
