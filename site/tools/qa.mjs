@@ -831,7 +831,7 @@ try {
   })));
   if (motionHydration.length !== 2
     || motionHydration.some(({ state, sources }) => state === "disabled" || sources.length !== 2 || sources.some((source) => !source))
-    || motionHydration.find(({ className }) => className.includes("hero-motion"))?.sources.some((source) => !source.includes("PVKH_MOTION_LOOP_"))) {
+    || motionHydration.find(({ className }) => className.includes("hero-motion"))?.sources.some((source) => !source.includes("_MOBILE_640x360_"))) {
     fail(`Motion: mobile mode did not hydrate the lightweight decorative sources ${JSON.stringify(motionHydration)}`);
   }
   await interactionPage.keyboard.press("Tab");

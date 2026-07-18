@@ -327,8 +327,8 @@ const shell = ({ locale, route, title, description, body, catalog, audioLibrary,
 const listMarkup = (items) => items.map((item) => `<li>${escapeHtml(item)}</li>`).join("");
 
 const heroMotionMarkup = (locale, route, name) => `<video class="hero-motion" muted loop playsinline preload="none" aria-hidden="true" tabindex="-1" data-motion-video>
-  <source data-src="${assetPrefixFor(locale, route)}assets/motion/PVKH_MOTION_BLOB_${name}_1920x1080_v1.webm" data-mobile-src="${assetPrefixFor(locale, route)}assets/motion/PVKH_MOTION_LOOP_1920x1080_v1.webm" type="video/webm">
-  <source data-src="${assetPrefixFor(locale, route)}assets/motion/PVKH_MOTION_BLOB_${name}_1920x1080_v1.mp4" data-mobile-src="${assetPrefixFor(locale, route)}assets/motion/PVKH_MOTION_LOOP_1920x1080_v1.mp4" type="video/mp4">
+  <source data-src="${assetPrefixFor(locale, route)}assets/motion/PVKH_MOTION_BLOB_${name}_1920x1080_v1.webm" data-mobile-src="${assetPrefixFor(locale, route)}assets/motion/PVKH_MOTION_BLOB_${name}_MOBILE_640x360_v1.webm" type="video/webm">
+  <source data-src="${assetPrefixFor(locale, route)}assets/motion/PVKH_MOTION_BLOB_${name}_1920x1080_v1.mp4" data-mobile-src="${assetPrefixFor(locale, route)}assets/motion/PVKH_MOTION_BLOB_${name}_MOBILE_640x360_v1.mp4" type="video/mp4">
 </video>`;
 
 const formatDate = (value, locale) => new Intl.DateTimeFormat(LOCALE_META[locale].lang, {

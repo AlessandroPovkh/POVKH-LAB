@@ -247,14 +247,18 @@ a:hover {
   min-height: 3rem;
   padding: 0.75rem 1rem;
   transform: translateY(-180%);
+  opacity: 0;
+  pointer-events: none;
   background: var(--bone);
   color: var(--void);
   font-family: "IBM Plex Mono", monospace;
   font-weight: 600;
 }
 
-.skip-link:focus {
+.skip-link:focus-visible {
   transform: translateY(0);
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .container {
@@ -2569,6 +2573,13 @@ html .artist-profile-heading .page-title {
 }
 
 @media (max-width: 48rem) {
+  .hero-motion {
+    object-fit: contain;
+    object-position: center 38%;
+    opacity: 0.78;
+    filter: saturate(1) contrast(1.12) brightness(0.82);
+  }
+
   body.audio-player-ready {
     padding-bottom: calc(8.5rem + env(safe-area-inset-bottom));
   }

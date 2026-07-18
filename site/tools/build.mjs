@@ -400,6 +400,10 @@ const build = async () => {
     "PVKH_MOTION_BLOB_LINK_1920x1080_v1.mp4",
     "PVKH_MOTION_BLOB_PRIME_1920x1080_v1.webm",
     "PVKH_MOTION_BLOB_PRIME_1920x1080_v1.mp4",
+    ...["SOUND", "PROCESS", "ARCHIVE", "TEAM", "ORIGIN", "SIGNAL", "LINK", "PRIME"].flatMap((name) => [
+      `PVKH_MOTION_BLOB_${name}_MOBILE_640x360_v1.webm`,
+      `PVKH_MOTION_BLOB_${name}_MOBILE_640x360_v1.mp4`
+    ]),
     "PVKH_MOTION_LOOP_1920x1080_v1.webm",
     "PVKH_MOTION_LOOP_1920x1080_v1.mp4",
     "PVKH_MOTION_AMBIENT_FIELD_1280x720_v1.webm",
@@ -480,6 +484,10 @@ const build = async () => {
       "../media/motion/exports/PVKH_MOTION_BLOB_LINK_1920x1080_v1.mp4",
       "../media/motion/exports/PVKH_MOTION_BLOB_PRIME_1920x1080_v1.webm",
       "../media/motion/exports/PVKH_MOTION_BLOB_PRIME_1920x1080_v1.mp4",
+      ...["SOUND", "PROCESS", "ARCHIVE", "TEAM", "ORIGIN", "SIGNAL", "LINK", "PRIME"].flatMap((name) => [
+        `../media/motion/exports/PVKH_MOTION_BLOB_${name}_MOBILE_640x360_v1.webm`,
+        `../media/motion/exports/PVKH_MOTION_BLOB_${name}_MOBILE_640x360_v1.mp4`
+      ]),
       "../media/motion/exports/PVKH_MOTION_LOOP_1920x1080_v1.webm",
       "../media/motion/exports/PVKH_MOTION_LOOP_1920x1080_v1.mp4",
       "../media/motion/exports/PVKH_MOTION_AMBIENT_FIELD_1280x720_v1.webm",
