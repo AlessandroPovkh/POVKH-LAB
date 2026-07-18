@@ -1,0 +1,93 @@
+{
+  "schemaVersion": 1,
+  "defaultCatalogId": "PVKH-007",
+  "format": {
+    "container": "mp3",
+    "codec": "mp3",
+    "sampleRate": 48000,
+    "bitRate": 192000,
+    "masterBitRate": 320000,
+    "channels": 2,
+    "waveformPoints": 160
+  },
+  "tracks": [
+    {
+      "catalogId": "PVKH-001",
+      "file": "pvkh-001-overdose.mp3",
+      "waveform": "pvkh-001-overdose.waveform.json",
+      "duration": 166.992
+    },
+    {
+      "catalogId": "PVKH-002",
+      "file": "pvkh-002-dichotomy.mp3",
+      "waveform": "pvkh-002-dichotomy.waveform.json",
+      "duration": 404.04
+    },
+    {
+      "catalogId": "PVKH-003",
+      "file": "pvkh-003-red-2.mp3",
+      "waveform": "pvkh-003-red-2.waveform.json",
+      "duration": 125.904
+    },
+    {
+      "catalogId": "PVKH-004",
+      "file": "pvkh-004-office.mp3",
+      "waveform": "pvkh-004-office.waveform.json",
+      "duration": 69.816
+    },
+    {
+      "catalogId": "PVKH-005",
+      "file": "pvkh-005-azimuth.mp3",
+      "waveform": "pvkh-005-azimuth.waveform.json",
+      "duration": 158.04
+    },
+    {
+      "catalogId": "PVKH-006",
+      "file": "pvkh-006-redline-malice.mp3",
+      "waveform": "pvkh-006-redline-malice.waveform.json",
+      "duration": 101.184
+    },
+    {
+      "catalogId": "PVKH-007",
+      "file": "pvkh-007-opportunist.mp3",
+      "waveform": "pvkh-007-opportunist.waveform.json",
+      "duration": 80.04
+    },
+    {
+      "catalogId": "PVKH-008",
+      "file": "pvkh-008-robert.mp3",
+      "waveform": "pvkh-008-robert.waveform.json",
+      "duration": 116.328
+    },
+    {
+      "catalogId": "PVKH-009",
+      "file": "pvkh-009-near-slowed.mp3",
+      "waveform": "pvkh-009-near-slowed.waveform.json",
+      "duration": 171.456
+    },
+    {
+      "catalogId": "PVKH-010",
+      "file": "pvkh-010-near.mp3",
+      "waveform": "pvkh-010-near.waveform.json",
+      "duration": 127.104
+    },
+    {
+      "catalogId": "PVKH-011",
+      "file": "pvkh-011-dreamulator.mp3",
+      "waveform": "pvkh-011-dreamulator.waveform.json",
+      "duration": 110.424
+    },
+    {
+      "catalogId": "PVKH-012",
+      "file": "pvkh-012-runway.mp3",
+      "waveform": "pvkh-012-runway.waveform.json",
+      "duration": 144.552
+    },
+    {
+      "catalogId": "PVKH-013",
+      "file": "pvkh-013-vse-son.mp3",
+      "waveform": "pvkh-013-vse-son.waveform.json",
+      "duration": 158.904
+    }
+  ]
+}

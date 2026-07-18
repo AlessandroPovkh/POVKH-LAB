@@ -4,7 +4,7 @@ import { createStaticServer } from "./server.mjs";
 
 const siteRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const port = Number.parseInt(process.env.PORT || "4173", 10);
-const app = createStaticServer({ root: path.join(siteRoot, "dist"), port });
+const app = createStaticServer({ root: path.join(siteRoot, "dist"), port, cacheControl: "no-store" });
 const url = await app.listen();
 
 console.log(`POVKH LAB site: ${url}`);

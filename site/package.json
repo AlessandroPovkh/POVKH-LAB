@@ -9,9 +9,18 @@
   },
   "scripts": {
     "build": "node tools/build.mjs",
+    "audio:stream": "node tools/generate-streaming-audio.mjs",
+    "visuals": "node tools/generate-release-visuals.mjs",
+    "og": "node tools/generate-og.mjs",
+    "waveforms": "node tools/generate-waveforms.mjs",
     "serve": "node tools/serve.mjs",
     "check": "node tools/check.mjs",
+    "check:pages-base": "node tools/check-pages-base.mjs",
     "qa": "node tools/qa.mjs",
     "test": "npm run build && npm run check && npm run qa"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.10.2",
+    "playwright": "1.61.1"
   }
 }

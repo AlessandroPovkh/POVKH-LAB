@@ -4,6 +4,12 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+    inputs:
+      deploy_production:
+        description: Build and deploy with approved production variables
+        required: true
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -15,10 +21,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+  test-preview:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -27,10 +30,62 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: Build static site
+          cache: npm
+          cache-dependency-path: site/package-lock.json
+      - name: Install pinned QA dependencies
+        working-directory: site
         run: |
-          node site/tools/build.mjs
-          touch site/dist/.nojekyll
+          npm ci
+          npx playwright install --with-deps chromium webkit
+      - name: Test locked preview
+        working-directory: site
+        env:
+          POVKH_SITE_MODE: preview
+        run: npm test
+
+  deploy-production:
+    if: github.event_name == 'workflow_dispatch' && inputs.deploy_production
+    needs: test-preview
+    environment:
+      name: production
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    env:
+      POVKH_SITE_MODE: production
+      POVKH_SITE_ORIGIN: ${{ vars.POVKH_SITE_ORIGIN }}
+      POVKH_SITE_BASE_PATH: ${{ vars.POVKH_SITE_BASE_PATH }}
+      POVKH_CONTACT_EMAIL: ${{ vars.POVKH_CONTACT_EMAIL }}
+      POVKH_SOCIAL_TELEGRAM: ${{ vars.POVKH_SOCIAL_TELEGRAM }}
+      POVKH_SOCIAL_TIKTOK: ${{ vars.POVKH_SOCIAL_TIKTOK }}
+      POVKH_SOCIAL_INSTAGRAM: ${{ vars.POVKH_SOCIAL_INSTAGRAM }}
+      POVKH_SOCIAL_YOUTUBE: ${{ vars.POVKH_SOCIAL_YOUTUBE }}
+      POVKH_SOCIAL_SOUNDCLOUD: ${{ vars.POVKH_SOCIAL_SOUNDCLOUD }}
+      POVKH_OG_IMAGE: /assets/og/povkh-lab-og.png
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: site/package-lock.json
+      - name: Install pinned QA dependencies
+        working-directory: site
+        run: |
+          npm ci
+          npx playwright install --with-deps chromium webkit
+      - name: Build strict production artifact
+        working-directory: site
+        run: npm run build
+      - name: Check production artifact
+        working-directory: site
+        run: |
+          npm run check
+          if [ -n "$POVKH_SITE_BASE_PATH" ]; then
+            npm run check:pages-base
+          fi
+          npm run qa
       - name: Configure Pages
         uses: actions/configure-pages@v5
       - name: Upload Pages artifact
