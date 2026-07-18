@@ -2666,7 +2666,7 @@ html .artist-profile-heading .page-title {
   }
 
   html .artist-profile-heading .page-title {
-    font-size: clamp(1rem, calc(8cqi + 0.65rem), 5rem);
+    font-size: clamp(1rem, calc(6cqi + 0.65rem), 5rem);
   }
 
   .artist-facts {
