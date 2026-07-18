@@ -858,9 +858,13 @@ for (const pageCase of pageCases) {
       continue;
     }
     const clean = reference.split("#")[0].split("?")[0];
-    let target = clean.startsWith("/")
-      ? path.resolve(distDir, clean.slice(1))
-      : path.resolve(path.dirname(absolute), clean);
+    const deployedReference = SITE_BASE_PATH
+      && (clean === SITE_BASE_PATH || clean.startsWith(`${SITE_BASE_PATH}/`))
+      ? clean.slice(SITE_BASE_PATH.length) || "/"
+      : clean;
+    let target = deployedReference.startsWith("/")
+      ? path.resolve(distDir, deployedReference.slice(1))
+      : path.resolve(path.dirname(absolute), deployedReference);
     if (target !== distDir && !target.startsWith(`${distDir}${path.sep}`)) {
       fail(`${label}: reference escapes dist ${reference}`);
       continue;
