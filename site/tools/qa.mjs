@@ -1736,13 +1736,20 @@ try {
   const pagesFallbackPage = await pagesFallbackContext.newPage();
   for (const { prefix, lang } of [{ prefix: "it", lang: "it" }, { prefix: "ru", lang: "ru" }]) {
     const missingPath = `/${prefix}/github-pages-fallback-check/`;
+    const localized404Path = `${SITE_BASE_PATH}/${prefix}/404.html`.replace(/\/+/g, "/");
+    const localized404Html = await readFile(path.join(siteRoot, "dist", prefix, "404.html"), "utf8");
     await pagesFallbackPage.route((url) => url.pathname === missingPath, (route) => route.fulfill({
       status: 404,
       contentType: "text/html; charset=utf-8",
       body: root404Html
     }));
+    await pagesFallbackPage.route((url) => url.pathname === localized404Path, (route) => route.fulfill({
+      status: 200,
+      contentType: "text/html; charset=utf-8",
+      body: localized404Html
+    }));
     await pagesFallbackPage.goto(`${baseUrl}${missingPath}`, { waitUntil: "load" });
-    await pagesFallbackPage.waitForURL(`${baseUrl}/${prefix}/404.html`);
+    await pagesFallbackPage.waitForURL(`${baseUrl}${localized404Path}`);
     if (await pagesFallbackPage.locator("html").getAttribute("lang") !== lang
       || !await pagesFallbackPage.locator("body").evaluate((body) => body.classList.contains("page-404"))) {
       fail(`GitHub Pages fallback: ${prefix} did not reach its localized 404`);
