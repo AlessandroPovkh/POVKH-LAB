@@ -1118,7 +1118,7 @@ try {
     scrollTo(0, 1300);
   });
   await signalPage.waitForFunction(() => document.querySelector("[data-hud-baseline]")?.textContent === "Y 1300");
-  await signalPage.waitForTimeout(220);
+  await signalPage.waitForFunction(() => getComputedStyle(document.querySelector(".site-hud-timeline")).opacity === "0");
   const scrolledHud = await signalPage.evaluate(() => ({
     section: document.querySelector("[data-hud-section-current]")?.textContent,
     baseline: document.querySelector("[data-hud-baseline]")?.textContent,
@@ -1138,7 +1138,7 @@ try {
   await signalPage.evaluate(() => scrollTo(0, 1200));
   await signalPage.waitForFunction(() => document.querySelector("[data-hud-baseline]")?.textContent === "Y 1200"
     && !document.querySelector("[data-hud-frame]")?.classList.contains("is-timeline-hidden"));
-  await signalPage.waitForTimeout(260);
+  await signalPage.waitForFunction(() => getComputedStyle(document.querySelector(".site-hud-timeline")).opacity === "1");
   const restoredTimelineOpacity = await signalPage.locator(".site-hud-timeline").evaluate((element) => getComputedStyle(element).opacity);
   if (restoredTimelineOpacity !== "1") fail(`HUD: timeline did not return on upward scroll (${restoredTimelineOpacity})`);
   await signalPage.evaluate(() => scrollTo(0, 1300));

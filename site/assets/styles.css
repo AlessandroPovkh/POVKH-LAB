@@ -1146,8 +1146,8 @@ main:focus {
   letter-spacing: -0.035em;
   text-transform: uppercase;
   text-wrap: balance;
-  overflow-wrap: normal;
-  word-break: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
   hyphens: none;
 }
 
@@ -1165,7 +1165,7 @@ html[lang="ru"] :where(.hero-title, .page-title, .section-title, .card-title, .e
 
 .hero-title-line {
   display: block;
-  white-space: nowrap;
+  white-space: normal;
 }
 
 html[lang="ru"] .hero-title {
@@ -1571,8 +1571,8 @@ html[lang="ru"] .step h3 {
   font-weight: 800;
   letter-spacing: -0.035em;
   line-height: 0.88;
-  overflow-wrap: normal;
-  word-break: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
   hyphens: none;
   text-transform: uppercase;
   text-wrap: balance;
