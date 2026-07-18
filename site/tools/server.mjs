@@ -36,8 +36,9 @@ const securityHeaders = {
   "X-Frame-Options": "DENY"
 };
 
-export const createStaticServer = ({ root, host = "127.0.0.1", port = 0, cacheControl = null } = {}) => {
+export const createStaticServer = ({ root, host = "127.0.0.1", port = 0, cacheControl = null, basePath = "" } = {}) => {
   const absoluteRoot = path.resolve(root);
+  const normalizedBasePath = basePath && basePath !== "/" ? `/${basePath.replace(/^\/+|\/+$/g, "")}` : "";
   const server = http.createServer(async (request, response) => {
     try {
       if (request.method !== "GET" && request.method !== "HEAD") {
@@ -57,6 +58,11 @@ export const createStaticServer = ({ root, host = "127.0.0.1", port = 0, cacheCo
         return;
       }
 
+      const publicPathname = pathname;
+      if (normalizedBasePath && (pathname === normalizedBasePath || pathname.startsWith(`${normalizedBasePath}/`))) {
+        pathname = pathname.slice(normalizedBasePath.length) || "/";
+      }
+
       let relative = pathname.replace(/^\/+/, "");
       let candidate = path.resolve(absoluteRoot, relative);
       if (candidate !== absoluteRoot && !candidate.startsWith(`${absoluteRoot}${path.sep}`)) {
@@ -67,7 +73,7 @@ export const createStaticServer = ({ root, host = "127.0.0.1", port = 0, cacheCo
       let info = await safeStat(candidate);
       if (info?.isDirectory()) {
         if (!pathname.endsWith("/")) {
-          response.writeHead(308, { ...securityHeaders, Location: `${pathname}/${requestUrl.search}` }).end();
+          response.writeHead(308, { ...securityHeaders, Location: `${publicPathname}/${requestUrl.search}` }).end();
           return;
         }
         candidate = path.join(candidate, "index.html");
@@ -76,7 +82,7 @@ export const createStaticServer = ({ root, host = "127.0.0.1", port = 0, cacheCo
         const asDirectory = path.join(candidate, "index.html");
         const directoryIndex = await safeStat(asDirectory);
         if (directoryIndex?.isFile()) {
-          response.writeHead(308, { ...securityHeaders, Location: `${pathname}/${requestUrl.search}` }).end();
+          response.writeHead(308, { ...securityHeaders, Location: `${publicPathname}/${requestUrl.search}` }).end();
           return;
         }
       }

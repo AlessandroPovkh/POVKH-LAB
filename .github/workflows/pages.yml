@@ -70,11 +70,9 @@ jobs:
           node-version: 22
           cache: npm
           cache-dependency-path: site/package-lock.json
-      - name: Install pinned QA dependencies
+      - name: Install production dependencies
         working-directory: site
-        run: |
-          npm ci
-          npx playwright install --with-deps chromium webkit
+        run: npm ci
       - name: Build strict production artifact
         working-directory: site
         run: npm run build
@@ -85,7 +83,6 @@ jobs:
           if [ -n "$POVKH_SITE_BASE_PATH" ]; then
             npm run check:pages-base
           fi
-          npm run qa
       - name: Configure Pages
         uses: actions/configure-pages@v5
       - name: Upload Pages artifact

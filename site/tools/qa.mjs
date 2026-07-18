@@ -227,7 +227,7 @@ const verifyDisplayFontGrowth = (label, before, after) => {
   }
 };
 
-const app = createStaticServer({ root: path.join(siteRoot, "dist") });
+const app = createStaticServer({ root: path.join(siteRoot, "dist"), basePath: SITE_BASE_PATH });
 const baseUrl = await app.listen();
 await rm(screenshotDir, { recursive: true, force: true });
 await mkdir(screenshotDir, { recursive: true });
