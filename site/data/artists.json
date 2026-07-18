@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 1,
+  "artists": [
+    {
+      "name": "DEV",
+      "slug": "dev",
+      "portrait": "assets/artists/dev.webp",
+      "gallery": [
+        "assets/artists/dev.webp"
+      ],
+      "bio": null,
+      "links": []
+    },
+    {
+      "name": "Alessandro Povkh",
+      "slug": "alessandro-povkh",
+      "portrait": "assets/artists/alessandro-povkh.webp",
+      "gallery": [
+        "assets/artists/alessandro-povkh.webp",
+        "assets/artists/alessandro-povkh-02.webp",
+        "assets/artists/alessandro-povkh-03.webp"
+      ],
+      "bio": null,
+      "links": [
+        { "service": "Instagram", "url": "https://www.instagram.com/alessandro_povkh/" },
+        { "service": "Telegram", "url": "https://t.me/instinct_has_been_distorted" },
+        { "service": "TikTok", "url": "https://www.tiktok.com/@alessandro_povkh" },
+        { "service": "YouTube", "url": "https://www.youtube.com/@alessandro_povkh" }
+      ]
+    },
+    {
+      "name": "k/smokin",
+      "slug": "k-smokin",
+      "portrait": "assets/artists/k-smokin.webp",
+      "gallery": [
+        "assets/artists/k-smokin.webp",
+        "assets/artists/k-smokin-02.webp"
+      ],
+      "bio": null,
+      "links": [
+        { "service": "Instagram", "url": "https://www.instagram.com/sntnpower/" }
+      ]
+    },
+    {
+      "name": "Levo.mp3",
+      "slug": "levo-mp3",
+      "portrait": "assets/artists/levo-mp3.webp",
+      "gallery": [
+        "assets/artists/levo-mp3.webp",
+        "assets/artists/levo-mp3-02.webp",
+        "assets/artists/levo-mp3-03.webp",
+        "assets/artists/levo-mp3-04.webp",
+        "assets/artists/levo-mp3-05.webp"
+      ],
+      "bio": null,
+      "links": [
+        { "service": "Instagram", "url": "https://www.instagram.com/levayatema/" },
+        { "service": "Telegram", "url": "https://t.me/levayatema" },
+        { "service": "TikTok", "url": "https://www.tiktok.com/@levo.mp3" }
+      ]
+    },
+    {
+      "name": "SUBMRN",
+      "slug": "submrn",
+      "portrait": "assets/artists/submrn.webp",
+      "gallery": [
+        "assets/artists/submrn.webp"
+      ],
+      "bio": null,
+      "links": [
+        { "service": "Instagram", "url": "https://www.instagram.com/submrn4778/" }
+      ]
+    }
+  ]
+}

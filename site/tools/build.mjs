@@ -12,6 +12,13 @@ import {
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { createPages } from "../src/pages.mjs";
+import {
+  IS_PRODUCTION,
+  OG_IMAGE_PATH,
+  SITE_BASE_PATH,
+  SITE_MODE,
+  SITE_ORIGIN
+} from "../src/config.mjs";
 import { hasValidStreamingServiceOrder, isOfficialStreamingUrl } from "../src/streaming.mjs";
 
 const siteRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -82,8 +89,24 @@ const readCatalog = async () => {
         throw new Error(`${release.id} ${field} must be a non-empty string`);
       }
     }
+    if (!/^(?:en|ru)$/.test(release.titleLanguage || "")) {
+      throw new Error(`${release.id} titleLanguage must be en or ru`);
+    }
+    const expectedTitleLanguage = release.id === "PVKH-013" ? "ru" : "en";
+    if (release.titleLanguage !== expectedTitleLanguage) {
+      throw new Error(`${release.id} titleLanguage must be ${expectedTitleLanguage}`);
+    }
     if (!Array.isArray(release.artists) || release.artists.length < 1 || release.artists.some((artist) => typeof artist !== "string" || !artist.trim())) {
       throw new Error(`${release.id} artists must contain at least one canonical artist name`);
+    }
+    if (release.artwork !== null && !/^assets\/releases\/[a-z0-9-]+\.webp$/.test(release.artwork || "")) {
+      throw new Error(`${release.id} artwork must be null or a safe approved WebP asset path`);
+    }
+    if (release.artwork && !await exists(path.join(siteRoot, release.artwork))) {
+      throw new Error(`${release.id} artwork is missing: ${release.artwork}`);
+    }
+    if (!await exists(path.join(siteRoot, "assets", "releases", "signals", `${release.slug}.svg`))) {
+      throw new Error(`${release.id} fallback signal visual is missing`);
     }
     if (release.artistCredit !== release.artists.join(" & ")) {
       throw new Error(`${release.id} artistCredit must be derived from artists with an ampersand separator`);
@@ -169,6 +192,122 @@ const readCatalog = async () => {
   return catalog;
 };
 
+const readArtistLibrary = async (catalog) => {
+  const library = JSON.parse(await readFile(path.join(siteRoot, "data", "artists.json"), "utf8"));
+  if (library.schemaVersion !== 1 || !Array.isArray(library.artists) || library.artists.length < 1) {
+    throw new Error("artists.json must use schemaVersion 1 and contain an artists array");
+  }
+  const names = new Set();
+  const slugs = new Set();
+  const artistSocialHosts = new Map([
+    ["Instagram", "www.instagram.com"],
+    ["Telegram", "t.me"],
+    ["TikTok", "www.tiktok.com"],
+    ["YouTube", "www.youtube.com"]
+  ]);
+  for (const artist of library.artists) {
+    if (typeof artist.name !== "string" || !artist.name.trim() || names.has(artist.name)) throw new Error("Every artist must have a unique canonical name");
+    if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(artist.slug || "") || slugs.has(artist.slug)) throw new Error(`${artist.name} must have a unique safe slug`);
+    if (artist.bio !== null || !Array.isArray(artist.links)) throw new Error(`${artist.name} must keep unapproved bio null and links explicit`);
+    const linkServices = new Set();
+    for (const link of artist.links) {
+      if (!link || typeof link !== "object" || Array.isArray(link) || Object.keys(link).sort().join(",") !== "service,url") {
+        throw new Error(`${artist.name} links must contain only service and url`);
+      }
+      if (!artistSocialHosts.has(link.service) || linkServices.has(link.service)) {
+        throw new Error(`${artist.name} has an unsupported or duplicate social service`);
+      }
+      let socialUrl;
+      try {
+        socialUrl = new URL(link.url);
+      } catch {
+        throw new Error(`${artist.name} has an invalid ${link.service} URL`);
+      }
+      if (socialUrl.protocol !== "https:" || socialUrl.hostname !== artistSocialHosts.get(link.service) || socialUrl.username || socialUrl.password) {
+        throw new Error(`${artist.name} has an invalid ${link.service} URL`);
+      }
+      linkServices.add(link.service);
+    }
+    if (artist.portrait !== null && !/^assets\/artists\/[a-z0-9-]+\.webp$/.test(artist.portrait || "")) throw new Error(`${artist.name} portrait must be null or a safe WebP path`);
+    if (artist.portrait && !await exists(path.join(siteRoot, artist.portrait))) throw new Error(`${artist.name} portrait is missing: ${artist.portrait}`);
+    if (!Array.isArray(artist.gallery) || artist.gallery.length > 24) throw new Error(`${artist.name} gallery must be an explicit array with at most 24 photos`);
+    if ((artist.gallery[0] || null) !== artist.portrait) throw new Error(`${artist.name} portrait must be the first gallery photo`);
+    const galleryPhotos = new Set();
+    for (const photo of artist.gallery) {
+      if (!/^assets\/artists\/[a-z0-9-]+\.webp$/.test(photo || "") || galleryPhotos.has(photo)) {
+        throw new Error(`${artist.name} gallery photos must be unique safe WebP paths`);
+      }
+      if (!await exists(path.join(siteRoot, photo))) throw new Error(`${artist.name} gallery photo is missing: ${photo}`);
+      galleryPhotos.add(photo);
+    }
+    names.add(artist.name);
+    slugs.add(artist.slug);
+  }
+  const catalogNames = new Set(catalog.releases.flatMap((release) => release.artists));
+  if (names.size !== catalogNames.size || [...catalogNames].some((name) => !names.has(name))) {
+    throw new Error("artists.json must exactly match the confirmed catalog roster");
+  }
+  return library;
+};
+
+const readAudioLibrary = async (catalog) => {
+  const raw = await readFile(path.join(siteRoot, "data", "audio-library.json"), "utf8");
+  const library = JSON.parse(raw);
+  const format = library.format;
+  if (library.schemaVersion !== 1
+    || !Array.isArray(library.tracks)
+    || library.tracks.length !== catalog.releases.length
+    || format?.container !== "mp3"
+    || format?.codec !== "mp3"
+    || format?.sampleRate !== 48000
+    || format?.bitRate !== 192000
+    || format?.masterBitRate !== 320000
+    || format?.channels !== 2
+    || format?.waveformPoints !== 160) {
+    throw new Error("audio-library.json must define 320 kbps masters, 192 kbps streaming copies, 48 kHz stereo and 160-point waveforms");
+  }
+
+  const files = new Set();
+  const waveforms = new Set();
+  for (const [index, track] of library.tracks.entries()) {
+    const release = catalog.releases[index];
+    if (track.catalogId !== release.id) {
+      throw new Error(`Audio position ${index + 1} must match ${release.id}`);
+    }
+    if (!/^pvkh-\d{3}-[a-z0-9-]+\.mp3$/.test(track.file || "") || files.has(track.file)) {
+      throw new Error(`${track.catalogId} must use a unique safe MP3 filename`);
+    }
+    if (!/^pvkh-\d{3}-[a-z0-9-]+\.waveform\.json$/.test(track.waveform || "") || waveforms.has(track.waveform)) {
+      throw new Error(`${track.catalogId} must use a unique safe waveform filename`);
+    }
+    if (!Number.isFinite(track.duration) || track.duration <= 0) {
+      throw new Error(`${track.catalogId} must declare a positive duration`);
+    }
+    files.add(track.file);
+    waveforms.add(track.waveform);
+
+    const source = path.join(siteRoot, "..", "Tracks", track.file);
+    if (!await exists(source)) throw new Error(`${track.catalogId} source is missing: Tracks/${track.file}`);
+    const streamingSource = path.join(siteRoot, "..", "Tracks", "streaming", track.file);
+    if (!await exists(streamingSource)) throw new Error(`${track.catalogId} streaming source is missing: Tracks/streaming/${track.file}`);
+    const waveformPath = path.join(siteRoot, "assets", "audio", track.waveform);
+    if (!await exists(waveformPath)) throw new Error(`${track.catalogId} waveform is missing: assets/audio/${track.waveform}`);
+    const waveform = JSON.parse(await readFile(waveformPath, "utf8"));
+    if (waveform.schemaVersion !== 1
+      || waveform.source !== track.file
+      || Math.abs(waveform.duration - track.duration) > 0.001
+      || !Array.isArray(waveform.peaks)
+      || waveform.peaks.length !== format.waveformPoints
+      || waveform.peaks.some((peak) => !Number.isFinite(peak) || peak < 0 || peak > 1)) {
+      throw new Error(`${track.catalogId} waveform data is invalid`);
+    }
+  }
+  if (!library.tracks.some((track) => track.catalogId === library.defaultCatalogId)) {
+    throw new Error("audio-library.json defaultCatalogId must identify one playlist track");
+  }
+  return library;
+};
+
 const listFiles = async (dir, base = dir) => {
   const entries = await readdir(dir, { withFileTypes: true });
   const files = [];
@@ -181,6 +320,25 @@ const listFiles = async (dir, base = dir) => {
 };
 
 const hashFile = async (file) => createHash("sha256").update(await readFile(file)).digest("hex");
+
+const assertOgImage = async () => {
+  if (IS_PRODUCTION && OG_IMAGE_PATH.includes("placeholder")) throw new Error("Production OG image cannot be a placeholder");
+  const target = path.join(siteRoot, OG_IMAGE_PATH.slice(1));
+  const buffer = await readFile(target);
+  if (buffer.length < 24 || buffer.toString("hex", 0, 8) !== "89504e470d0a1a0a") {
+    throw new Error("POVKH_OG_IMAGE must be a PNG so its launch dimensions can be validated");
+  }
+  if (buffer.readUInt32BE(16) !== 1200 || buffer.readUInt32BE(20) !== 630) {
+    throw new Error("POVKH_OG_IMAGE must be exactly 1200x630");
+  }
+};
+
+const publicUrlForOutput = (relative) => {
+  const publicPath = relative === "index.html"
+    ? "/"
+    : `/${relative.replace(/index\.html$/, "")}`;
+  return `${SITE_ORIGIN}${SITE_BASE_PATH}${publicPath}`;
+};
 
 const exists = async (target) => {
   try {
@@ -200,13 +358,15 @@ const writePage = async (relative, html) => {
 
 const build = async () => {
   const catalog = await readCatalog();
+  const audioLibrary = await readAudioLibrary(catalog);
+  const artistLibrary = await readArtistLibrary(catalog);
+  await assertOgImage();
   await rm(stageDir, { recursive: true, force: true });
-  await rm(backupDir, { recursive: true, force: true });
   await mkdir(stageDir, { recursive: true });
 
-  const pages = createPages(catalog);
+  const pages = createPages(catalog, audioLibrary, artistLibrary);
   const smartLinkPageCount = catalog.releases.filter((release) => release.streamingLinks).length;
-  const expectedPageCount = 3 * (catalog.releases.length + 9 + smartLinkPageCount);
+  const expectedPageCount = 3 * (catalog.releases.length + artistLibrary.artists.length + 9 + smartLinkPageCount);
   if (pages.size !== expectedPageCount) {
     throw new Error(`The localized site must contain exactly ${expectedPageCount} HTML pages; received ${pages.size}`);
   }
@@ -215,6 +375,13 @@ const build = async () => {
   }
 
   await cp(path.join(siteRoot, "assets"), path.join(stageDir, "assets"), { recursive: true });
+  await mkdir(path.join(stageDir, "assets", "tracks"), { recursive: true });
+  for (const track of audioLibrary.tracks) {
+    await cp(
+      path.join(siteRoot, "..", "Tracks", "streaming", track.file),
+      path.join(stageDir, "assets", "tracks", track.file)
+    );
+  }
   await mkdir(path.join(stageDir, "assets", "motion"), { recursive: true });
   for (const filename of [
     "PVKH_MOTION_BLOB_SOUND_1920x1080_v1.webm",
@@ -233,6 +400,8 @@ const build = async () => {
     "PVKH_MOTION_BLOB_LINK_1920x1080_v1.mp4",
     "PVKH_MOTION_BLOB_PRIME_1920x1080_v1.webm",
     "PVKH_MOTION_BLOB_PRIME_1920x1080_v1.mp4",
+    "PVKH_MOTION_LOOP_1920x1080_v1.webm",
+    "PVKH_MOTION_LOOP_1920x1080_v1.mp4",
     "PVKH_MOTION_AMBIENT_FIELD_1280x720_v1.webm",
     "PVKH_MOTION_AMBIENT_FIELD_1280x720_v1.mp4"
   ]) {
@@ -246,7 +415,18 @@ const build = async () => {
     path.join(siteRoot, "..", "exports", "POVKH-LAB-Brand-Board-v1.0.pdf"),
     path.join(stageDir, "downloads", "POVKH-LAB-Brand-Board-v1.0.pdf"),
   );
-  await writeFile(path.join(stageDir, "robots.txt"), "User-agent: *\nDisallow: /\n", "utf8");
+  const robots = IS_PRODUCTION
+    ? `User-agent: *\nAllow: /\nSitemap: ${SITE_ORIGIN}${SITE_BASE_PATH}/sitemap.xml\n`
+    : "User-agent: *\nDisallow: /\n";
+  await writeFile(path.join(stageDir, "robots.txt"), robots, "utf8");
+  if (IS_PRODUCTION) {
+    const urls = [...pages.keys()]
+      .filter((relative) => !relative.endsWith("404.html"))
+      .map((relative) => `  <url><loc>${publicUrlForOutput(relative)}</loc></url>`)
+      .join("\n");
+    await writeFile(path.join(stageDir, "sitemap.xml"), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`, "utf8");
+  }
+  await writeFile(path.join(stageDir, ".nojekyll"), "", "utf8");
   for (const { locale, directory } of [
     { locale: "en", directory: "" },
     { locale: "it", directory: "it" },
@@ -276,9 +456,14 @@ const build = async () => {
     schemaVersion: 1,
     generatedFrom: [
       "data/catalog.json",
+      "data/audio-library.json",
+      "data/artists.json",
+      `config:${SITE_MODE}`,
       "src/pages.mjs",
       "src/i18n.mjs",
       "assets/",
+      "../Tracks/",
+      "../Tracks/streaming/",
       "../media/motion/exports/PVKH_MOTION_BLOB_SOUND_1920x1080_v1.webm",
       "../media/motion/exports/PVKH_MOTION_BLOB_SOUND_1920x1080_v1.mp4",
       "../media/motion/exports/PVKH_MOTION_BLOB_PROCESS_1920x1080_v1.webm",
@@ -295,6 +480,8 @@ const build = async () => {
       "../media/motion/exports/PVKH_MOTION_BLOB_LINK_1920x1080_v1.mp4",
       "../media/motion/exports/PVKH_MOTION_BLOB_PRIME_1920x1080_v1.webm",
       "../media/motion/exports/PVKH_MOTION_BLOB_PRIME_1920x1080_v1.mp4",
+      "../media/motion/exports/PVKH_MOTION_LOOP_1920x1080_v1.webm",
+      "../media/motion/exports/PVKH_MOTION_LOOP_1920x1080_v1.mp4",
       "../media/motion/exports/PVKH_MOTION_AMBIENT_FIELD_1280x720_v1.webm",
       "../media/motion/exports/PVKH_MOTION_AMBIENT_FIELD_1280x720_v1.mp4",
       "../exports/POVKH-LAB-Brand-Board-v1.0.pdf",

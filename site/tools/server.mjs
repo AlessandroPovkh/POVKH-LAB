@@ -8,11 +8,14 @@ const MIME = new Map([
   [".html", "text/html; charset=utf-8"],
   [".js", "text/javascript; charset=utf-8"],
   [".json", "application/json; charset=utf-8"],
+  [".mp3", "audio/mpeg"],
   [".pdf", "application/pdf"],
+  [".mp4", "video/mp4"],
   [".png", "image/png"],
   [".svg", "image/svg+xml; charset=utf-8"],
   [".ttf", "font/ttf"],
   [".txt", "text/plain; charset=utf-8"],
+  [".webm", "video/webm"],
   [".webmanifest", "application/manifest+json; charset=utf-8"]
 ]);
 
@@ -20,7 +23,7 @@ const safeStat = async (file) => {
   try {
     return await lstat(file);
   } catch (error) {
-    if (error.code === "ENOENT") return null;
+    if (error.code === "ENOENT" || error.code === "ENOTDIR") return null;
     throw error;
   }
 };
@@ -33,15 +36,23 @@ const securityHeaders = {
   "X-Frame-Options": "DENY"
 };
 
-export const createStaticServer = ({ root, host = "127.0.0.1", port = 0 } = {}) => {
+export const createStaticServer = ({ root, host = "127.0.0.1", port = 0, cacheControl = null } = {}) => {
   const absoluteRoot = path.resolve(root);
   const server = http.createServer(async (request, response) => {
     try {
+      if (request.method !== "GET" && request.method !== "HEAD") {
+        response.writeHead(405, { ...securityHeaders, Allow: "GET, HEAD" }).end("Method not allowed");
+        return;
+      }
       const requestUrl = new URL(request.url, "http://local.test");
       let pathname;
       try {
         pathname = decodeURIComponent(requestUrl.pathname);
       } catch {
+        response.writeHead(400, securityHeaders).end("Bad request");
+        return;
+      }
+      if (pathname.includes("\0")) {
         response.writeHead(400, securityHeaders).end("Bad request");
         return;
       }
@@ -87,15 +98,52 @@ export const createStaticServer = ({ root, host = "127.0.0.1", port = 0 } = {}) 
       }
 
       const extension = path.extname(candidate).toLowerCase();
+      let responseStatus = status;
+      let rangeStart = 0;
+      let rangeEnd = Math.max(0, info.size - 1);
+      const rangeHeader = status === 200 ? request.headers.range : null;
+
+      if (rangeHeader && /^bytes=(\d*)-(\d*)$/.test(rangeHeader)) {
+        const match = rangeHeader.match(/^bytes=(\d*)-(\d*)$/);
+        let valid = Boolean(match) && Boolean(match?.[1] || match?.[2]) && info.size > 0;
+        if (valid && !match[1]) {
+          const suffixLength = Number(match[2]);
+          valid = Number.isSafeInteger(suffixLength) && suffixLength > 0;
+          if (valid) rangeStart = Math.max(0, info.size - suffixLength);
+        } else if (valid) {
+          rangeStart = Number(match[1]);
+          rangeEnd = match[2] ? Number(match[2]) : info.size - 1;
+          valid = Number.isSafeInteger(rangeStart)
+            && Number.isSafeInteger(rangeEnd)
+            && rangeStart >= 0
+            && rangeStart < info.size
+            && rangeEnd >= rangeStart;
+        }
+        rangeEnd = Math.min(rangeEnd, info.size - 1);
+        if (!valid) {
+          response.writeHead(416, {
+            ...securityHeaders,
+            "Accept-Ranges": "bytes",
+            "Content-Range": `bytes */${info.size}`,
+            "Content-Length": 0
+          }).end();
+          return;
+        }
+        responseStatus = 206;
+      }
+
+      const contentLength = responseStatus === 206 ? rangeEnd - rangeStart + 1 : info.size;
       const headers = {
         ...securityHeaders,
         "Content-Type": MIME.get(extension) || "application/octet-stream",
-        "Content-Length": info.size,
-        "Cache-Control": extension === ".html" ? "no-cache" : "public, max-age=3600"
+        "Content-Length": contentLength,
+        "Accept-Ranges": "bytes",
+        "Cache-Control": cacheControl || (extension === ".html" ? "no-cache" : "public, max-age=3600")
       };
-      response.writeHead(status, headers);
+      if (responseStatus === 206) headers["Content-Range"] = `bytes ${rangeStart}-${rangeEnd}/${info.size}`;
+      response.writeHead(responseStatus, headers);
       if (request.method === "HEAD") response.end();
-      else createReadStream(candidate).pipe(response);
+      else createReadStream(candidate, responseStatus === 206 ? { start: rangeStart, end: rangeEnd } : undefined).pipe(response);
     } catch (error) {
       response.writeHead(500, securityHeaders).end("Internal server error");
       console.error(error);

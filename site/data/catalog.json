@@ -104,6 +104,7 @@
       ],
       "artistCredit": "DEV & Alessandro Povkh",
       "title": "Overdose",
+      "titleLanguage": "en",
       "tuneCoreId": "1232370964",
       "tuneCoreIdNeedsOwnerVerification": false,
       "releaseDate": "2025-07-11",
@@ -112,7 +113,7 @@
         "digital"
       ],
       "trackCount": 1,
-      "artwork": null,
+      "artwork": "assets/releases/pvkh-001-overdose.webp",
       "streamingLinks": [
         {
           "service": "appleMusic",
@@ -176,6 +177,7 @@
       ],
       "artistCredit": "Alessandro Povkh",
       "title": "Dichotomy",
+      "titleLanguage": "en",
       "tuneCoreId": "1232479921",
       "tuneCoreIdNeedsOwnerVerification": false,
       "releaseDate": "2025-07-30",
@@ -184,7 +186,7 @@
         "digital"
       ],
       "trackCount": 1,
-      "artwork": null,
+      "artwork": "assets/releases/pvkh-002-dichotomy.webp",
       "streamingLinks": [
         {
           "service": "appleMusic",
@@ -249,6 +251,7 @@
       ],
       "artistCredit": "Alessandro Povkh & k/smokin",
       "title": "Red 2",
+      "titleLanguage": "en",
       "tuneCoreId": "1232649073",
       "tuneCoreIdNeedsOwnerVerification": false,
       "releaseDate": "2025-09-23",
@@ -257,7 +260,7 @@
         "digital"
       ],
       "trackCount": 1,
-      "artwork": null,
+      "artwork": "assets/releases/pvkh-003-red-2.webp",
       "streamingLinks": [
         {
           "service": "appleMusic",
@@ -322,6 +325,7 @@
       ],
       "artistCredit": "Alessandro Povkh & k/smokin",
       "title": "Office",
+      "titleLanguage": "en",
       "tuneCoreId": "1233083233",
       "tuneCoreIdNeedsOwnerVerification": false,
       "releaseDate": "2025-12-20",
@@ -330,7 +334,7 @@
         "digital"
       ],
       "trackCount": 1,
-      "artwork": null,
+      "artwork": "assets/releases/pvkh-004-office.webp",
       "streamingLinks": [
         {
           "service": "appleMusic",
@@ -395,6 +399,7 @@
       ],
       "artistCredit": "Alessandro Povkh & k/smokin",
       "title": "Azimuth",
+      "titleLanguage": "en",
       "tuneCoreId": "1233337272",
       "tuneCoreIdNeedsOwnerVerification": false,
       "releaseDate": "2026-02-19",
@@ -403,7 +408,7 @@
         "digital"
       ],
       "trackCount": 1,
-      "artwork": null,
+      "artwork": "assets/releases/pvkh-005-azimuth.webp",
       "streamingLinks": [
         {
           "service": "appleMusic",
@@ -467,6 +472,7 @@
       ],
       "artistCredit": "Alessandro Povkh & k/smokin",
       "title": "Redline Malice",
+      "titleLanguage": "en",
       "tuneCoreId": "1233439358",
       "tuneCoreIdNeedsOwnerVerification": false,
       "releaseDate": "2026-03-11",
@@ -475,7 +481,7 @@
         "digital"
       ],
       "trackCount": 1,
-      "artwork": null,
+      "artwork": "assets/releases/pvkh-006-redline-malice.webp",
       "streamingLinks": [
         {
           "service": "appleMusic",
@@ -539,6 +545,7 @@
       ],
       "artistCredit": "Alessandro Povkh & k/smokin",
       "title": "Opportunist",
+      "titleLanguage": "en",
       "tuneCoreId": "1233513535",
       "tuneCoreIdNeedsOwnerVerification": false,
       "releaseDate": "2026-04-01",
@@ -547,7 +554,7 @@
         "digital"
       ],
       "trackCount": 1,
-      "artwork": null,
+      "artwork": "assets/releases/pvkh-007-opportunist.webp",
       "streamingLinks": [
         {
           "service": "appleMusic",
@@ -611,6 +618,7 @@
       ],
       "artistCredit": "Levo.mp3",
       "title": "Robert",
+      "titleLanguage": "en",
       "tuneCoreId": "1233712643",
       "tuneCoreIdNeedsOwnerVerification": false,
       "releaseDate": "2026-05-22",
@@ -619,7 +627,7 @@
         "digital"
       ],
       "trackCount": 1,
-      "artwork": null,
+      "artwork": "assets/releases/pvkh-008-robert.webp",
       "streamingLinks": [
         {
           "service": "appleMusic",
@@ -680,6 +688,7 @@
       ],
       "artistCredit": "Levo.mp3",
       "title": "Near (Slowed)",
+      "titleLanguage": "en",
       "tuneCoreId": "1233799559",
       "tuneCoreIdNeedsOwnerVerification": false,
       "releaseDate": "2026-06-19",
@@ -688,7 +697,7 @@
         "digital"
       ],
       "trackCount": 1,
-      "artwork": null,
+      "artwork": "assets/releases/pvkh-009-near-slowed.webp",
       "streamingLinks": [
         {
           "service": "appleMusic",
@@ -751,6 +760,7 @@
       ],
       "artistCredit": "Levo.mp3",
       "title": "Near",
+      "titleLanguage": "en",
       "tuneCoreId": "1233811243",
       "tuneCoreIdNeedsOwnerVerification": false,
       "releaseDate": "2026-06-19",
@@ -759,7 +769,7 @@
         "digital"
       ],
       "trackCount": 1,
-      "artwork": null,
+      "artwork": "assets/releases/pvkh-010-near.webp",
       "streamingLinks": [
         {
           "service": "appleMusic",
@@ -821,6 +831,7 @@
       ],
       "artistCredit": "Levo.mp3 & Alessandro Povkh",
       "title": "Dreamulator",
+      "titleLanguage": "en",
       "tuneCoreId": "11233799518",
       "tuneCoreIdNeedsOwnerVerification": true,
       "releaseDate": "2026-06-08",
@@ -829,7 +840,7 @@
         "digital"
       ],
       "trackCount": 1,
-      "artwork": null,
+      "artwork": "assets/releases/pvkh-011-dreamulator.webp",
       "streamingLinks": [
         {
           "service": "appleMusic",
@@ -848,7 +859,7 @@
         {
           "position": 1,
           "title": "Dreamulator",
-          "duration": "2:25"
+          "duration": "1:50"
         }
       ],
       "content": {
@@ -893,6 +904,7 @@
       ],
       "artistCredit": "Levo.mp3",
       "title": "Runway",
+      "titleLanguage": "en",
       "tuneCoreId": "1233925115",
       "tuneCoreIdNeedsOwnerVerification": false,
       "releaseDate": "2026-08-07",
@@ -901,13 +913,13 @@
         "digital"
       ],
       "trackCount": 1,
-      "artwork": null,
+      "artwork": "assets/releases/pvkh-012-runway.webp",
       "streamingLinks": null,
       "tracks": [
         {
           "position": 1,
           "title": "Runway",
-          "duration": null
+          "duration": "2:25"
         }
       ],
       "content": {
@@ -952,6 +964,7 @@
       ],
       "artistCredit": "SUBMRN",
       "title": "Все сон",
+      "titleLanguage": "ru",
       "tuneCoreId": "1233944903",
       "tuneCoreIdNeedsOwnerVerification": false,
       "releaseDate": "2026-07-24",
@@ -960,13 +973,13 @@
         "digital"
       ],
       "trackCount": 1,
-      "artwork": null,
+      "artwork": "assets/releases/pvkh-013-vse-son.webp",
       "streamingLinks": null,
       "tracks": [
         {
           "position": 1,
           "title": "Все сон",
-          "duration": null
+          "duration": "2:39"
         }
       ],
       "content": {
