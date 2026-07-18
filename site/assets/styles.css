@@ -1163,6 +1163,10 @@ html[lang="ru"] :where(.hero-title, .page-title, .section-title, .card-title, .e
   font-size: clamp(1.75rem, calc(9vw + 0.6rem), 10rem);
 }
 
+html[lang="it"] .hero-title {
+  font-size: clamp(1.75rem, calc(7.5vw + 0.6rem), 10rem);
+}
+
 .hero-title-line {
   display: block;
   white-space: nowrap;
@@ -1176,7 +1180,7 @@ html[lang="ru"] .hero-title {
 .page-title {
   width: 100%;
   max-width: 13ch;
-  font-size: clamp(1.6rem, calc(10.5vw + 0.5rem), 8.5rem);
+  font-size: clamp(1.6rem, calc(9.75vw + 0.5rem), 8.5rem);
 }
 
 html[lang="ru"] .page-title {
@@ -2072,7 +2076,7 @@ html[lang="ru"] .step h3 {
 
 html .artist-profile-heading .page-title {
   max-width: 9ch;
-  font-size: clamp(1.5rem, calc(12cqi + 0.65rem), 8rem);
+  font-size: clamp(1.5rem, calc(11.25cqi + 0.65rem), 8rem);
 }
 
 .artist-profile-heading {
