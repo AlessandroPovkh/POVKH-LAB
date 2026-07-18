@@ -1180,7 +1180,7 @@ html[lang="ru"] .hero-title {
 .page-title {
   width: 100%;
   max-width: 13ch;
-  font-size: clamp(1.6rem, calc(9.75vw + 0.5rem), 8.5rem);
+  font-size: clamp(1.35rem, calc(9.75vw + 0.5rem), 8.5rem);
 }
 
 html[lang="ru"] .page-title {
@@ -2666,7 +2666,7 @@ html .artist-profile-heading .page-title {
   }
 
   html .artist-profile-heading .page-title {
-    font-size: clamp(1.15rem, calc(8cqi + 0.65rem), 5rem);
+    font-size: clamp(1rem, calc(8cqi + 0.65rem), 5rem);
   }
 
   .artist-facts {
@@ -2798,7 +2798,11 @@ html .artist-profile-heading .page-title {
 
 @media (max-width: 24rem) {
   .hero-title {
-    font-size: clamp(1.75rem, calc(13vw + 0.375rem), 13rem);
+    font-size: clamp(1.4rem, calc(10vw + 0.375rem), 10rem);
+  }
+
+  html[lang="it"] .hero-title {
+    font-size: clamp(1.3rem, calc(8vw + 0.375rem), 9rem);
   }
 
   html[lang="ru"] .hero-title {
