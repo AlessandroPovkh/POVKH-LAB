@@ -1,0 +1,4 @@
+interface:
+  display_name: "Developing Brand Ecosystems"
+  short_description: "Audit and develop coherent brand ecosystems"
+  default_prompt: "Use $developing-brand-ecosystems to audit and develop this brand or product ecosystem."

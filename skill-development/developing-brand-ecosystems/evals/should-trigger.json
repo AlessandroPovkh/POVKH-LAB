@@ -1,0 +1,19 @@
+{
+  "should_trigger": [
+    "Audit our existing brand, product site, campaign templates, and design system, then develop them into one coherent ecosystem.",
+    "Преврати разрозненные материалы компании в целостную бренд-экосистему и подготовь production handoff.",
+    "Create a brand from scratch for this physical product, including positioning, identity, packaging, and its digital touchpoint.",
+    "Свяжи позиционирование, айдентику, интерфейс продукта, контент и правила запуска."
+  ],
+  "should_not_trigger": [
+    "Change this button from blue to green.",
+    "Исправь ошибку 500 в API.",
+    "Write one Instagram caption for tomorrow.",
+    "Рассчитай TAM для рынка доставки еды."
+  ],
+  "ambiguous": [
+    "Refresh our homepage branding.",
+    "Проверь наш бренд-гайд.",
+    "Make the product feel more premium."
+  ]
+}

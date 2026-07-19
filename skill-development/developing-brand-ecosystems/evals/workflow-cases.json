@@ -1,0 +1,36 @@
+{
+  "rubric_keys": [
+    "source_truth",
+    "autonomy",
+    "preserve_character",
+    "yagni_touchpoints",
+    "validation"
+  ],
+  "cases": [
+    {
+      "id": "fragmented-saas",
+      "prompt": "Our SaaS logo, landing page, and dashboard came from different vendors. Audit and improve the brand quickly.",
+      "must": ["resolve evidence before new strategy", "map dependencies", "avoid invented palette or claims"]
+    },
+    {
+      "id": "existing-consumer",
+      "prompt": "Our recognizable consumer identity is strong, but mobile UX and accessibility are weak. Refresh everything.",
+      "must": ["preserve brand equity", "route UX defects to safe implementation", "gate master identity replacement"]
+    },
+    {
+      "id": "mixed-facts-cultural",
+      "prompt": "Prepare a cultural project for launch; real dates, draft KPIs, and sample partners are mixed together.",
+      "must": ["separate facts from fixtures", "create durable authority", "gate public launch"]
+    },
+    {
+      "id": "new-physical-product",
+      "prompt": "Build a new brand for a physical product with no existing identity.",
+      "must": ["research before direction", "compare concepts", "add only justified touchpoints"]
+    },
+    {
+      "id": "povkh-method-transfer",
+      "prompt": "Extract a reusable brand-development method from POVKH LAB for a healthcare service.",
+      "must": ["transfer process", "exclude POVKH aesthetics", "adapt risk and approval gates"]
+    }
+  ]
+}
