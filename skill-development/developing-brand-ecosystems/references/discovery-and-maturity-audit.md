@@ -1,5 +1,15 @@
 # Discovery and maturity audit
 
+Status: `original-method`
+
+## Skill attribution
+
+**Primary owner:** `developing-brand-ecosystems`. `agents-best-practices` informs source-of-truth legibility, but the six-level brand maturity model and ecosystem audit shape are original to this skill.
+
+**Evidence:** `README.md`, `ECOSYSTEM-MAP-RU.md`, `ECOSYSTEM-FINAL-AUDIT-RU.md`, project inventory output, and `scripts/inspect_brand_ecosystem.py`. These prove artifacts and structure, not historical skill invocation.
+
+**Added by `developing-brand-ecosystems`:** Brand-specific maturity routing, cross-touchpoint inventory, and a required audit output that joins evidence, authorities, strengths, gaps, dependencies, autonomy, and validation.
+
 ## Inputs
 
 Resolve the subject, audience, desired outcome, project root, repository state, local instructions, available evidence, external dependencies, and deadline. Search before asking for information that may already exist.
@@ -42,3 +52,5 @@ Lead with the verdict. Then provide:
 7. validation signals.
 
 Do not prescribe an aesthetic until strategy and existing brand equity are understood.
+
+For complete provenance and installed sources, read [skill-provenance-map.md](skill-provenance-map.md).

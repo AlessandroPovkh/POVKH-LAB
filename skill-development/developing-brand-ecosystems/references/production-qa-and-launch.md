@@ -1,5 +1,15 @@
 # Production QA and launch
 
+Status: `orchestration`
+
+## Skill attribution
+
+**Primary owner:** Existing project test/build harnesses own their checks; `playwright`/`webapp-testing` own browser automation when invoked; `verification-before-completion` owns fresh evidence before claims. `developing-brand-ecosystems` owns the cross-artifact validation ladder and reconciliation of authorities with all consumers.
+
+**Evidence:** `tools/qa_label_ecosystem.mjs`, `site/tools/qa.mjs`, media/production QA scripts, manifests, and final audits. They prove project QA and Playwright/Axe/FFmpeg/fontTools usage, not historical Agent Skill invocation.
+
+**Added by `developing-brand-ecosystems`:** Source→generation→artifact→experience→integration→launch ordering and a brand-specific handoff contract spanning several specialist outputs.
+
 ## Validation ladder
 
 1. Source: schemas, licenses, rights, naming, approvals, and source-of-truth consistency.
@@ -23,3 +33,5 @@ Lead with what is ready. Include:
 - launch variables, approvals, rollback, and next review.
 
 Do not claim readiness from the existence of files alone.
+
+For routed owners and installed sources, read [skill-provenance-map.md](skill-provenance-map.md).

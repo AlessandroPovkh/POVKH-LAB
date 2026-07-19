@@ -1,5 +1,15 @@
 # Strategy and positioning
 
+Status: `original-method`
+
+## Skill attribution
+
+**Primary owner:** `developing-brand-ecosystems`. No installed strategy skill is evidenced as the historical creator of POVKH LAB positioning; project-specific strategic judgment came from the user/Codex workflow and is not reconstructable per decision.
+
+**Evidence:** `BRAND-GUIDE-RU.md` sections on history, positioning, idea, values, character, and voice. The files prove decisions exist, not which Agent Skill made them.
+
+**Added by `developing-brand-ecosystems`:** Evidence-status separation, a normative strategy-source contract, and cross-system authority rules that downstream identity/product/content work must follow.
+
 ## Evidence before invention
 
 Separate verified knowledge, stakeholder intent, observed behavior, hypotheses, and unknowns. Label hypotheses. Never turn a convenient assumption into public copy.
@@ -29,3 +39,5 @@ Create one normative strategy source with owner, scope, decision status, last re
 - Prefer specific tension and proof over generic aspiration.
 - Keep internal language, public claims, and legal claims distinct.
 - Define success signals without inventing baseline numbers or targets.
+
+For provenance limits and installed sources, read [skill-provenance-map.md](skill-provenance-map.md).

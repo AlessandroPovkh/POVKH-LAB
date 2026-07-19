@@ -1,5 +1,15 @@
 # Autonomy and approvals
 
+Status: `adapted-from-skill`
+
+## Skill attribution
+
+**Primary owner:** `agents-best-practices` supplies autonomy/risk/permission architecture; generic Codex safety practice supplies scope and approval boundaries. `developing-brand-ecosystems` adapts these into brand work packets and concrete strategic, factual, production, and launch gates.
+
+**Evidence:** `agents-best-practices` v1.2.0 metadata, the skill design/plan, and baseline/forward evals. POVKH project files show approval states and preview gates but do not prove the earlier skill invocation.
+
+**Added by `developing-brand-ecosystems`:** Per-packet mode selection for mixed creative/technical work and a brand-specific list of taste-defining, public-factual, rights, master, and launch decisions.
+
 Choose a mode for each work packet and state it briefly.
 
 | Observable condition | Mode | Action |
@@ -17,3 +27,5 @@ Naming or master-position changes, replacing recognizable identity, public claim
 ## Missing evidence
 
 Use `unknown`, `hypothesis`, `sample`, `fixture`, `draft`, or another explicit state. Continue safe work around the gap. Ask only when the missing choice changes the direction or requires new authority.
+
+For sources and ownership limits, read [skill-provenance-map.md](skill-provenance-map.md).

@@ -1,5 +1,15 @@
 # Product and digital experience
 
+Status: `orchestration`
+
+## Skill attribution
+
+**Primary owner:** The existing framework/project harness owns implementation. Use `frontend-design` for a new visual direction, `ui-ux-pro-max` for substantial UX/accessibility review, and `playwright` or `webapp-testing` when rendered verification lacks a stronger native harness. `developing-brand-ecosystems` owns brand-through-behavior constraints and cross-system integration.
+
+**Evidence:** `site/src/`, `site/assets/`, `site/data/`, `site/tools/`, `site/package.json`, `site/package-lock.json`, `site/README.md`, and commits `af86034`–`33688f7`. They prove direct code and Playwright/Axe library use; they do not prove those Agent Skills were invoked.
+
+**Added by `developing-brand-ecosystems`:** A bridge from brand authorities and fact states to journeys, terminology, content models, preview/production gates, and downstream experience validation.
+
 ## Brand through behavior
 
 Treat information architecture, terminology, interaction, performance, accessibility, privacy, reliability, and recovery states as brand expression—not only visual styling.
@@ -19,3 +29,5 @@ Use `ui-ux-pro-max` for substantial UX/accessibility review. Use `playwright` or
 ## Completion
 
 Core journeys work with real content across required viewports and input modes; public facts are approved; privacy and launch gates are explicit; the production artifact is reproducible.
+
+For the library-versus-skill distinction and owner map, read [skill-provenance-map.md](skill-provenance-map.md).

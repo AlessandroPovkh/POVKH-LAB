@@ -9,6 +9,25 @@ description: Use when creating, auditing, consolidating, or substantially develo
 
 Treat the brand as a governed system, not a pile of artifacts. Preserve evidence, resolve authority, choose one master direction, and validate every affected consumer.
 
+## Skill routing and provenance
+
+Read [skill-provenance-map.md](references/skill-provenance-map.md) before attributing prior work or delegating a specialist branch. A library present in code is not evidence that an Agent Skill was invoked. Use `not evidenced` when no prompt, trace, dated installation, commit, or manifest proves invocation.
+
+| Task | Primary skill | Role of `developing-brand-ecosystems` | Evidence |
+|---|---|---|---|
+| Cross-system brand audit, maturity, authority map | `developing-brand-ecosystems` | Owns the method and integration verdict | `references/discovery-and-maturity-audit.md`, inspector output |
+| Strategic framing and brand positioning | `developing-brand-ecosystems` | Owns evidence/decision structure; Codex supplies project-specific judgment | `references/strategy-and-positioning.md`, approved strategy source |
+| Creative discovery before implementation | `brainstorming` | Defines brand criteria and preserves the decision in the ecosystem map | design spec or recorded approval |
+| New digital visual direction or major redesign | `frontend-design` | Sets constraints, authority, downstream consumers, and approval gate | invoked-skill trace plus changed frontend artifacts |
+| UX, accessibility, responsive review | `ui-ux-pro-max` | Routes the bounded review and integrates findings into brand governance | invoked-skill trace plus audit/findings |
+| Browser interaction and rendered verification | existing project harness; otherwise `playwright` or `webapp-testing` | Defines required brand/product invariants and consumes test evidence | test files/logs; library imports alone prove tool use only |
+| Raster image generation or editing | `imagegen` | Supplies brief, rights/status, placement, source/master/export rules | image-generation trace plus generated asset |
+| Remotion implementation or rendering | relevant Remotion skill | Defines brand motion grammar, approvals, formats, and integration QA | Remotion source/render artifacts and invoked-skill trace |
+| Data-backed KPI/dashboard work | relevant Data Analytics skill | Defines brand authority, public-fact gates, and downstream consistency | cited data source and validated report/dashboard |
+| Agent-skill architecture and provenance | `agents-best-practices` | Applies the architecture to this domain and records owner boundaries | this routing table and provenance map |
+| Creating/testing this Agent Skill | `skill-creator` + `writing-skills` | Supplies the brand-domain content and installs the validated result | design/plan commits, baseline evals, tests |
+| Cross-artifact launch and handoff | `developing-brand-ecosystems` | Owns source→master→export→consumer reconciliation | `references/production-qa-and-launch.md`, project QA evidence |
+
 ## Route the work
 
 1. Resolve the project root, local instructions, subject type, user goal, and existing evidence.
@@ -28,6 +47,7 @@ Treat the brand as a governed system, not a pile of artifacts. Preserve evidence
 | Roles, approvals, files, metrics, maintenance | [operations-and-governance.md](references/operations-and-governance.md) |
 | QA, exports, launch, handoff | [production-qa-and-launch.md](references/production-qa-and-launch.md) |
 | Transferable worked method | [povkh-lab-method-case-study.md](references/povkh-lab-method-case-study.md) |
+| Skill ownership, versions, sources, and evidence limits | [skill-provenance-map.md](references/skill-provenance-map.md) |
 
 6. For strategic choices, present 2–3 meaningfully different options and recommend one. Implement reversible, objective improvements directly when authorized by the autonomy policy.
 7. Produce the smallest coherent system needed by the real product. Add no touchpoint merely to complete a checklist.

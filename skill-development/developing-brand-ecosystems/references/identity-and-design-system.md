@@ -1,5 +1,15 @@
 # Identity and design system
 
+Status: `original-method`
+
+## Skill attribution
+
+**Primary owner:** `developing-brand-ecosystems` owns identity governance and source/master/export states. Specialist visual production may use `frontend-design`, `imagegen`, or a format-specific owner, but no such historical invocation is evidenced for POVKH LAB.
+
+**Evidence:** `BRAND-GUIDE-RU.md`, `assets/logo/`, `assets/fonts/`, `templates/`, `exports/export-manifest.json`, `tools/build_logo_outlines.py`, and `tools/qa_brand_package.mjs`. fontTools usage is library/tool evidence, not an Agent Skill.
+
+**Added by `developing-brand-ecosystems`:** A portable hierarchy for editable sources, approved masters, exports, previews, archives, licenses, owners, and downstream validation.
+
 ## System layers
 
 Define the smallest useful set:
@@ -24,3 +34,5 @@ Start with recognizable codes worth preserving. Fix execution defects inside the
 ## Validation
 
 Check small-size legibility, monochrome use, contrast, zoom, responsive crops, safe areas, export dimensions, file naming, source/export consistency, and representative real content.
+
+For provenance limits and conditional specialist owners, read [skill-provenance-map.md](skill-provenance-map.md).
