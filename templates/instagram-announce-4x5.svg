@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1350" viewBox="0 0 1080 1350" role="img" aria-labelledby="title desc" data-template-version="1.0" data-safe-inset="72">
+  <title id="title">POVKH LAB Instagram 4:5 announcement template</title>
+  <desc id="desc">Sample production template, 1080 by 1350 pixels, visibly marked not for publication. Keep all critical content between x 72 and 1008 and between y 72 and 1278. The lower-right publisher mark uses the approved outlined compact PL logo.</desc>
+  <style>
+    @font-face { font-family: Barlow; src: url("../assets/fonts/BarlowCondensed-Black.ttf") format("truetype"); font-style: normal; font-weight: 900; font-display: swap; }
+    @font-face { font-family: Plex; src: url("../assets/fonts/IBMPlexMono-Regular.ttf") format("truetype"); font-style: normal; font-weight: 400; font-display: swap; }
+    .display { font-family: Barlow, "Arial Narrow", sans-serif; font-weight: 900; font-synthesis: none; }
+    .meta { font-family: Plex, monospace; font-weight: 400; font-synthesis: none; letter-spacing: .08em; }
+  </style>
+  <rect width="1080" height="1350" fill="#F2EFE7"/>
+  <rect x="72" y="72" width="936" height="690" fill="#080808"/>
+  <circle cx="540" cy="417" r="220" fill="none" stroke="#8F918F" stroke-width="2"/>
+  <text data-critical="true" x="540" y="426" fill="#8F918F" class="meta" font-size="18" text-anchor="middle">ARTWORK / PHOTO</text>
+  <rect x="72" y="796" width="936" height="18" fill="#F32222"/>
+  <text x="1008" y="786" fill="#B5121B" class="meta" font-size="14" text-anchor="end">SAMPLE / NOT FOR PUBLICATION</text>
+  <text data-critical="true" x="72" y="1026" fill="#080808" class="display" font-size="214" textLength="936" lengthAdjust="spacingAndGlyphs">ARTIST</text>
+  <text data-critical="true" x="72" y="1196" fill="#080808" class="display" font-size="164" textLength="700" lengthAdjust="spacingAndGlyphs">RELEASE</text>
+  <g data-critical="true" fill="#080808" class="meta" font-size="19">
+    <text x="72" y="1273">PVKH-001 / OUT 18.09.2026</text>
+  </g>
+  <image data-critical="true" href="../assets/logo/povkh-lab-compact-light-outlined.svg" x="944" y="1214" width="64" height="64" preserveAspectRatio="xMidYMid meet" aria-hidden="true" focusable="false"/>
+</svg>

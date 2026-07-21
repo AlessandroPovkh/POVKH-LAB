@@ -192,6 +192,8 @@ function pdfPageCount(buffer) {
 }
 
 async function assertExactExports(exportsDir) {
+  const canonicalExports = path.join(root, "exports");
+  const allowedDownstreamDirectories = exportsDir === canonicalExports ? new Set(["social"]) : new Set();
   const rootExpected = new Set([
     BOARD_PDF,
     BOARD_PNG,
@@ -203,7 +205,7 @@ async function assertExactExports(exportsDir) {
     .map(({ name }) => name)
     .filter((name) => name !== ".DS_Store");
   const missingRoot = [...rootExpected].filter((name) => !actualRoot.includes(name));
-  const orphanRoot = actualRoot.filter((name) => !rootExpected.has(name));
+  const orphanRoot = actualRoot.filter((name) => !rootExpected.has(name) && !allowedDownstreamDirectories.has(name));
   if (missingRoot.length || orphanRoot.length) {
     throw new Error(
       `Export set mismatch. Missing: ${missingRoot.join(", ") || "none"}; `

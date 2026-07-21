@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>POVKH LAB — Brand Board v2.0</title>
+  <style>
+    @font-face { font-family: Barlow; src: url("assets/fonts/BarlowCondensed-Black.ttf") format("truetype"); font-style:normal; font-weight:900; font-display:swap; }
+    @font-face { font-family: Inter; src: url("assets/fonts/Inter-Variable.ttf") format("truetype"); font-style:normal; font-weight:100 900; font-display:swap; }
+    @font-face { font-family: Plex; src: url("assets/fonts/IBMPlexMono-Regular.ttf") format("truetype"); font-style:normal; font-weight:400; font-display:swap; }
+    :root {
+      --void:#080808; --bone:#F2EFE7; --signal:#F32222; --signal-ink:#B5121B; --steel:#8F918F; --paper:#fff;
+      --u:24px; --edge:72px;
+    }
+    *, *::before, *::after { box-sizing:border-box; }
+    html { background:#1b1b1b; scroll-behavior:smooth; }
+    body { margin:0; min-width:0; overflow-x:hidden; color:var(--bone); font-family:Inter,Arial,sans-serif; font-synthesis:none; background:#1b1b1b; }
+    main { display:block; }
+    .skip-link {
+      position:fixed; z-index:1000; top:12px; left:12px; padding:12px 16px; transform:translateY(-160%);
+      color:var(--void); background:var(--bone); border:3px solid var(--signal); font:600 16px/1.2 Inter,Arial,sans-serif;
+    }
+    .skip-link:focus { transform:translateY(0); outline:3px solid var(--void); outline-offset:2px; }
+    .sr-only {
+      position:absolute!important; width:1px!important; height:1px!important; padding:0!important; margin:-1px!important;
+      overflow:hidden!important; clip:rect(0,0,0,0)!important; white-space:nowrap!important; border:0!important;
+    }
+    .sheet {
+      width:1600px; height:1000px; margin:20px auto; padding:var(--edge); position:relative; overflow:hidden;
+      background:var(--void); page-break-after:always; break-after:page;
+    }
+    .light { background:var(--bone); color:var(--void); }
+    .light .section-no, .light .label.signal { color:var(--signal-ink); }
+    .red { background:var(--signal); color:var(--void); }
+    .kicker, .meta, th, td { font-family:Plex,monospace; }
+    .kicker { font-size:15px; letter-spacing:.12em; text-transform:uppercase; }
+    .section-no { position:absolute; right:72px; top:64px; color:var(--signal); font:400 15px Plex,monospace; letter-spacing:.12em; }
+    .demo-badge {
+      position:absolute; top:58px; left:520px; padding:8px 12px; border:1px solid currentColor;
+      font:400 13px/1.2 Plex,monospace; letter-spacing:.08em; text-transform:uppercase;
+    }
+    h1,h2,h3,.display { font-family:Barlow,"Arial Narrow",sans-serif; font-weight:900; text-transform:uppercase; margin:0; }
+    h1 { font-size:234px; line-height:.77; letter-spacing:-.035em; }
+    h2 { font-size:112px; line-height:.86; letter-spacing:-.025em; }
+    h3 { font-size:48px; line-height:.94; letter-spacing:-.01em; }
+    p { font-size:20px; line-height:1.48; margin:0 0 18px; max-width:68ch; }
+    .lead { font-size:31px; line-height:1.25; max-width:46ch; }
+    .small { font-size:15px; line-height:1.45; }
+    .muted { color:var(--steel); }
+    .signal { color:var(--signal); }
+    .rule { height:22px; width:100%; background:var(--signal); }
+    .hair { height:1px; width:100%; background:currentColor; opacity:.25; }
+    .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:58px; }
+    .grid-3 { display:grid; grid-template-columns:repeat(3,1fr); gap:30px; }
+    .grid-4 { display:grid; grid-template-columns:repeat(4,1fr); gap:22px; }
+    .card { border:1px solid rgba(242,239,231,.28); padding:25px; min-height:180px; }
+    .light .card { border-color:rgba(8,8,8,.25); }
+    .label { font:400 13px Plex,monospace; letter-spacing:.1em; text-transform:uppercase; }
+    .big-number { font:900 170px/.78 Barlow,sans-serif; letter-spacing:-.03em; }
+    .logo-img { width:100%; height:auto; display:block; }
+    .cover-title { position:absolute; left:72px; right:72px; top:175px; }
+    .cover-title > span { display:block; }
+    .cover-title .rule { margin:28px 0 18px; }
+    .cover-title .cover-lab { font-size:270px; }
+    .cover-logo { position:absolute; left:72px; right:72px; top:190px; width:1456px; height:364px; object-fit:contain; }
+    .foot { position:absolute; bottom:32px; left:72px; right:72px; display:flex; justify-content:space-between; font:12px Plex,monospace; letter-spacing:.08em; opacity:.72; }
+    ul { padding-left:22px; margin:14px 0 0; }
+    li { margin:0 0 10px; font-size:17px; line-height:1.35; }
+    table { border-collapse:collapse; width:100%; margin-top:20px; }
+    th,td { text-align:left; border-top:1px solid rgba(242,239,231,.25); padding:13px 10px; font-size:14px; vertical-align:top; }
+    .light th,.light td { border-color:rgba(8,8,8,.22); }
+    .swatch { height:210px; padding:20px; display:flex; flex-direction:column; justify-content:space-between; }
+    .swatch b { font:900 44px Barlow,sans-serif; }
+    .swatch span { font:14px Plex,monospace; }
+    .template { width:100%; max-height:650px; object-fit:contain; object-position:center; background:#111; }
+    .token { display:inline-block; border:1px solid currentColor; padding:7px 10px; margin:0 8px 8px 0; font:13px Plex,monospace; }
+    .quote { border-left:22px solid var(--signal); padding-left:34px; font-size:38px; line-height:1.18; max-width:34ch; }
+    .safe-circle { width:620px; height:620px; border:2px dashed var(--signal); border-radius:50%; display:grid; place-items:center; margin:auto; }
+    .safe-circle img { width:74%; border-radius:50%; }
+    .type-xl { font:900 180px/.78 Barlow,sans-serif; text-transform:uppercase; letter-spacing:-.025em; }
+    .type-body { font:400 24px/1.45 Inter,sans-serif; }
+    .type-meta { font:400 18px/1.55 Plex,monospace; letter-spacing:.08em; }
+    .motion-line { display:flex; align-items:center; justify-content:space-between; gap:18px; margin-top:48px; }
+    .motion-line .phase { flex:1; border-top:20px solid var(--signal); padding-top:18px; }
+    .mock-row { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:24px; height:670px; align-items:center; }
+    .mock-row img { width:100%; height:100%; min-width:0; min-height:0; max-height:100%; object-fit:contain; }
+    #variants .grid-3 .logo-img { height:390px; object-fit:contain; }
+    @media (prefers-reduced-motion:reduce) {
+      html { scroll-behavior:auto; }
+      *, *::before, *::after { animation-duration:.01ms!important; animation-iteration-count:1!important; transition-duration:.01ms!important; }
+    }
+    @media print {
+      @page { size: 1600px 1000px; margin:0; }
+      html,body { background:#fff; }
+      body { zoom:1!important; overflow:visible; }
+      .skip-link { display:none!important; }
+      .sheet { margin:0; break-inside:avoid; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#brand-board">Перейти к бренд-борду</a>
+  <main id="brand-board" tabindex="-1" aria-label="POVKH LAB — бренд-борд">
+  <section class="sheet" id="cover" aria-labelledby="cover-title">
+    <div class="kicker">Brand system / v2.0 / 21.07.2026</div>
+    <div class="demo-badge">Release names, dates and copy are sample data — not approved for publication</div>
+    <h1 id="cover-title" class="sr-only">POVKH LAB Terminal Relic brand system</h1>
+    <img class="cover-logo" src="assets/logo/povkh-lab-horizontal-reverse-transparent-outlined.svg" alt="POVKH LAB Terminal Relic: органический знак, красная сигнальная линия и название">
+    <p class="lead" style="position:absolute;right:72px;bottom:104px;width:560px">Строгая система для свободного звука.</p>
+    <div class="foot"><span>ORGANIC SIGNAL / DISCIPLINED SYSTEM</span><span>MASTER DIRECTION / TERMINAL RELIC</span></div>
+  </section>
+
+  <section class="sheet light" id="foundation" aria-labelledby="foundation-title">
+    <span class="section-no">01 / FOUNDATION</span>
+    <div class="kicker">История и позиция</div>
+    <div class="grid-2" style="margin-top:70px;grid-template-columns:.9fr 1.1fr">
+      <div>
+        <h2 id="foundation-title">ЗВУК<br>КАК<br>МЕТОД</h2>
+        <div class="rule" style="width:82%;margin:34px 0"></div>
+        <div class="quote">Форма фиксирует эксперимент.</div>
+      </div>
+      <div style="padding-top:8px">
+        <p class="lead">POVKH LAB — независимый электронный лейбл и кураторская платформа. Здесь звук рассматривается как материя: гипотеза, опыт, отбор, точная фиксация результата.</p>
+        <p><b>POVKH</b> — авторская подпись и ответственность за выбор. <b>LAB</b> — метод работы, а не декоративная «лаборатория». Каждый релиз становится исследованием, каталог — архивом состояний электронной музыки.</p>
+        <p>Органический реликт удерживается точной типографикой и сеткой: артисты и музыка различаются, но дисциплина формы остаётся узнаваемой.</p>
+        <div class="grid-3" style="margin-top:42px">
+          <div class="card"><span class="label signal">Миссия</span><p class="small" style="margin-top:16px">Давать новым формам электронной музыки точное звуковое, визуальное и профессиональное воплощение.</p></div>
+          <div class="card"><span class="label signal">Принцип</span><p class="small" style="margin-top:16px">Свобода внутри системы. Эксперимент обязан быть осмысленным и законченным.</p></div>
+          <div class="card"><span class="label signal">Результат</span><p class="small" style="margin-top:16px">Не поток контента, а цельные музыкальные объекты и долговечный каталог.</p></div>
+        </div>
+      </div>
+    </div>
+    <div class="foot"><span>POVKH LAB / BRAND FOUNDATION</span><span>NOT A GENRE. A COORDINATE SYSTEM.</span></div>
+  </section>
+
+  <section class="sheet" id="logo" aria-labelledby="logo-title">
+    <span class="section-no">02 / LOGO SYSTEM</span>
+    <div class="kicker">Мастер и семейство</div>
+    <div class="grid-2" style="margin-top:52px;grid-template-columns:630px 1fr">
+      <img class="logo-img" src="assets/logo/povkh-lab-primary-dark-outlined.svg" alt="Основной логотип POVKH LAB Terminal Relic: светлый органический знак, красная линия и название на чёрном поле">
+      <div>
+        <h2 id="logo-title" style="font-size:90px">TERMINAL<br>RELIC</h2>
+        <p class="lead" style="margin-top:28px">Основной знак соединяет живую геометрию <b>❧</b> с жёстким именем <b>POVKH LAB</b> и Signal Red rule.</p>
+        <div class="grid-2" style="gap:22px;margin-top:34px">
+          <div class="card"><span class="label signal">Реликт</span><p class="small" style="margin-top:14px">Органическая форма, найденный сигнал и непредсказуемость звука.</p></div>
+          <div class="card"><span class="label signal">Линия</span><p class="small" style="margin-top:14px">Порог, монтажный срез, playhead и состояние записи.</p></div>
+          <div class="card"><span class="label signal">Система</span><p class="small" style="margin-top:14px">Имя, сетка и выпускная дисциплина удерживают эксперимент.</p></div>
+          <div class="card"><span class="label signal">HUD</span><p class="small" style="margin-top:14px">Синтаксис, индексы и статусы — без прицелов и scope-графики.</p></div>
+        </div>
+        <p class="small muted" style="margin-top:26px">Файлы с окончанием <b>-outlined.svg</b> — производственные мастера: буквы переведены в кривые и не требуют установленного шрифта.</p>
+      </div>
+    </div>
+    <div class="foot"><span>PRIMARY / STACKED / DARK</span><span>USE OUTLINED SVG MASTER</span></div>
+  </section>
+
+  <section class="sheet light" id="variants" aria-labelledby="variants-title">
+    <span class="section-no">03 / LOCKUPS</span>
+    <div class="kicker">Версии и иерархия</div>
+    <h2 class="sr-only" id="variants-title">Версии логотипа и иерархия применения</h2>
+    <div class="grid-3" style="margin-top:54px">
+      <div><img class="logo-img" src="assets/logo/povkh-lab-primary-dark-outlined.svg" alt="Вертикальная версия Primary Dark на чёрном фоне"><h3 style="margin-top:18px">PRIMARY DARK</h3><p class="small">По умолчанию: аватар, страница лейбла, заставка, мерч, бренд-пост.</p></div>
+      <div><img class="logo-img" src="assets/logo/povkh-lab-primary-light-outlined.svg" alt="Вертикальная версия Primary Light на светлом фоне"><h3 style="margin-top:18px">PRIMARY LIGHT</h3><p class="small">Для светлой бумаги, документов и спокойных editorial-носителей.</p></div>
+      <div><img class="logo-img" src="assets/logo/povkh-lab-ascii-dark-outlined.svg" alt="ASCII-подпись Terminal Relic на светлом фоне"><h3 style="margin-top:18px">ASCII SIGNATURE</h3><p class="small">Только крупный формат: terminal-панели, motion, inserts и process-материалы.</p></div>
+    </div>
+    <div class="grid-2" style="margin-top:24px;grid-template-columns:3fr 1fr;gap:20px;background:#080808;padding:10px">
+      <img src="assets/logo/povkh-lab-horizontal-dark-outlined.svg" alt="Горизонтальная версия Terminal Relic на чёрном фоне" style="width:100%;height:140px;object-fit:contain;display:block">
+      <img src="assets/logo/povkh-lab-compact-dark-outlined.svg" alt="Компактный орнамент Terminal Relic на чёрном фоне" style="width:100%;height:140px;object-fit:contain;display:block">
+    </div>
+    <div class="grid-4" style="margin-top:16px">
+      <div><span class="label signal">STACKED</span><p class="small">Минимум 96 px / 26 мм</p></div>
+      <div><span class="label signal">HORIZONTAL</span><p class="small">Минимум 160 px / 42 мм</p></div>
+      <div><span class="label signal">COMPACT RELIC</span><p class="small">Минимум 24 px / 7 мм</p></div>
+      <div><span class="label signal">ASCII</span><p class="small">Минимум 600 px / 160 мм</p></div>
+    </div>
+    <div class="foot"><span>FULL COLOUR / LIGHT / MONO / HORIZONTAL / COMPACT</span><span>DO NOT IMPROVISE NEW LOCKUPS</span></div>
+  </section>
+
+  <section class="sheet" id="construction" aria-labelledby="construction-title">
+    <span class="section-no">04 / CONSTRUCTION</span>
+    <div class="kicker">Охранное поле и масштаб</div>
+    <div class="grid-2" style="margin-top:34px;grid-template-columns:760px 1fr">
+      <img src="assets/logo/povkh-lab-construction.svg" alt="Схема построения Terminal Relic и охранного поля X" style="width:760px;height:760px;object-fit:contain">
+      <div style="padding-top:22px">
+        <h2 id="construction-title" style="font-size:85px">НЕ<br>ЛОМАТЬ<br>РЕЛИКТ</h2>
+        <div class="rule" style="margin:28px 0"></div>
+        <p><b>X = 8% короткой стороны.</b> Оставляйте минимум X с каждой стороны. Внутрь поля не входят текст, край фотографии, sponsor mark, trim или UI.</p>
+        <ul>
+          <li>Не растягивать, не наклонять, не вращать.</li>
+          <li>Не менять толщину и позицию красной линии.</li>
+          <li>Не зеркалить, не упрощать и не перерисовывать орнамент.</li>
+          <li>Не добавлять glow, bevel, outline, shadow, grain.</li>
+          <li>Не помещать знак в прицел, scope или декоративную HUD-рамку.</li>
+          <li>Не перекрашивать мастер под каждый релиз.</li>
+          <li>На активном фото использовать защитное поле Void/Bone.</li>
+          <li>В анимации геометрия всегда возвращается к идеальному мастеру.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot"><span>CLEAR SPACE / X = 8% OF SHORT SIDE</span><span>ORNAMENT SOURCE / IMMUTABLE</span></div>
+  </section>
+
+  <section class="sheet light" id="colour" aria-labelledby="colour-title">
+    <span class="section-no">05 / COLOUR</span>
+    <div class="kicker">Основная палитра</div>
+    <h2 id="colour-title" style="margin-top:42px">70 / 20 / 10</h2>
+    <p class="lead" style="margin:20px 0 38px">Красный — действие и пунктуация, а не декоративный фон.</p>
+    <div class="grid-4">
+      <div class="swatch" style="background:#080808;color:#F2EFE7"><b>VOID</b><span>#080808<br>RGB 8 / 8 / 8<br>CMYK 0 / 0 / 0 / 97</span></div>
+      <div class="swatch" style="background:#F2EFE7;color:#080808;border:1px solid #080808"><b>BONE</b><span>#F2EFE7<br>RGB 242 / 239 / 231<br>CMYK 0 / 1 / 5 / 5</span></div>
+      <div class="swatch" style="background:#F32222;color:#080808"><b>SIGNAL</b><span>#F32222<br>RGB 243 / 34 / 34<br>CMYK 0 / 86 / 86 / 5</span></div>
+      <div class="swatch" style="background:#8F918F;color:#080808"><b>STEEL</b><span>#8F918F<br>RGB 143 / 145 / 143<br>CMYK 1 / 0 / 1 / 43</span></div>
+    </div>
+    <div class="grid-3" style="margin-top:38px">
+      <div class="card"><span class="label signal">Контраст</span><p class="small" style="margin-top:14px">Bone / Void — основной дуэт. Signal / Void — CTA, дата, линия. Мелкий красный текст на Bone — Signal Ink #B5121B.</p></div>
+      <div class="card"><span class="label signal">Печать</span><p class="small" style="margin-top:14px">CMYK — стартовые значения. Красный обязательно проверять цветопробой на выбранной бумаге.</p></div>
+      <div class="card"><span class="label signal">Release accent</span><p class="small" style="margin-top:14px">Допустим один временный цвет внутри кампании, но он не заменяет Signal Red в мастер-логотипе.</p></div>
+    </div>
+    <div class="foot"><span>VOID / BONE / SIGNAL / STEEL</span><span>ONE CHROMATIC ACCENT PER ASSET</span></div>
+  </section>
+
+  <section class="sheet" id="type" aria-labelledby="type-title">
+    <span class="section-no">06 / TYPOGRAPHY</span>
+    <div class="kicker">Типографическая система</div>
+    <div class="demo-badge">Sample metadata / unapproved</div>
+    <div class="grid-2" style="margin-top:54px;grid-template-columns:1.25fr .75fr">
+      <div>
+        <h2 class="type-xl" id="type-title">BARLOW<br>CONDENSED</h2>
+        <div class="rule" style="margin:24px 0 28px"></div>
+        <p class="lead">Display / 700–900 / uppercase / трекинг −2…−4%</p>
+        <p>Крупные заголовки, номера, даты, постеры. Не используется для длинного текста. Производственный логотип остаётся готовым outlined SVG и не перенабирается.</p>
+      </div>
+      <div>
+        <span class="label signal">INTER VARIABLE</span>
+        <p class="type-body" style="margin-top:18px">Редакционный текст должен быть спокойным, ясным и человеческим. Строка 55–72 знака, sentence case, вес 400–600.</p>
+        <div class="hair" style="margin:30px 0"></div>
+        <span class="label signal">IBM PLEX MONO</span>
+        <p class="type-meta" style="margin-top:18px">PVKH-001 / ARTIST<br>18.09.2026 / 00:15<br>FORMAT / DIGITAL + VINYL</p>
+        <div class="hair" style="margin:30px 0"></div>
+        <div>
+          <span class="token">DISPLAY XL / 72–160</span><span class="token">H1 / 64</span><span class="token">H2 / 40</span><span class="token">BODY / 16–25</span><span class="token">LABEL / 12–16</span><span class="token">MICRO / 10–13</span>
+        </div>
+      </div>
+    </div>
+    <div class="foot"><span>BARLOW CONDENSED / INTER / IBM PLEX MONO</span><span>SIL OPEN FONT LICENSE</span></div>
+  </section>
+
+  <section class="sheet light" id="visual-language" aria-labelledby="visual-language-title">
+    <span class="section-no">07 / VISUAL LANGUAGE</span>
+    <div class="kicker">Графическая грамматика</div>
+    <h2 id="visual-language-title" style="margin-top:44px">КОНТРОЛИРУЕМАЯ<br>АНОМАЛИЯ</h2>
+    <div class="grid-4" style="margin-top:48px">
+      <div class="card"><span class="big-number signal">01</span><h3>MONOLITH</h3><p class="small">Один крупный типографический объект занимает 55–90% поля.</p></div>
+      <div class="card"><span class="big-number signal">02</span><h3>THRESHOLD</h3><p class="small">Одна линия делит кадр 65/35 или 75/25. Она несёт смысл.</p></div>
+      <div class="card"><span class="big-number signal">03</span><h3>INDEX</h3><p class="small">Реальные данные работают как архивная маркировка, без псевдонауки.</p></div>
+      <div class="card"><span class="big-number signal">04</span><h3>VOID</h3><p class="small">Минимум 30% пустого поля и один объект высокого давления.</p></div>
+    </div>
+    <div class="grid-2" style="margin-top:42px">
+      <div><span class="label signal">Разрешено</span><p>Hard crop, мелкое зерно 2–6%, threshold 2–4 тона, halftone одного масштаба, registration drift до 0,25%, directional blur одного слоя.</p></div>
+      <div><span class="label signal">Запрещено</span><p>Bubble, smiley, mushrooms, random 3D, liquid wobble, rainbow neon, винил/наушники/equalizer как клипарт, псевдолабораторные колбы и бессмысленный AI-surreal.</p></div>
+    </div>
+    <div class="foot"><span>ONE HERO / ONE TEXT BLOCK / ONE SIGNAL</span><span>MAX TWO TEXTURE TECHNIQUES</span></div>
+  </section>
+
+  <section class="sheet" id="templates" aria-labelledby="templates-title">
+    <span class="section-no">08 / CONTENT TEMPLATES</span>
+    <div class="kicker">Рабочие форматы</div>
+    <div class="demo-badge">Template previews / sample data</div>
+    <h2 class="sr-only" id="templates-title">Рабочие форматы и шаблоны контента</h2>
+    <div class="mock-row" style="margin-top:52px">
+      <img src="templates/release-cover-type.svg" alt="Квадратный типографический шаблон обложки релиза 3000 на 3000 пикселей">
+      <img src="templates/instagram-announce-4x5.svg" alt="Шаблон анонса для ленты Instagram в формате 4 к 5">
+      <img src="templates/story-signal-9x16.svg" alt="Шаблон Signal для Stories и Reels в формате 9 к 16">
+    </div>
+    <div class="grid-3" style="margin-top:30px">
+      <div><span class="label signal">RELEASE / 3000²</span><p class="small">OBJECT / TYPE / DOCUMENT. Каталог и publisher mark находятся в утверждённых слотах.</p></div>
+      <div><span class="label signal">FEED / 1080×1350</span><p class="small">Один вопрос на первый экран. Детали и контекст — следующие слайды карусели.</p></div>
+      <div><span class="label signal">STORY / 1080×1920</span><p class="small">Signal → artwork → excerpt → date/CTA. Важные данные внутри UI-safe зоны.</p></div>
+    </div>
+    <div class="foot"><span>EDITABLE SVG TEMPLATES INCLUDED</span><span>6-COLUMN SOCIAL GRID / U = SHORT SIDE ÷ 60</span></div>
+  </section>
+
+  <section class="sheet light" id="motion-photo" aria-labelledby="motion-photo-title">
+    <span class="section-no">09 / MOTION + IMAGE</span>
+    <div class="kicker">Поведение во времени</div>
+    <h2 id="motion-photo-title" style="margin-top:42px">CUT → PRESSURE →<br><span class="signal">SIGNAL</span> → RELEASE</h2>
+    <div class="motion-line">
+      <div class="phase"><span class="label">CUT / 2–6 FR</span><p class="small">Жёсткий монтажный вход.</p></div>
+      <div class="phase"><span class="label">PRESSURE / 4–8%</span><p class="small">Медленное движение крупного слоя.</p></div>
+      <div class="phase"><span class="label">SIGNAL / 8–15 FR</span><p class="small">Линия проходит один раз.</p></div>
+      <div class="phase"><span class="label">HOLD / 30 FR+</span><p class="small">Информация читается.</p></div>
+    </div>
+    <div class="grid-2" style="margin-top:56px">
+      <div class="card"><h3>ФОТО</h3><p style="margin-top:20px">Документальная студия и сцена, прямой flash, глубокий чёрный, холодная нейтральная база, зерно, макро металла/кожи/бумаги, осознанный blur и отрицательное поле.</p></div>
+      <div class="card"><h3>НЕ ДЕЛАТЬ</h3><p style="margin-top:20px">Bounce, elastic, liquid morph, постоянный RGB split, kaleidoscope, glitch packs, длинные 3D-заставки, мигание быстрее трёх раз в секунду.</p></div>
+    </div>
+    <p class="small" style="margin-top:26px">Логотип не morph-ится и не растягивается. Двигаются маска, crop, окружение или позиция; финальный кадр всегда показывает чистую геометрию.</p>
+    <div class="foot"><span>ONE MOTION DEVICE PER VIDEO</span><span>STATIC / REDUCED MOTION VERSION REQUIRED</span></div>
+  </section>
+
+  <section class="sheet" id="voice" aria-labelledby="voice-title">
+    <span class="section-no">10 / VOICE</span>
+    <div class="kicker">Как говорит POVKH LAB</div>
+    <div class="demo-badge">Example copy / not a release announcement</div>
+    <div class="grid-2" style="margin-top:60px;grid-template-columns:.8fr 1.2fr">
+      <div>
+        <h2 id="voice-title">КОРОТКО.<br>ТОЧНО.<br>БЕЗ<br>ХАЙПА.</h2>
+        <div class="rule" style="margin:34px 0"></div>
+        <p>Факты и ощущения важнее обещаний. Мы не объясняем музыку до конца и не изображаем «безумный андеграунд».</p>
+      </div>
+      <div>
+        <div class="card" style="min-height:310px">
+          <span class="label signal">АНОНС / ФОРМУЛА</span>
+          <p class="type-meta" style="margin-top:26px;color:var(--bone)">ARTIST — RELEASE<br>PVKH-001 / 18.09.2026<br><br>A study in unstable rhythm and close-range pressure.<br><br>OUT 18.09 / PRE-ORDER</p>
+        </div>
+        <div class="grid-2" style="gap:22px;margin-top:22px">
+          <div class="card"><span class="label signal">Говорим</span><p class="small" style="margin-top:15px">«Recorded in one pass.»<br>«One resonator, no overdubs.»<br>«Sound as method.»</p></div>
+          <div class="card"><span class="label signal">Не говорим</span><p class="small" style="margin-top:15px">«Бомба», «дропчик», «мы взрываем», mind-blowing, next level, ряды emoji и пустая псевдонаука.</p></div>
+        </div>
+      </div>
+    </div>
+    <div class="foot"><span>ARTIST-FIRST / FACTUAL / LOW-HYPE</span><span>POVKH LAB — ALWAYS WITH SPACE</span></div>
+  </section>
+
+  <section class="sheet light" id="workflow" aria-labelledby="workflow-title">
+    <span class="section-no">11 / TEAM WORKFLOW</span>
+    <div class="kicker">Единый источник истины</div>
+    <h2 id="workflow-title" style="margin-top:44px">ИЗМЕНЯЕТСЯ КОНТЕНТ.<br>НЕ ИЗМЕНЯЕТСЯ СИСТЕМА.</h2>
+    <div class="grid-3" style="margin-top:44px">
+      <div class="card"><span class="label signal">01 / SOURCE</span><p class="small" style="margin-top:14px">Работа начинается с папки релиза и утверждённого master artwork. Никто не скачивает логотип из чата.</p></div>
+      <div class="card"><span class="label signal">02 / REVIEW</span><p class="small" style="margin-top:14px">WIP → RVW → APR → PUB. Версии не перезаписываются; опубликованный файл сохраняется в delivery.</p></div>
+      <div class="card"><span class="label signal">03 / QA</span><p class="small" style="margin-top:14px">Проверить spelling, каталог, дату, safe zone, 32 px thumbnail, контраст, права, sRGB и субтитры.</p></div>
+    </div>
+    <table>
+      <caption class="sr-only">Правила именования, мастер-файлы и проверка материалов</caption>
+      <tr><th scope="row">ИМЯ ФАЙЛА</th><td>PVKH_[CAT]_[ARTIST]_[RELEASE]_[ASSET]_[RATIO_OR_SIZE_OR_DURATION]_[STATUS]_vNN_YYYYMMDD.ext</td></tr>
+      <tr><th scope="row">ПРИМЕР</th><td>PVKH_001_ARTIST_RELEASE_ANNOUNCE_4x5_APR_v03_20260903.jpg</td></tr>
+      <tr><th scope="row">МАСТЕРЫ</th><td>Outlined SVG для логотипов · 3000×3000 artwork · 1080×1350 feed · 1080×1920 vertical · 3840×2160 YouTube thumbnail</td></tr>
+      <tr><th scope="row">ПРОВЕРКА</th><td>Mobile preview на 50% яркости · круглая обрезка · читаемость без звука · один CTA · один акцент</td></tr>
+    </table>
+    <div class="grid-2" style="margin-top:34px">
+      <div><span class="label signal">Релизный ритм</span><p>SIGNAL T−21 → ANNOUNCE T−14 → CONTEXT T−10 → EXCERPT T−7 → DETAIL T−3 → OUT NOW T0. OPTIONAL POST-RELEASE: PROCESS T+2 → AFTERIMAGE T+7.</p></div>
+      <div><span class="label signal">Главный вопрос</span><p>Если материал можно без потери выпустить на любом другом лейбле, он ещё не стал объектом POVKH LAB.</p></div>
+    </div>
+    <div class="foot"><span>BRAND BOARD V2.0 / TERMINAL RELIC</span><span>QUARTERLY PLATFORM-SPEC REVIEW</span></div>
+  </section>
+  </main>
+  <script>
+    const fitBoard = () => {
+      document.body.style.zoom = window.innerWidth < 1640 ? String(window.innerWidth / 1640) : "1";
+    };
+    fitBoard();
+    window.addEventListener("resize", fitBoard, { passive: true });
+  </script>
+</body>
+</html>
