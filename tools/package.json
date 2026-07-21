@@ -1,0 +1,17 @@
+{
+  "name": "povkh-lab-brand-tools",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Pinned export and production-QA dependencies for the POVKH LAB brand package",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "export": "node export_brand_board.mjs",
+    "qa": "node qa_brand_package.mjs"
+  },
+  "dependencies": {
+    "@axe-core/playwright": "4.10.2",
+    "playwright": "1.61.1"
+  }
+}

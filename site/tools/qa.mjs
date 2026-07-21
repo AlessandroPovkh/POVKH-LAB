@@ -1626,7 +1626,8 @@ try {
     "/downloads/POVKH-LAB-Brand-Board-v1.0.pdf",
     "/assets/logo/povkh-lab-horizontal-reverse-transparent-outlined.svg",
     "/assets/logo/povkh-lab-horizontal-dark-outlined.svg",
-    "/assets/logo/povkh-lab-primary-reverse-transparent-outlined.svg"
+    "/assets/logo/povkh-lab-primary-reverse-transparent-outlined.svg",
+    "/assets/logo/povkh-lab-ascii-reverse-transparent-outlined.svg"
   ]) {
     const response = await fetch(`${baseUrl}${asset}`, { method: "HEAD" });
     if (!response.ok) fail(`Press asset unavailable: ${asset} (${response.status})`);

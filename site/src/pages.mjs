@@ -27,7 +27,8 @@ const PRESS_ASSETS = [
   "downloads/POVKH-LAB-Brand-Board-v1.0.pdf",
   "assets/logo/povkh-lab-horizontal-reverse-transparent-outlined.svg",
   "assets/logo/povkh-lab-horizontal-dark-outlined.svg",
-  "assets/logo/povkh-lab-primary-reverse-transparent-outlined.svg"
+  "assets/logo/povkh-lab-primary-reverse-transparent-outlined.svg",
+  "assets/logo/povkh-lab-ascii-reverse-transparent-outlined.svg"
 ];
 
 const escapeHtml = (value) => String(value)

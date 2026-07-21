@@ -940,10 +940,14 @@ for (const logo of [
   "povkh-lab-compact-reverse-transparent-outlined.svg",
   "povkh-lab-horizontal-dark-outlined.svg",
   "povkh-lab-horizontal-reverse-transparent-outlined.svg",
-  "povkh-lab-primary-reverse-transparent-outlined.svg"
+  "povkh-lab-primary-reverse-transparent-outlined.svg",
+  "povkh-lab-ascii-reverse-transparent-outlined.svg"
 ]) {
-  const svg = await readFile(path.join(distDir, "assets", "logo", logo), "utf8");
+  const publicLogo = await readFile(path.join(distDir, "assets", "logo", logo));
+  const canonicalLogo = await readFile(path.join(siteRoot, "..", "assets", "logo", logo));
+  const svg = publicLogo.toString("utf8");
   if (/<text\b|<image\b|@font-face|href=/i.test(svg)) fail(`Logo is not self-contained outlined SVG: ${logo}`);
+  if (!publicLogo.equals(canonicalLogo)) fail(`Public logo differs from canonical Terminal Relic master: ${logo}`);
 }
 
 const buildManifest = JSON.parse(await readFile(path.join(distDir, "build-manifest.json"), "utf8"));

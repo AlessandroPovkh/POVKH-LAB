@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-labelledby="title desc" data-template-version="1.0" data-safe-inset="64">
+  <title id="title">POVKH LAB YouTube thumbnail template</title>
+  <desc id="desc">Legacy-compatible 1280 by 720 sample delivery derivative template, visibly marked not for publication. Build campaign masters at 3840 by 2160, then downsample when required. Critical typography stays inside a 64-pixel safe inset and clear of the lower-right duration badge area.</desc>
+  <style>
+    @font-face { font-family: Barlow; src: url("../assets/fonts/BarlowCondensed-Black.ttf") format("truetype"); font-style: normal; font-weight: 900; font-display: swap; }
+    @font-face { font-family: Plex; src: url("../assets/fonts/IBMPlexMono-Regular.ttf") format("truetype"); font-style: normal; font-weight: 400; font-display: swap; }
+    .display { font-family: Barlow, "Arial Narrow", sans-serif; font-weight: 900; font-synthesis: none; }
+    .meta { font-family: Plex, monospace; font-weight: 400; font-synthesis: none; letter-spacing: .08em; }
+  </style>
+  <rect width="1280" height="720" fill="#080808"/>
+  <rect x="720" width="560" height="720" fill="#202020"/>
+  <text data-critical="true" x="1000" y="370" fill="#8F918F" class="meta" text-anchor="middle" font-size="20">ARTIST / PROCESS IMAGE</text>
+  <text data-critical="true" x="64" y="108" fill="#F32222" class="meta" font-size="20">PROCESS / 001</text>
+  <text data-critical="true" x="64" y="405" fill="#F2EFE7" class="display" font-size="260" textLength="608" lengthAdjust="spacingAndGlyphs">ARTIST</text>
+  <rect x="64" y="438" width="608" height="20" fill="#F32222"/>
+  <text data-critical="true" x="64" y="575" fill="#F2EFE7" class="display" font-size="135" textLength="520" lengthAdjust="spacingAndGlyphs">ONE SOUND</text>
+  <text data-critical="true" x="64" y="651" fill="#F2EFE7" class="meta" font-size="18">POVKH LAB / SESSION ARCHIVE</text>
+  <text x="672" y="685" fill="#F32222" class="meta" font-size="14" text-anchor="end">SAMPLE / NOT FOR PUBLICATION</text>
+</svg>

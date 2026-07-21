@@ -247,15 +247,16 @@ export const COPY = {
         description: "Approved POVKH LAB logo masters and an identity reference board with clearly marked sample release content.",
         eyebrow: "Press / identity assets",
         lede: "Approved outlined logo masters plus an identity reference board. Release-specific press material will appear only after approval.",
-        version: "Asset version: brand system v1.0",
-        downloadsEyebrow: "Downloads / 04",
+        version: "Asset version: Terminal Relic brand system v2.0",
+        downloadsEyebrow: "Downloads / 05",
         downloadsTitle: "Logo masters + reference",
-        downloadsBody: "The three SVG files are approved logo masters. The board documents identity usage; its release names, dates and copy are explicitly marked sample data.",
+        downloadsBody: "The four SVG files are approved Terminal Relic logo masters. The board documents identity usage; its release names, dates and copy are explicitly marked sample data.",
         cards: [
           ["PDF / 12 pages / reference", "Brand board", "Approved identity rules with clearly marked sample release metadata and example copy."],
           ["SVG / outlined", "Horizontal reverse", "Bone and Signal logo for approved dark backgrounds."],
           ["SVG / outlined", "Horizontal dark", "Void and Signal logo for approved light backgrounds."],
-          ["SVG / outlined", "Primary reverse", "Stacked master for square and portrait placements on dark backgrounds."]
+          ["SVG / outlined", "Primary reverse", "Stacked master for square and portrait placements on dark backgrounds."],
+          ["SVG / outlined", "ASCII signature", "Secondary terminal-format signature for large dark-field applications."]
         ],
         namingEyebrow: "Naming",
         namingTitle: "POVKH LAB",
@@ -462,15 +463,16 @@ export const COPY = {
         description: "Master approvati del logo POVKH LAB e un brand board di riferimento con contenuti di uscita di esempio chiaramente contrassegnati.",
         eyebrow: "Stampa / materiali dell’identità",
         lede: "Master approvati del logo convertiti in tracciati e un brand board di riferimento. I materiali stampa specifici dell’uscita appariranno solo dopo l’approvazione.",
-        version: "Versione dei materiali: sistema di identità v1.0",
-        downloadsEyebrow: "Download / 04",
+        version: "Versione dei materiali: sistema Terminal Relic v2.0",
+        downloadsEyebrow: "Download / 05",
         downloadsTitle: "Master del logo + riferimento",
-        downloadsBody: "I tre file SVG sono master approvati del logo. Il board documenta l’uso dell’identità; nomi delle uscite, date e testi sono esplicitamente indicati come dati di esempio.",
+        downloadsBody: "I quattro file SVG sono master approvati Terminal Relic. Il board documenta l’uso dell’identità; nomi delle uscite, date e testi sono esplicitamente indicati come dati di esempio.",
         cards: [
           ["PDF / 12 pagine / riferimento", "Brand board", "Regole approvate dell’identità con metadati di uscita di esempio e testi dimostrativi chiaramente contrassegnati."],
           ["SVG / convertito in tracciati", "Orizzontale negativo", "Logo Bone e Signal per sfondi scuri approvati."],
           ["SVG / convertito in tracciati", "Orizzontale scuro", "Logo Void e Signal per sfondi chiari approvati."],
-          ["SVG / convertito in tracciati", "Primario negativo", "Master impilato per applicazioni quadrate e verticali su sfondi scuri."]
+          ["SVG / convertito in tracciati", "Primario negativo", "Master impilato per applicazioni quadrate e verticali su sfondi scuri."],
+          ["SVG / convertito in tracciati", "Firma ASCII", "Firma secondaria in formato terminale per applicazioni ampie su fondo scuro."]
         ],
         namingEyebrow: "Denominazione",
         namingTitle: "POVKH LAB",
@@ -677,15 +679,16 @@ export const COPY = {
         description: "Утверждённые мастер-файлы логотипа POVKH LAB и справочный бренд-борд с явно обозначенным демонстрационным контентом релиза.",
         eyebrow: "Пресса / материалы айдентики",
         lede: "Утверждённые мастер-файлы логотипа в кривых и справочный бренд-борд. Материалы для прессы по конкретному релизу появятся только после утверждения.",
-        version: "Версия материалов: бренд-система v1.0",
-        downloadsEyebrow: "Загрузки / 04",
+        version: "Версия материалов: бренд-система Terminal Relic v2.0",
+        downloadsEyebrow: "Загрузки / 05",
         downloadsTitle: "Мастер‑файлы логотипа + справочный материал",
-        downloadsBody: "Три SVG-файла — утверждённые мастер-файлы логотипа. Бренд-борд описывает правила использования айдентики; названия релизов, даты и тексты явно отмечены как демонстрационные данные.",
+        downloadsBody: "Четыре SVG-файла — утверждённые мастер-файлы Terminal Relic. Бренд-борд описывает правила использования айдентики; названия релизов, даты и тексты явно отмечены как демонстрационные данные.",
         cards: [
           ["PDF / 12 страниц / справочный материал", "Бренд-борд", "Утверждённые правила айдентики с явно обозначенными демонстрационными метаданными релиза и примерами текстов."],
           ["SVG / в кривых", "Горизонтальный инверсный", "Логотип в цветах Bone и Signal для утверждённых тёмных фонов."],
           ["SVG / в кривых", "Горизонтальный тёмный", "Логотип в цветах Void и Signal для утверждённых светлых фонов."],
-          ["SVG / в кривых", "Основной инверсный", "Вертикально скомпонованный мастер-файл для квадратного и портретного размещения на тёмном фоне."]
+          ["SVG / в кривых", "Основной инверсный", "Вертикально скомпонованный мастер-файл для квадратного и портретного размещения на тёмном фоне."],
+          ["SVG / в кривых", "ASCII-подпись", "Вторичная терминальная подпись для крупных носителей на тёмном фоне."]
         ],
         namingEyebrow: "Название",
         namingTitle: "POVKH LAB",
