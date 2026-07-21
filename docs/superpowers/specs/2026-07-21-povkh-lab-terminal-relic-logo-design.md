@@ -1,7 +1,14 @@
 # POVKH LAB — Terminal Relic logo concept
 
 Date: 2026-07-21  
-Status: WIP concept for review; not an approved production master
+Status: Approved master direction; production rollout authorized
+
+## Approval record
+
+On 2026-07-21 the user approved the Terminal Relic concept board as the new
+POVKH LAB master direction and explicitly authorized its rollout to the brand
+book, website and GitHub Pages. The production system must preserve the exact
+supplied ornament geometry and the no-targeting exclusions below.
 
 ## Goal
 
@@ -9,7 +16,10 @@ Develop an adaptive POVKH LAB logo concept from the supplied `❧` vector. The d
 
 ## Relationship to the current identity
 
-The approved `Concept 02 / Typographic Monolith` remains the normative master while this concept is reviewed. Terminal Relic is stored as a candidate in `logo-concepts/` and must not replace files in `assets/logo/` or downstream consumers without a separate approval.
+Terminal Relic supersedes `Concept 02 / Typographic Monolith` as the normative
+master. Concept 02 remains a process archive and must not be used for new
+production work. Existing public asset filenames stay stable while their
+geometry is replaced by Terminal Relic compositions.
 
 Recognizable POVKH LAB codes remain intact:
 
@@ -54,7 +64,7 @@ HUD is expressed through information structure: indexes, file-like identifiers, 
 - no glow, chrome, bevel, 3D, neon gradients or glossy cyberpunk effects;
 - no random code, fake coordinates or meaningless technical decoration;
 - no modification of the public brand name or catalogue-code rules;
-- no replacement of the approved master during concept review.
+- no unreviewed changes to the approved ornament geometry.
 
 ## First review artifact
 
@@ -75,8 +85,11 @@ The board uses only the approved color tokens. It is a visual decision artifact,
 - the organic symbol and rigid typography feel intentionally tense;
 - the system works in pure black and white;
 - the concept does not resemble a targeting interface;
-- the existing master and all downstream consumers remain untouched.
+- every downstream consumer uses the same governed production masters.
 
 ## Approval path
 
-If the concept board is approved, the next stage creates editable SVG sources, outlined production masters, reverse/mono variants, PNG previews and a source-to-export manifest. If rejected, all work remains a labeled process concept under `logo-concepts/`.
+Approval has been granted. Production creates outlined primary, horizontal,
+compact, mono, reverse and ASCII masters, derived PNGs and a source-to-export
+manifest. All public lettering is converted to paths; the approved ornament
+source remains unchanged under `logo-concepts/terminal-relic/source/`.
