@@ -10,7 +10,7 @@ export const LOCALE_META = {
 
 const common = {
   en: {
-    nav: { home: "Home", catalog: "Catalog", artists: "Artists", process: "Process", about: "About", press: "Press", download: "Download", contact: "Contact" },
+    nav: { home: "Home", catalog: "Catalog", merch: "Merch", artists: "Artists", process: "Process", about: "About", press: "Press", download: "Download", contact: "Contact" },
     menu: "Menu",
     languageNav: "Language",
     skip: "Skip to main content",
@@ -38,7 +38,7 @@ const common = {
     }
   },
   it: {
-    nav: { home: "Home", catalog: "Catalogo", artists: "Artisti", process: "Processo", about: "Chi siamo", press: "Stampa", download: "Download", contact: "Contatti" },
+    nav: { home: "Home", catalog: "Catalogo", merch: "Merch", artists: "Artisti", process: "Processo", about: "Chi siamo", press: "Stampa", download: "Download", contact: "Contatti" },
     menu: "Menu",
     languageNav: "Lingua",
     skip: "Vai al contenuto principale",
@@ -66,7 +66,7 @@ const common = {
     }
   },
   ru: {
-    nav: { home: "Главная", catalog: "Каталог", artists: "Артисты", process: "Процесс", about: "О нас", press: "Пресса", download: "Скачать", contact: "Контакты" },
+    nav: { home: "Главная", catalog: "Каталог", merch: "Мерч", artists: "Артисты", process: "Процесс", about: "О нас", press: "Пресса", download: "Скачать", contact: "Контакты" },
     menu: "Меню",
     languageNav: "Язык",
     skip: "Перейти к основному содержимому",
@@ -303,6 +303,18 @@ export const COPY = {
         ],
         footer: "Downloads, contribution links and verified requirements will appear after the packages pass release review."
       },
+      links: {
+        title: "Social access",
+        description: "Verified POVKH LAB social channels: Telegram, TikTok, Instagram and YouTube.",
+        eyebrow: "LINK NODE / VERIFIED CHANNELS",
+        displayTitle: ["SOCIAL", "ACCESS"],
+        lede: "Select a verified label channel. Every destination opens outside the archive.",
+        navLabel: "Verified POVKH LAB social channels",
+        serviceAria: "Open POVKH LAB on {service} in a new tab",
+        status: "ACCESS / EXTERNAL",
+        emptyTitle: "No verified channel available",
+        emptyBody: "The access node is not public yet. Return to the label archive."
+      },
       notFound: {
         title: "Page not found",
         description: "The requested POVKH LAB page could not be found.",
@@ -519,6 +531,18 @@ export const COPY = {
         ],
         footer: "Download, link di supporto e requisiti verificati appariranno dopo la revisione dei pacchetti."
       },
+      links: {
+        title: "Accesso social",
+        description: "Canali social verificati di POVKH LAB: Telegram, TikTok, Instagram e YouTube.",
+        eyebrow: "NODO LINK / CANALI VERIFICATI",
+        displayTitle: ["ACCESSO", "SOCIAL"],
+        lede: "Seleziona un canale verificato dell’etichetta. Ogni destinazione si apre fuori dall’archivio.",
+        navLabel: "Canali social verificati di POVKH LAB",
+        serviceAria: "Apri POVKH LAB su {service} in una nuova scheda",
+        status: "ACCESSO / ESTERNO",
+        emptyTitle: "Nessun canale verificato disponibile",
+        emptyBody: "Il nodo di accesso non è ancora pubblico. Torna all’archivio dell’etichetta."
+      },
       notFound: {
         title: "Pagina non trovata",
         description: "Impossibile trovare la pagina POVKH LAB richiesta.",
@@ -734,6 +758,18 @@ export const COPY = {
           ["МОДУЛЬ / 03", "Плагин засекречен", "Идентификатор сборки и документация ожидаются."]
         ],
         footer: "Загрузки, ссылки поддержки и проверенные системные требования появятся после финальной проверки пакетов."
+      },
+      links: {
+        title: "Социальный доступ",
+        description: "Подтверждённые социальные каналы POVKH LAB: Telegram, TikTok, Instagram и YouTube.",
+        eyebrow: "УЗЕЛ СВЯЗИ / ПОДТВЕРЖДЁННЫЕ КАНАЛЫ",
+        displayTitle: ["СОЦИАЛЬНЫЙ", "ДОСТУП"],
+        lede: "Выберите подтверждённый канал лейбла. Каждая ссылка открывается вне архива.",
+        navLabel: "Подтверждённые социальные каналы POVKH LAB",
+        serviceAria: "Открыть POVKH LAB в {service} в новой вкладке",
+        status: "ДОСТУП / ВНЕШНИЙ",
+        emptyTitle: "Нет доступных подтверждённых каналов",
+        emptyBody: "Узел доступа ещё не опубликован. Вернитесь в архив лейбла."
       },
       notFound: {
         title: "Страница не найдена",

@@ -5,7 +5,7 @@ import AxeBuilder from "@axe-core/playwright";
 import { chromium, webkit } from "playwright";
 import { COPY } from "../src/i18n.mjs";
 import { genreLabel } from "../src/pages.mjs";
-import { SITE_BASE_PATH, SITE_ORIGIN } from "../src/config.mjs";
+import { SITE_BASE_PATH, SITE_ORIGIN, SOCIAL_LINKS } from "../src/config.mjs";
 import { createStaticServer } from "./server.mjs";
 
 const siteRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -14,6 +14,7 @@ const siteOrigin = `${SITE_ORIGIN}${SITE_BASE_PATH}`;
 const catalog = JSON.parse(await readFile(path.join(siteRoot, "data", "catalog.json"), "utf8"));
 const audioLibrary = JSON.parse(await readFile(path.join(siteRoot, "data", "audio-library.json"), "utf8"));
 const artistLibrary = JSON.parse(await readFile(path.join(siteRoot, "data", "artists.json"), "utf8"));
+const merchLibrary = JSON.parse(await readFile(path.join(siteRoot, "data", "merch.json"), "utf8"));
 const defaultAudioTrack = audioLibrary.tracks.find((track) => track.catalogId === audioLibrary.defaultCatalogId);
 const publishedReleaseCount = catalog.releases.filter((release) => release.status === "published").length;
 const upcomingReleaseCount = catalog.releases.filter((release) => release.status === "upcoming").length;
@@ -24,10 +25,13 @@ const baseRoutes = [
   ...catalog.releases.filter((release) => release.streamingLinks).map((release) => `/listen/${release.slug}/`),
   "/artists/",
   ...artistLibrary.artists.map((artist) => `/artists/${artist.slug}/`),
+  "/merch/",
+  ...merchLibrary.objects.map((object) => `/merch/${object.slug}/`),
   "/process/",
   "/about/",
   "/press/",
   "/contact/",
+  "/links/",
   "/download/"
 ];
 const locales = [
@@ -75,7 +79,19 @@ const screenshotCases = new Map([
   ["/ru/catalog/pvkh-013/@375", "release-upcoming-ru-mobile-375.png"],
   ["/it/process/@1024", "process-it-tablet-1024.png"],
   ["/press/@1024", "press-en-tablet-1024.png"],
-  ["/ru/contact/@375", "contact-ru-mobile-375.png"]
+  ["/ru/contact/@375", "contact-ru-mobile-375.png"],
+  ["/links/@375", "social-access-en-mobile-375.png"],
+  ["/links/@1440", "social-access-en-desktop-1440.png"],
+  ["/it/links/@375", "social-access-it-mobile-375.png"],
+  ["/ru/links/@375", "social-access-ru-mobile-375.png"],
+  ["/ru/links/@1440", "social-access-ru-desktop-1440.png"],
+  ["/merch/@1440", "merch-en-desktop-1440.png"],
+  ["/merch/@375", "merch-en-mobile-375.png"],
+  ["/it/merch/@1024", "merch-it-tablet-1024.png"],
+  ["/ru/merch/@320", "merch-ru-mobile-320.png"],
+  ["/merch/vinyl/@1440", "merch-vinyl-en-desktop-1440.png"],
+  ["/it/merch/zine-booklet/@375", "merch-zine-it-mobile-375.png"],
+  ["/ru/merch/collector-box-set/@1024", "merch-collector-box-ru-tablet-1024.png"]
 ]);
 const failures = [];
 let axeScans = 0;
@@ -108,6 +124,8 @@ const inspectDisplayTypography = () => {
     ".release-card-title",
     ".release-display-title",
     ".smartlink-release",
+    ".social-access-title",
+    ".social-access-service",
     ".step h3"
   ].join(",");
   const issues = [];
@@ -193,6 +211,8 @@ const displayFontSizes = () => {
     ".release-card-title",
     ".release-display-title",
     ".smartlink-release",
+    ".social-access-title",
+    ".social-access-service",
     ".step h3"
   ].join(",");
   return [...document.querySelectorAll(selector)]
@@ -399,6 +419,260 @@ try {
         .filter((image) => image.complete && image.naturalWidth === 0)
         .map((image) => image.getAttribute("src")));
       if (brokenImages.length) fail(`${label}: broken images ${brokenImages.join(", ")}`);
+
+      if (baseRoute === "/merch/") {
+        const merchContract = await page.evaluate(() => ({
+          objects: document.querySelectorAll("[data-merch-object]").length,
+          categories: [...document.querySelectorAll("[data-merch-category]")]
+            .map((node) => node.dataset.merchCategory),
+          detailLinks: document.querySelectorAll("[data-merch-detail]").length,
+          roadmap: document.querySelectorAll("[data-merch-roadmap]").length,
+          anchor: document.querySelector('.merch-hero a[href="#merch-objects"]')?.getAttribute("href"),
+          navCurrent: document.querySelectorAll('.nav-link[aria-current="page"]').length,
+          firstGridColumns: new Set([...document.querySelector(".merch-object-grid").querySelectorAll(".merch-object")]
+            .map((node) => Math.round(node.getBoundingClientRect().left))).size
+        }));
+        if (merchContract.objects !== merchLibrary.objects.length
+          || JSON.stringify(merchContract.categories) !== JSON.stringify(["media", "wear", "printObjects"])
+          || merchContract.detailLinks !== merchLibrary.objects.length
+          || merchContract.roadmap !== 1
+          || merchContract.anchor !== "#merch-objects"
+          || merchContract.navCurrent !== 2
+          || (viewport.width === 320 && merchContract.firstGridColumns !== 1)) {
+          fail(`${label}: invalid merch browser contract ${JSON.stringify(merchContract)}`);
+        }
+
+        if (viewport.width === 320 || viewport.width === 375) {
+          await page.waitForFunction(() => document.querySelector("[data-audio-player]")?.classList.contains("is-ready"));
+          const playerSafety = await page.evaluate(() => {
+            const overlaps = (a, b) => a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top;
+            const player = document.querySelector("[data-audio-player]").getBoundingClientRect();
+            const copyAndAction = [
+              ["lede", document.querySelector(".merch-hero .lede")],
+              ["status", document.querySelector(".merch-hero .meta")],
+              ["action", document.querySelector('.merch-hero a[href="#merch-objects"]')]
+            ].flatMap(([name, node]) => {
+              if (!node || getComputedStyle(node).display === "none") return [];
+              const rect = node.getBoundingClientRect();
+              return rect.width > 0 && rect.height > 0 ? [{ name, rect }] : [];
+            });
+            return {
+              player,
+              intersections: copyAndAction.filter(({ rect }) => overlaps(player, rect)).map(({ name, rect }) => ({ name, rect }))
+            };
+          });
+          if (playerSafety.intersections.length) {
+            fail(`${label}: ready player intersects merch hero copy/action ${JSON.stringify(playerSafety)}`);
+          }
+        }
+
+        if (viewport.width === 375) {
+          await page.locator('.merch-hero a[href="#merch-objects"]').click();
+          await page.waitForFunction(() => location.hash === "#merch-objects");
+          await page.waitForFunction(() => {
+            const rect = document.querySelector("#merch-objects")?.getBoundingClientRect();
+            return Boolean(rect && rect.top < innerHeight && rect.bottom > 0);
+          });
+          const ctaNavigation = await page.evaluate(() => {
+            const target = document.querySelector("#merch-objects");
+            const rect = target?.getBoundingClientRect();
+            return {
+              hash: location.hash,
+              targetVisible: Boolean(rect && rect.top < innerHeight && rect.bottom > 0),
+              targetTop: rect?.top ?? null
+            };
+          });
+          if (ctaNavigation.hash !== "#merch-objects" || !ctaNavigation.targetVisible) {
+            fail(`${label}: merch hero CTA did not visibly reach the object index ${JSON.stringify(ctaNavigation)}`);
+          }
+          await page.evaluate(() => {
+            document.documentElement.style.scrollBehavior = "auto";
+            window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+          });
+          await page.waitForFunction(() => scrollY === 0);
+        }
+      }
+
+      const merchSlug = baseRoute.match(/^\/merch\/([a-z0-9-]+)\/$/)?.[1] || null;
+      if (merchSlug) {
+        const expectedObject = merchLibrary.objects.find((object) => object.slug === merchSlug);
+        const detailContract = await page.evaluate(() => {
+          const gallery = document.querySelector("[data-merch-gallery]");
+          const triggers = [...document.querySelectorAll("[data-merch-gallery-trigger]")];
+          const figures = [...document.querySelectorAll("[data-merch-gallery-figure]")];
+          const releaseGate = document.querySelector("[data-merch-release-gate]");
+          const hero = document.querySelector(".merch-detail-visual img");
+          return {
+            rootCount: document.querySelectorAll("[data-merch-detail-id]").length,
+            objectId: document.querySelector("[data-merch-detail-id]")?.dataset.merchDetailId || null,
+            stage: document.querySelector("[data-merch-detail-id]")?.dataset.merchStage || null,
+            galleryCount: Number(gallery?.dataset.galleryCount || 0),
+            controller: gallery?.dataset.merchGalleryController || null,
+            triggers: triggers.length,
+            uniqueTriggerHrefs: new Set(triggers.map((trigger) => trigger.href)).size,
+            figures: figures.length,
+            hiddenFigures: figures.filter((figure) => figure.hidden).length,
+            dialogCount: document.querySelectorAll("[data-merch-gallery-dialog]").length,
+            dialogOpen: document.querySelector("[data-merch-gallery-dialog]")?.open || false,
+            gateCount: releaseGate ? 1 : 0,
+            heroLoading: hero?.getAttribute("loading") || null,
+            heroPriority: hero?.getAttribute("fetchpriority") || null,
+            breadcrumbCurrent: document.querySelector("[data-merch-breadcrumb] [aria-current=page]")?.textContent.trim() || null,
+            horizontalOverflow: document.documentElement.scrollWidth - document.documentElement.clientWidth
+          };
+        });
+        if (!expectedObject
+          || detailContract.rootCount !== 1
+          || detailContract.objectId !== expectedObject.id
+          || detailContract.stage !== "concept"
+          || detailContract.galleryCount !== expectedObject.gallery.length
+          || detailContract.controller !== "active"
+          || detailContract.triggers !== expectedObject.gallery.length
+          || detailContract.uniqueTriggerHrefs !== expectedObject.gallery.length
+          || detailContract.figures !== expectedObject.gallery.length
+          || detailContract.hiddenFigures !== expectedObject.gallery.length - 1
+          || detailContract.dialogCount !== 1
+          || detailContract.dialogOpen
+          || detailContract.gateCount !== 1
+          || detailContract.heroLoading !== "eager"
+          || detailContract.heroPriority !== "high"
+          || !detailContract.breadcrumbCurrent
+          || detailContract.horizontalOverflow > 1) {
+          fail(`${label}: invalid merch detail contract ${JSON.stringify(detailContract)}`);
+        }
+
+        if (viewport.width === 375) {
+          const triggerIndex = Math.min(1, expectedObject.gallery.length - 1);
+          const trigger = page.locator("[data-merch-gallery-trigger]").nth(triggerIndex);
+          await trigger.focus();
+          await trigger.click();
+          await page.waitForFunction(() => document.querySelector("[data-merch-gallery-dialog]")?.open);
+          const initialDialog = await page.evaluate(() => ({
+            open: document.querySelector("[data-merch-gallery-dialog]")?.open || false,
+            current: [...document.querySelectorAll("[data-merch-gallery-figure]")].findIndex((figure) => !figure.hidden),
+            counter: document.querySelector("[data-merch-gallery-counter]")?.textContent.trim() || "",
+            activeControllers: document.querySelectorAll('[data-merch-gallery-controller="active"]').length,
+            activeElement: document.activeElement?.matches("[data-merch-gallery-close]") || false
+          }));
+          if (!initialDialog.open
+            || initialDialog.current !== triggerIndex
+            || initialDialog.activeControllers !== 1
+            || !initialDialog.activeElement) {
+            fail(`${label}: merch gallery did not open at the selected view ${JSON.stringify(initialDialog)}`);
+          }
+          await page.keyboard.press("End");
+          const finalIndex = await page.locator("[data-merch-gallery-figure]").evaluateAll((figures) => figures.findIndex((figure) => !figure.hidden));
+          if (finalIndex !== expectedObject.gallery.length - 1) fail(`${label}: End did not reach final merch gallery view`);
+          await page.keyboard.press("Home");
+          const homeIndex = await page.locator("[data-merch-gallery-figure]").evaluateAll((figures) => figures.findIndex((figure) => !figure.hidden));
+          if (homeIndex !== 0) fail(`${label}: Home did not reach first merch gallery view`);
+          await page.keyboard.press("Escape");
+          await page.waitForFunction(() => !document.querySelector("[data-merch-gallery-dialog]")?.open);
+          if (!await trigger.evaluate((element) => document.activeElement === element)) {
+            fail(`${label}: merch gallery did not restore focus to its trigger`);
+          }
+        }
+      }
+
+      if (baseRoute === "/links/") {
+        const socialAccess = await page.evaluate(() => {
+          const nav = document.querySelector("[data-social-access-nav]");
+          const links = [...document.querySelectorAll("[data-social-access-link]")];
+          return {
+            navCount: document.querySelectorAll("[data-social-access-nav]").length,
+            navLabel: nav?.getAttribute("aria-label") || "",
+            ids: links.map((link) => link.dataset.socialId),
+            hrefs: links.map((link) => link.href),
+            targets: links.map((link) => {
+              const rect = link.getBoundingClientRect();
+              return {
+                width: rect.width,
+                height: rect.height,
+                left: rect.left,
+                right: rect.right,
+                scrollWidth: link.scrollWidth,
+                scrollHeight: link.scrollHeight,
+                ariaLabel: link.getAttribute("aria-label"),
+                target: link.getAttribute("target"),
+                rel: link.getAttribute("rel")
+              };
+            })
+          };
+        });
+        const expectedIds = SOCIAL_LINKS.map(({ id }) => id);
+        const expectedHrefs = SOCIAL_LINKS.map(({ url }) => url);
+        if (socialAccess.navCount !== 1 || socialAccess.navLabel !== COPY[locale.code].pages.links.navLabel) {
+          fail(`${label}: invalid social-access navigation landmark ${JSON.stringify(socialAccess)}`);
+        }
+        if (JSON.stringify(socialAccess.ids) !== JSON.stringify(expectedIds)
+          || JSON.stringify(socialAccess.hrefs) !== JSON.stringify(expectedHrefs)) {
+          fail(`${label}: social-access order or destinations do not match SOCIAL_LINKS ${JSON.stringify(socialAccess)}`);
+        }
+        if (new Set(socialAccess.hrefs).size !== socialAccess.hrefs.length) {
+          fail(`${label}: social-access destinations are not unique`);
+        }
+        for (const [index, target] of socialAccess.targets.entries()) {
+          const expected = SOCIAL_LINKS[index];
+          const relTokens = new Set((target.rel || "").split(/\s+/).filter(Boolean));
+          const expectedAria = interpolate(COPY[locale.code].pages.links.serviceAria, { service: expected?.label || "" });
+          if (target.target !== "_blank"
+            || !relTokens.has("noopener")
+            || !relTokens.has("noreferrer")
+            || target.ariaLabel !== expectedAria) {
+            fail(`${label}: social-access ${expected?.id || index} has an unsafe or incorrect accessible target ${JSON.stringify(target)}`);
+          }
+          if (target.width < 44 || target.height < 44) {
+            fail(`${label}: social-access ${expected?.id || index} is below 44×44px ${JSON.stringify(target)}`);
+          }
+          if (target.scrollWidth > target.width + 0.5 || target.scrollHeight > target.height + 0.5) {
+            fail(`${label}: social-access ${expected?.id || index} content is clipped ${JSON.stringify(target)}`);
+          }
+          if (target.left < -0.5 || target.right > viewport.width + 0.5) {
+            fail(`${label}: social-access ${expected?.id || index} leaves the viewport ${JSON.stringify(target)}`);
+          }
+        }
+
+        if (viewport.width === 320 || viewport.width === 375) {
+          await page.waitForFunction(() => document.querySelector("[data-audio-player]")?.classList.contains("is-ready"));
+          if (viewport.width === 375) {
+            const initialPlayerClearance = await page.evaluate(() => {
+              const player = document.querySelector("[data-audio-player]")?.getBoundingClientRect();
+              const finalLink = document.querySelector(".social-access-item:last-child [data-social-access-link]")?.getBoundingClientRect();
+              return { playerTop: player?.top ?? null, finalBottom: finalLink?.bottom ?? null };
+            });
+            if (initialPlayerClearance.playerTop === null
+              || initialPlayerClearance.finalBottom === null
+              || initialPlayerClearance.finalBottom > initialPlayerClearance.playerTop + 0.5) {
+              fail(`${label}: all four social-access rows must appear above the ready player at 375px ${JSON.stringify(initialPlayerClearance)}`);
+            }
+          }
+          await page.evaluate(() => {
+            document.documentElement.style.scrollBehavior = "auto";
+            const player = document.querySelector("[data-audio-player]")?.getBoundingClientRect();
+            const finalLink = document.querySelector(".social-access-item:last-child [data-social-access-link]")?.getBoundingClientRect();
+            if (player && finalLink && finalLink.bottom > player.top) {
+              window.scrollBy(0, finalLink.bottom - player.top + 16);
+            }
+          });
+          await page.evaluate(() => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+          const playerSafety = await page.evaluate(() => {
+            const overlaps = (a, b) => a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top;
+            const player = document.querySelector("[data-audio-player]")?.getBoundingClientRect();
+            const finalLink = document.querySelector(".social-access-item:last-child [data-social-access-link]")?.getBoundingClientRect();
+            return {
+              player,
+              finalLink,
+              visible: Boolean(finalLink && finalLink.top >= 0 && finalLink.bottom <= innerHeight),
+              overlap: Boolean(player && finalLink && overlaps(player, finalLink))
+            };
+          });
+          if (!playerSafety.visible || playerSafety.overlap) {
+            fail(`${label}: final social-access row cannot be revealed clear of the audio player ${JSON.stringify(playerSafety)}`);
+          }
+          await page.evaluate(() => window.scrollTo(0, 0));
+          await page.evaluate(() => document.documentElement.style.removeProperty("scroll-behavior"));
+        }
+      }
 
       if (baseRoute === "/catalog/") {
         const catalogContract = await page.evaluate(() => {
@@ -710,6 +984,7 @@ try {
       if (!expectedMobile && navVisibility.mobile !== "none") fail(`${label}: mobile navigation visible at or above 1280px`);
       if (navVisibility.desktop === null || navVisibility.mobile === null) fail(`${label}: responsive navigation element missing`);
 
+      await page.evaluate(() => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))));
       const languageTargetMetrics = await page.locator("nav[data-language-switcher] .language-link").evaluateAll((links) => {
         const targets = links.map((link) => {
           const style = getComputedStyle(link);
@@ -757,6 +1032,7 @@ try {
 
       const screenshotName = screenshotCases.get(`${route}@${viewport.name}`);
       if (screenshotName) {
+        if (baseRoute === "/links/") await page.mouse.move(1, 1);
         await page.evaluate(async () => {
           await Promise.all([...document.querySelectorAll("[data-motion-video]")].map((video) => new Promise((resolve) => {
             video.pause();
@@ -851,6 +1127,68 @@ try {
   const focusStyle = await interactionPage.locator(".menu-summary").evaluate((element) => getComputedStyle(element).outlineStyle);
   if (focusStyle === "none") fail("Keyboard: focused menu control has no visible outline");
 
+  await interactionPage.goto(`${baseUrl}/links/`, { waitUntil: "load" });
+  const firstSocialAccess = interactionPage.locator("[data-social-access-link]").first();
+  await firstSocialAccess.focus();
+  const socialFocusStyle = await firstSocialAccess.evaluate((element) => {
+    const style = getComputedStyle(element);
+    return { style: style.outlineStyle, width: Number.parseFloat(style.outlineWidth) };
+  });
+  if (socialFocusStyle.style === "none" || socialFocusStyle.width < 3) {
+    fail(`Social access: focused channel has no 3px visible outline ${JSON.stringify(socialFocusStyle)}`);
+  }
+  const socialLanguageTargets = await interactionPage.locator("nav[data-language-switcher] .language-link").evaluateAll((links) => links.map((link) => ({
+    lang: link.getAttribute("hreflang"),
+    path: new URL(link.href).pathname,
+    search: new URL(link.href).search,
+    hash: new URL(link.href).hash
+  })));
+  if (JSON.stringify(socialLanguageTargets) !== JSON.stringify([
+    { lang: "en", path: "/links/", search: "", hash: "" },
+    { lang: "it", path: "/it/links/", search: "", hash: "" },
+    { lang: "ru", path: "/ru/links/", search: "", hash: "" }
+  ])) {
+    fail(`Social access: language targets do not preserve route identity ${JSON.stringify(socialLanguageTargets)}`);
+  }
+
+  await interactionPage.locator(".menu-summary").click();
+  await Promise.all([
+    interactionPage.waitForURL(`${baseUrl}/`),
+    interactionPage.locator(".mobile-nav").getByRole("link", { name: COPY.en.common.nav.home, exact: true }).click()
+  ]);
+  const socialHomeIdentity = await interactionPage.evaluate(() => ({
+    path: location.pathname,
+    bodyClass: document.body.className,
+    heading: document.querySelector("h1")?.textContent?.replace(/\s+/g, " ").trim() || "",
+    hasSocialAccess: Boolean(document.querySelector(".social-access-terminal")),
+    activeNav: document.querySelector(".desktop-nav .nav-link[aria-current='page']")?.textContent?.trim() || ""
+  }));
+  if (socialHomeIdentity.path !== "/"
+    || !socialHomeIdentity.bodyClass.split(/\s+/).includes("page-home")
+    || socialHomeIdentity.heading !== COPY.en.pages.home.heroTitle.join(" ")
+    || socialHomeIdentity.hasSocialAccess
+    || socialHomeIdentity.activeNav !== COPY.en.common.nav.home) {
+    fail(`Social access: Home must restore the original home route ${JSON.stringify(socialHomeIdentity)}`);
+  }
+
+  await interactionPage.goto(`${baseUrl}/links/`, { waitUntil: "load" });
+  await Promise.all([
+    interactionPage.waitForURL(`${baseUrl}/ru/links/`),
+    interactionPage.locator('nav[data-language-switcher] .language-link[hreflang="ru"]').click()
+  ]);
+  const russianSocialIdentity = await interactionPage.evaluate(() => ({
+    lang: document.documentElement.lang,
+    path: location.pathname,
+    ids: [...document.querySelectorAll("[data-social-access-link]")].map((link) => link.dataset.socialId),
+    hrefs: [...document.querySelectorAll("[data-social-access-link]")].map((link) => link.href)
+  }));
+  if (russianSocialIdentity.lang !== "ru"
+    || russianSocialIdentity.path !== "/ru/links/"
+    || JSON.stringify(russianSocialIdentity.ids) !== JSON.stringify(SOCIAL_LINKS.map(({ id }) => id))
+    || JSON.stringify(russianSocialIdentity.hrefs) !== JSON.stringify(SOCIAL_LINKS.map(({ url }) => url))) {
+    fail(`Social access: Russian language switch changed route or destination identity ${JSON.stringify(russianSocialIdentity)}`);
+  }
+
   await interactionPage.goto(`${baseUrl}/catalog/`, { waitUntil: "load" });
   const upcomingFilter = interactionPage.locator('[data-filter-value="upcoming"]');
   await upcomingFilter.focus();
@@ -939,13 +1277,80 @@ try {
     hudIndex: document.querySelector("[data-hud-player-index]")?.textContent,
     trackCount: document.querySelectorAll("[data-player-track]").length,
     peaksReady: document.querySelector("[data-audio-player]")?.dataset.waveformState,
-    mediaTitle: navigator.mediaSession?.metadata?.title || null
+    mediaTitle: navigator.mediaSession?.metadata?.title || null,
+    volume: document.querySelector("[data-audio-engine]")?.volume,
+    volumeValue: document.querySelector("[data-player-volume-value]")?.textContent,
+    volumeExpanded: document.querySelector("[data-player-volume-toggle]")?.getAttribute("aria-expanded")
   }));
   await audioPage.mouse.click(700, 760);
   await audioPage.waitForTimeout(120);
   if (!await audioPage.locator("[data-audio-engine]").evaluate((audio) => audio.paused)) {
     fail("Audio player: a random page click started playback");
   }
+  const volumeToggle = audioPage.locator("[data-player-volume-toggle]");
+  const volumeRange = audioPage.locator("[data-player-volume]");
+  await volumeToggle.click();
+  const volumeOpen = await audioPage.evaluate(() => ({
+    expanded: document.querySelector("[data-player-volume-toggle]")?.getAttribute("aria-expanded"),
+    hidden: document.querySelector("[data-player-volume-popup]")?.hidden
+  }));
+  await audioPage.screenshot({ path: path.join(screenshotDir, "player-volume-desktop-1440.png") });
+  await volumeRange.evaluate((range, value) => {
+    range.value = value;
+    range.dispatchEvent(new Event("input", { bubbles: true }));
+  }, "35");
+  const volumeChanged = await audioPage.evaluate(() => ({
+    audio: document.querySelector("[data-audio-engine]")?.volume,
+    value: document.querySelector("[data-player-volume-value]")?.textContent,
+    percent: document.querySelector("[data-player-volume-percent]")?.textContent,
+    saved: localStorage.getItem("povkh-lab-player-volume-v1"),
+    popupHidden: document.querySelector("[data-player-volume-popup]")?.hidden
+  }));
+  await volumeRange.evaluate((range, value) => {
+    range.value = value;
+    range.dispatchEvent(new Event("input", { bubbles: true }));
+  }, "0");
+  const zeroVolume = await audioPage.evaluate(() => ({
+    audio: document.querySelector("[data-audio-engine]")?.volume,
+    value: document.querySelector("[data-player-volume-value]")?.textContent,
+    percent: document.querySelector("[data-player-volume-percent]")?.textContent
+  }));
+  await volumeRange.evaluate((range, value) => {
+    range.value = value;
+    range.dispatchEvent(new Event("input", { bubbles: true }));
+  }, "35");
+  await audioPage.keyboard.press("Escape");
+  const volumeClosed = await audioPage.evaluate(() => ({
+    expanded: document.querySelector("[data-player-volume-toggle]")?.getAttribute("aria-expanded"),
+    hidden: document.querySelector("[data-player-volume-popup]")?.hidden,
+    focusReturned: document.activeElement?.hasAttribute("data-player-volume-toggle")
+  }));
+  await volumeToggle.click();
+  await audioPage.mouse.click(700, 760);
+  const volumeOutsideClosed = await audioPage.evaluate(() => ({
+    expanded: document.querySelector("[data-player-volume-toggle]")?.getAttribute("aria-expanded"),
+    hidden: document.querySelector("[data-player-volume-popup]")?.hidden
+  }));
+  await volumeToggle.focus();
+  await audioPage.keyboard.press("Space");
+  const keyboardVolumeOpen = await audioPage.evaluate(() => ({
+    popupHidden: document.querySelector("[data-player-volume-popup]")?.hidden,
+    focusedRange: document.activeElement?.hasAttribute("data-player-volume")
+  }));
+  await audioPage.keyboard.press("Shift+Tab");
+  const keyboardVolumeToggleFocused = await audioPage.evaluate(() => document.activeElement?.hasAttribute("data-player-volume-toggle"));
+  await audioPage.keyboard.press("Tab");
+  const keyboardVolumeRangeFocused = await audioPage.evaluate(() => document.activeElement?.hasAttribute("data-player-volume"));
+  await audioPage.keyboard.press("ArrowLeft");
+  const keyboardVolumeLowered = await audioPage.evaluate(() => ({
+    audio: document.querySelector("[data-audio-engine]")?.volume,
+    range: document.querySelector("[data-player-volume]")?.value,
+    value: document.querySelector("[data-player-volume-value]")?.textContent,
+    percent: document.querySelector("[data-player-volume-percent]")?.textContent,
+    ariaValueText: document.querySelector("[data-player-volume]")?.getAttribute("aria-valuetext")
+  }));
+  await audioPage.keyboard.press("ArrowRight");
+  await audioPage.keyboard.press("Escape");
   await audioPage.locator("[data-player-toggle]").click();
   await audioPage.waitForFunction(() => document.querySelector("[data-audio-player]")?.dataset.playing === "true");
   await audioPage.waitForTimeout(350);
@@ -967,6 +1372,24 @@ try {
   const homeTime = await audioPage.locator("[data-audio-engine]").evaluate((audio) => audio.currentTime);
   await audioPage.keyboard.press("ArrowRight");
   const arrowTime = await audioPage.locator("[data-audio-engine]").evaluate((audio) => audio.currentTime);
+  const waveformBox = await waveform.boundingBox();
+  if (!waveformBox) fail("Audio timeline: waveform has no pointer box");
+  else {
+    await audioPage.mouse.move(waveformBox.x + waveformBox.width * 0.25, waveformBox.y + waveformBox.height / 2);
+    const hoverTooltip = await audioPage.evaluate(() => ({
+      hidden: document.querySelector("[data-player-seek-tooltip]")?.hidden,
+      text: document.querySelector("[data-player-seek-tooltip]")?.textContent
+    }));
+    await audioPage.mouse.down();
+    await audioPage.mouse.move(waveformBox.x + waveformBox.width * 0.75, waveformBox.y + waveformBox.height / 2, { steps: 6 });
+    const dragTime = await audioPage.locator("[data-audio-engine]").evaluate((audio) => audio.currentTime);
+    await audioPage.screenshot({ path: path.join(screenshotDir, "player-timeline-scrub-1440.png") });
+    await audioPage.mouse.up();
+    if (hoverTooltip.hidden || !/^\d{2}:\d{2}$/.test(hoverTooltip.text || "")
+      || Math.abs(dragTime - defaultAudioTrack.duration * 0.75) > 1.2) {
+      fail(`Audio timeline: pointer contract failed ${JSON.stringify({ hoverTooltip, dragTime })}`);
+    }
+  }
   await audioPage.locator("[data-player-next]").click();
   await audioPage.waitForFunction(() => document.querySelector("[data-player-title]")?.textContent === "ROBERT"
     && document.querySelector("[data-audio-player]")?.dataset.waveformState === "ready"
@@ -1030,7 +1453,10 @@ try {
     currentSrc: document.querySelector("[data-audio-engine]")?.currentSrc,
     playing: document.querySelector("[data-audio-player]")?.dataset.playing,
     playerCount: document.querySelectorAll("[data-audio-player]").length,
-    routeMainCount: document.querySelectorAll("[data-route-main]").length
+    routeMainCount: document.querySelectorAll("[data-route-main]").length,
+    volume: document.querySelector("[data-audio-engine]")?.volume,
+    volumeValue: document.querySelector("[data-player-volume-value]")?.textContent,
+    volumeExpanded: document.querySelector("[data-player-volume-toggle]")?.getAttribute("aria-expanded")
   }));
   await audioPage.goBack();
   await audioPage.waitForURL(baseUrl + "/");
@@ -1039,12 +1465,51 @@ try {
     title: document.querySelector("[data-player-title]")?.textContent,
     playerCount: document.querySelectorAll("[data-audio-player]").length
   }));
+  const russianBefore = await audioPage.evaluate(() => ({
+    currentTime: document.querySelector("[data-audio-engine]")?.currentTime,
+    paused: document.querySelector("[data-audio-engine]")?.paused,
+    playing: document.querySelector("[data-audio-player]")?.dataset.playing,
+    volume: document.querySelector("[data-audio-engine]")?.volume,
+    popupHidden: document.querySelector("[data-player-volume-popup]")?.hidden,
+    expanded: document.querySelector("[data-player-volume-toggle]")?.getAttribute("aria-expanded")
+  }));
+  await audioPage.evaluate(() => { window.__qaRussianAudio = document.querySelector("[data-audio-engine]"); });
+  await Promise.all([
+    audioPage.waitForURL(`${baseUrl}/ru/`),
+    audioPage.locator('nav[data-language-switcher] .language-link[hreflang="ru"]').click()
+  ]);
+  await audioPage.waitForTimeout(220);
+  const russianAfter = await audioPage.evaluate(() => ({
+    sameNode: window.__qaRussianAudio === document.querySelector("[data-audio-engine]"),
+    currentTime: document.querySelector("[data-audio-engine]")?.currentTime,
+    paused: document.querySelector("[data-audio-engine]")?.paused,
+    playing: document.querySelector("[data-audio-player]")?.dataset.playing,
+    volume: document.querySelector("[data-audio-engine]")?.volume,
+    volumeValue: document.querySelector("[data-player-volume-value]")?.textContent,
+    popupHidden: document.querySelector("[data-player-volume-popup]")?.hidden,
+    expanded: document.querySelector("[data-player-volume-toggle]")?.getAttribute("aria-expanded"),
+    toggleLabel: document.querySelector("[data-player-volume-toggle]")?.getAttribute("aria-label"),
+    rangeValueText: document.querySelector("[data-player-volume]")?.getAttribute("aria-valuetext"),
+    controlLabel: document.querySelector("[data-player-volume-label]")?.textContent
+  }));
+  const russianVolumeLabel = await audioPage.locator("[data-player-volume-toggle]")
+    .getAttribute("aria-label");
   if (await audioPage.locator("[data-audio-player]").getAttribute("data-playing") === "true") {
     await audioPage.locator("[data-player-toggle]").click();
   }
   if (!initialAudio.paused || initialAudio.title !== "OPPORTUNIST" || initialAudio.artist !== "ALESSANDRO POVKH & K/SMOKIN"
     || initialAudio.index !== "07 / 13" || initialAudio.hudIndex !== "07 / 13" || initialAudio.trackCount !== 13
     || initialAudio.peaksReady !== "ready" || initialAudio.mediaTitle !== "OPPORTUNIST"
+    || Math.abs(initialAudio.volume - 0.6) > 0.001 || initialAudio.volumeValue !== "60" || initialAudio.volumeExpanded !== "false"
+    || volumeOpen.expanded !== "true" || volumeOpen.hidden
+    || Math.abs(volumeChanged.audio - 0.35) > 0.001 || volumeChanged.value !== "35" || volumeChanged.percent !== "35%"
+    || volumeChanged.saved !== "0.35" || volumeChanged.popupHidden
+    || zeroVolume.audio !== 0 || zeroVolume.value !== "00" || zeroVolume.percent !== "0%"
+    || volumeClosed.expanded !== "false" || !volumeClosed.hidden || !volumeClosed.focusReturned
+    || volumeOutsideClosed.expanded !== "false" || !volumeOutsideClosed.hidden
+    || keyboardVolumeOpen.popupHidden || !keyboardVolumeOpen.focusedRange || !keyboardVolumeToggleFocused || !keyboardVolumeRangeFocused
+    || Math.abs(keyboardVolumeLowered.audio - 0.34) > 0.001 || keyboardVolumeLowered.range !== "34"
+    || keyboardVolumeLowered.value !== "34" || keyboardVolumeLowered.percent !== "34%" || keyboardVolumeLowered.ariaValueText !== "34%"
     || playingAudio.paused || playingAudio.currentTime <= 0 || playingAudio.state !== "playing"
     || endTime < defaultAudioTrack.duration - 0.2 || homeTime > 0.05 || Math.abs(arrowTime - 5) > 0.15
     || !pausedAudio.paused || pausedAudio.userPaused !== "true"
@@ -1057,11 +1522,212 @@ try {
     || !directAudio.currentSrc?.endsWith("/assets/tracks/pvkh-012-runway.mp3")
     || !persistentAfter.sameNode || persistentAfter.currentTime < persistentBefore || persistentAfter.playing !== "true"
     || !persistentAfter.currentSrc?.endsWith("/assets/tracks/pvkh-012-runway.mp3") || persistentAfter.playerCount !== 1 || persistentAfter.routeMainCount !== 1
+    || Math.abs(persistentAfter.volume - 0.35) > 0.001 || persistentAfter.volumeValue !== "35" || persistentAfter.volumeExpanded !== "false"
     || !persistentBack.sameNode || persistentBack.title !== "RUNWAY" || persistentBack.playerCount !== 1
+    || !russianVolumeLabel?.startsWith("Громкость:")
+    || !russianAfter.sameNode || russianAfter.paused !== russianBefore.paused || russianAfter.playing !== russianBefore.playing
+    || russianAfter.currentTime <= russianBefore.currentTime || Math.abs(russianAfter.volume - russianBefore.volume) > 0.001
+    || russianAfter.volumeValue !== "35" || !russianAfter.popupHidden || russianAfter.expanded !== "false"
+    || !russianAfter.toggleLabel?.startsWith("Громкость:") || russianAfter.rangeValueText !== "35%"
+    || russianAfter.controlLabel?.trim() !== "Регулятор громкости"
     || audioErrors.length) {
-    fail(`Audio player contract failed ${JSON.stringify({ initialAudio, playingAudio, endTime, homeTime, arrowTime, pausedAudio, nextAudio, previousAudio, playlistOpen, playlistFocusReturned, directAudio, persistentBefore, persistentAfter, persistentBack, audioErrors })}`);
+    fail(`Audio player contract failed ${JSON.stringify({ initialAudio, volumeOpen, volumeChanged, zeroVolume, volumeClosed, volumeOutsideClosed, keyboardVolumeOpen, keyboardVolumeToggleFocused, keyboardVolumeRangeFocused, keyboardVolumeLowered, playingAudio, endTime, homeTime, arrowTime, pausedAudio, nextAudio, previousAudio, playlistOpen, playlistFocusReturned, directAudio, persistentBefore, persistentAfter, persistentBack, russianBefore, russianAfter, russianVolumeLabel, audioErrors })}`);
   }
   await audioContext.close();
+
+  const fallbackWaveformContext = await browser.newContext({ viewport: { width: 1440, height: 1000 } });
+  const fallbackWaveformPage = await fallbackWaveformContext.newPage();
+  await fallbackWaveformPage.route("**/*.waveform.json", (route) => route.abort());
+  await fallbackWaveformPage.goto(baseUrl, { waitUntil: "load" });
+  await fallbackWaveformPage.waitForFunction(
+    () => document.querySelector("[data-audio-player]")?.dataset.waveformState === "error"
+  );
+  const fallbackWaveform = fallbackWaveformPage.locator("[data-player-waveform]");
+  const fallbackBox = await fallbackWaveform.boundingBox();
+  if (!fallbackBox) {
+    fail("Fallback waveform: seek canvas has no pointer box");
+  } else {
+    await fallbackWaveformPage.mouse.click(
+      fallbackBox.x + fallbackBox.width * 0.25,
+      fallbackBox.y + fallbackBox.height * 0.5
+    );
+    await fallbackWaveformPage.locator("[data-player-toggle]").click();
+    await fallbackWaveformPage.waitForFunction(
+      () => document.querySelector("[data-audio-engine]")?.readyState >= 1
+    );
+    const fallbackSeekTime = await fallbackWaveformPage.locator("[data-audio-engine]")
+      .evaluate((audio) => audio.currentTime);
+    if (Math.abs(fallbackSeekTime - defaultAudioTrack.duration * 0.25) > 1.2) {
+      fail(`Fallback waveform: seek restored ${fallbackSeekTime}`);
+    }
+  }
+  await fallbackWaveformContext.close();
+
+  const savedVolumeContext = await browser.newContext();
+  await savedVolumeContext.addInitScript(() => {
+    localStorage.setItem("povkh-lab-player-volume-v1", "0.35");
+  });
+  const savedVolumePage = await savedVolumeContext.newPage();
+  await savedVolumePage.goto(baseUrl, { waitUntil: "load" });
+  const savedVolume = await savedVolumePage.evaluate(() => ({
+    audio: document.querySelector("[data-audio-engine]")?.volume,
+    range: document.querySelector("[data-player-volume]")?.value,
+    value: document.querySelector("[data-player-volume-value]")?.textContent,
+    percent: document.querySelector("[data-player-volume-percent]")?.textContent,
+    ariaValueText: document.querySelector("[data-player-volume]")?.getAttribute("aria-valuetext"),
+    toggleLabel: document.querySelector("[data-player-volume-toggle]")?.getAttribute("aria-label")
+  }));
+  if (Math.abs(savedVolume.audio - 0.35) > 0.001 || savedVolume.range !== "35"
+    || savedVolume.value !== "35" || savedVolume.percent !== "35%" || savedVolume.ariaValueText !== "35%"
+    || savedVolume.toggleLabel !== "Volume: 35%") {
+    fail(`Audio volume: valid storage did not restore ${JSON.stringify(savedVolume)}`);
+  }
+  await savedVolumeContext.close();
+
+  const invalidVolumeContext = await browser.newContext();
+  await invalidVolumeContext.addInitScript(() => {
+    localStorage.setItem("povkh-lab-player-volume-v1", "not-a-volume");
+  });
+  const invalidVolumePage = await invalidVolumeContext.newPage();
+  await invalidVolumePage.goto(baseUrl, { waitUntil: "load" });
+  const invalidVolume = await invalidVolumePage.locator("[data-audio-engine]")
+    .evaluate((audio) => audio.volume);
+  if (Math.abs(invalidVolume - 0.6) > 0.001) {
+    fail(`Audio volume: invalid storage restored ${invalidVolume} instead of 0.6`);
+  }
+  await invalidVolumeContext.close();
+
+  const malformedVolumeContext = await browser.newContext();
+  await malformedVolumeContext.addInitScript(() => {
+    localStorage.setItem("povkh-lab-player-volume-v1", "0.35garbage");
+  });
+  const malformedVolumePage = await malformedVolumeContext.newPage();
+  await malformedVolumePage.goto(baseUrl, { waitUntil: "load" });
+  const malformedVolume = await malformedVolumePage.locator("[data-audio-engine]")
+    .evaluate((audio) => audio.volume);
+  if (Math.abs(malformedVolume - 0.6) > 0.001) {
+    fail(`Audio volume: malformed storage restored ${malformedVolume} instead of 0.6`);
+  }
+  await malformedVolumeContext.close();
+
+  const unavailableVolumeContext = await browser.newContext();
+  await unavailableVolumeContext.addInitScript(() => {
+    Storage.prototype.getItem = () => {
+      throw new DOMException("Storage blocked", "SecurityError");
+    };
+    Storage.prototype.setItem = () => {
+      throw new DOMException("Storage blocked", "SecurityError");
+    };
+  });
+  const unavailableVolumePage = await unavailableVolumeContext.newPage();
+  await unavailableVolumePage.goto(baseUrl, { waitUntil: "load" });
+  const unavailableVolume = await unavailableVolumePage.locator("[data-audio-engine]")
+    .evaluate((audio) => audio.volume);
+  if (Math.abs(unavailableVolume - 0.6) > 0.001) {
+    fail(`Audio volume: unavailable storage restored ${unavailableVolume} instead of 0.6`);
+  }
+  await unavailableVolumeContext.close();
+
+  for (const width of [320, 375]) {
+    const mobileVolumeContext = await browser.newContext({ viewport: { width, height: 812 } });
+    const mobileVolumePage = await mobileVolumeContext.newPage();
+    await mobileVolumePage.goto(baseUrl, { waitUntil: "load" });
+    await mobileVolumePage.locator("[data-player-volume-toggle]").click();
+    const mobileVolume = await mobileVolumePage.evaluate(() => {
+      const rect = (selector) => {
+        const rect = document.querySelector(selector)?.getBoundingClientRect();
+        return rect && {
+          width: rect.width,
+          height: rect.height,
+          top: rect.top,
+          right: rect.right,
+          bottom: rect.bottom,
+          left: rect.left
+        };
+      };
+      const popup = rect("[data-player-volume-popup]");
+      const title = rect("[data-player-title]");
+      return {
+        button: rect("[data-player-volume-toggle]"),
+        range: rect("[data-player-volume]"),
+        waveform: rect("[data-player-waveform]"),
+        waveformTouchAction: getComputedStyle(document.querySelector("[data-player-waveform]")).touchAction,
+        popup,
+        title,
+        player: rect("[data-audio-player]"),
+        popupHidden: document.querySelector("[data-player-volume-popup]")?.hidden,
+        overlapsTitle: Boolean(popup && title && popup.left < title.right && popup.right > title.left
+          && popup.top < title.bottom && popup.bottom > title.top),
+        viewport: innerWidth
+      };
+    });
+    if (mobileVolume.popupHidden || !mobileVolume.button || !mobileVolume.range || !mobileVolume.waveform || !mobileVolume.popup || !mobileVolume.title || !mobileVolume.player
+      || mobileVolume.button.height < 44 || mobileVolume.range.height < 44 || mobileVolume.waveform.height < 44
+      || mobileVolume.waveformTouchAction !== "pan-y"
+      || mobileVolume.popup.left < 0 || mobileVolume.popup.right > mobileVolume.viewport
+      || mobileVolume.overlapsTitle || mobileVolume.player.height > 150) {
+      fail(`Mobile audio volume ${width}px: invalid popup geometry ${JSON.stringify(mobileVolume)}`);
+    }
+    if (width === 375) {
+      await mobileVolumePage.screenshot({ path: path.join(screenshotDir, "player-volume-mobile-375.png") });
+    }
+    await mobileVolumePage.goto(`${baseUrl}/merch/`, { waitUntil: "load" });
+    const mobileMerchPlayer = await mobileVolumePage.evaluate(() => {
+      const player = document.querySelector("[data-audio-player]")?.getBoundingClientRect();
+      const action = document.querySelector('.merch-hero a[href="#merch-objects"]')?.getBoundingClientRect();
+      return {
+        player,
+        action,
+        overlapsAction: Boolean(player && action && player.left < action.right && player.right > action.left
+          && player.top < action.bottom && player.bottom > action.top)
+      };
+    });
+    if (!mobileMerchPlayer.player || !mobileMerchPlayer.action || mobileMerchPlayer.player.height > 150 || mobileMerchPlayer.overlapsAction) {
+      fail(`Mobile audio player ${width}px: overlaps merch action ${JSON.stringify(mobileMerchPlayer)}`);
+    }
+    await mobileVolumeContext.close();
+  }
+
+  for (const { width, height } of [
+    { width: 320, height: 780 },
+    { width: 375, height: 812 },
+    { width: 1024, height: 900 },
+    { width: 1440, height: 1000 }
+  ]) {
+    for (const textZoom of [false, true]) {
+      const merchGeometryContext = await browser.newContext({ viewport: { width, height } });
+      const merchGeometryPage = await merchGeometryContext.newPage();
+      for (const route of ["/merch/", "/it/merch/", "/ru/merch/"]) {
+        await merchGeometryPage.goto(`${baseUrl}${route}`, { waitUntil: "load" });
+        if (textZoom) await applyTextZoom(merchGeometryPage);
+        await merchGeometryPage.waitForFunction(() => document.querySelector("[data-audio-player]")?.classList.contains("is-ready"));
+        const geometry = await merchGeometryPage.evaluate(() => {
+          const overlaps = (a, b) => a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top;
+          const title = document.querySelector("#merch-title");
+          const range = document.createRange();
+          if (title) range.selectNodeContents(title);
+          const titleRanges = [...range.getClientRects()]
+            .filter((rect) => rect.width > 0 && rect.height > 0)
+            .map(({ top, right, bottom, left, width, height }) => ({ top, right, bottom, left, width, height }));
+          const player = document.querySelector("[data-audio-player]")?.getBoundingClientRect();
+          const playerRect = player && {
+            top: player.top, right: player.right, bottom: player.bottom, left: player.left,
+            width: player.width, height: player.height
+          };
+          return {
+            player: playerRect,
+            titleRanges,
+            intersections: playerRect ? titleRanges.filter((rect) => overlaps(playerRect, rect)) : [],
+            overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth
+          };
+        });
+        if (!geometry.player || !geometry.titleRanges.length || geometry.intersections.length || geometry.overflow > 1) {
+          fail(`Merch player geometry ${route} @ ${width}px${textZoom ? " 200% text zoom" : ""}: ${JSON.stringify(geometry)}`);
+        }
+      }
+      await merchGeometryContext.close();
+    }
+  }
 
   const signalContext = await browser.newContext({
     viewport: { width: 1440, height: 1000 },
@@ -1261,6 +1927,21 @@ try {
   if (await noScriptPage.locator('[data-release-id="PVKH-001"]').count() !== 1) {
     fail("No JavaScript: smart-link return did not restore the release page");
   }
+  await noScriptPage.goto(`${baseUrl}/links/`, { waitUntil: "load" });
+  const noScriptSocialAccess = await noScriptPage.evaluate(() => ({
+    ids: [...document.querySelectorAll("[data-social-access-link]")].map((link) => link.dataset.socialId),
+    hrefs: [...document.querySelectorAll("[data-social-access-link]")].map((link) => link.href),
+    targets: [...document.querySelectorAll("[data-social-access-link]")].map((link) => link.getAttribute("target")),
+    rels: [...document.querySelectorAll("[data-social-access-link]")].map((link) => link.getAttribute("rel")),
+    overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth
+  }));
+  if (JSON.stringify(noScriptSocialAccess.ids) !== JSON.stringify(SOCIAL_LINKS.map(({ id }) => id))
+    || JSON.stringify(noScriptSocialAccess.hrefs) !== JSON.stringify(SOCIAL_LINKS.map(({ url }) => url))
+    || noScriptSocialAccess.targets.some((target) => target !== "_blank")
+    || noScriptSocialAccess.rels.some((rel) => !rel?.includes("noopener") || !rel.includes("noreferrer"))
+    || noScriptSocialAccess.overflow > 1) {
+    fail(`No JavaScript social access: invalid contract ${JSON.stringify(noScriptSocialAccess)}`);
+  }
   await noScriptPage.goto(baseUrl, { waitUntil: "load" });
   const noScriptSignal = await noScriptPage.evaluate(() => ({
     paths: [...document.querySelectorAll("[data-signal-field] path")].map((path) => path.getAttribute("d")),
@@ -1273,11 +1954,60 @@ try {
   }
   await noScriptContext.close();
 
+  const noScriptMerchContext = await browser.newContext({
+    javaScriptEnabled: false,
+    viewport: { width: 375, height: 812 }
+  });
+  const noScriptMerchPage = await noScriptMerchContext.newPage();
+  await noScriptMerchPage.goto(`${baseUrl}/merch/`, { waitUntil: "load" });
+  const noScriptMerch = await noScriptMerchPage.evaluate(() => ({
+    objects: document.querySelectorAll("[data-merch-object]").length,
+    detailLinks: document.querySelectorAll("[data-merch-detail]").length,
+    anchor: document.querySelector('.merch-hero a[href="#merch-objects"]')?.getAttribute("href"),
+    overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth
+  }));
+  if (noScriptMerch.objects !== merchLibrary.objects.length
+    || noScriptMerch.detailLinks !== merchLibrary.objects.length
+    || noScriptMerch.anchor !== "#merch-objects"
+    || noScriptMerch.overflow > 1) {
+    fail(`No JavaScript merch: invalid contract ${JSON.stringify(noScriptMerch)}`);
+  }
+  await noScriptMerchContext.close();
+
+  const noScriptMerchDetailContext = await browser.newContext({
+    javaScriptEnabled: false,
+    viewport: { width: 375, height: 812 }
+  });
+  const noScriptMerchDetailPage = await noScriptMerchDetailContext.newPage();
+  await noScriptMerchDetailPage.goto(`${baseUrl}/merch/vinyl/`, { waitUntil: "load" });
+  const noScriptMerchDetail = await noScriptMerchDetailPage.evaluate(() => ({
+    objectId: document.querySelector("[data-merch-detail-id]")?.dataset.merchDetailId || null,
+    links: [...document.querySelectorAll("[data-merch-gallery-trigger]")].map((link) => ({
+      href: link.getAttribute("href"),
+      alt: link.querySelector("img")?.getAttribute("alt") || ""
+    })),
+    dialogOpen: document.querySelector("[data-merch-gallery-dialog]")?.hasAttribute("open") || false,
+    controller: document.querySelector("[data-merch-gallery]")?.dataset.merchGalleryController || null,
+    overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth
+  }));
+  if (noScriptMerchDetail.objectId !== "MRCH-001"
+    || noScriptMerchDetail.links.length !== merchLibrary.objects[0].gallery.length
+    || noScriptMerchDetail.links.some(({ href, alt }) => !href?.endsWith(".webp") || !alt)
+    || noScriptMerchDetail.dialogOpen
+    || noScriptMerchDetail.controller
+    || noScriptMerchDetail.overflow > 1) {
+    fail(`No JavaScript merch detail: invalid fallback ${JSON.stringify(noScriptMerchDetail)}`);
+  }
+  await noScriptMerchDetailContext.close();
+
   const auditTextZoomRoute = async (page, route, suffix = "") => {
     await page.goto(`${baseUrl}${route}`, { waitUntil: "load" });
     await page.evaluate(() => document.fonts.ready);
     const before = await page.evaluate(displayFontSizes);
     await applyTextZoom(page);
+    if (/^(?:\/(?:it|ru))?\/links\/$/.test(route)) {
+      await page.waitForFunction(() => document.querySelector("[data-audio-player]")?.classList.contains("is-ready"));
+    }
     const zoomMetrics = await page.evaluate(() => {
       const targets = [...document.querySelectorAll('[data-release-cta="streaming"]')].map((target) => {
         const rect = target.getBoundingClientRect();
@@ -1290,11 +2020,25 @@ try {
           visible: style.display !== "none" && style.visibility !== "hidden" && rect.width > 0 && rect.height > 0
         };
       });
+      const socialTargets = [...document.querySelectorAll("[data-social-access-link]")].map((target) => {
+        const rect = target.getBoundingClientRect();
+        const style = getComputedStyle(target);
+        return {
+          width: rect.width,
+          height: rect.height,
+          left: rect.left,
+          right: rect.right,
+          scrollWidth: target.scrollWidth,
+          scrollHeight: target.scrollHeight,
+          visible: style.display !== "none" && style.visibility !== "hidden" && rect.width > 0 && rect.height > 0
+        };
+      });
       return {
         rootFontSize: Number.parseFloat(getComputedStyle(document.documentElement).fontSize),
         viewport: document.documentElement.clientWidth,
         documentWidth: document.documentElement.scrollWidth,
-        targets
+        targets,
+        socialTargets
       };
     });
     const label = `200% text zoom${suffix}: ${route}`;
@@ -1308,8 +2052,59 @@ try {
     if (zoomMetrics.targets.some(({ width, height, scrollWidth, scrollHeight }) => scrollWidth > width + 0.5 || scrollHeight > height + 0.5)) {
       fail(`${label} clips streaming CTA content ${JSON.stringify(zoomMetrics.targets)}`);
     }
+    if (zoomMetrics.socialTargets.some(({ visible, width, height, left, right }) => !visible || width < 44 || height < 44 || left < -0.5 || right > zoomMetrics.viewport + 0.5)) {
+      fail(`${label} has an unavailable social-access target ${JSON.stringify(zoomMetrics.socialTargets)}`);
+    }
+    if (zoomMetrics.socialTargets.some(({ width, height, scrollWidth, scrollHeight }) => scrollWidth > width + 0.5 || scrollHeight > height + 0.5)) {
+      fail(`${label} clips social-access content ${JSON.stringify(zoomMetrics.socialTargets)}`);
+    }
+    if (zoomMetrics.socialTargets.length) {
+      await page.evaluate(() => {
+        document.documentElement.style.scrollBehavior = "auto";
+        const player = document.querySelector("[data-audio-player]")?.getBoundingClientRect();
+        const finalLink = document.querySelector(".social-access-item:last-child [data-social-access-link]")?.getBoundingClientRect();
+        if (player && finalLink && finalLink.bottom > player.top) {
+          window.scrollBy(0, finalLink.bottom - player.top + 16);
+        }
+      });
+      await page.evaluate(() => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+      const socialPlayerSafety = await page.evaluate(() => {
+        const overlaps = (a, b) => a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top;
+        const player = document.querySelector("[data-audio-player]")?.getBoundingClientRect();
+        const finalLink = document.querySelector(".social-access-item:last-child [data-social-access-link]")?.getBoundingClientRect();
+        return {
+          player,
+          finalLink,
+          visible: Boolean(finalLink && finalLink.top >= 0 && finalLink.bottom <= innerHeight),
+          overlap: Boolean(player && finalLink && overlaps(player, finalLink))
+        };
+      });
+      if (!socialPlayerSafety.visible || socialPlayerSafety.overlap) {
+        fail(`${label}: final social-access row cannot be revealed clear of the audio player ${JSON.stringify(socialPlayerSafety)}`);
+      }
+      await page.evaluate(() => document.documentElement.style.removeProperty("scroll-behavior"));
+    }
     const typographyIssues = await page.evaluate(inspectDisplayTypography);
     if (typographyIssues.length) fail(`${label} typography ${JSON.stringify(typographyIssues.slice(0, 6))}`);
+    if (/^(?:\/(?:it|ru))?\/merch\/$/.test(route)) {
+      await page.waitForFunction(() => document.querySelector("[data-audio-player]")?.classList.contains("is-ready"));
+      const playerSafety = await page.evaluate(() => {
+        const overlaps = (a, b) => a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top;
+        const player = document.querySelector("[data-audio-player]").getBoundingClientRect();
+        const title = document.querySelector("#merch-title");
+        const titleRange = document.createRange();
+        if (title) titleRange.selectNodeContents(title);
+        return {
+          player,
+          intersections: [...titleRange.getClientRects()]
+            .filter((rect) => overlaps(player, rect))
+            .map((rect) => ({ name: "title", rect }))
+        };
+      });
+      if (playerSafety.intersections.length) {
+        fail(`${label}: ready player intersects merch hero at ${page.viewportSize().width}px ${JSON.stringify(playerSafety)}`);
+      }
+    }
     const after = await page.evaluate(displayFontSizes);
     verifyDisplayFontGrowth(label, before, after);
   };
@@ -1321,6 +2116,16 @@ try {
   const textZoomPage = await textZoomContext.newPage();
   for (const { route } of routeCases) await auditTextZoomRoute(textZoomPage, route);
   await textZoomContext.close();
+
+  const merchTextZoomContext = await browser.newContext({
+    viewport: { width: 375, height: 812 },
+    reducedMotion: "reduce"
+  });
+  const merchTextZoomPage = await merchTextZoomContext.newPage();
+  for (const route of ["/merch/", "/it/merch/", "/ru/merch/"]) {
+    await auditTextZoomRoute(merchTextZoomPage, route, " @ 375px");
+  }
+  await merchTextZoomContext.close();
 
   const fallbackTextZoomContext = await browser.newContext({
     viewport: { width: 320, height: 780 },
@@ -1387,12 +2192,15 @@ try {
         desktopRight: desktop.right,
         languageLeft: languages.left,
         navClientWidth: navList.clientWidth,
-        navScrollWidth: navList.scrollWidth
+        navScrollWidth: navList.scrollWidth,
+        volumeLabel: document.querySelector("[data-player-volume-toggle]")?.getAttribute("aria-label")
       };
     });
+    const expectedVolumePrefix = route === "/ru/" ? "Громкость:" : "Volume:";
     if (headerMetrics.documentWidth > headerMetrics.viewport + 1
       || headerMetrics.desktopRight > headerMetrics.languageLeft + 1
-      || headerMetrics.navScrollWidth > headerMetrics.navClientWidth + 1) {
+      || headerMetrics.navScrollWidth > headerMetrics.navClientWidth + 1
+      || !headerMetrics.volumeLabel?.startsWith(expectedVolumePrefix)) {
       fail(`200% text zoom: ${route} desktop header collision ${JSON.stringify(headerMetrics)}`);
     }
     verifyDisplayFontGrowth(`200% text zoom: ${route} desktop`, headerBefore, await headerZoomPage.evaluate(displayFontSizes));
@@ -1451,6 +2259,39 @@ try {
     || reducedSignalAfter.animations) {
     fail(`Reduced motion: signal field reacted to pointer input ${JSON.stringify({ before: reducedStyles.signal, after: reducedSignalAfter })}`);
   }
+  await reducedPage.goto(`${baseUrl}/merch/`, { waitUntil: "load" });
+  const reducedMerch = await reducedPage.evaluate(() => {
+    const card = document.querySelector(".merch-object");
+    return {
+      found: Boolean(card),
+      transitionDuration: card ? getComputedStyle(card).transitionDuration : null,
+      animations: card?.getAnimations({ subtree: true }).length ?? -1
+    };
+  });
+  const reducedMerchDurations = reducedMerch.transitionDuration
+    ?.split(",")
+    .map((value) => Number.parseFloat(value)) ?? [];
+  if (!reducedMerch.found
+    || reducedMerch.animations !== 0
+    || reducedMerchDurations.some((value) => !Number.isFinite(value) || value > 0.00002)) {
+    fail(`Reduced motion: merch card still moves ${JSON.stringify(reducedMerch)}`);
+  }
+  await reducedPage.goto(`${baseUrl}/links/`, { waitUntil: "load" });
+  const reducedSocialAccess = await reducedPage.evaluate(() => {
+    const terminal = document.querySelector(".social-access-terminal");
+    const link = document.querySelector(".social-access-link");
+    const field = document.querySelector(".social-access-field");
+    return {
+      terminalAnimations: terminal?.getAnimations({ subtree: true }).length ?? -1,
+      linkTransition: link ? getComputedStyle(link).transitionDuration : null,
+      fieldAnimations: field?.getAnimations({ subtree: true }).length ?? -1
+    };
+  });
+  if (reducedSocialAccess.terminalAnimations !== 0
+    || reducedSocialAccess.fieldAnimations !== 0
+    || reducedSocialAccess.linkTransition?.split(",").some((value) => Number.parseFloat(value) > 0.00002)) {
+    fail(`Reduced motion: social access is not static ${JSON.stringify(reducedSocialAccess)}`);
+  }
   await reducedContext.close();
 
   const saveDataContext = await browser.newContext({ viewport: { width: 375, height: 812 } });
@@ -1487,7 +2328,114 @@ try {
     || saveDataAudio.state !== "paused") {
     fail(`Save-Data: deferred media contract failed ${JSON.stringify({ saveDataRequests, saveDataAudioRequests, saveDataStates, saveDataSignalMode, saveDataAudio })}`);
   }
+  await saveDataPage.goto(`${baseUrl}/links/`, { waitUntil: "load" });
+  const saveDataSocialAccess = await saveDataPage.evaluate(() => {
+    const terminal = document.querySelector(".social-access-terminal");
+    const field = document.querySelector(".social-access-field");
+    return {
+      terminalAnimations: terminal?.getAnimations({ subtree: true }).length ?? -1,
+      fieldAnimations: field?.getAnimations({ subtree: true }).length ?? -1,
+      links: document.querySelectorAll("[data-social-access-link]").length
+    };
+  });
+  if (saveDataRequests.length
+    || saveDataSocialAccess.terminalAnimations !== 0
+    || saveDataSocialAccess.fieldAnimations !== 0
+    || saveDataSocialAccess.links !== SOCIAL_LINKS.length) {
+    fail(`Save-Data: social access is not static and complete ${JSON.stringify({ saveDataRequests, saveDataSocialAccess })}`);
+  }
+  const deferredWaveform = saveDataPage.locator("[data-player-waveform]");
+  const deferredBox = await deferredWaveform.boundingBox();
+  if (!deferredBox) throw new Error("Save-Data timeline has no pointer box");
+  await saveDataPage.mouse.click(
+    deferredBox.x + deferredBox.width * 0.5,
+    deferredBox.y + deferredBox.height * 0.5
+  );
+  await saveDataPage.locator("[data-player-toggle]").click();
+  await saveDataPage.waitForFunction(() => document.querySelector("[data-audio-engine]")?.readyState >= 1);
+  const deferredSeekTime = await saveDataPage.locator("[data-audio-engine]")
+    .evaluate((audio) => audio.currentTime);
+  if (Math.abs(deferredSeekTime - defaultAudioTrack.duration * 0.5) > 1.2) {
+    fail(`Save-Data timeline: pending seek restored ${deferredSeekTime}`);
+  }
   await saveDataContext.close();
+
+  const touchSeekContext = await browser.newContext({
+    viewport: { width: 375, height: 812 },
+    hasTouch: true,
+    isMobile: true
+  });
+  const touchSeekPage = await touchSeekContext.newPage();
+  await touchSeekPage.goto(baseUrl, { waitUntil: "load" });
+  await touchSeekPage.waitForFunction(
+    () => document.querySelector("[data-audio-player]")?.dataset.waveformState === "ready"
+  );
+  await touchSeekPage.locator("[data-player-toggle]").click();
+  await touchSeekPage.waitForFunction(
+    () => document.querySelector("[data-audio-engine]")?.readyState >= 1
+  );
+  const touchWaveform = touchSeekPage.locator("[data-player-waveform]");
+  const touchBox = await touchWaveform.boundingBox();
+  if (!touchBox) {
+    fail("Touch timeline: waveform has no pointer box");
+  } else {
+    const touchY = touchBox.y + touchBox.height * 0.5;
+    await touchWaveform.dispatchEvent("pointerdown", {
+      pointerId: 41,
+      pointerType: "touch",
+      isPrimary: true,
+      button: 0,
+      buttons: 1,
+      clientX: touchBox.x + touchBox.width * 0.2,
+      clientY: touchY
+    });
+    await touchWaveform.dispatchEvent("pointermove", {
+      pointerId: 41,
+      pointerType: "touch",
+      isPrimary: true,
+      button: -1,
+      buttons: 1,
+      clientX: touchBox.x + touchBox.width * 0.7,
+      clientY: touchY
+    });
+    await touchWaveform.dispatchEvent("pointerup", {
+      pointerId: 41,
+      pointerType: "touch",
+      isPrimary: true,
+      button: 0,
+      buttons: 0,
+      clientX: touchBox.x + touchBox.width * 0.7,
+      clientY: touchY
+    });
+    const touchSeekTime = await touchSeekPage.locator("[data-audio-engine]")
+      .evaluate((audio) => audio.currentTime);
+    await touchWaveform.dispatchEvent("pointerdown", {
+      pointerId: 42,
+      pointerType: "touch",
+      isPrimary: true,
+      button: 0,
+      buttons: 1,
+      clientX: touchBox.x + touchBox.width * 0.4,
+      clientY: touchY
+    });
+    await touchWaveform.dispatchEvent("pointercancel", {
+      pointerId: 42,
+      pointerType: "touch",
+      isPrimary: true,
+      button: 0,
+      buttons: 0,
+      clientX: touchBox.x + touchBox.width * 0.4,
+      clientY: touchY
+    });
+    const cancelledSeeking = await touchSeekPage.locator("[data-audio-player]")
+      .getAttribute("data-seeking");
+    const touchAction = await touchWaveform.evaluate((element) => getComputedStyle(element).touchAction);
+    if (Math.abs(touchSeekTime - defaultAudioTrack.duration * 0.7) > 1.2
+      || cancelledSeeking === "true" || touchAction !== "pan-y") {
+      fail(`Touch timeline: drag contract failed ${JSON.stringify({ touchSeekTime, cancelledSeeking, touchAction })}`);
+    }
+  }
+  await touchSeekContext.close();
 
   const dynamicMotionContext = await browser.newContext({
     viewport: { width: 375, height: 812 },
@@ -1770,6 +2718,29 @@ try {
     webkitPage.on("pageerror", (error) => webkitErrors.push(error.message));
     await webkitPage.goto(baseUrl, { waitUntil: "load" });
     await webkitPage.waitForFunction(() => document.querySelector("[data-audio-player]")?.classList.contains("is-ready"));
+    await webkitPage.locator("[data-player-volume-toggle]").click();
+    await webkitPage.locator("[data-player-volume]").fill("60");
+    const webkitVolumeOpen = await webkitPage.evaluate(() => ({
+      volume: document.querySelector("[data-audio-engine]")?.volume,
+      popupHidden: document.querySelector("[data-player-volume-popup]")?.hidden
+    }));
+    const webkitWaveform = webkitPage.locator("[data-player-waveform]");
+    const webkitWaveformBox = await webkitWaveform.boundingBox();
+    if (!webkitWaveformBox) {
+      fail("WebKit audio: waveform has no pointer box");
+    } else {
+      await webkitPage.mouse.move(
+        webkitWaveformBox.x + webkitWaveformBox.width * 0.2,
+        webkitWaveformBox.y + webkitWaveformBox.height * 0.5
+      );
+      await webkitPage.mouse.down();
+      await webkitPage.mouse.move(
+        webkitWaveformBox.x + webkitWaveformBox.width * 0.4,
+        webkitWaveformBox.y + webkitWaveformBox.height * 0.5,
+        { steps: 4 }
+      );
+      await webkitPage.mouse.up();
+    }
     await webkitPage.locator("[data-player-toggle]").click();
     await webkitPage.waitForFunction(() => document.querySelector("[data-audio-player]")?.dataset.playing === "true");
     await webkitPage.waitForTimeout(350);
@@ -1777,13 +2748,20 @@ try {
       paused: document.querySelector("[data-audio-engine]")?.paused,
       currentTime: document.querySelector("[data-audio-engine]")?.currentTime,
       currentSrc: document.querySelector("[data-audio-engine]")?.currentSrc,
+      volume: document.querySelector("[data-audio-engine]")?.volume,
+      timelineTime: document.querySelector("[data-audio-engine]")?.currentTime,
+      touchAction: getComputedStyle(document.querySelector("[data-player-waveform]")).touchAction,
       playing: document.querySelector("[data-audio-player]")?.dataset.playing,
       artist: document.querySelector("[data-player-artist]")?.textContent,
       waveform: document.querySelector("[data-audio-player]")?.dataset.waveformState
     }));
     if (webkitAudio.paused || webkitAudio.playing !== "true" || !webkitAudio.currentSrc?.endsWith("/assets/tracks/pvkh-007-opportunist.mp3")
       || webkitAudio.artist !== "ALESSANDRO POVKH & K/SMOKIN"
-      || webkitAudio.waveform !== "ready") {
+      || webkitAudio.waveform !== "ready"
+      || Math.abs(webkitVolumeOpen.volume - 0.6) > 0.001 || webkitVolumeOpen.popupHidden
+      || Math.abs(webkitAudio.volume - 0.6) > 0.001
+      || Math.abs(webkitAudio.timelineTime - defaultAudioTrack.duration * 0.4) > 1.2
+      || webkitAudio.touchAction !== "pan-y") {
       fail(`WebKit audio contract failed ${JSON.stringify(webkitAudio)}`);
     }
     await webkitPage.locator("[data-player-toggle]").click();
@@ -1867,6 +2845,8 @@ await writeFile(path.join(screenshotDir, "qa-report.json"), `${JSON.stringify({
     "verified streaming CTA contract",
     "44px streaming targets and 8px gaps",
     "localized smart-link routing",
+    "localized DROP 001 detail routes and native-dialog galleries",
+    "merch gallery keyboard, focus restore and no-JavaScript image fallback",
     "WCAG A/AA",
     "keyboard",
     "deep language routing",

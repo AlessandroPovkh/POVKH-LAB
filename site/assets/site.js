@@ -25,6 +25,7 @@
     const audio = audioPlayer.querySelector("[data-audio-engine]");
     const canvas = audioPlayer.querySelector("[data-player-waveform]");
     const playhead = audioPlayer.querySelector("[data-player-playhead]");
+    const seekTooltip = audioPlayer.querySelector("[data-player-seek-tooltip]");
     const toggle = audioPlayer.querySelector("[data-player-toggle]");
     const previous = audioPlayer.querySelector("[data-player-prev]");
     const next = audioPlayer.querySelector("[data-player-next]");
@@ -33,6 +34,13 @@
     const indexLabel = audioPlayer.querySelector("[data-player-index]");
     const timeLabel = audioPlayer.querySelector("[data-player-time]");
     const status = audioPlayer.querySelector("[data-player-status]");
+    const volumeShell = audioPlayer.querySelector("[data-player-volume-shell]");
+    const volumeToggle = audioPlayer.querySelector("[data-player-volume-toggle]");
+    const volumePopup = audioPlayer.querySelector("[data-player-volume-popup]");
+    const volumeRange = audioPlayer.querySelector("[data-player-volume]");
+    const volumeValue = audioPlayer.querySelector("[data-player-volume-value]");
+    const volumePercent = audioPlayer.querySelector("[data-player-volume-percent]");
+    const volumeLabel = audioPlayer.querySelector("[data-player-volume-label]");
     const playlistToggle = audioPlayer.querySelector("[data-player-playlist-toggle]");
     const playlistDialog = audioPlayer.querySelector("[data-player-playlist-dialog]");
     const playlistClose = audioPlayer.querySelector("[data-player-playlist-close]");
@@ -52,10 +60,14 @@
       isDefault: item.dataset.playerDefault === "true"
     }));
 
-    if (!audio || !canvas || !playhead || !toggle || !previous || !next || !title
-      || !artist || !indexLabel || !timeLabel || !status || !tracks.length) return null;
+    if (!audio || !canvas || !playhead || !seekTooltip || !toggle || !previous || !next || !title
+      || !artist || !indexLabel || !timeLabel || !status || !tracks.length
+      || !volumeShell || !volumeToggle || !volumePopup || !volumeRange
+      || !volumeValue || !volumePercent || !volumeLabel) return null;
 
     const storageKey = "povkh-lab-player-v2";
+    const volumeStorageKey = "povkh-lab-player-volume-v1";
+    const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
     const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
     const waveformCache = new Map();
     let trackIndex = Math.max(0, tracks.findIndex((track) => track.isDefault));
@@ -64,6 +76,40 @@
     let mediaAttempt = 0;
     let pendingRestoreTime = 0;
     let restoreFocusAfterDialog = true;
+    let seekPointerId = null;
+    let seekTooltipTimer = 0;
+
+    const readVolumePreference = () => {
+      try {
+        const rawValue = localStorage.getItem(volumeStorageKey);
+        const value = rawValue === null || rawValue.trim() === "" ? NaN : Number(rawValue);
+        return Number.isFinite(value) && value >= 0 && value <= 1 ? value : 0.6;
+      } catch {
+        return 0.6;
+      }
+    };
+
+    const syncVolumeUi = () => {
+      const percent = Math.round(clamp(audio.volume, 0, 1) * 100);
+      volumeRange.value = String(percent);
+      volumeRange.setAttribute("aria-valuenow", String(percent));
+      volumeRange.setAttribute("aria-valuetext", `${percent}%`);
+      volumeValue.textContent = String(percent).padStart(2, "0");
+      volumePercent.textContent = `${percent}%`;
+      volumeToggle.setAttribute("aria-label", `${volumeToggle.dataset.volumeLabel}: ${percent}%`);
+    };
+
+    const setVolume = (value, { persist = true } = {}) => {
+      const next = clamp(Number(value) / 100, 0, 1);
+      audio.volume = Number.isFinite(next) ? next : 0.6;
+      syncVolumeUi();
+      if (!persist) return;
+      try {
+        localStorage.setItem(volumeStorageKey, String(audio.volume));
+      } catch {
+        // Volume still works when storage is unavailable.
+      }
+    };
 
     const readState = () => {
       try {
@@ -276,6 +322,34 @@
       saveState();
     };
 
+    const clampRatio = (value) => Math.min(1, Math.max(0, value));
+    const ratioFromPointer = (event) => {
+      const rect = canvas.getBoundingClientRect();
+      return rect.width ? clampRatio((event.clientX - rect.left) / rect.width) : 0;
+    };
+    const showSeekTooltip = (ratio, { temporary = false } = {}) => {
+      const duration = Number.isFinite(audio.duration) ? audio.duration : tracks[trackIndex].duration;
+      const safeRatio = clampRatio(ratio);
+      seekTooltip.textContent = formatTime(safeRatio * duration);
+      seekTooltip.style.setProperty("--seek-preview", String(safeRatio));
+      seekTooltip.hidden = false;
+      clearTimeout(seekTooltipTimer);
+      if (temporary) {
+        seekTooltipTimer = window.setTimeout(() => {
+          if (seekPointerId === null) seekTooltip.hidden = true;
+        }, 1200);
+      }
+    };
+    const hideSeekTooltip = () => {
+      clearTimeout(seekTooltipTimer);
+      if (seekPointerId === null) seekTooltip.hidden = true;
+    };
+    const showCurrentSeekTooltip = () => {
+      const duration = Number.isFinite(audio.duration) ? audio.duration : tracks[trackIndex].duration;
+      const currentTime = audio.currentTime || pendingRestoreTime || 0;
+      showSeekTooltip(duration ? currentTime / duration : 0, { temporary: true });
+    };
+
     const closePlaylist = ({ restoreFocus = true } = {}) => {
       if (!playlistDialog) return;
       restoreFocusAfterDialog = restoreFocus;
@@ -286,6 +360,18 @@
         playlistToggle?.setAttribute("aria-expanded", "false");
         if (restoreFocus) playlistToggle?.focus({ preventScroll: true });
       }
+    };
+
+    const closeVolume = ({ restoreFocus = false } = {}) => {
+      volumePopup.hidden = true;
+      volumeToggle.setAttribute("aria-expanded", "false");
+      if (restoreFocus) volumeToggle.focus({ preventScroll: true });
+    };
+
+    const openVolume = () => {
+      volumePopup.hidden = false;
+      volumeToggle.setAttribute("aria-expanded", "true");
+      volumeRange.focus({ preventScroll: true });
     };
 
     const openPlaylist = () => {
@@ -320,14 +406,43 @@
       announce: true
     }));
     canvas.addEventListener("pointerdown", (event) => {
-      const rect = canvas.getBoundingClientRect();
-      seekToRatio((event.clientX - rect.left) / rect.width);
+      if (event.button !== 0 && event.pointerType === "mouse") return;
+      seekPointerId = event.pointerId;
+      audioPlayer.dataset.seeking = "true";
+      try { canvas.setPointerCapture?.(event.pointerId); } catch { /* Synthetic QA events have no active native pointer. */ }
+      const ratio = ratioFromPointer(event);
+      showSeekTooltip(ratio);
+      seekToRatio(ratio);
     });
+    canvas.addEventListener("pointermove", (event) => {
+      const ratio = ratioFromPointer(event);
+      if (seekPointerId === event.pointerId) seekToRatio(ratio);
+      if (seekPointerId === null || seekPointerId === event.pointerId) showSeekTooltip(ratio);
+    });
+    const endSeek = (event) => {
+      if (seekPointerId !== event.pointerId) return;
+      const ratio = ratioFromPointer(event);
+      seekToRatio(ratio);
+      try { canvas.releasePointerCapture?.(event.pointerId); } catch { /* Pointer capture may already be released. */ }
+      seekPointerId = null;
+      audioPlayer.dataset.seeking = "false";
+      showSeekTooltip(ratio, { temporary: true });
+    };
+    canvas.addEventListener("pointerup", endSeek);
+    canvas.addEventListener("pointercancel", (event) => {
+      if (seekPointerId !== event.pointerId) return;
+      seekPointerId = null;
+      audioPlayer.dataset.seeking = "false";
+      hideSeekTooltip();
+    });
+    canvas.addEventListener("pointerleave", hideSeekTooltip);
+    canvas.addEventListener("focus", showCurrentSeekTooltip);
     canvas.addEventListener("keydown", (event) => {
       const duration = Number.isFinite(audio.duration) ? audio.duration : tracks[trackIndex].duration;
       if (event.key === "Home" || event.key === "End") {
         event.preventDefault();
         seekToRatio(event.key === "Home" ? 0 : 1);
+        showCurrentSeekTooltip();
         return;
       }
       if (!event.key.startsWith("Arrow") || !duration) return;
@@ -335,6 +450,7 @@
       const direction = event.key === "ArrowLeft" || event.key === "ArrowDown" ? -1 : 1;
       const currentTime = audio.currentTime || pendingRestoreTime || 0;
       seekToRatio((currentTime + direction * 5) / duration);
+      showCurrentSeekTooltip();
     });
 
     playlistToggle?.addEventListener("click", openPlaylist);
@@ -358,6 +474,20 @@
         closePlaylist();
       });
     }
+    volumeToggle.addEventListener("click", () => {
+      if (volumePopup.hidden) openVolume();
+      else closeVolume({ restoreFocus: true });
+    });
+    volumeRange.addEventListener("input", () => setVolume(volumeRange.value));
+    volumeShell.addEventListener("keydown", (event) => {
+      if (event.key !== "Escape" || volumePopup.hidden) return;
+      event.preventDefault();
+      closeVolume({ restoreFocus: true });
+    });
+    document.addEventListener("pointerdown", (event) => {
+      if (!volumePopup.hidden && !volumeShell.contains(event.target)) closeVolume();
+    });
+    document.addEventListener("povkh:routebeforechange", () => closeVolume());
 
     audio.addEventListener("timeupdate", syncPlaybackUi);
     audio.addEventListener("play", () => {
@@ -451,6 +581,12 @@
       if (announcer && incomingAnnouncer) {
         copyAttributes(announcer, incomingAnnouncer, ["data-track-template"]);
       }
+      const incomingVolumeToggle = incomingPlayer.querySelector("[data-player-volume-toggle]");
+      if (incomingVolumeToggle) {
+        copyAttributes(volumeToggle, incomingVolumeToggle, ["data-volume-label"]);
+      }
+      const incomingVolumeLabel = incomingPlayer.querySelector("[data-player-volume-label]");
+      if (incomingVolumeLabel) volumeLabel.textContent = incomingVolumeLabel.textContent;
 
       for (const current of audioPlayer.querySelectorAll("[data-player-copy]")) {
         const key = current.dataset.playerCopy;
@@ -476,6 +612,7 @@
       else if (audioPlayer.dataset.waveformState === "loading") status.textContent = status.dataset.loadingLabel;
       else status.textContent = "";
       syncPlaybackUi();
+      syncVolumeUi();
     };
 
     const saved = readState();
@@ -491,6 +628,8 @@
     window.addEventListener("scroll", syncPlayerScrollMode, { passive: true });
     syncPlayerScrollMode();
     syncPlaylistUi();
+    audio.volume = readVolumePreference();
+    syncVolumeUi();
     void loadTrack(trackIndex, {
       restoreTime: Number(saved?.currentTime) || 0,
       autoplay: !saved?.userPaused && !connection?.saveData,
@@ -502,8 +641,10 @@
       audio,
       tracks,
       closePlaylist,
+      closeVolume,
       loadTrack,
       saveState,
+      setVolume,
       syncLocaleFrom
     };
   };
@@ -1037,6 +1178,98 @@
     };
   };
 
+  const initMerchGalleries = () => {
+    const galleries = [...document.querySelectorAll("[data-merch-gallery]")];
+    if (!galleries.length) return () => {};
+    const abortController = new AbortController();
+    const { signal } = abortController;
+
+    for (const gallery of galleries) {
+      const dialog = gallery.querySelector("[data-merch-gallery-dialog]");
+      const triggers = [...gallery.querySelectorAll("[data-merch-gallery-trigger]")];
+      const figures = [...gallery.querySelectorAll("[data-merch-gallery-figure]")];
+      const close = gallery.querySelector("[data-merch-gallery-close]");
+      const previous = gallery.querySelector("[data-merch-gallery-previous]");
+      const next = gallery.querySelector("[data-merch-gallery-next]");
+      const counter = gallery.querySelector("[data-merch-gallery-counter]");
+      if (!dialog
+        || typeof dialog.showModal !== "function"
+        || !triggers.length
+        || triggers.length !== figures.length
+        || !close
+        || !previous
+        || !next
+        || !counter) continue;
+
+      let activeIndex = 0;
+      let restoreTarget = null;
+      const total = figures.length;
+      const counterTemplate = counter.dataset.counterTemplate || "{current} / {total}";
+      gallery.dataset.merchGalleryController = "active";
+
+      const show = (requestedIndex) => {
+        activeIndex = Math.max(0, Math.min(total - 1, requestedIndex));
+        figures.forEach((figure, index) => {
+          figure.hidden = index !== activeIndex;
+          if (index === activeIndex) figure.setAttribute("aria-current", "true");
+          else figure.removeAttribute("aria-current");
+        });
+        previous.disabled = activeIndex === 0;
+        next.disabled = activeIndex === total - 1;
+        const currentText = String(activeIndex + 1).padStart(2, "0");
+        const totalText = String(total).padStart(2, "0");
+        counter.textContent = `${currentText} / ${totalText}`;
+        counter.setAttribute("aria-label", counterTemplate
+          .replace("{current}", String(activeIndex + 1))
+          .replace("{total}", String(total)));
+      };
+      const open = (index, trigger) => {
+        restoreTarget = trigger;
+        show(index);
+        if (!dialog.open) dialog.showModal();
+        close.focus();
+      };
+
+      triggers.forEach((trigger, index) => {
+        trigger.addEventListener("click", (event) => {
+          if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+          event.preventDefault();
+          open(index, trigger);
+        }, { signal });
+      });
+      close.addEventListener("click", () => dialog.close(), { signal });
+      dialog.addEventListener("click", (event) => {
+        if (event.target === dialog) dialog.close();
+      }, { signal });
+      previous.addEventListener("click", () => show(activeIndex - 1), { signal });
+      next.addEventListener("click", () => show(activeIndex + 1), { signal });
+      dialog.addEventListener("keydown", (event) => {
+        const target = event.key === "ArrowLeft" ? activeIndex - 1
+          : event.key === "ArrowRight" ? activeIndex + 1
+            : event.key === "Home" ? 0
+              : event.key === "End" ? total - 1
+                : null;
+        if (target === null) return;
+        event.preventDefault();
+        show(target);
+      }, { signal });
+      dialog.addEventListener("close", () => {
+        if (restoreTarget?.isConnected) restoreTarget.focus();
+        restoreTarget = null;
+      }, { signal });
+      show(0);
+    }
+
+    return () => {
+      for (const gallery of galleries) {
+        const dialog = gallery.querySelector("[data-merch-gallery-dialog]");
+        if (dialog?.open) dialog.close();
+        delete gallery.dataset.merchGalleryController;
+      }
+      abortController.abort();
+    };
+  };
+
   let disposeCurrentRoute = () => {};
   site.disposeRoute = () => {
     disposeCurrentRoute();
@@ -1051,7 +1284,8 @@
       initLocalized404(),
       initMobileMenu(),
       initCatalogFilters(),
-      initArtistGalleries()
+      initArtistGalleries(),
+      initMerchGalleries()
     ];
     let disposed = false;
     disposeCurrentRoute = () => {

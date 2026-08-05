@@ -17,10 +17,18 @@
     "check": "node tools/check.mjs",
     "check:pages-base": "node tools/check-pages-base.mjs",
     "qa": "node tools/qa.mjs",
-    "test": "npm run build && npm run check && npm run qa"
+    "assets:merch": "node tools/export-merch-assets.mjs",
+    "test:merch": "node --test tools/merch.test.mjs",
+    "test:merch-assets": "node --test tools/merch-assets.test.mjs",
+    "test:merch-assets:source": "PVKH_VERIFY_PRIVATE_MERCH_SOURCES=1 node --test tools/merch-assets.test.mjs",
+    "test:merch-pages": "node --test tools/merch-pages.test.mjs",
+    "test:social-links": "node --test tools/social-links.test.mjs",
+    "test": "npm run test:merch && npm run test:merch-assets && npm run test:merch-pages && npm run test:social-links && npm run build && npm run check && npm run qa"
   },
   "devDependencies": {
     "@axe-core/playwright": "4.10.2",
-    "playwright": "1.61.1"
+    "@zxing/library": "0.21.3",
+    "playwright": "1.61.1",
+    "pngjs": "7.0.0"
   }
 }

@@ -1,0 +1,1235 @@
+{
+  "schemaVersion": 1,
+  "authority": "DROP_001_CONCEPT_COPY",
+  "reviewState": "approvedForConceptPreview",
+  "locales": [
+    "en",
+    "it",
+    "ru"
+  ],
+  "overview": {
+    "en": {
+      "title": "Merch",
+      "description": "POVKH LAB physical archive: upcoming audio media, apparel, printed matter and collector objects.",
+      "eyebrow": "POVKH LAB / Physical archive",
+      "heroTitle": "First physical signal",
+      "lede": "Audio media, apparel and printed objects will carry the label system beyond the screen.",
+      "status": "STATUS / COMING SOON",
+      "heroCta": "Explore the objects",
+      "indexEyebrow": "Object index / 11",
+      "indexTitle": "Future editions",
+      "indexBody": "The first collection is visible as a direction, not as available stock.",
+      "roadmapEyebrow": "Roadmap / undated",
+      "roadmapTitle": "Directions in development",
+      "roadmapBody": "This sequence describes the current working order. It does not announce launch dates or availability.",
+      "categoryLabels": {
+        "media": "Media",
+        "wear": "Wear",
+        "printObjects": "Print / objects"
+      },
+      "roadmapPhases": [
+        {
+          "id": "print-small",
+          "index": "01",
+          "title": "Print and small objects",
+          "body": "Posters, sticker packs and editorial matter."
+        },
+        {
+          "id": "audio-media",
+          "index": "02",
+          "title": "Audio media",
+          "body": "Physical formats extending the catalog."
+        },
+        {
+          "id": "apparel-collector",
+          "index": "03",
+          "title": "Apparel and collector editions",
+          "body": "Wearables and collector objects."
+        }
+      ]
+    },
+    "it": {
+      "title": "Merch",
+      "description": "L’archivio fisico POVKH LAB: supporti audio, abbigliamento, stampa e oggetti da collezione in arrivo.",
+      "eyebrow": "POVKH LAB / Archivio fisico",
+      "heroTitle": "Primo segnale fisico",
+      "lede": "Supporti audio, abbigliamento e oggetti stampati porteranno il sistema dell’etichetta oltre lo schermo.",
+      "status": "STATO / PROSSIMAMENTE",
+      "heroCta": "Esplora gli oggetti",
+      "indexEyebrow": "Indice oggetti / 11",
+      "indexTitle": "Edizioni future",
+      "indexBody": "La prima collezione è presentata come direzione, non come disponibilità di magazzino.",
+      "roadmapEyebrow": "Roadmap / senza date",
+      "roadmapTitle": "Direzioni in sviluppo",
+      "roadmapBody": "La sequenza descrive l’ordine di lavoro attuale. Non annuncia date di lancio o disponibilità.",
+      "categoryLabels": {
+        "media": "Supporti",
+        "wear": "Abbigliamento",
+        "printObjects": "Stampa / oggetti"
+      },
+      "roadmapPhases": [
+        {
+          "id": "print-small",
+          "index": "01",
+          "title": "Stampa e piccoli oggetti",
+          "body": "Poster, pacchetti di sticker e materiali editoriali."
+        },
+        {
+          "id": "audio-media",
+          "index": "02",
+          "title": "Supporti audio",
+          "body": "Formati fisici che estendono il catalogo."
+        },
+        {
+          "id": "apparel-collector",
+          "index": "03",
+          "title": "Abbigliamento ed edizioni da collezione",
+          "body": "Capi e oggetti da collezione."
+        }
+      ]
+    },
+    "ru": {
+      "title": "Мерч",
+      "description": "Физический архив POVKH LAB: будущие аудионосители, одежда, печатные материалы и коллекционные объекты.",
+      "eyebrow": "POVKH LAB / Физический архив",
+      "heroTitle": "Первый физический сигнал",
+      "lede": "Аудионосители, одежда и печатные объекты продолжат систему лейбла за пределами экрана.",
+      "status": "СТАТУС / СКОРО",
+      "heroCta": "Смотреть объекты",
+      "indexEyebrow": "Индекс объектов / 11",
+      "indexTitle": "Будущие издания",
+      "indexBody": "Первая коллекция показана как направление, а не как доступный товар.",
+      "roadmapEyebrow": "Роадмап / без дат",
+      "roadmapTitle": "Направления в разработке",
+      "roadmapBody": "Последовательность отражает текущий рабочий порядок и не объявляет даты запуска или наличие.",
+      "categoryLabels": {
+        "media": "Носители",
+        "wear": "Одежда",
+        "printObjects": "Печать / объекты"
+      },
+      "roadmapPhases": [
+        {
+          "id": "print-small",
+          "index": "01",
+          "title": "Печать и малые объекты",
+          "body": "Постеры, стикерпаки и редакционные материалы."
+        },
+        {
+          "id": "audio-media",
+          "index": "02",
+          "title": "Аудионосители",
+          "body": "Физические форматы, продолжающие каталог."
+        },
+        {
+          "id": "apparel-collector",
+          "index": "03",
+          "title": "Одежда и коллекционные издания",
+          "body": "Предметы одежды и коллекционные объекты."
+        }
+      ]
+    }
+  },
+  "shared": {
+    "en": {
+      "conceptStatus": "CONCEPT / COMING SOON",
+      "viewGallery": "View gallery",
+      "closeGallery": "Close gallery",
+      "previousImage": "Previous image",
+      "nextImage": "Next image",
+      "imageCounter": "Image {current} of {total}",
+      "storyEyebrow": "Object / concept",
+      "specificationsTitle": "Verified specifications",
+      "releaseGateTitle": "Concept only",
+      "backToDrop": "Back to DROP 001",
+      "accessTerminal": "Access Terminal",
+      "previousObject": "Previous object",
+      "nextObject": "Next object",
+      "galleryLabel": "Concept gallery"
+    },
+    "it": {
+      "conceptStatus": "CONCEPT / PROSSIMAMENTE",
+      "viewGallery": "Apri la galleria",
+      "closeGallery": "Chiudi la galleria",
+      "previousImage": "Immagine precedente",
+      "nextImage": "Immagine successiva",
+      "imageCounter": "Immagine {current} di {total}",
+      "storyEyebrow": "Oggetto / concept",
+      "specificationsTitle": "Specifiche verificate",
+      "releaseGateTitle": "Solo concept",
+      "backToDrop": "Torna a DROP 001",
+      "accessTerminal": "Terminale di accesso",
+      "previousObject": "Oggetto precedente",
+      "nextObject": "Oggetto successivo",
+      "galleryLabel": "Galleria concept"
+    },
+    "ru": {
+      "conceptStatus": "КОНЦЕПТ / СКОРО",
+      "viewGallery": "Открыть галерею",
+      "closeGallery": "Закрыть галерею",
+      "previousImage": "Предыдущее изображение",
+      "nextImage": "Следующее изображение",
+      "imageCounter": "Изображение {current} из {total}",
+      "storyEyebrow": "Объект / концепт",
+      "specificationsTitle": "Подтверждённые характеристики",
+      "releaseGateTitle": "Только концепт",
+      "backToDrop": "Назад к DROP 001",
+      "accessTerminal": "Терминал доступа",
+      "previousObject": "Предыдущий объект",
+      "nextObject": "Следующий объект",
+      "galleryLabel": "Галерея концепта"
+    }
+  },
+  "products": {
+    "MRCH-001": {
+      "en": {
+        "name": "Signal Red Vinyl",
+        "metaDescription": "Selected Signal Red Vinyl concept with complete and detail views. Concept only; coming soon.",
+        "eyebrow": "MRCH-001 / CONCEPT",
+        "lede": "A Signal Red record and indexed sleeve form one controlled physical-media sequence.",
+        "storyTitle": "Red as stored voltage",
+        "storyBody": "The red disc behaves like stored voltage inside a pale archive sleeve. Dense microtype, track data and the bullet mark turn listening into an object uncovered layer by layer.",
+        "conceptNote": "Concept renders show design intent only. Final construction, color and production details remain subject to physical proof.",
+        "releaseGate": "Approved physical construction, artwork and assembled samples are required before production claims.",
+        "gallery": {
+          "hero": {
+            "alt": "Signal Red Vinyl concept, complete object",
+            "caption": "complete object / concept render"
+          },
+          "reverse": {
+            "alt": "Signal Red Vinyl concept, reverse system",
+            "caption": "reverse system / concept render"
+          },
+          "inner": {
+            "alt": "Signal Red Vinyl concept, inner reveal",
+            "caption": "inner reveal / concept render"
+          },
+          "macro": {
+            "alt": "Signal Red Vinyl concept, surface macro",
+            "caption": "surface macro / concept render"
+          },
+          "contents": {
+            "alt": "Signal Red Vinyl concept, proposed contents",
+            "caption": "proposed contents / concept render"
+          }
+        },
+        "specifications": {}
+      },
+      "it": {
+        "name": "Signal Red Vinyl",
+        "metaDescription": "Concept selezionato Signal Red Vinyl con viste complete e di dettaglio. Solo concept; prossimamente.",
+        "eyebrow": "MRCH-001 / CONCEPT",
+        "lede": "Un disco Signal Red e una copertina indicizzata formano una sequenza fisica controllata.",
+        "storyTitle": "Rosso come tensione immagazzinata",
+        "storyBody": "Il disco rosso agisce come tensione immagazzinata dentro una copertina d’archivio chiara. Microtesto, tracklist e bullet mark trasformano l’ascolto in un oggetto da scoprire strato dopo strato.",
+        "conceptNote": "I render concept mostrano solo l’intento progettuale. Costruzione, colore e dettagli produttivi finali restano soggetti a prova fisica.",
+        "releaseGate": "Servono costruzione fisica, artwork e campioni assemblati approvati prima di qualsiasi dichiarazione produttiva.",
+        "gallery": {
+          "hero": {
+            "alt": "Concept Signal Red Vinyl, oggetto completo",
+            "caption": "oggetto completo / render concept"
+          },
+          "reverse": {
+            "alt": "Concept Signal Red Vinyl, sistema posteriore",
+            "caption": "sistema posteriore / render concept"
+          },
+          "inner": {
+            "alt": "Concept Signal Red Vinyl, interno rivelato",
+            "caption": "interno rivelato / render concept"
+          },
+          "macro": {
+            "alt": "Concept Signal Red Vinyl, macro della superficie",
+            "caption": "macro della superficie / render concept"
+          },
+          "contents": {
+            "alt": "Concept Signal Red Vinyl, contenuto proposto",
+            "caption": "contenuto proposto / render concept"
+          }
+        },
+        "specifications": {}
+      },
+      "ru": {
+        "name": "Signal Red Vinyl",
+        "metaDescription": "Выбранный концепт Signal Red Vinyl: общий и детальные виды. Только концепт; скоро.",
+        "eyebrow": "MRCH-001 / CONCEPT",
+        "lede": "Пластинка Signal Red и индексированный конверт образуют единую контролируемую последовательность.",
+        "storyTitle": "Красный как сохранённое напряжение",
+        "storyBody": "Красный диск работает как сохранённое напряжение внутри светлого архивного конверта. Плотный микротекст, треклист и bullet-знак превращают прослушивание в объект, который раскрывается слой за слоем.",
+        "conceptNote": "Концепт-рендеры показывают только дизайн-намерение. Финальная конструкция, цвет и производственные детали требуют физической проверки.",
+        "releaseGate": "До заявлений о производстве нужны утверждённые физическая конструкция, макеты и собранные образцы.",
+        "gallery": {
+          "hero": {
+            "alt": "Концепт Signal Red Vinyl, объект целиком",
+            "caption": "объект целиком / концепт-рендер"
+          },
+          "reverse": {
+            "alt": "Концепт Signal Red Vinyl, оборотная система",
+            "caption": "оборотная система / концепт-рендер"
+          },
+          "inner": {
+            "alt": "Концепт Signal Red Vinyl, внутреннее раскрытие",
+            "caption": "внутреннее раскрытие / концепт-рендер"
+          },
+          "macro": {
+            "alt": "Концепт Signal Red Vinyl, макро поверхности",
+            "caption": "макро поверхности / концепт-рендер"
+          },
+          "contents": {
+            "alt": "Концепт Signal Red Vinyl, предложенное содержимое",
+            "caption": "предложенное содержимое / концепт-рендер"
+          }
+        },
+        "specifications": {}
+      }
+    },
+    "MRCH-002": {
+      "en": {
+        "name": "Cassette 002",
+        "metaDescription": "Selected Cassette 002 concept with complete and detail views. Concept only; coming soon.",
+        "eyebrow": "MRCH-002 / CONCEPT",
+        "lede": "A compact smoke-shell cassette is treated as an indexed audio relic.",
+        "storyTitle": "Memory in a smaller machine",
+        "storyBody": "The smoke shell leaves the cassette mechanism visible while the Bone J-card treats it as indexed evidence. Portable sound becomes an intimate archive object rather than a nostalgic prop.",
+        "conceptNote": "Concept renders show design intent only. Final construction, color and production details remain subject to physical proof.",
+        "releaseGate": "Approved physical construction, artwork and assembled samples are required before production claims.",
+        "gallery": {
+          "hero": {
+            "alt": "Cassette 002 concept, complete object",
+            "caption": "complete object / concept render"
+          },
+          "shell": {
+            "alt": "Cassette 002 concept, shell detail",
+            "caption": "shell detail / concept render"
+          },
+          "open": {
+            "alt": "Cassette 002 concept, open configuration",
+            "caption": "open configuration / concept render"
+          },
+          "rear": {
+            "alt": "Cassette 002 concept, rear view",
+            "caption": "rear view / concept render"
+          },
+          "detail": {
+            "alt": "Cassette 002 concept, construction detail",
+            "caption": "construction detail / concept render"
+          }
+        },
+        "specifications": {}
+      },
+      "it": {
+        "name": "Cassette 002",
+        "metaDescription": "Concept selezionato Cassette 002 con viste complete e di dettaglio. Solo concept; prossimamente.",
+        "eyebrow": "MRCH-002 / CONCEPT",
+        "lede": "Una cassetta compatta smoke-shell è trattata come reliquia audio indicizzata.",
+        "storyTitle": "Memoria in una macchina più piccola",
+        "storyBody": "La shell smoke lascia visibile il meccanismo, mentre la J-card Bone lo tratta come prova indicizzata. Il suono portatile diventa un oggetto d’archivio intimo, non un semplice richiamo nostalgico.",
+        "conceptNote": "I render concept mostrano solo l’intento progettuale. Costruzione, colore e dettagli produttivi finali restano soggetti a prova fisica.",
+        "releaseGate": "Servono costruzione fisica, artwork e campioni assemblati approvati prima di qualsiasi dichiarazione produttiva.",
+        "gallery": {
+          "hero": {
+            "alt": "Concept Cassette 002, oggetto completo",
+            "caption": "oggetto completo / render concept"
+          },
+          "shell": {
+            "alt": "Concept Cassette 002, dettaglio della scocca",
+            "caption": "dettaglio della scocca / render concept"
+          },
+          "open": {
+            "alt": "Concept Cassette 002, configurazione aperta",
+            "caption": "configurazione aperta / render concept"
+          },
+          "rear": {
+            "alt": "Concept Cassette 002, vista posteriore",
+            "caption": "vista posteriore / render concept"
+          },
+          "detail": {
+            "alt": "Concept Cassette 002, dettaglio costruttivo",
+            "caption": "dettaglio costruttivo / render concept"
+          }
+        },
+        "specifications": {}
+      },
+      "ru": {
+        "name": "Cassette 002",
+        "metaDescription": "Выбранный концепт Cassette 002: общий и детальные виды. Только концепт; скоро.",
+        "eyebrow": "MRCH-002 / CONCEPT",
+        "lede": "Компактная кассета smoke-shell оформлена как индексированный аудио-реликт.",
+        "storyTitle": "Память в маленькой машине",
+        "storyBody": "Дымчатый корпус оставляет механизм кассеты видимым, а Bone-вкладыш превращает его в индексированное свидетельство. Портативный звук становится камерным архивным объектом, а не ностальгическим реквизитом.",
+        "conceptNote": "Концепт-рендеры показывают только дизайн-намерение. Финальная конструкция, цвет и производственные детали требуют физической проверки.",
+        "releaseGate": "До заявлений о производстве нужны утверждённые физическая конструкция, макеты и собранные образцы.",
+        "gallery": {
+          "hero": {
+            "alt": "Концепт Cassette 002, объект целиком",
+            "caption": "объект целиком / концепт-рендер"
+          },
+          "shell": {
+            "alt": "Концепт Cassette 002, деталь корпуса",
+            "caption": "деталь корпуса / концепт-рендер"
+          },
+          "open": {
+            "alt": "Концепт Cassette 002, открытая конфигурация",
+            "caption": "открытая конфигурация / концепт-рендер"
+          },
+          "rear": {
+            "alt": "Концепт Cassette 002, вид сзади",
+            "caption": "вид сзади / концепт-рендер"
+          },
+          "detail": {
+            "alt": "Концепт Cassette 002, деталь конструкции",
+            "caption": "деталь конструкции / концепт-рендер"
+          }
+        },
+        "specifications": {}
+      }
+    },
+    "MRCH-003": {
+      "en": {
+        "name": "Disc 004",
+        "metaDescription": "Selected Disc 004 concept with complete and detail views. Concept only; coming soon.",
+        "eyebrow": "MRCH-003 / CONCEPT",
+        "lede": "A silver disc and clear jewel case shift attention between reflection and transparency.",
+        "storyTitle": "Light becomes the carrier",
+        "storyBody": "The silver surface catches the room while the clear case almost disappears. Reflection, transparency and the dark hub let the medium change character with every viewing angle.",
+        "conceptNote": "Concept renders show design intent only. Final construction, color and production details remain subject to physical proof.",
+        "releaseGate": "Approved physical construction, artwork and assembled samples are required before production claims.",
+        "gallery": {
+          "case": {
+            "alt": "Disc 004 concept, closed case",
+            "caption": "closed case / concept render"
+          },
+          "disc": {
+            "alt": "Disc 004 concept, disc view",
+            "caption": "disc view / concept render"
+          },
+          "open": {
+            "alt": "Disc 004 concept, open configuration",
+            "caption": "open configuration / concept render"
+          },
+          "rear": {
+            "alt": "Disc 004 concept, rear view",
+            "caption": "rear view / concept render"
+          },
+          "detail": {
+            "alt": "Disc 004 concept, construction detail",
+            "caption": "construction detail / concept render"
+          }
+        },
+        "specifications": {}
+      },
+      "it": {
+        "name": "Disc 004",
+        "metaDescription": "Concept selezionato Disc 004 con viste complete e di dettaglio. Solo concept; prossimamente.",
+        "eyebrow": "MRCH-003 / CONCEPT",
+        "lede": "Un disco silver e una jewel case trasparente alternano riflesso e trasparenza.",
+        "storyTitle": "La luce diventa supporto",
+        "storyBody": "La superficie silver cattura l’ambiente mentre la jewel case trasparente quasi scompare. Riflesso, trasparenza e hub scuro cambiano il carattere del supporto a ogni angolazione.",
+        "conceptNote": "I render concept mostrano solo l’intento progettuale. Costruzione, colore e dettagli produttivi finali restano soggetti a prova fisica.",
+        "releaseGate": "Servono costruzione fisica, artwork e campioni assemblati approvati prima di qualsiasi dichiarazione produttiva.",
+        "gallery": {
+          "case": {
+            "alt": "Concept Disc 004, custodia chiusa",
+            "caption": "custodia chiusa / render concept"
+          },
+          "disc": {
+            "alt": "Concept Disc 004, vista del disco",
+            "caption": "vista del disco / render concept"
+          },
+          "open": {
+            "alt": "Concept Disc 004, configurazione aperta",
+            "caption": "configurazione aperta / render concept"
+          },
+          "rear": {
+            "alt": "Concept Disc 004, vista posteriore",
+            "caption": "vista posteriore / render concept"
+          },
+          "detail": {
+            "alt": "Concept Disc 004, dettaglio costruttivo",
+            "caption": "dettaglio costruttivo / render concept"
+          }
+        },
+        "specifications": {}
+      },
+      "ru": {
+        "name": "Disc 004",
+        "metaDescription": "Выбранный концепт Disc 004: общий и детальные виды. Только концепт; скоро.",
+        "eyebrow": "MRCH-003 / CONCEPT",
+        "lede": "Серебристый диск и прозрачный jewel case соединяют отражение и прозрачность.",
+        "storyTitle": "Свет становится носителем",
+        "storyBody": "Серебристая поверхность ловит окружающее пространство, пока прозрачный jewel case почти исчезает. Отражение, прозрачность и тёмный центр меняют характер носителя при каждом новом ракурсе.",
+        "conceptNote": "Концепт-рендеры показывают только дизайн-намерение. Финальная конструкция, цвет и производственные детали требуют физической проверки.",
+        "releaseGate": "До заявлений о производстве нужны утверждённые физическая конструкция, макеты и собранные образцы.",
+        "gallery": {
+          "case": {
+            "alt": "Концепт Disc 004, закрытый футляр",
+            "caption": "закрытый футляр / концепт-рендер"
+          },
+          "disc": {
+            "alt": "Концепт Disc 004, вид диска",
+            "caption": "вид диска / концепт-рендер"
+          },
+          "open": {
+            "alt": "Концепт Disc 004, открытая конфигурация",
+            "caption": "открытая конфигурация / концепт-рендер"
+          },
+          "rear": {
+            "alt": "Концепт Disc 004, вид сзади",
+            "caption": "вид сзади / концепт-рендер"
+          },
+          "detail": {
+            "alt": "Концепт Disc 004, деталь конструкции",
+            "caption": "деталь конструкции / концепт-рендер"
+          }
+        },
+        "specifications": {}
+      }
+    },
+    "MRCH-004": {
+      "en": {
+        "name": "Data Key 003",
+        "metaDescription": "Selected Data Key 003 concept with complete and detail views. Concept only; coming soon.",
+        "eyebrow": "MRCH-004 / CONCEPT",
+        "lede": "A dual-ended data object is reduced to a black technical rail and archive packaging.",
+        "storyTitle": "Data without the cloud",
+        "storyBody": "Two connectors meet inside one black technical rail: a small, deliberate container for files that can be held, transferred and archived. The packaging frames data as a physical edition.",
+        "conceptNote": "Concept renders show design intent only. Final construction, color and production details remain subject to physical proof.",
+        "releaseGate": "Approved physical construction, artwork and assembled samples are required before production claims.",
+        "gallery": {
+          "packaging": {
+            "alt": "Data Key 003 concept, packaging system",
+            "caption": "packaging system / concept render"
+          },
+          "closed": {
+            "alt": "Data Key 003 concept, closed object",
+            "caption": "closed object / concept render"
+          },
+          "usb-a": {
+            "alt": "Data Key 003 concept, USB-A side",
+            "caption": "USB-A side / concept render"
+          },
+          "usb-c": {
+            "alt": "Data Key 003 concept, USB-C side",
+            "caption": "USB-C side / concept render"
+          },
+          "detail": {
+            "alt": "Data Key 003 concept, construction detail",
+            "caption": "construction detail / concept render"
+          }
+        },
+        "specifications": {}
+      },
+      "it": {
+        "name": "Data Key 003",
+        "metaDescription": "Concept selezionato Data Key 003 con viste complete e di dettaglio. Solo concept; prossimamente.",
+        "eyebrow": "MRCH-004 / CONCEPT",
+        "lede": "Un oggetto dati a doppia estremità è ridotto a una barra tecnica nera e a una confezione d’archivio.",
+        "storyTitle": "Dati senza cloud",
+        "storyBody": "Due connettori si incontrano in una barra tecnica nera: un contenitore piccolo e intenzionale per file da tenere, trasferire e archiviare. Il packaging presenta i dati come edizione fisica.",
+        "conceptNote": "I render concept mostrano solo l’intento progettuale. Costruzione, colore e dettagli produttivi finali restano soggetti a prova fisica.",
+        "releaseGate": "Servono costruzione fisica, artwork e campioni assemblati approvati prima di qualsiasi dichiarazione produttiva.",
+        "gallery": {
+          "packaging": {
+            "alt": "Concept Data Key 003, sistema di confezione",
+            "caption": "sistema di confezione / render concept"
+          },
+          "closed": {
+            "alt": "Concept Data Key 003, oggetto chiuso",
+            "caption": "oggetto chiuso / render concept"
+          },
+          "usb-a": {
+            "alt": "Concept Data Key 003, lato USB-A",
+            "caption": "lato USB-A / render concept"
+          },
+          "usb-c": {
+            "alt": "Concept Data Key 003, lato USB-C",
+            "caption": "lato USB-C / render concept"
+          },
+          "detail": {
+            "alt": "Concept Data Key 003, dettaglio costruttivo",
+            "caption": "dettaglio costruttivo / render concept"
+          }
+        },
+        "specifications": {}
+      },
+      "ru": {
+        "name": "Data Key 003",
+        "metaDescription": "Выбранный концепт Data Key 003: общий и детальные виды. Только концепт; скоро.",
+        "eyebrow": "MRCH-004 / CONCEPT",
+        "lede": "Двусторонний носитель данных сведён к чёрной технической рейке и архивной упаковке.",
+        "storyTitle": "Данные без облака",
+        "storyBody": "Два разъёма встречаются в одной чёрной технической рейке — небольшом осознанном контейнере для файлов, которые можно хранить, переносить и архивировать. Упаковка подаёт данные как физическое издание.",
+        "conceptNote": "Концепт-рендеры показывают только дизайн-намерение. Финальная конструкция, цвет и производственные детали требуют физической проверки.",
+        "releaseGate": "До заявлений о производстве нужны утверждённые физическая конструкция, макеты и собранные образцы.",
+        "gallery": {
+          "packaging": {
+            "alt": "Концепт Data Key 003, система упаковки",
+            "caption": "система упаковки / концепт-рендер"
+          },
+          "closed": {
+            "alt": "Концепт Data Key 003, закрытый объект",
+            "caption": "закрытый объект / концепт-рендер"
+          },
+          "usb-a": {
+            "alt": "Концепт Data Key 003, сторона USB-A",
+            "caption": "сторона USB-A / концепт-рендер"
+          },
+          "usb-c": {
+            "alt": "Концепт Data Key 003, сторона USB-C",
+            "caption": "сторона USB-C / концепт-рендер"
+          },
+          "detail": {
+            "alt": "Концепт Data Key 003, деталь конструкции",
+            "caption": "деталь конструкции / концепт-рендер"
+          }
+        },
+        "specifications": {}
+      }
+    },
+    "MRCH-005": {
+      "en": {
+        "name": "Bone Source Tee",
+        "metaDescription": "Selected Bone Source Tee concept with complete and detail views. Concept only; coming soon.",
+        "eyebrow": "MRCH-005 / CONCEPT",
+        "lede": "A Bone-tone tee carries the exact terminal-relic ASCII signature across the front.",
+        "storyTitle": "Terminal code, translated to cloth",
+        "storyBody": "The exact ASCII signature leaves the screen and becomes a full-scale gesture across the torso. The Bone field keeps the code legible while letting the garment remain easy to wear.",
+        "conceptNote": "Concept renders show design intent only. Final construction, color and production details remain subject to physical proof.",
+        "releaseGate": "Approved physical construction, artwork and assembled samples are required before production claims.",
+        "gallery": {
+          "front": {
+            "alt": "Bone Source Tee concept, front view",
+            "caption": "front view / concept render"
+          },
+          "rear": {
+            "alt": "Bone Source Tee concept, rear view",
+            "caption": "rear view / concept render"
+          },
+          "print-macro": {
+            "alt": "Bone Source Tee concept, print and fiber macro",
+            "caption": "print and fiber macro / concept render"
+          },
+          "on-body": {
+            "alt": "Bone Source Tee concept, on-body front view",
+            "caption": "on-body front view / concept render"
+          }
+        },
+        "specifications": {}
+      },
+      "it": {
+        "name": "Bone Source Tee",
+        "metaDescription": "Concept selezionato Bone Source Tee con viste complete e di dettaglio. Solo concept; prossimamente.",
+        "eyebrow": "MRCH-005 / CONCEPT",
+        "lede": "Una T-shirt Bone porta sul fronte la firma ASCII terminal-relic esatta.",
+        "storyTitle": "Codice terminale, tradotto in tessuto",
+        "storyBody": "La firma ASCII esatta lascia lo schermo e diventa un gesto a grande scala sul busto. Il campo Bone mantiene il codice leggibile senza rendere il capo difficile da indossare.",
+        "conceptNote": "I render concept mostrano solo l’intento progettuale. Costruzione, colore e dettagli produttivi finali restano soggetti a prova fisica.",
+        "releaseGate": "Servono costruzione fisica, artwork e campioni assemblati approvati prima di qualsiasi dichiarazione produttiva.",
+        "gallery": {
+          "front": {
+            "alt": "Concept Bone Source Tee, vista frontale",
+            "caption": "vista frontale / render concept"
+          },
+          "rear": {
+            "alt": "Concept Bone Source Tee, vista posteriore",
+            "caption": "vista posteriore / render concept"
+          },
+          "print-macro": {
+            "alt": "Concept Bone Source Tee, macro di stampa e fibra",
+            "caption": "macro di stampa e fibra / render concept"
+          },
+          "on-body": {
+            "alt": "Concept Bone Source Tee, vista frontale indossata",
+            "caption": "vista frontale indossata / render concept"
+          }
+        },
+        "specifications": {}
+      },
+      "ru": {
+        "name": "Bone Source Tee",
+        "metaDescription": "Выбранный концепт Bone Source Tee: общий и детальные виды. Только концепт; скоро.",
+        "eyebrow": "MRCH-005 / CONCEPT",
+        "lede": "Футболка Bone несёт точную ASCII-подпись terminal-relic на передней части.",
+        "storyTitle": "Код терминала, переведённый в ткань",
+        "storyBody": "Точная ASCII-подпись покидает экран и становится крупным жестом на передней части футболки. Поле Bone сохраняет читаемость кода, не мешая вещи оставаться удобной для повседневной носки.",
+        "conceptNote": "Концепт-рендеры показывают только дизайн-намерение. Финальная конструкция, цвет и производственные детали требуют физической проверки.",
+        "releaseGate": "До заявлений о производстве нужны утверждённые физическая конструкция, макеты и собранные образцы.",
+        "gallery": {
+          "front": {
+            "alt": "Концепт Bone Source Tee, вид спереди",
+            "caption": "вид спереди / концепт-рендер"
+          },
+          "rear": {
+            "alt": "Концепт Bone Source Tee, вид сзади",
+            "caption": "вид сзади / концепт-рендер"
+          },
+          "print-macro": {
+            "alt": "Концепт Bone Source Tee, макро печати и ткани",
+            "caption": "макро печати и ткани / концепт-рендер"
+          },
+          "on-body": {
+            "alt": "Концепт Bone Source Tee, вид спереди на человеке",
+            "caption": "вид спереди на человеке / концепт-рендер"
+          }
+        },
+        "specifications": {}
+      }
+    },
+    "MRCH-006": {
+      "en": {
+        "name": "Void Backmark Hoodie",
+        "metaDescription": "Selected Void Backmark Hoodie concept with complete and detail views. Concept only; coming soon.",
+        "eyebrow": "MRCH-006 / CONCEPT",
+        "lede": "A washed Void hoodie keeps the front quiet and holds the exact reverse signature high on the back.",
+        "storyTitle": "Quiet in front, signal behind",
+        "storyBody": "The front stays nearly absent; the exact reverse signature appears only when the wearer turns away. That timing gives the hoodie expression without turning it into a walking billboard.",
+        "conceptNote": "Concept renders show design intent only. Final construction, color and production details remain subject to physical proof.",
+        "releaseGate": "Approved physical construction, artwork and assembled samples are required before production claims.",
+        "gallery": {
+          "rear": {
+            "alt": "Void Backmark Hoodie concept, rear view",
+            "caption": "rear view / concept render"
+          },
+          "front": {
+            "alt": "Void Backmark Hoodie concept, front view",
+            "caption": "front view / concept render"
+          },
+          "print-macro": {
+            "alt": "Void Backmark Hoodie concept, print and fiber macro",
+            "caption": "print and fiber macro / concept render"
+          },
+          "worn-rear": {
+            "alt": "Void Backmark Hoodie concept, worn rear view",
+            "caption": "worn rear view / concept render"
+          }
+        },
+        "specifications": {}
+      },
+      "it": {
+        "name": "Void Backmark Hoodie",
+        "metaDescription": "Concept selezionato Void Backmark Hoodie con viste complete e di dettaglio. Solo concept; prossimamente.",
+        "eyebrow": "MRCH-006 / CONCEPT",
+        "lede": "Una felpa washed Void mantiene il fronte silenzioso e porta la firma reverse esatta sul retro.",
+        "storyTitle": "Silenzio davanti, segnale dietro",
+        "storyBody": "Il fronte resta quasi assente; la firma reverse esatta appare solo quando chi la indossa si volta. Questo tempo visivo dà espressione alla felpa senza trasformarla in un cartellone ambulante.",
+        "conceptNote": "I render concept mostrano solo l’intento progettuale. Costruzione, colore e dettagli produttivi finali restano soggetti a prova fisica.",
+        "releaseGate": "Servono costruzione fisica, artwork e campioni assemblati approvati prima di qualsiasi dichiarazione produttiva.",
+        "gallery": {
+          "rear": {
+            "alt": "Concept Void Backmark Hoodie, vista posteriore",
+            "caption": "vista posteriore / render concept"
+          },
+          "front": {
+            "alt": "Concept Void Backmark Hoodie, vista frontale",
+            "caption": "vista frontale / render concept"
+          },
+          "print-macro": {
+            "alt": "Concept Void Backmark Hoodie, macro di stampa e fibra",
+            "caption": "macro di stampa e fibra / render concept"
+          },
+          "worn-rear": {
+            "alt": "Concept Void Backmark Hoodie, vista posteriore indossata",
+            "caption": "vista posteriore indossata / render concept"
+          }
+        },
+        "specifications": {}
+      },
+      "ru": {
+        "name": "Void Backmark Hoodie",
+        "metaDescription": "Выбранный концепт Void Backmark Hoodie: общий и детальные виды. Только концепт; скоро.",
+        "eyebrow": "MRCH-006 / CONCEPT",
+        "lede": "Худи washed Void сохраняет тихий перед и несёт точную reverse-подпись высоко на спине.",
+        "storyTitle": "Тишина спереди, сигнал сзади",
+        "storyBody": "Передняя часть почти исчезает; точная обратная подпись проявляется лишь когда человек поворачивается спиной. Такой ритм даёт худи экспрессию, не превращая его в ходячий рекламный щит.",
+        "conceptNote": "Концепт-рендеры показывают только дизайн-намерение. Финальная конструкция, цвет и производственные детали требуют физической проверки.",
+        "releaseGate": "До заявлений о производстве нужны утверждённые физическая конструкция, макеты и собранные образцы.",
+        "gallery": {
+          "rear": {
+            "alt": "Концепт Void Backmark Hoodie, вид сзади",
+            "caption": "вид сзади / концепт-рендер"
+          },
+          "front": {
+            "alt": "Концепт Void Backmark Hoodie, вид спереди",
+            "caption": "вид спереди / концепт-рендер"
+          },
+          "print-macro": {
+            "alt": "Концепт Void Backmark Hoodie, макро печати и ткани",
+            "caption": "макро печати и ткани / концепт-рендер"
+          },
+          "worn-rear": {
+            "alt": "Концепт Void Backmark Hoodie, вид сзади на человеке",
+            "caption": "вид сзади на человеке / концепт-рендер"
+          }
+        },
+        "specifications": {}
+      }
+    },
+    "MRCH-007": {
+      "en": {
+        "name": "Field Issue Cap",
+        "metaDescription": "Selected Field Issue Cap concept with complete and detail views. Concept only; coming soon.",
+        "eyebrow": "MRCH-007 / CONCEPT",
+        "lede": "A washed Void cap centers the exact compact bullet mark on a Bone field patch.",
+        "storyTitle": "A field credential",
+        "storyBody": "The compact bullet mark sits like an issued credential on the Bone patch. Its restrained scale works at street distance, while the stitch and washed surface reward a closer look.",
+        "conceptNote": "Concept renders show design intent only. Final construction, color and production details remain subject to physical proof.",
+        "releaseGate": "Approved physical construction, artwork and assembled samples are required before production claims.",
+        "gallery": {
+          "front": {
+            "alt": "Field Issue Cap concept, front view",
+            "caption": "front view / concept render"
+          },
+          "rear": {
+            "alt": "Field Issue Cap concept, rear view",
+            "caption": "rear view / concept render"
+          },
+          "side-on-head": {
+            "alt": "Field Issue Cap concept, side on-head view",
+            "caption": "side on-head view / concept render"
+          },
+          "patch-macro": {
+            "alt": "Field Issue Cap concept, patch and stitch macro",
+            "caption": "patch and stitch macro / concept render"
+          }
+        },
+        "specifications": {}
+      },
+      "it": {
+        "name": "Field Issue Cap",
+        "metaDescription": "Concept selezionato Field Issue Cap con viste complete e di dettaglio. Solo concept; prossimamente.",
+        "eyebrow": "MRCH-007 / CONCEPT",
+        "lede": "Un cappellino washed Void centra il marchio bullet compatto esatto su una patch Bone.",
+        "storyTitle": "Una credenziale da campo",
+        "storyBody": "Il bullet mark compatto siede sulla patch Bone come una credenziale assegnata. La scala contenuta funziona da lontano, mentre cucitura e superficie washed premiano lo sguardo ravvicinato.",
+        "conceptNote": "I render concept mostrano solo l’intento progettuale. Costruzione, colore e dettagli produttivi finali restano soggetti a prova fisica.",
+        "releaseGate": "Servono costruzione fisica, artwork e campioni assemblati approvati prima di qualsiasi dichiarazione produttiva.",
+        "gallery": {
+          "front": {
+            "alt": "Concept Field Issue Cap, vista frontale",
+            "caption": "vista frontale / render concept"
+          },
+          "rear": {
+            "alt": "Concept Field Issue Cap, vista posteriore",
+            "caption": "vista posteriore / render concept"
+          },
+          "side-on-head": {
+            "alt": "Concept Field Issue Cap, vista laterale indossata",
+            "caption": "vista laterale indossata / render concept"
+          },
+          "patch-macro": {
+            "alt": "Concept Field Issue Cap, macro di patch e cuciture",
+            "caption": "macro di patch e cuciture / render concept"
+          }
+        },
+        "specifications": {}
+      },
+      "ru": {
+        "name": "Field Issue Cap",
+        "metaDescription": "Выбранный концепт Field Issue Cap: общий и детальные виды. Только концепт; скоро.",
+        "eyebrow": "MRCH-007 / CONCEPT",
+        "lede": "Кепка washed Void размещает точный компактный bullet-знак по центру нашивки Bone.",
+        "storyTitle": "Полевой идентификатор",
+        "storyBody": "Компактный bullet-знак сидит на Bone-нашивке как выданный полевой идентификатор. Сдержанный масштаб работает на расстоянии, а строчка и washed-фактура раскрываются при близком рассмотрении.",
+        "conceptNote": "Концепт-рендеры показывают только дизайн-намерение. Финальная конструкция, цвет и производственные детали требуют физической проверки.",
+        "releaseGate": "До заявлений о производстве нужны утверждённые физическая конструкция, макеты и собранные образцы.",
+        "gallery": {
+          "front": {
+            "alt": "Концепт Field Issue Cap, вид спереди",
+            "caption": "вид спереди / концепт-рендер"
+          },
+          "rear": {
+            "alt": "Концепт Field Issue Cap, вид сзади",
+            "caption": "вид сзади / концепт-рендер"
+          },
+          "side-on-head": {
+            "alt": "Концепт Field Issue Cap, вид сбоку на человеке",
+            "caption": "вид сбоку на человеке / концепт-рендер"
+          },
+          "patch-macro": {
+            "alt": "Концепт Field Issue Cap, макро нашивки и швов",
+            "caption": "макро нашивки и швов / концепт-рендер"
+          }
+        },
+        "specifications": {}
+      }
+    },
+    "MRCH-008": {
+      "en": {
+        "name": "Print 001 Diptych",
+        "metaDescription": "Selected Print 001 Diptych concept with complete and detail views. Concept only; coming soon.",
+        "eyebrow": "MRCH-008 / CONCEPT",
+        "lede": "A Bone and Void diptych sets the full ASCII relic against its reversed field.",
+        "storyTitle": "One image, two states",
+        "storyBody": "Bone and Void hold the same ASCII relic in opposite electrical states. Hung together, the pair reads as transmission and afterimage rather than two isolated posters.",
+        "conceptNote": "Concept renders show design intent only. Final construction, color and production details remain subject to physical proof.",
+        "releaseGate": "Approved physical construction, artwork and assembled samples are required before production claims.",
+        "gallery": {
+          "diptych": {
+            "alt": "Print 001 Diptych concept, complete diptych",
+            "caption": "complete diptych / concept render"
+          },
+          "bone": {
+            "alt": "Print 001 Diptych concept, Bone variant",
+            "caption": "Bone variant / concept render"
+          },
+          "void": {
+            "alt": "Print 001 Diptych concept, Void variant",
+            "caption": "Void variant / concept render"
+          },
+          "material": {
+            "alt": "Print 001 Diptych concept, surface detail",
+            "caption": "surface detail / concept render"
+          }
+        },
+        "specifications": {}
+      },
+      "it": {
+        "name": "Dittico Print 001",
+        "metaDescription": "Concept selezionato Dittico Print 001 con viste complete e di dettaglio. Solo concept; prossimamente.",
+        "eyebrow": "MRCH-008 / CONCEPT",
+        "lede": "Un dittico Bone e Void accosta la reliquia ASCII completa al suo campo reverse.",
+        "storyTitle": "Un’immagine, due stati",
+        "storyBody": "Bone e Void tengono la stessa reliquia ASCII in stati elettrici opposti. Esposta insieme, la coppia si legge come trasmissione e immagine residua, non come due poster isolati.",
+        "conceptNote": "I render concept mostrano solo l’intento progettuale. Costruzione, colore e dettagli produttivi finali restano soggetti a prova fisica.",
+        "releaseGate": "Servono costruzione fisica, artwork e campioni assemblati approvati prima di qualsiasi dichiarazione produttiva.",
+        "gallery": {
+          "diptych": {
+            "alt": "Concept Dittico Print 001, dittico completo",
+            "caption": "dittico completo / render concept"
+          },
+          "bone": {
+            "alt": "Concept Dittico Print 001, variante Bone",
+            "caption": "variante Bone / render concept"
+          },
+          "void": {
+            "alt": "Concept Dittico Print 001, variante Void",
+            "caption": "variante Void / render concept"
+          },
+          "material": {
+            "alt": "Concept Dittico Print 001, dettaglio della superficie",
+            "caption": "dettaglio della superficie / render concept"
+          }
+        },
+        "specifications": {}
+      },
+      "ru": {
+        "name": "Диптих Print 001",
+        "metaDescription": "Выбранный концепт Диптих Print 001: общий и детальные виды. Только концепт; скоро.",
+        "eyebrow": "MRCH-008 / CONCEPT",
+        "lede": "Диптих Bone и Void сопоставляет полный ASCII-реликт с его обратным полем.",
+        "storyTitle": "Одно изображение, два состояния",
+        "storyBody": "Bone и Void удерживают один ASCII-реликт в противоположных электрических состояниях. Вместе пара читается как передача и остаточное изображение, а не как два отдельных постера.",
+        "conceptNote": "Концепт-рендеры показывают только дизайн-намерение. Финальная конструкция, цвет и производственные детали требуют физической проверки.",
+        "releaseGate": "До заявлений о производстве нужны утверждённые физическая конструкция, макеты и собранные образцы.",
+        "gallery": {
+          "diptych": {
+            "alt": "Концепт Диптих Print 001, диптих целиком",
+            "caption": "диптих целиком / концепт-рендер"
+          },
+          "bone": {
+            "alt": "Концепт Диптих Print 001, версия Bone",
+            "caption": "версия Bone / концепт-рендер"
+          },
+          "void": {
+            "alt": "Концепт Диптих Print 001, версия Void",
+            "caption": "версия Void / концепт-рендер"
+          },
+          "material": {
+            "alt": "Концепт Диптих Print 001, деталь поверхности",
+            "caption": "деталь поверхности / концепт-рендер"
+          }
+        },
+        "specifications": {}
+      }
+    },
+    "MRCH-009": {
+      "en": {
+        "name": "Signal Kit 001",
+        "metaDescription": "Selected Signal Kit 001 concept with complete and detail views. Concept only; coming soon.",
+        "eyebrow": "MRCH-009 / CONCEPT",
+        "lede": "Four exact label motifs combine with a first-party social-access QR.",
+        "storyTitle": "Identity that can migrate",
+        "storyBody": "The motifs leave a fixed page and travel across cases, machines and street surfaces. The QR does not borrow a platform identity; it returns every placement to the label-owned access terminal.",
+        "conceptNote": "Concept renders show design intent only. Final construction, color and production details remain subject to physical proof.",
+        "releaseGate": "Approved physical construction, artwork and assembled samples are required before production claims.",
+        "gallery": {
+          "sheet": {
+            "alt": "Signal Kit 001 concept, complete sheet",
+            "caption": "complete sheet / concept render"
+          },
+          "peel-macro": {
+            "alt": "Signal Kit 001 concept, peel-edge macro",
+            "caption": "peel-edge macro / concept render"
+          },
+          "separated": {
+            "alt": "Signal Kit 001 concept, separated set",
+            "caption": "separated set / concept render"
+          },
+          "applied": {
+            "alt": "Signal Kit 001 concept, applied surface",
+            "caption": "applied surface / concept render"
+          }
+        },
+        "specifications": {}
+      },
+      "it": {
+        "name": "Signal Kit 001",
+        "metaDescription": "Concept selezionato Signal Kit 001 con viste complete e di dettaglio. Solo concept; prossimamente.",
+        "eyebrow": "MRCH-009 / CONCEPT",
+        "lede": "Quattro motivi esatti del marchio si uniscono a un QR social di prima parte.",
+        "storyTitle": "Un’identità che può migrare",
+        "storyBody": "I motivi lasciano la pagina e viaggiano su custodie, macchine e superfici urbane. Il QR non prende in prestito l’identità di una piattaforma: riporta ogni applicazione al terminale del label.",
+        "conceptNote": "I render concept mostrano solo l’intento progettuale. Costruzione, colore e dettagli produttivi finali restano soggetti a prova fisica.",
+        "releaseGate": "Servono costruzione fisica, artwork e campioni assemblati approvati prima di qualsiasi dichiarazione produttiva.",
+        "gallery": {
+          "sheet": {
+            "alt": "Concept Signal Kit 001, foglio completo",
+            "caption": "foglio completo / render concept"
+          },
+          "peel-macro": {
+            "alt": "Concept Signal Kit 001, macro del bordo sollevato",
+            "caption": "macro del bordo sollevato / render concept"
+          },
+          "separated": {
+            "alt": "Concept Signal Kit 001, set separato",
+            "caption": "set separato / render concept"
+          },
+          "applied": {
+            "alt": "Concept Signal Kit 001, applicazione su superficie",
+            "caption": "applicazione su superficie / render concept"
+          }
+        },
+        "specifications": {}
+      },
+      "ru": {
+        "name": "Signal Kit 001",
+        "metaDescription": "Выбранный концепт Signal Kit 001: общий и детальные виды. Только концепт; скоро.",
+        "eyebrow": "MRCH-009 / CONCEPT",
+        "lede": "Четыре точных мотива лейбла объединены с собственным QR социального доступа.",
+        "storyTitle": "Идентичность, способная перемещаться",
+        "storyBody": "Мотивы покидают страницу и переходят на кейсы, устройства и городские поверхности. QR не заимствует идентичность платформы — он возвращает каждое размещение к собственному терминалу лейбла.",
+        "conceptNote": "Концепт-рендеры показывают только дизайн-намерение. Финальная конструкция, цвет и производственные детали требуют физической проверки.",
+        "releaseGate": "До заявлений о производстве нужны утверждённые физическая конструкция, макеты и собранные образцы.",
+        "gallery": {
+          "sheet": {
+            "alt": "Концепт Signal Kit 001, лист целиком",
+            "caption": "лист целиком / концепт-рендер"
+          },
+          "peel-macro": {
+            "alt": "Концепт Signal Kit 001, макро приподнятого края",
+            "caption": "макро приподнятого края / концепт-рендер"
+          },
+          "separated": {
+            "alt": "Концепт Signal Kit 001, раздельный набор",
+            "caption": "раздельный набор / концепт-рендер"
+          },
+          "applied": {
+            "alt": "Концепт Signal Kit 001, нанесение на поверхность",
+            "caption": "нанесение на поверхность / концепт-рендер"
+          }
+        },
+        "specifications": {}
+      }
+    },
+    "MRCH-010": {
+      "en": {
+        "name": "Zine 001 / Ink Pressure",
+        "metaDescription": "Selected Zine 001 / Ink Pressure concept with complete and detail views. Concept only; coming soon.",
+        "eyebrow": "MRCH-010 / CONCEPT",
+        "lede": "An art-led zine turns pressure, fragments and material memory into an editorial sequence.",
+        "storyTitle": "Pressure leaves a memory",
+        "storyBody": "Skin macros, suspended matter and impact traces move through the pages like evidence from an unknown process. The zine is built as an artwork in sequence, never as a product brochure.",
+        "conceptNote": "Concept renders show design intent only. Final construction, color and production details remain subject to physical proof.",
+        "releaseGate": "Approved physical construction, artwork and assembled samples are required before production claims.",
+        "gallery": {
+          "closed": {
+            "alt": "Zine 001 / Ink Pressure concept, closed object",
+            "caption": "closed object / concept render"
+          },
+          "open": {
+            "alt": "Zine 001 / Ink Pressure concept, open configuration",
+            "caption": "open configuration / concept render"
+          },
+          "binding": {
+            "alt": "Zine 001 / Ink Pressure concept, binding detail",
+            "caption": "binding detail / concept render"
+          },
+          "spread-a": {
+            "alt": "Zine 001 / Ink Pressure concept, Fragment Study spread",
+            "caption": "Fragment Study spread / concept render"
+          },
+          "spread-b": {
+            "alt": "Zine 001 / Ink Pressure concept, Material Memory spread",
+            "caption": "Material Memory spread / concept render"
+          },
+          "spread-c": {
+            "alt": "Zine 001 / Ink Pressure concept, Transmission Loss spread",
+            "caption": "Transmission Loss spread / concept render"
+          }
+        },
+        "specifications": {}
+      },
+      "it": {
+        "name": "Zine 001 / Ink Pressure",
+        "metaDescription": "Concept selezionato Zine 001 / Ink Pressure con viste complete e di dettaglio. Solo concept; prossimamente.",
+        "eyebrow": "MRCH-010 / CONCEPT",
+        "lede": "Uno zine artistico trasforma pressione, frammenti e memoria materiale in una sequenza editoriale.",
+        "storyTitle": "La pressione lascia una memoria",
+        "storyBody": "Macro della pelle, materia sospesa e tracce d’impatto attraversano le pagine come prove di un processo sconosciuto. Lo zine è costruito come opera in sequenza, mai come brochure di prodotto.",
+        "conceptNote": "I render concept mostrano solo l’intento progettuale. Costruzione, colore e dettagli produttivi finali restano soggetti a prova fisica.",
+        "releaseGate": "Servono costruzione fisica, artwork e campioni assemblati approvati prima di qualsiasi dichiarazione produttiva.",
+        "gallery": {
+          "closed": {
+            "alt": "Concept Zine 001 / Ink Pressure, oggetto chiuso",
+            "caption": "oggetto chiuso / render concept"
+          },
+          "open": {
+            "alt": "Concept Zine 001 / Ink Pressure, configurazione aperta",
+            "caption": "configurazione aperta / render concept"
+          },
+          "binding": {
+            "alt": "Concept Zine 001 / Ink Pressure, dettaglio della rilegatura",
+            "caption": "dettaglio della rilegatura / render concept"
+          },
+          "spread-a": {
+            "alt": "Concept Zine 001 / Ink Pressure, doppia pagina Fragment Study",
+            "caption": "doppia pagina Fragment Study / render concept"
+          },
+          "spread-b": {
+            "alt": "Concept Zine 001 / Ink Pressure, doppia pagina Material Memory",
+            "caption": "doppia pagina Material Memory / render concept"
+          },
+          "spread-c": {
+            "alt": "Concept Zine 001 / Ink Pressure, doppia pagina Transmission Loss",
+            "caption": "doppia pagina Transmission Loss / render concept"
+          }
+        },
+        "specifications": {}
+      },
+      "ru": {
+        "name": "Zine 001 / Ink Pressure",
+        "metaDescription": "Выбранный концепт Zine 001 / Ink Pressure: общий и детальные виды. Только концепт; скоро.",
+        "eyebrow": "MRCH-010 / CONCEPT",
+        "lede": "Художественный зин превращает давление, фрагменты и память материала в редакционную последовательность.",
+        "storyTitle": "Давление оставляет память",
+        "storyBody": "Макросъёмка кожи, подвешенная материя и следы удара проходят через страницы как свидетельства неизвестного процесса. Зин построен как последовательное произведение искусства, а не как товарная брошюра.",
+        "conceptNote": "Концепт-рендеры показывают только дизайн-намерение. Финальная конструкция, цвет и производственные детали требуют физической проверки.",
+        "releaseGate": "До заявлений о производстве нужны утверждённые физическая конструкция, макеты и собранные образцы.",
+        "gallery": {
+          "closed": {
+            "alt": "Концепт Zine 001 / Ink Pressure, закрытый объект",
+            "caption": "закрытый объект / концепт-рендер"
+          },
+          "open": {
+            "alt": "Концепт Zine 001 / Ink Pressure, открытая конфигурация",
+            "caption": "открытая конфигурация / концепт-рендер"
+          },
+          "binding": {
+            "alt": "Концепт Zine 001 / Ink Pressure, деталь переплёта",
+            "caption": "деталь переплёта / концепт-рендер"
+          },
+          "spread-a": {
+            "alt": "Концепт Zine 001 / Ink Pressure, разворот Fragment Study",
+            "caption": "разворот Fragment Study / концепт-рендер"
+          },
+          "spread-b": {
+            "alt": "Концепт Zine 001 / Ink Pressure, разворот Material Memory",
+            "caption": "разворот Material Memory / концепт-рендер"
+          },
+          "spread-c": {
+            "alt": "Концепт Zine 001 / Ink Pressure, разворот Transmission Loss",
+            "caption": "разворот Transmission Loss / концепт-рендер"
+          }
+        },
+        "specifications": {}
+      }
+    },
+    "MRCH-011": {
+      "en": {
+        "name": "Collector Box 001",
+        "metaDescription": "Selected Collector Box 001 concept with complete and detail views. Concept only; coming soon.",
+        "eyebrow": "MRCH-011 / CONCEPT",
+        "lede": "A rigid archive-box concept gathers the selected DROP 001 objects into one layered system.",
+        "storyTitle": "The container becomes architecture",
+        "storyBody": "The box does more than hold the edition: it controls the order in which objects appear. Lid, upper layer and lower tray turn unpacking into a measured descent through DROP 001.",
+        "conceptNote": "Concept renders show design intent only. Final construction, color and production details remain subject to physical proof.",
+        "releaseGate": "Approved physical construction, artwork and assembled samples are required before production claims.",
+        "gallery": {
+          "closed": {
+            "alt": "Collector Box 001 concept, closed object",
+            "caption": "closed object / concept render"
+          },
+          "open": {
+            "alt": "Collector Box 001 concept, open configuration",
+            "caption": "open configuration / concept render"
+          },
+          "layer": {
+            "alt": "Collector Box 001 concept, layered contents",
+            "caption": "layered contents / concept render"
+          },
+          "detail": {
+            "alt": "Collector Box 001 concept, construction detail",
+            "caption": "construction detail / concept render"
+          }
+        },
+        "specifications": {}
+      },
+      "it": {
+        "name": "Collector Box 001",
+        "metaDescription": "Concept selezionato Collector Box 001 con viste complete e di dettaglio. Solo concept; prossimamente.",
+        "eyebrow": "MRCH-011 / CONCEPT",
+        "lede": "Un box rigido d’archivio riunisce gli oggetti selezionati di DROP 001 in un sistema stratificato.",
+        "storyTitle": "Il contenitore diventa architettura",
+        "storyBody": "Il box non si limita a contenere l’edizione: controlla l’ordine in cui gli oggetti appaiono. Coperchio, livello superiore e vassoio inferiore trasformano l’apertura in una discesa misurata dentro DROP 001.",
+        "conceptNote": "I render concept mostrano solo l’intento progettuale. Costruzione, colore e dettagli produttivi finali restano soggetti a prova fisica.",
+        "releaseGate": "Servono costruzione fisica, artwork e campioni assemblati approvati prima di qualsiasi dichiarazione produttiva.",
+        "gallery": {
+          "closed": {
+            "alt": "Concept Collector Box 001, oggetto chiuso",
+            "caption": "oggetto chiuso / render concept"
+          },
+          "open": {
+            "alt": "Concept Collector Box 001, configurazione aperta",
+            "caption": "configurazione aperta / render concept"
+          },
+          "layer": {
+            "alt": "Concept Collector Box 001, contenuto stratificato",
+            "caption": "contenuto stratificato / render concept"
+          },
+          "detail": {
+            "alt": "Concept Collector Box 001, dettaglio costruttivo",
+            "caption": "dettaglio costruttivo / render concept"
+          }
+        },
+        "specifications": {}
+      },
+      "ru": {
+        "name": "Collector Box 001",
+        "metaDescription": "Выбранный концепт Collector Box 001: общий и детальные виды. Только концепт; скоро.",
+        "eyebrow": "MRCH-011 / CONCEPT",
+        "lede": "Жёсткий архивный бокс объединяет выбранные объекты DROP 001 в многослойную систему.",
+        "storyTitle": "Контейнер становится архитектурой",
+        "storyBody": "Бокс не просто хранит издание — он управляет порядком появления объектов. Крышка, верхний слой и нижний лоток превращают распаковку в выверенное погружение внутрь DROP 001.",
+        "conceptNote": "Концепт-рендеры показывают только дизайн-намерение. Финальная конструкция, цвет и производственные детали требуют физической проверки.",
+        "releaseGate": "До заявлений о производстве нужны утверждённые физическая конструкция, макеты и собранные образцы.",
+        "gallery": {
+          "closed": {
+            "alt": "Концепт Collector Box 001, закрытый объект",
+            "caption": "закрытый объект / концепт-рендер"
+          },
+          "open": {
+            "alt": "Концепт Collector Box 001, открытая конфигурация",
+            "caption": "открытая конфигурация / концепт-рендер"
+          },
+          "layer": {
+            "alt": "Концепт Collector Box 001, содержимое по слоям",
+            "caption": "содержимое по слоям / концепт-рендер"
+          },
+          "detail": {
+            "alt": "Концепт Collector Box 001, деталь конструкции",
+            "caption": "деталь конструкции / концепт-рендер"
+          }
+        },
+        "specifications": {}
+      }
+    }
+  }
+}

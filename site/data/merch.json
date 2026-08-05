@@ -1,0 +1,711 @@
+{
+  "schemaVersion": 2,
+  "collectionId": "DROP-001",
+  "status": "comingSoon",
+  "stage": "concept",
+  "copyAuthority": "data/merch-copy-authority.json",
+  "assetManifest": "data/merch-asset-manifest.json",
+  "categories": [
+    {
+      "id": "media",
+      "order": 1
+    },
+    {
+      "id": "wear",
+      "order": 2
+    },
+    {
+      "id": "printObjects",
+      "order": 3
+    }
+  ],
+  "objects": [
+    {
+      "id": "MRCH-001",
+      "slug": "vinyl",
+      "category": "media",
+      "order": 1,
+      "status": "comingSoon",
+      "stage": "concept",
+      "detailEnabled": true,
+      "copyKey": "MRCH-001",
+      "gallery": [
+        {
+          "id": "vinyl-hero",
+          "role": "hero",
+          "path": "assets/merch/vinyl-hero.webp",
+          "kind": "conceptRender",
+          "selection": "approvedConcept",
+          "copyKey": "MRCH-001.gallery.hero",
+          "width": 1536,
+          "height": 1024
+        },
+        {
+          "id": "vinyl-reverse",
+          "role": "reverse",
+          "path": "assets/merch/vinyl-reverse.webp",
+          "kind": "conceptRender",
+          "selection": "approvedConcept",
+          "copyKey": "MRCH-001.gallery.reverse",
+          "width": 1536,
+          "height": 1024
+        },
+        {
+          "id": "vinyl-inner",
+          "role": "inner",
+          "path": "assets/merch/vinyl-inner.webp",
+          "kind": "conceptRender",
+          "selection": "approvedConcept",
+          "copyKey": "MRCH-001.gallery.inner",
+          "width": 1536,
+          "height": 1024
+        },
+        {
+          "id": "vinyl-macro",
+          "role": "macro",
+          "path": "assets/merch/vinyl-macro.webp",
+          "kind": "conceptRender",
+          "selection": "approvedConcept",
+          "copyKey": "MRCH-001.gallery.macro",
+          "width": 1536,
+          "height": 1024
+        },
+        {
+          "id": "vinyl-contents",
+          "role": "contents",
+          "path": "assets/merch/vinyl-contents.webp",
+          "kind": "conceptRender",
+          "selection": "approvedConcept",
+          "copyKey": "MRCH-001.gallery.contents",
+          "width": 1536,
+          "height": 1024
+        }
+      ],
+      "specifications": [],
+      "releaseGate": {
+        "state": "requiredBeforeProduction",
+        "copyKey": "MRCH-001.releaseGate"
+      }
+    },
+    {
+      "id": "MRCH-002",
+      "slug": "cassette",
+      "category": "media",
+      "order": 2,
+      "status": "comingSoon",
+      "stage": "concept",
+      "detailEnabled": true,
+      "copyKey": "MRCH-002",
+      "gallery": [
+        {
+          "id": "cassette-hero",
+          "role": "hero",
+          "path": "assets/merch/cassette-hero.webp",
+          "kind": "conceptRender",
+          "selection": "approvedConcept",
+          "copyKey": "MRCH-002.gallery.hero",
+          "width": 1536,
+          "height": 1024
+        },
+        {
+          "id": "cassette-shell",
+          "role": "shell",
+          "path": "assets/merch/cassette-shell.webp",
+          "kind": "conceptRender",
+          "selection": "approvedConcept",
+          "copyKey": "MRCH-002.gallery.shell",
+          "width": 1536,
+          "height": 1024
+        },
+        {
+          "id": "cassette-open",
+          "role": "open",
+          "path": "assets/merch/cassette-open.webp",
+          "kind": "conceptRender",
+          "selection": "approvedConcept",
+          "copyKey": "MRCH-002.gallery.open",
+          "width": 1536,
+          "height": 1024
+        },
+        {
+          "id": "cassette-rear",
+          "role": "rear",
+          "path": "assets/merch/cassette-rear.webp",
+          "kind": "conceptRender",
+          "selection": "approvedConcept",
+          "copyKey": "MRCH-002.gallery.rear",
+          "width": 1536,
+          "height": 1024
+        },
+        {
+          "id": "cassette-detail",
+          "role": "detail",
+          "path": "assets/merch/cassette-detail.webp",
+          "kind": "conceptRender",
+          "selection": "approvedConcept",
+          "copyKey": "MRCH-002.gallery.detail",
+          "width": 1536,
+          "height": 1024
+        }
+      ],
+      "specifications": [],
+      "releaseGate": {
+        "state": "requiredBeforeProduction",
+        "copyKey": "MRCH-002.releaseGate"
+      }
+    },
+    {
+      "id": "MRCH-003",
+      "slug": "cd",
+      "category": "media",
+      "order": 3,
+      "status": "comingSoon",
+      "stage": "concept",
+      "detailEnabled": true,
+      "copyKey": "MRCH-003",
+      "gallery": [
+        {
+          "id": "cd-case",
+          "role": "case",
+          "path": "assets/merch/cd-case.webp",
+          "kind": "conceptRender",
+          "selection": "approvedConcept",
+          "copyKey": "MRCH-003.gallery.case",
+          "width": 1536,
+          "height": 1024
+        },
+        {
+          "id": "cd-disc",
+          "role": "disc",
+          "path": "assets/merch/cd-disc.webp",
+          "kind": "conceptRender",
+          "selection": "approvedConcept",
+          "copyKey": "MRCH-003.gallery.disc",
+          "width": 1536,
+          "height": 1024
+        },
+        {
+          "id": "cd-open",
+          "role": "open",
+          "path": "assets/merch/cd-open.webp",
+          "kind": "conceptRender",
+          "selection": "approvedConcept",
+          "copyKey": "MRCH-003.gallery.open",
+          "width": 1536,
+          "height": 1024
+        },
+        {
+          "id": "cd-rear",
+          "role": "rear",
+          "path": "assets/merch/cd-rear.webp",
+          "kind": "conceptRender",
+          "selection": "approvedConcept",
+          "copyKey": "MRCH-003.gallery.rear",
+          "width": 1536,
+          "height": 1024
+        },
+        {
+          "id": "cd-detail",
+          "role": "detail",
+          "path": "assets/merch/cd-detail.webp",
+          "kind": "conceptRender",
+          "selection": "approvedConcept",
+          "copyKey": "MRCH-003.gallery.detail",
+          "width": 1536,
+          "height": 1024
+        }
+      ],
+      "specifications": [],
+      "releaseGate": {
+        "state": "requiredBeforeProduction",
+        "copyKey": "MRCH-003.releaseGate"
+      }
+    },
+    {
+      "id": "MRCH-004",
+      "slug": "usb-edition",
+      "category": "media",
+      "order": 4,
+      "status": "comingSoon",
+      "stage": "concept",
+      "detailEnabled": true,
+      "copyKey": "MRCH-004",
+      "gallery": [
+        {
+          "id": "usb-edition-packaging",
+          "role": "packaging",
+          "path": "assets/merch/usb-edition-packaging.webp",
+          "kind": "conceptRender",
+          "selection": "approvedConcept",
+          "copyKey": "MRCH-004.gallery.packaging",
+          "width": 1536,
+          "height": 1024
+        },
+        {
+          "id": "usb-edition-closed",
+          "role": "closed",
+          "path": "assets/merch/usb-edition-closed.webp",
+          "kind": "conceptRender",
+          "selection": "approvedConcept",
+          "copyKey": "MRCH-004.gallery.closed",
+          "width": 1536,
+          "height": 1024
+        },
+        {
+          "id": "usb-edition-usb-a",
+          "role": "usb-a",
+          "path": "assets/merch/usb-edition-usb-a.webp",
+          "kind": "conceptRender",
+          "selection": "approvedConcept",
+          "copyKey": "MRCH-004.gallery.usb-a",
+          "width": 1536,
+          "height": 1024
+        },
+        {
+          "id": "usb-edition-usb-c",
+          "role": "usb-c",
+          "path": "assets/merch/usb-edition-usb-c.webp",
+          "kind": "conceptRender",
+          "selection": "approvedConcept",
+          "copyKey": "MRCH-004.gallery.usb-c",
+          "width": 1536,
+          "height": 1024
+        },
+        {
+          "id": "usb-edition-detail",
+          "role": "detail",
+          "path": "assets/merch/usb-edition-detail.webp",
+          "kind": "conceptRender",
+          "selection": "approvedConcept",
+          "copyKey": "MRCH-004.gallery.detail",
+          "width": 1536,
+          "height": 1024
+        }
+      ],
+      "specifications": [],
+      "releaseGate": {
+        "state": "requiredBeforeProduction",
+        "copyKey": "MRCH-004.releaseGate"
+      }
+    },
+    {
+      "id": "MRCH-005",
+      "slug": "t-shirt",
+      "category": "wear",
+      "order": 5,
+      "status": "comingSoon",
+      "stage": "concept",
+      "detailEnabled": true,
+      "copyKey": "MRCH-005",
+      "gallery": [
+        {
+          "id": "t-shirt-front",
+          "role": "front",
+          "path": "assets/merch/t-shirt-front.webp",
+          "kind": "conceptRender",
+          "selection": "approvedConcept",
+          "copyKey": "MRCH-005.gallery.front",
+          "width": 1536,
+          "height": 1024
+        },
+        {
+          "id": "t-shirt-rear",
+          "role": "rear",
+          "path": "assets/merch/t-shirt-rear.webp",
+          "kind": "conceptRender",
+          "selection": "approvedConcept",
+          "copyKey": "MRCH-005.gallery.rear",
+          "width": 1536,
+          "height": 1024
+        },
+        {
+          "id": "t-shirt-print-macro",
+          "role": "print-macro",
+          "path": "assets/merch/t-shirt-print-macro.webp",
+          "kind": "conceptRender",
+          "selection": "approvedConcept",
+          "copyKey": "MRCH-005.gallery.print-macro",
+          "width": 1536,
+          "height": 1024
+        },
+        {
+          "id": "t-shirt-on-body",
+          "role": "on-body",
+          "path": "assets/merch/t-shirt-on-body.webp",
+          "kind": "conceptRender",
+          "selection": "approvedConcept",
+          "copyKey": "MRCH-005.gallery.on-body",
+          "width": 1536,
+          "height": 1024
+        }
+      ],
+      "specifications": [],
+      "releaseGate": {
+        "state": "requiredBeforeProduction",
+        "copyKey": "MRCH-005.releaseGate"
+      }
+    },
+    {
+      "id": "MRCH-006",
+      "slug": "hoodie",
+      "category": "wear",
+      "order": 6,
+      "status": "comingSoon",
+      "stage": "concept",
+      "detailEnabled": true,
+      "copyKey": "MRCH-006",
+      "gallery": [
+        {
+          "id": "hoodie-rear",
+          "role": "rear",
+          "path": "assets/merch/hoodie-rear.webp",
+          "kind": "conceptRender",
+          "selection": "approvedConcept",
+          "copyKey": "MRCH-006.gallery.rear",
+          "width": 1536,
+          "height": 1024
+        },
+        {
+          "id": "hoodie-front",
+          "role": "front",
+          "path": "assets/merch/hoodie-front.webp",
+          "kind": "conceptRender",
+          "selection": "approvedConcept",
+          "copyKey": "MRCH-006.gallery.front",
+          "width": 1536,
+          "height": 1024
+        },
+        {
+          "id": "hoodie-print-macro",
+          "role": "print-macro",
+          "path": "assets/merch/hoodie-print-macro.webp",
+          "kind": "conceptRender",
+          "selection": "approvedConcept",
+          "copyKey": "MRCH-006.gallery.print-macro",
+          "width": 1536,
+          "height": 1024
+        },
+        {
+          "id": "hoodie-worn-rear",
+          "role": "worn-rear",
+          "path": "assets/merch/hoodie-worn-rear.webp",
+          "kind": "conceptRender",
+          "selection": "approvedConcept",
+          "copyKey": "MRCH-006.gallery.worn-rear",
+          "width": 1536,
+          "height": 1024
+        }
+      ],
+      "specifications": [],
+      "releaseGate": {
+        "state": "requiredBeforeProduction",
+        "copyKey": "MRCH-006.releaseGate"
+      }
+    },
+    {
+      "id": "MRCH-007",
+      "slug": "cap",
+      "category": "wear",
+      "order": 7,
+      "status": "comingSoon",
+      "stage": "concept",
+      "detailEnabled": true,
+      "copyKey": "MRCH-007",
+      "gallery": [
+        {
+          "id": "cap-front",
+          "role": "front",
+          "path": "assets/merch/cap-front.webp",
+          "kind": "conceptRender",
+          "selection": "approvedConcept",
+          "copyKey": "MRCH-007.gallery.front",
+          "width": 1536,
+          "height": 1024
+        },
+        {
+          "id": "cap-rear",
+          "role": "rear",
+          "path": "assets/merch/cap-rear.webp",
+          "kind": "conceptRender",
+          "selection": "approvedConcept",
+          "copyKey": "MRCH-007.gallery.rear",
+          "width": 1536,
+          "height": 1024
+        },
+        {
+          "id": "cap-side-on-head",
+          "role": "side-on-head",
+          "path": "assets/merch/cap-side-on-head.webp",
+          "kind": "conceptRender",
+          "selection": "approvedConcept",
+          "copyKey": "MRCH-007.gallery.side-on-head",
+          "width": 1536,
+          "height": 1024
+        },
+        {
+          "id": "cap-patch-macro",
+          "role": "patch-macro",
+          "path": "assets/merch/cap-patch-macro.webp",
+          "kind": "conceptRender",
+          "selection": "approvedConcept",
+          "copyKey": "MRCH-007.gallery.patch-macro",
+          "width": 1536,
+          "height": 1024
+        }
+      ],
+      "specifications": [],
+      "releaseGate": {
+        "state": "requiredBeforeProduction",
+        "copyKey": "MRCH-007.releaseGate"
+      }
+    },
+    {
+      "id": "MRCH-008",
+      "slug": "poster",
+      "category": "printObjects",
+      "order": 8,
+      "status": "comingSoon",
+      "stage": "concept",
+      "detailEnabled": true,
+      "copyKey": "MRCH-008",
+      "gallery": [
+        {
+          "id": "poster-diptych",
+          "role": "diptych",
+          "path": "assets/merch/poster-diptych.webp",
+          "kind": "conceptRender",
+          "selection": "approvedConcept",
+          "copyKey": "MRCH-008.gallery.diptych",
+          "width": 1536,
+          "height": 1024
+        },
+        {
+          "id": "poster-bone",
+          "role": "bone",
+          "path": "assets/merch/poster-bone.webp",
+          "kind": "conceptRender",
+          "selection": "approvedConcept",
+          "copyKey": "MRCH-008.gallery.bone",
+          "width": 1536,
+          "height": 1024
+        },
+        {
+          "id": "poster-void",
+          "role": "void",
+          "path": "assets/merch/poster-void.webp",
+          "kind": "conceptRender",
+          "selection": "approvedConcept",
+          "copyKey": "MRCH-008.gallery.void",
+          "width": 1536,
+          "height": 1024
+        },
+        {
+          "id": "poster-material",
+          "role": "material",
+          "path": "assets/merch/poster-material.webp",
+          "kind": "conceptRender",
+          "selection": "approvedConcept",
+          "copyKey": "MRCH-008.gallery.material",
+          "width": 1536,
+          "height": 1024
+        }
+      ],
+      "specifications": [],
+      "releaseGate": {
+        "state": "requiredBeforeProduction",
+        "copyKey": "MRCH-008.releaseGate"
+      }
+    },
+    {
+      "id": "MRCH-009",
+      "slug": "sticker-pack",
+      "category": "printObjects",
+      "order": 9,
+      "status": "comingSoon",
+      "stage": "concept",
+      "detailEnabled": true,
+      "copyKey": "MRCH-009",
+      "gallery": [
+        {
+          "id": "sticker-pack-sheet",
+          "role": "sheet",
+          "path": "assets/merch/sticker-pack-sheet.webp",
+          "kind": "conceptRender",
+          "selection": "approvedConcept",
+          "copyKey": "MRCH-009.gallery.sheet",
+          "width": 1536,
+          "height": 1024
+        },
+        {
+          "id": "sticker-pack-peel-macro",
+          "role": "peel-macro",
+          "path": "assets/merch/sticker-pack-peel-macro.webp",
+          "kind": "conceptRender",
+          "selection": "approvedConcept",
+          "copyKey": "MRCH-009.gallery.peel-macro",
+          "width": 1536,
+          "height": 1024
+        },
+        {
+          "id": "sticker-pack-separated",
+          "role": "separated",
+          "path": "assets/merch/sticker-pack-separated.webp",
+          "kind": "conceptRender",
+          "selection": "approvedConcept",
+          "copyKey": "MRCH-009.gallery.separated",
+          "width": 1536,
+          "height": 1024
+        },
+        {
+          "id": "sticker-pack-applied",
+          "role": "applied",
+          "path": "assets/merch/sticker-pack-applied.webp",
+          "kind": "conceptRender",
+          "selection": "approvedConcept",
+          "copyKey": "MRCH-009.gallery.applied",
+          "width": 1536,
+          "height": 1024
+        }
+      ],
+      "specifications": [],
+      "releaseGate": {
+        "state": "requiredBeforeProduction",
+        "copyKey": "MRCH-009.releaseGate"
+      }
+    },
+    {
+      "id": "MRCH-010",
+      "slug": "zine-booklet",
+      "category": "printObjects",
+      "order": 10,
+      "status": "comingSoon",
+      "stage": "concept",
+      "detailEnabled": true,
+      "copyKey": "MRCH-010",
+      "gallery": [
+        {
+          "id": "zine-booklet-closed",
+          "role": "closed",
+          "path": "assets/merch/zine-booklet-closed.webp",
+          "kind": "conceptRender",
+          "selection": "approvedConcept",
+          "copyKey": "MRCH-010.gallery.closed",
+          "width": 1536,
+          "height": 1024
+        },
+        {
+          "id": "zine-booklet-open",
+          "role": "open",
+          "path": "assets/merch/zine-booklet-open.webp",
+          "kind": "conceptRender",
+          "selection": "approvedConcept",
+          "copyKey": "MRCH-010.gallery.open",
+          "width": 1536,
+          "height": 1024
+        },
+        {
+          "id": "zine-booklet-binding",
+          "role": "binding",
+          "path": "assets/merch/zine-booklet-binding.webp",
+          "kind": "conceptRender",
+          "selection": "approvedConcept",
+          "copyKey": "MRCH-010.gallery.binding",
+          "width": 1536,
+          "height": 1024
+        },
+        {
+          "id": "zine-booklet-spread-a",
+          "role": "spread-a",
+          "path": "assets/merch/zine-booklet-spread-a.webp",
+          "kind": "conceptRender",
+          "selection": "approvedConcept",
+          "copyKey": "MRCH-010.gallery.spread-a",
+          "width": 1536,
+          "height": 1024
+        },
+        {
+          "id": "zine-booklet-spread-b",
+          "role": "spread-b",
+          "path": "assets/merch/zine-booklet-spread-b.webp",
+          "kind": "conceptRender",
+          "selection": "approvedConcept",
+          "copyKey": "MRCH-010.gallery.spread-b",
+          "width": 1536,
+          "height": 1024
+        },
+        {
+          "id": "zine-booklet-spread-c",
+          "role": "spread-c",
+          "path": "assets/merch/zine-booklet-spread-c.webp",
+          "kind": "conceptRender",
+          "selection": "approvedConcept",
+          "copyKey": "MRCH-010.gallery.spread-c",
+          "width": 1536,
+          "height": 1024
+        }
+      ],
+      "specifications": [],
+      "releaseGate": {
+        "state": "requiredBeforeProduction",
+        "copyKey": "MRCH-010.releaseGate"
+      }
+    },
+    {
+      "id": "MRCH-011",
+      "slug": "collector-box-set",
+      "category": "printObjects",
+      "order": 11,
+      "status": "comingSoon",
+      "stage": "concept",
+      "detailEnabled": true,
+      "copyKey": "MRCH-011",
+      "gallery": [
+        {
+          "id": "collector-box-set-closed",
+          "role": "closed",
+          "path": "assets/merch/collector-box-set-closed.webp",
+          "kind": "conceptRender",
+          "selection": "approvedConcept",
+          "copyKey": "MRCH-011.gallery.closed",
+          "width": 1536,
+          "height": 1024
+        },
+        {
+          "id": "collector-box-set-open",
+          "role": "open",
+          "path": "assets/merch/collector-box-set-open.webp",
+          "kind": "conceptRender",
+          "selection": "approvedConcept",
+          "copyKey": "MRCH-011.gallery.open",
+          "width": 1536,
+          "height": 1024
+        },
+        {
+          "id": "collector-box-set-layer",
+          "role": "layer",
+          "path": "assets/merch/collector-box-set-layer.webp",
+          "kind": "conceptRender",
+          "selection": "approvedConcept",
+          "copyKey": "MRCH-011.gallery.layer",
+          "width": 1536,
+          "height": 1024
+        },
+        {
+          "id": "collector-box-set-detail",
+          "role": "detail",
+          "path": "assets/merch/collector-box-set-detail.webp",
+          "kind": "conceptRender",
+          "selection": "approvedConcept",
+          "copyKey": "MRCH-011.gallery.detail",
+          "width": 1536,
+          "height": 1024
+        }
+      ],
+      "specifications": [],
+      "releaseGate": {
+        "state": "requiredBeforeProduction",
+        "copyKey": "MRCH-011.releaseGate"
+      }
+    }
+  ]
+}

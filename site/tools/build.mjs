@@ -11,13 +11,15 @@ import {
 } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { validateMerchLibrary } from "../src/merch.mjs";
 import { createPages } from "../src/pages.mjs";
 import {
   IS_PRODUCTION,
   OG_IMAGE_PATH,
   SITE_BASE_PATH,
   SITE_MODE,
-  SITE_ORIGIN
+  SITE_ORIGIN,
+  SOCIAL_LINKS
 } from "../src/config.mjs";
 import { hasValidStreamingServiceOrder, isOfficialStreamingUrl } from "../src/streaming.mjs";
 
@@ -350,6 +352,46 @@ const exists = async (target) => {
   }
 };
 
+const webpDimensions = (buffer) => {
+  if (buffer.subarray(0, 4).toString("ascii") !== "RIFF"
+    || buffer.subarray(8, 12).toString("ascii") !== "WEBP") return null;
+  const type = buffer.subarray(12, 16).toString("ascii");
+  if (type === "VP8X") return { width: 1 + buffer.readUIntLE(24, 3), height: 1 + buffer.readUIntLE(27, 3) };
+  if (type === "VP8L" && buffer[20] === 0x2f) return {
+    width: 1 + buffer[21] + ((buffer[22] & 0x3f) << 8),
+    height: 1 + ((buffer[22] & 0xc0) >> 6) + (buffer[23] << 2) + ((buffer[24] & 0x0f) << 10)
+  };
+  if (type === "VP8 ") {
+    const marker = buffer.indexOf(Buffer.from([0x9d, 0x01, 0x2a]), 20);
+    if (marker >= 0) return {
+      width: buffer.readUInt16LE(marker + 3) & 0x3fff,
+      height: buffer.readUInt16LE(marker + 5) & 0x3fff
+    };
+  }
+  return null;
+};
+
+const readMerchLibrary = async () => {
+  const library = JSON.parse(await readFile(path.join(siteRoot, "data", "merch.json"), "utf8"));
+  const copyAuthority = JSON.parse(await readFile(path.join(siteRoot, "data", "merch-copy-authority.json"), "utf8"));
+  const assetManifest = JSON.parse(await readFile(path.join(siteRoot, "data", "merch-asset-manifest.json"), "utf8"));
+  const assetsByPath = new Map(assetManifest.assets.map((asset) => [asset.publicPath, asset]));
+  return validateMerchLibrary(library, copyAuthority, {
+    readAsset: async (relative) => {
+      const record = assetsByPath.get(relative);
+      if (!record) return null;
+      const bytes = await readFile(path.join(siteRoot, relative));
+      const measured = webpDimensions(bytes);
+      if (!measured || createHash("sha256").update(bytes).digest("hex") !== record.outputSha256) return null;
+      return { path: relative, ...measured, sha256: record.outputSha256 };
+    },
+    verifyEvidence: async ({ path: relative, sha256 }) => {
+      const bytes = await readFile(path.join(siteRoot, "..", relative));
+      return createHash("sha256").update(bytes).digest("hex") === sha256;
+    }
+  });
+};
+
 const writePage = async (relative, html) => {
   const output = path.join(stageDir, relative);
   await mkdir(path.dirname(output), { recursive: true });
@@ -360,13 +402,23 @@ const build = async () => {
   const catalog = await readCatalog();
   const audioLibrary = await readAudioLibrary(catalog);
   const artistLibrary = await readArtistLibrary(catalog);
+  const merchLibrary = await readMerchLibrary();
   await assertOgImage();
   await rm(stageDir, { recursive: true, force: true });
   await mkdir(stageDir, { recursive: true });
 
-  const pages = createPages(catalog, audioLibrary, artistLibrary);
+  if (IS_PRODUCTION && SOCIAL_LINKS.length === 0) {
+    throw new Error("Production links page requires at least one verified social destination");
+  }
+
+  const pages = createPages(catalog, audioLibrary, artistLibrary, merchLibrary);
   const smartLinkPageCount = catalog.releases.filter((release) => release.streamingLinks).length;
-  const expectedPageCount = 3 * (catalog.releases.length + artistLibrary.artists.length + 9 + smartLinkPageCount);
+  const basePagesPerLocale = catalog.releases.length
+    + artistLibrary.artists.length
+    + 11
+    + smartLinkPageCount;
+  const expectedPageCount = 3 * (basePagesPerLocale + merchLibrary.objects.length);
+  if (expectedPageCount !== 153) throw new Error(`DROP 001 release contract must derive 153 pages; derived ${expectedPageCount}`);
   if (pages.size !== expectedPageCount) {
     throw new Error(`The localized site must contain exactly ${expectedPageCount} HTML pages; received ${pages.size}`);
   }
@@ -462,6 +514,9 @@ const build = async () => {
       "data/catalog.json",
       "data/audio-library.json",
       "data/artists.json",
+      "data/merch.json",
+      "data/merch-copy-authority.json",
+      "data/merch-asset-manifest.json",
       `config:${SITE_MODE}`,
       "src/pages.mjs",
       "src/i18n.mjs",
