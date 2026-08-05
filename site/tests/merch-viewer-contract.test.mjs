@@ -57,12 +57,20 @@ test("keeps declared viewer budgets inside the approved product-class ceilings",
   for (const object of library.objects) {
     const viewer = requireViewer(object);
     const limits = limitsFor(object.slug);
-    assert.deepEqual(Object.keys(viewer.budget || {}).sort(), ["bytes", "drawCalls", "triangles"]);
-    assert.ok(Number.isInteger(viewer.budget.bytes) && viewer.budget.bytes > 0, `${object.id}.viewer.budget.bytes must be a positive integer`);
-    assert.ok(Number.isInteger(viewer.budget.triangles) && viewer.budget.triangles >= 0, `${object.id}.viewer.budget.triangles must be a non-negative integer`);
-    assert.ok(Number.isInteger(viewer.budget.drawCalls) && viewer.budget.drawCalls >= 0, `${object.id}.viewer.budget.drawCalls must be a non-negative integer`);
-    assert.ok(viewer.budget.bytes <= limits.bytes, `${object.id} exceeds its ${limits.bytes}-byte delivery ceiling`);
-    assert.ok(viewer.budget.triangles <= limits.triangles, `${object.id} exceeds its ${limits.triangles}-triangle ceiling`);
-    assert.ok(viewer.budget.drawCalls <= limits.drawCalls, `${object.id} exceeds its ${limits.drawCalls}-draw-call ceiling`);
+    if (viewer.kind === "spin") {
+      assert.deepEqual(Object.keys(viewer.budget || {}).sort(), ["desktopBytes", "desktopFrames", "mobileBytes", "mobileFrames"]);
+      assert.ok(Number.isInteger(viewer.budget.mobileBytes) && viewer.budget.mobileBytes > 0 && viewer.budget.mobileBytes <= 2_500_000, `${object.id} spin exceeds the 2.5 MB mobile ceiling`);
+      assert.ok(Number.isInteger(viewer.budget.desktopBytes) && viewer.budget.desktopBytes > 0 && viewer.budget.desktopBytes <= 4_000_000, `${object.id} spin exceeds the 4 MB desktop ceiling`);
+      assert.equal(viewer.budget.mobileFrames, 24, `${object.id} mobile spin must contain 24 frames`);
+      assert.equal(viewer.budget.desktopFrames, 36, `${object.id} desktop spin must contain 36 frames`);
+    } else {
+      assert.deepEqual(Object.keys(viewer.budget || {}).sort(), ["bytes", "drawCalls", "triangles"]);
+      assert.ok(Number.isInteger(viewer.budget.bytes) && viewer.budget.bytes > 0, `${object.id}.viewer.budget.bytes must be a positive integer`);
+      assert.ok(Number.isInteger(viewer.budget.triangles) && viewer.budget.triangles >= 0, `${object.id}.viewer.budget.triangles must be a non-negative integer`);
+      assert.ok(Number.isInteger(viewer.budget.drawCalls) && viewer.budget.drawCalls >= 0, `${object.id}.viewer.budget.drawCalls must be a non-negative integer`);
+      assert.ok(viewer.budget.bytes <= limits.bytes, `${object.id} exceeds its ${limits.bytes}-byte delivery ceiling`);
+      assert.ok(viewer.budget.triangles <= limits.triangles, `${object.id} exceeds its ${limits.triangles}-triangle ceiling`);
+      assert.ok(viewer.budget.drawCalls <= limits.drawCalls, `${object.id} exceeds its ${limits.drawCalls}-draw-call ceiling`);
+    }
   }
 });
