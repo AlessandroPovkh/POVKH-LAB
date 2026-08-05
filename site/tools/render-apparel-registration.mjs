@@ -1,17 +1,22 @@
 import { execFile as execFileCallback } from "node:child_process";
 import { createHash } from "node:crypto";
 import {
+  copyFile,
   mkdir,
+  mkdtemp,
   readFile,
   rename,
   rm,
+  stat,
   writeFile
 } from "node:fs/promises";
+import { createRequire } from "node:module";
 import path from "node:path";
 import { promisify } from "node:util";
 import { fileURLToPath } from "node:url";
 
 const execFile = promisify(execFileCallback);
+const require = createRequire(import.meta.url);
 const siteRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const registrationPath = path.join(siteRoot, "data", "apparel-print-registration-v02.json");
 const output = Object.freeze({ width: 1536, height: 1024 });
@@ -136,14 +141,35 @@ const dimensions = async (file) => {
   return { width: Number(match[1]), height: Number(match[2]) };
 };
 
-const assertAsset = async (reference, expectedDimensions) => {
-  const file = path.join(siteRoot, reference.path);
+const assertAssetAtRoot = async (root, reference, expectedDimensions) => {
+  const file = path.join(root, reference.path);
   const actualSha = await fileSha256(file);
   if (actualSha !== reference.sha256) throw new Error(`hash mismatch: ${reference.path}`);
   const actualDimensions = await dimensions(file);
   if (actualDimensions.width !== expectedDimensions.width || actualDimensions.height !== expectedDimensions.height) {
     throw new Error(`dimension mismatch: ${reference.path}`);
   }
+};
+
+const assertAsset = async (reference, expectedDimensions) => assertAssetAtRoot(siteRoot, reference, expectedDimensions);
+
+const decodedRgbaSha256 = async (file) => {
+  const { stdout } = await execFile("ffmpeg", [
+    "-hide_banner", "-loglevel", "error", "-i", file,
+    "-frames:v", "1", "-f", "rawvideo", "-pix_fmt", "rgba", "pipe:1"
+  ], { encoding: "buffer", maxBuffer: 16 * 1024 * 1024 });
+  return sha256(stdout);
+};
+
+const toolFingerprints = async (browser) => {
+  const { stdout } = await execFile("ffmpeg", ["-version"]);
+  const ffmpegVersion = stdout.trimEnd();
+  return {
+    playwright: require("playwright/package.json").version,
+    chromium: browser.version(),
+    ffmpeg: ffmpegVersion.split("\n")[0],
+    ffmpegVersionSha256: sha256(Buffer.from(ffmpegVersion, "utf8"))
+  };
 };
 
 const solveLinearSystem = (matrix, values) => {
@@ -366,9 +392,9 @@ const renderPixels = async (page, { baseBytes, masterBytes, artworkToOutput, vie
   textureReturnOpacity: view.textureReturnOpacity
 });
 
-const encodeWebp = async (sourceFile, publicFile) => {
-  await mkdir(path.dirname(publicFile), { recursive: true });
-  const temporary = `${publicFile}.tmp-${process.pid}.webp`;
+const encodeWebp = async (sourceFile, outputFile) => {
+  await mkdir(path.dirname(outputFile), { recursive: true });
+  const temporary = `${outputFile}.tmp-${process.pid}.webp`;
   await rm(temporary, { force: true });
   try {
     await execFile("ffmpeg", [
@@ -376,22 +402,38 @@ const encodeWebp = async (sourceFile, publicFile) => {
       "-vf", "format=yuv420p", "-map_metadata", "-1", "-frames:v", "1",
       "-c:v", "libwebp", "-quality", "88", "-compression_level", "6", temporary
     ]);
-    await rename(temporary, publicFile);
+    await rename(temporary, outputFile);
   } finally {
     await rm(temporary, { force: true });
   }
 };
 
-const render = async () => {
+const validateGovernedInputs = async () => {
   for (const garment of Object.values(garments)) {
     await assertAsset(garment.master, { width: 1600, height: 600 });
     for (const view of Object.values(garment.views)) await assertAsset(view.base, output);
   }
+};
+
+const buildStagedBundle = async (stageRoot) => {
+  await validateGovernedInputs();
 
   const { chromium } = await import("playwright");
   const browser = await chromium.launch({ headless: true });
   const records = {};
+  const artifacts = [];
+  const addArtifact = (projectPath) => {
+    const record = {
+      projectPath,
+      stageFile: path.join(stageRoot, projectPath),
+      finalFile: path.join(siteRoot, projectPath)
+    };
+    artifacts.push(record);
+    return record.stageFile;
+  };
+  let fingerprints;
   try {
+    fingerprints = await toolFingerprints(browser);
     const page = await browser.newPage({ viewport: output });
     for (const [slug, garment] of Object.entries(garments)) {
       const masterBytes = await readFile(path.join(siteRoot, garment.master.path));
@@ -407,10 +449,10 @@ const render = async () => {
         const renderBytes = decodeDataUrl(rendered.render);
         const garmentMaskBytes = decodeDataUrl(rendered.garmentMask);
         const artworkMaskBytes = decodeDataUrl(rendered.artworkMask);
-        const sourceRenderFile = path.join(siteRoot, view.sourceRenderPath);
-        const garmentMaskFile = path.join(siteRoot, view.garmentMaskPath);
-        const artworkMaskFile = path.join(siteRoot, view.artworkMaskPath);
-        const publicFile = path.join(siteRoot, view.publicPath);
+        const sourceRenderFile = addArtifact(view.sourceRenderPath);
+        const garmentMaskFile = addArtifact(view.garmentMaskPath);
+        const artworkMaskFile = addArtifact(view.artworkMaskPath);
+        const publicFile = addArtifact(view.publicPath);
         await writeAtomic(sourceRenderFile, renderBytes);
         await writeAtomic(garmentMaskFile, garmentMaskBytes);
         await writeAtomic(artworkMaskFile, artworkMaskBytes);
@@ -420,9 +462,18 @@ const render = async () => {
           publicPath: view.publicPath,
           output,
           base: view.base,
-          sourceRender: asset(view.sourceRenderPath, sha256(renderBytes)),
-          garmentMask: asset(view.garmentMaskPath, sha256(garmentMaskBytes)),
-          appliedArtworkMask: asset(view.artworkMaskPath, sha256(artworkMaskBytes)),
+          sourceRender: {
+            ...asset(view.sourceRenderPath, sha256(renderBytes)),
+            pixelSha256: await decodedRgbaSha256(sourceRenderFile)
+          },
+          garmentMask: {
+            ...asset(view.garmentMaskPath, sha256(garmentMaskBytes)),
+            pixelSha256: await decodedRgbaSha256(garmentMaskFile)
+          },
+          appliedArtworkMask: {
+            ...asset(view.artworkMaskPath, sha256(artworkMaskBytes)),
+            pixelSha256: await decodedRgbaSha256(artworkMaskFile)
+          },
           fabricModulation: {
             enabled: true,
             ...view.base,
@@ -436,6 +487,7 @@ const render = async () => {
           artworkQuad: view.artworkQuad,
           artworkToOutput,
           outputSha256: await fileSha256(publicFile),
+          outputPixelSha256: await decodedRgbaSha256(publicFile),
           encoder
         };
       }
@@ -456,32 +508,36 @@ const render = async () => {
       path: "tools/render-apparel-registration.mjs",
       method: "inverse-homography bilinear RGBA composition",
       publicEncoder: encoder,
-      deterministic: true
+      pixelDeterministic: true,
+      encodedBytesDeterministic: false,
+      fingerprints
     },
     garments: records
   };
-  await writeAtomic(registrationPath, Buffer.from(`${JSON.stringify(registration, null, 2)}\n`, "utf8"));
-  process.stdout.write("rendered 4 apparel registrations\n");
+  const stagedRegistrationFile = addArtifact(path.relative(siteRoot, registrationPath));
+  await writeAtomic(stagedRegistrationFile, Buffer.from(`${JSON.stringify(registration, null, 2)}\n`, "utf8"));
+  return { artifacts, registration, stageRoot };
 };
 
-const verify = async () => {
-  const registration = JSON.parse(await readFile(registrationPath, "utf8"));
+const assertRegistrationContract = (registration) => {
   if (registration.schemaVersion !== 2) throw new Error("apparel registration schema must remain v2");
-  let count = 0;
+  if (registration.renderer?.pixelDeterministic !== true) throw new Error("renderer must declare pixel determinism");
+  if (registration.renderer?.encodedBytesDeterministic !== false) {
+    throw new Error("renderer must not claim cross-platform encoded byte determinism");
+  }
+  const fingerprints = registration.renderer?.fingerprints;
+  if (!fingerprints?.playwright || !fingerprints.chromium || !fingerprints.ffmpeg || !fingerprints.ffmpegVersionSha256) {
+    throw new Error("renderer fingerprints are incomplete");
+  }
   for (const [slug, garment] of Object.entries(garments)) {
-    await assertAsset(garment.master, { width: 1600, height: 600 });
     const record = registration.garments?.[slug];
     if (!record) throw new Error(`missing garment registration: ${slug}`);
+    if (JSON.stringify(record.master) !== JSON.stringify(garment.master)) throw new Error(`master registration drift: ${slug}`);
     for (const [role, view] of Object.entries(garment.views)) {
       const registered = record.views?.[role];
       if (!registered) throw new Error(`missing view registration: ${slug}/${role}`);
-      await assertAsset(view.base, output);
-      await assertAsset(registered.sourceRender, output);
-      await assertAsset(registered.garmentMask, output);
-      await assertAsset(registered.appliedArtworkMask, output);
-      await assertAsset({ path: registered.publicPath, sha256: registered.outputSha256 }, output);
       const expectedHomography = homography(sourceCorners, view.artworkQuad);
-      if (registered.artworkToOutput.length !== 9 || registered.artworkToOutput.some((value, index) => (
+      if (registered.artworkToOutput?.length !== 9 || registered.artworkToOutput.some((value, index) => (
         Math.abs(value - expectedHomography[index]) > 1e-10
       ))) throw new Error(`homography drift: ${slug}/${role}`);
       if (JSON.stringify(registered.surfaceAnchors) !== JSON.stringify(view.surfaceAnchors)) {
@@ -490,13 +546,191 @@ const verify = async () => {
       if (JSON.stringify(registered.artworkQuad) !== JSON.stringify(view.artworkQuad)) {
         throw new Error(`artwork quad drift: ${slug}/${role}`);
       }
-      count += 1;
     }
   }
-  process.stdout.write(`verified ${count} apparel registrations\n`);
 };
 
-const args = process.argv.slice(2);
-if (args.length === 0) await render();
-else if (args.length === 1 && args[0] === "--verify") await verify();
-else throw new Error(`unsupported apparel registration arguments: ${args.join(" ")}`);
+const validateStagedBundle = async ({ artifacts, registration, stageRoot }) => {
+  assertRegistrationContract(registration);
+  if (artifacts.length !== 17) throw new Error(`apparel registration bundle must stage 17 files; received ${artifacts.length}`);
+  const projectPaths = new Set();
+  for (const artifact of artifacts) {
+    if (projectPaths.has(artifact.projectPath)) throw new Error(`duplicate staged artifact: ${artifact.projectPath}`);
+    projectPaths.add(artifact.projectPath);
+    await stat(artifact.stageFile);
+  }
+  const stagedRegistration = JSON.parse(await readFile(path.join(stageRoot, path.relative(siteRoot, registrationPath)), "utf8"));
+  if (JSON.stringify(stagedRegistration) !== JSON.stringify(registration)) throw new Error("staged registration JSON drifted");
+
+  for (const [slug, garment] of Object.entries(registration.garments)) {
+    for (const [role, view] of Object.entries(garment.views)) {
+      await assertAssetAtRoot(stageRoot, view.sourceRender, output);
+      await assertAssetAtRoot(stageRoot, view.garmentMask, output);
+      await assertAssetAtRoot(stageRoot, view.appliedArtworkMask, output);
+      await assertAssetAtRoot(stageRoot, { path: view.publicPath, sha256: view.outputSha256 }, output);
+      const checks = [
+        [view.sourceRender.path, view.sourceRender.pixelSha256, "source render"],
+        [view.garmentMask.path, view.garmentMask.pixelSha256, "garment mask"],
+        [view.appliedArtworkMask.path, view.appliedArtworkMask.pixelSha256, "artwork mask"],
+        [view.publicPath, view.outputPixelSha256, "public WebP"]
+      ];
+      for (const [projectPath, expectedPixelSha, label] of checks) {
+        const actualPixelSha = await decodedRgbaSha256(path.join(stageRoot, projectPath));
+        if (actualPixelSha !== expectedPixelSha) throw new Error(`staged ${label} pixel hash mismatch: ${slug}/${role}`);
+      }
+    }
+  }
+};
+
+const fileExists = async (file) => {
+  try {
+    await stat(file);
+    return true;
+  } catch (error) {
+    if (error.code === "ENOENT") return false;
+    throw error;
+  }
+};
+
+export const publishStagedBundle = async (artifacts, {
+  backupParent = siteRoot,
+  renameFile = rename
+} = {}) => {
+  if (!Array.isArray(artifacts) || artifacts.length === 0) throw new Error("cannot publish an empty apparel bundle");
+  const backupRoot = await mkdtemp(path.join(backupParent, ".apparel-registration-backup-"));
+  const backups = [];
+  try {
+    for (const [index, artifact] of artifacts.entries()) {
+      await stat(artifact.stageFile);
+      await mkdir(path.dirname(artifact.finalFile), { recursive: true });
+      const existed = await fileExists(artifact.finalFile);
+      const backupFile = path.join(backupRoot, `${String(index).padStart(2, "0")}-${path.basename(artifact.finalFile)}`);
+      if (existed) await copyFile(artifact.finalFile, backupFile);
+      backups.push({ ...artifact, backupFile, existed });
+    }
+
+    try {
+      for (const artifact of artifacts) await renameFile(artifact.stageFile, artifact.finalFile);
+    } catch (publishError) {
+      const rollbackErrors = [];
+      for (const backup of [...backups].reverse()) {
+        try {
+          if (backup.existed) await copyFile(backup.backupFile, backup.finalFile);
+          else await rm(backup.finalFile, { force: true });
+        } catch (rollbackError) {
+          rollbackErrors.push(rollbackError);
+        }
+      }
+      if (rollbackErrors.length > 0) {
+        throw new AggregateError([publishError, ...rollbackErrors], "apparel bundle publish and rollback failed");
+      }
+      throw publishError;
+    }
+  } finally {
+    await rm(backupRoot, { recursive: true, force: true });
+  }
+};
+
+export const renderApparelRegistration = async () => {
+  const stageRoot = await mkdtemp(path.join(siteRoot, ".apparel-registration-stage-"));
+  try {
+    const stagedBundle = await buildStagedBundle(stageRoot);
+    await validateStagedBundle(stagedBundle);
+    await publishStagedBundle(stagedBundle.artifacts);
+    return 4;
+  } finally {
+    await rm(stageRoot, { recursive: true, force: true });
+  }
+};
+
+const comparePixelArtifact = async ({
+  committedFile,
+  committedPixelSha,
+  stagedFile,
+  stagedPixelSha,
+  label,
+  identity
+}) => {
+  const committedActual = await decodedRgbaSha256(committedFile);
+  if (committedActual !== committedPixelSha) throw new Error(`${label} pixel hash mismatch: ${identity}`);
+  const stagedActual = await decodedRgbaSha256(stagedFile);
+  if (stagedActual !== stagedPixelSha) throw new Error(`staged ${label} pixel hash mismatch: ${identity}`);
+  if (stagedActual !== committedActual) throw new Error(`dry rerender ${label} pixel mismatch: ${identity}`);
+};
+
+export const verifyApparelRegistration = async ({ registrationFile = registrationPath } = {}) => {
+  await validateGovernedInputs();
+  const committedRegistration = JSON.parse(await readFile(registrationFile, "utf8"));
+  const stageRoot = await mkdtemp(path.join(siteRoot, ".apparel-registration-verify-"));
+  try {
+    const stagedBundle = await buildStagedBundle(stageRoot);
+    await validateStagedBundle(stagedBundle);
+    assertRegistrationContract(committedRegistration);
+    let count = 0;
+    for (const [slug, garment] of Object.entries(garments)) {
+      const committedGarment = committedRegistration.garments[slug];
+      const stagedGarment = stagedBundle.registration.garments[slug];
+      for (const [role, view] of Object.entries(garment.views)) {
+        const committed = committedGarment.views[role];
+        const staged = stagedGarment.views[role];
+        await assertAsset(committed.sourceRender, output);
+        await assertAsset(committed.garmentMask, output);
+        await assertAsset(committed.appliedArtworkMask, output);
+        await assertAsset({ path: committed.publicPath, sha256: committed.outputSha256 }, output);
+        await comparePixelArtifact({
+          committedFile: path.join(siteRoot, committed.sourceRender.path),
+          committedPixelSha: committed.sourceRender.pixelSha256,
+          stagedFile: path.join(stageRoot, staged.sourceRender.path),
+          stagedPixelSha: staged.sourceRender.pixelSha256,
+          label: "source render",
+          identity: `${slug}/${role}`
+        });
+        await comparePixelArtifact({
+          committedFile: path.join(siteRoot, committed.garmentMask.path),
+          committedPixelSha: committed.garmentMask.pixelSha256,
+          stagedFile: path.join(stageRoot, staged.garmentMask.path),
+          stagedPixelSha: staged.garmentMask.pixelSha256,
+          label: "garment mask",
+          identity: `${slug}/${role}`
+        });
+        await comparePixelArtifact({
+          committedFile: path.join(siteRoot, committed.appliedArtworkMask.path),
+          committedPixelSha: committed.appliedArtworkMask.pixelSha256,
+          stagedFile: path.join(stageRoot, staged.appliedArtworkMask.path),
+          stagedPixelSha: staged.appliedArtworkMask.pixelSha256,
+          label: "artwork mask",
+          identity: `${slug}/${role}`
+        });
+        await comparePixelArtifact({
+          committedFile: path.join(siteRoot, committed.publicPath),
+          committedPixelSha: committed.outputPixelSha256,
+          stagedFile: path.join(stageRoot, staged.publicPath),
+          stagedPixelSha: staged.outputPixelSha256,
+          label: "public WebP",
+          identity: `${slug}/${role}`
+        });
+        if (JSON.stringify(committed.artworkToOutput) !== JSON.stringify(staged.artworkToOutput)) {
+          throw new Error(`dry rerender homography mismatch: ${slug}/${role}`);
+        }
+        count += 1;
+      }
+    }
+    return count;
+  } finally {
+    await rm(stageRoot, { recursive: true, force: true });
+  }
+};
+
+const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
+if (isMain) {
+  const args = process.argv.slice(2);
+  if (args.length === 0) {
+    const count = await renderApparelRegistration();
+    process.stdout.write(`rendered and bundle-published ${count} apparel registrations\n`);
+  } else if (args.length === 1 && args[0] === "--verify") {
+    const count = await verifyApparelRegistration();
+    process.stdout.write(`dry-rerendered and pixel-verified ${count} apparel registrations\n`);
+  } else {
+    throw new Error(`unsupported apparel registration arguments: ${args.join(" ")}`);
+  }
+}

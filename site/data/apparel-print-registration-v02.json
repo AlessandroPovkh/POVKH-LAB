@@ -16,7 +16,14 @@
     "path": "tools/render-apparel-registration.mjs",
     "method": "inverse-homography bilinear RGBA composition",
     "publicEncoder": "ffmpeg/libwebp q=88 yuv420p metadata-stripped",
-    "deterministic": true
+    "pixelDeterministic": true,
+    "encodedBytesDeterministic": false,
+    "fingerprints": {
+      "playwright": "1.61.1",
+      "chromium": "149.0.7827.55",
+      "ffmpeg": "ffmpeg version 7.0.2-tessus  https://evermeet.cx/ffmpeg/  Copyright (c) 2000-2024 the FFmpeg developers",
+      "ffmpegVersionSha256": "93ef6adc04bee8764e8043f09891bac8b7a799864dc71f70ae186e69e5484f90"
+    }
   },
   "garments": {
     "t-shirt": {
@@ -52,15 +59,18 @@
           },
           "sourceRender": {
             "path": "tools/fixtures/apparel-registration/renders/t-shirt-print-macro-registration-v02.png",
-            "sha256": "284d69231f5fe99f6ba3f5accdc7007a20933709eee96ffd31851897c51d0331"
+            "sha256": "284d69231f5fe99f6ba3f5accdc7007a20933709eee96ffd31851897c51d0331",
+            "pixelSha256": "561e879082fd36f55ea3ee3324a45645550ef3a0afe6e4db054e6f932be42df7"
           },
           "garmentMask": {
             "path": "tools/fixtures/apparel-registration/masks/t-shirt-print-macro-garment-mask-v02.png",
-            "sha256": "5b056ffc83f20309d955fc0b307848f6e0bc134deeecde3df48b47c2472dc9e0"
+            "sha256": "5b056ffc83f20309d955fc0b307848f6e0bc134deeecde3df48b47c2472dc9e0",
+            "pixelSha256": "dec224b6e691aa39ea03e5b8d9fd712516ea3b128e31d0d3ab5430f6ed404bb0"
           },
           "appliedArtworkMask": {
             "path": "tools/fixtures/apparel-registration/masks/t-shirt-print-macro-applied-artwork-mask-v02.png",
-            "sha256": "da66ae20d7c507b5a3a21f008015c0ee02da66f649db2533db8d03deeda3a626"
+            "sha256": "da66ae20d7c507b5a3a21f008015c0ee02da66f649db2533db8d03deeda3a626",
+            "pixelSha256": "b742ac40d635768b4565efcc838b59c018ef67be22f676ae25c9b1b77d2ad1a9"
           },
           "fabricModulation": {
             "enabled": true,
@@ -137,6 +147,7 @@
             1
           ],
           "outputSha256": "0f7a78e92d72a2a874fe842efb6136f72bbb00ce5f04eb481edd9cef0e8d015f",
+          "outputPixelSha256": "25afe2a920d52e0f01065d622b8cae85b1304ab10bf97e08696fedf14878ce2c",
           "encoder": "ffmpeg/libwebp q=88 yuv420p metadata-stripped"
         },
         "on-body": {
@@ -151,15 +162,18 @@
           },
           "sourceRender": {
             "path": "tools/fixtures/apparel-registration/renders/t-shirt-on-body-registration-v02.png",
-            "sha256": "c41f7436f6959e82852ba1f30ca6c271015c8631706900822d84a49ea519f5aa"
+            "sha256": "c41f7436f6959e82852ba1f30ca6c271015c8631706900822d84a49ea519f5aa",
+            "pixelSha256": "9e6ad3dce9e13d5c6860ce62d5156188203dd866af054deb28a0b2f1479fd854"
           },
           "garmentMask": {
             "path": "tools/fixtures/apparel-registration/masks/t-shirt-on-body-garment-mask-v02.png",
-            "sha256": "87b240af73c2da10f9c65eed1425cc7a90388a468667053a1153ee6762cb37a3"
+            "sha256": "87b240af73c2da10f9c65eed1425cc7a90388a468667053a1153ee6762cb37a3",
+            "pixelSha256": "17239eb0357d16322ade2b6c027d348481d4f170343c9f4a4e987f2b307055c7"
           },
           "appliedArtworkMask": {
             "path": "tools/fixtures/apparel-registration/masks/t-shirt-on-body-applied-artwork-mask-v02.png",
-            "sha256": "e52fbd62b19efa603e566fd1935a4f8d3c390b2fbdfe592e9051a959467724f8"
+            "sha256": "e52fbd62b19efa603e566fd1935a4f8d3c390b2fbdfe592e9051a959467724f8",
+            "pixelSha256": "a815cbd26167da018c48961c501c534bab983503b284cdfd310fc088eeffc800"
           },
           "fabricModulation": {
             "enabled": true,
@@ -236,6 +250,7 @@
             1
           ],
           "outputSha256": "02acf8b05cdb16b227c723235046fc7a0b22e819b3c85bad7181932975f854e8",
+          "outputPixelSha256": "e43e3a692d3242bc98c24492b37360261cebe80439616674a3467a0b1eb489bc",
           "encoder": "ffmpeg/libwebp q=88 yuv420p metadata-stripped"
         }
       }
@@ -273,15 +288,18 @@
           },
           "sourceRender": {
             "path": "tools/fixtures/apparel-registration/renders/hoodie-print-macro-registration-v02.png",
-            "sha256": "887243fbbc7599773b718dc5d8144068db6741f9f2b502b24f53cabef519cbbd"
+            "sha256": "887243fbbc7599773b718dc5d8144068db6741f9f2b502b24f53cabef519cbbd",
+            "pixelSha256": "b999d3e21a96d1aa2b197c47e351328e4dc5c47fea38158a962cd8da6c8c62ea"
           },
           "garmentMask": {
             "path": "tools/fixtures/apparel-registration/masks/hoodie-print-macro-garment-mask-v02.png",
-            "sha256": "c8ed116242a7431517fcc2dceda911991f86b9537e569bdd7d251e2605ea361b"
+            "sha256": "c8ed116242a7431517fcc2dceda911991f86b9537e569bdd7d251e2605ea361b",
+            "pixelSha256": "573d0489f7c5bc5e0552a7abbc1d810ff2cfa0d4a2461ffe8d9917ba66d41602"
           },
           "appliedArtworkMask": {
             "path": "tools/fixtures/apparel-registration/masks/hoodie-print-macro-applied-artwork-mask-v02.png",
-            "sha256": "9d2fef489311b6d29b3ddb2ac8e5919c8c83250b33ad7a5618be99a56fffea34"
+            "sha256": "9d2fef489311b6d29b3ddb2ac8e5919c8c83250b33ad7a5618be99a56fffea34",
+            "pixelSha256": "76940b8a901840b8db0b09c03271467869c77594f23135e756a8790ab8b62b7e"
           },
           "fabricModulation": {
             "enabled": true,
@@ -358,6 +376,7 @@
             1
           ],
           "outputSha256": "6c211bb6ccbcee5e11eb5e6e4bfa5c549b6d2c386d3fea7e85995b733e5b0f9c",
+          "outputPixelSha256": "783bb57f757eb9ba298e6019d8035eed51de4b7ab245ebe130cab033918bc9fd",
           "encoder": "ffmpeg/libwebp q=88 yuv420p metadata-stripped"
         },
         "worn-rear": {
@@ -372,15 +391,18 @@
           },
           "sourceRender": {
             "path": "tools/fixtures/apparel-registration/renders/hoodie-worn-rear-registration-v02.png",
-            "sha256": "a3c08bd380fd18a1e124174b2dbaf7896efb79b3d14309080d046d9291cb0f93"
+            "sha256": "a3c08bd380fd18a1e124174b2dbaf7896efb79b3d14309080d046d9291cb0f93",
+            "pixelSha256": "f58bcfa7ece21ae2544ff9738fb86fae3f21250404478ea203b4dbcf48b0459c"
           },
           "garmentMask": {
             "path": "tools/fixtures/apparel-registration/masks/hoodie-worn-rear-garment-mask-v02.png",
-            "sha256": "f1fbcab15dce95a500c432cf9983bdea31d20566191b466b0d74f69a0d66ada6"
+            "sha256": "f1fbcab15dce95a500c432cf9983bdea31d20566191b466b0d74f69a0d66ada6",
+            "pixelSha256": "6167c5928cca9f7786026316ed441cb0ceeae6fe53ba569fa106718f61680f44"
           },
           "appliedArtworkMask": {
             "path": "tools/fixtures/apparel-registration/masks/hoodie-worn-rear-applied-artwork-mask-v02.png",
-            "sha256": "38cd91e754fa62b8793149e12d60a2ce3276597be1907d017b1084db3084cb95"
+            "sha256": "38cd91e754fa62b8793149e12d60a2ce3276597be1907d017b1084db3084cb95",
+            "pixelSha256": "f44b210ff25fed450fc1c6602076529ec3ebc890ea9e60751d51601a45657bf3"
           },
           "fabricModulation": {
             "enabled": true,
@@ -457,6 +479,7 @@
             1
           ],
           "outputSha256": "9a4bf9c4b080657a1cd23ab5abd54874c04b95a1f97bb8d42092e2bf068776c1",
+          "outputPixelSha256": "daa97bdb28adbac36dce052bf85bca87d40d5d1f6ac797da34fb057d735c6430",
           "encoder": "ffmpeg/libwebp q=88 yuv420p metadata-stripped"
         }
       }

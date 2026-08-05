@@ -3,7 +3,7 @@
 | Task | Implementation | Spec review | Quality review | Status |
 | --- | --- | --- | --- | --- |
 | 1. Governance tests | tests-only RED | passed after fixes | passed after fixes | completed / intentional RED |
-| 2. Apparel registration | implemented / tests green | — | — | implementation complete / reviews pending |
+| 2. Apparel registration | implemented / tests green | — | quality fixes implemented | implementation complete / re-review pending |
 | 3. PHYSICAL motion | — | — | — | pending |
 | 4. 3D runtime | — | — | — | pending |
 | 5. Cassette + hoodie POC | — | — | — | pending |
@@ -34,9 +34,11 @@
 ## Task 2 implementation evidence
 
 - Copied only the two locked 1600×600 artwork masters and four 1536×1024 blank apparel bases into the governed registration fixture; all six source SHA-256 values match the read-only authority.
-- `npm run assets:apparel-registration` deterministically reproduces four source PNGs, garment masks, actual-alpha artwork masks, q88 metadata-stripped public WebPs and `data/apparel-print-registration-v02.json`.
-- A second complete render reproduced the same PNG, mask, WebP and JSON hashes.
-- `npm run test:merch-registration` — passed 5/5.
+- `npm run assets:apparel-registration` stages and validates all four source PNGs, eight masks, four q88 metadata-stripped public WebPs and the JSON registration before backup-backed atomic publication.
+- `--verify` now performs a real dry rerender and compares decoded RGBA pixel hashes for all PNGs, masks and regenerated q88 WebPs; encoded-byte reproducibility is explicitly not claimed across toolchains.
+- Provenance records the actual Playwright, Chromium and ffmpeg fingerprints used for the governed bundle.
+- A second complete render plus dry verification passed without changing any governed image bytes.
+- `npm run test:merch-registration` — passed 7/7, including stale-pixel rejection and injected rename-failure rollback.
 - `npm run test:merch-assets` — passed 2/2.
 - `npm run test:merch-pages` — passed 1/1.
 - `npm run test:merch` — passed 10/10.

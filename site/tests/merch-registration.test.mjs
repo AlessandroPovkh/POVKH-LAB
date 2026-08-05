@@ -1,11 +1,12 @@
 import assert from "node:assert/strict";
 import { execFile as execFileCallback } from "node:child_process";
 import { createHash } from "node:crypto";
-import { readFile } from "node:fs/promises";
+import { mkdir, mkdtemp, readFile, rename, rm, writeFile } from "node:fs/promises";
+import { tmpdir } from "node:os";
 import path from "node:path";
 import test from "node:test";
 import { promisify } from "node:util";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 
 const siteRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const execFile = promisify(execFileCallback);
@@ -152,6 +153,13 @@ const bounds = (points) => ({
 test("locks the canonical 1600x600 / 300x112.5 mm plane and exact artwork masters", async () => {
   const registration = await readRegistration();
   assert.equal(registration.schemaVersion, 2);
+  assert.equal(registration.renderer.pixelDeterministic, true);
+  assert.equal(registration.renderer.encodedBytesDeterministic, false);
+  assert.equal(Object.hasOwn(registration.renderer, "deterministic"), false, "renderer must not overclaim encoded byte determinism");
+  assert.match(registration.renderer.fingerprints?.playwright || "", /^\d+\.\d+\.\d+$/);
+  assert.match(registration.renderer.fingerprints?.chromium || "", /\d+/);
+  assert.match(registration.renderer.fingerprints?.ffmpeg || "", /^ffmpeg version /);
+  assert.match(registration.renderer.fingerprints?.ffmpegVersionSha256 || "", sha256Pattern);
   assert.deepEqual(registration.canonicalPlane, {
     width: 1600,
     height: 600,
@@ -196,6 +204,10 @@ test("declares an auditable surface quad, homography, garment mask and fabric la
       await assertAssetReference(view.appliedArtworkMask, `${slug}.${role}.appliedArtworkMask`, view.output);
       await assertAssetReference(view.fabricModulation, `${slug}.${role}.fabricModulation`, view.output);
       await assertAssetReference({ path: view.publicPath, sha256: view.outputSha256 }, `${slug}.${role}.publicOutput`, view.output);
+      assert.match(view.sourceRender.pixelSha256 || "", sha256Pattern, `${slug}.${role}.sourceRender needs a decoded RGBA hash`);
+      assert.match(view.garmentMask.pixelSha256 || "", sha256Pattern, `${slug}.${role}.garmentMask needs a decoded RGBA hash`);
+      assert.match(view.appliedArtworkMask.pixelSha256 || "", sha256Pattern, `${slug}.${role}.appliedArtworkMask needs a decoded RGBA hash`);
+      assert.match(view.outputPixelSha256 || "", sha256Pattern, `${slug}.${role}.publicOutput needs a decoded RGBA hash`);
       assert.equal(view.fabricModulation.enabled, true, `${slug}.${role} must preserve fold and fibre modulation`);
       assert.equal(view.surfaceAnchors?.length, 4, `${slug}.${role} needs four declared surface anchors`);
       for (const [index, anchor] of (view.surfaceAnchors || []).entries()) {
@@ -270,8 +282,63 @@ test("keeps every inverse-projected print within the normalized 0.02 scale and c
   }
 });
 
-test("the deterministic compositor verifies every governed source and output byte", async () => {
+test("the compositor dry-rerenders and pixel-verifies every governed output", async () => {
   const renderer = path.join(siteRoot, "tools", "render-apparel-registration.mjs");
   const { stdout } = await execFile(process.execPath, [renderer, "--verify"]);
-  assert.match(stdout, /verified 4 apparel registrations/);
+  assert.match(stdout, /dry-rerendered and pixel-verified 4 apparel registrations/);
+});
+
+test("dry verification rejects a stale registered compositor pixel hash", async () => {
+  const temporaryRoot = await mkdtemp(path.join(tmpdir(), "pvkh-apparel-stale-"));
+  try {
+    const staleRegistration = await readRegistration();
+    staleRegistration.garments["t-shirt"].views["print-macro"].sourceRender.pixelSha256 = "0".repeat(64);
+    const stalePath = path.join(temporaryRoot, "apparel-print-registration-v02.json");
+    await writeFile(stalePath, `${JSON.stringify(staleRegistration, null, 2)}\n`, "utf8");
+    const rendererUrl = pathToFileURL(path.join(siteRoot, "tools", "render-apparel-registration.mjs")).href;
+    const { verifyApparelRegistration } = await import(rendererUrl);
+    await assert.rejects(
+      verifyApparelRegistration({ registrationFile: stalePath }),
+      /source render pixel hash mismatch: t-shirt\/print-macro/
+    );
+  } finally {
+    await rm(temporaryRoot, { recursive: true, force: true });
+  }
+});
+
+test("bundle publication rolls every final file back after a rename failure", async () => {
+  const temporaryRoot = await mkdtemp(path.join(tmpdir(), "pvkh-apparel-rollback-"));
+  try {
+    const stageRoot = path.join(temporaryRoot, "stage");
+    const finalRoot = path.join(temporaryRoot, "final");
+    await Promise.all([mkdir(stageRoot), mkdir(finalRoot)]);
+    const artifacts = ["one.png", "two.json"].map((name) => ({
+      stageFile: path.join(stageRoot, name),
+      finalFile: path.join(finalRoot, name)
+    }));
+    await Promise.all([
+      writeFile(artifacts[0].stageFile, "new-one"),
+      writeFile(artifacts[1].stageFile, "new-two"),
+      writeFile(artifacts[0].finalFile, "old-one"),
+      writeFile(artifacts[1].finalFile, "old-two")
+    ]);
+    const rendererUrl = pathToFileURL(path.join(siteRoot, "tools", "render-apparel-registration.mjs")).href;
+    const { publishStagedBundle } = await import(rendererUrl);
+    let renameCount = 0;
+    await assert.rejects(
+      publishStagedBundle(artifacts, {
+        backupParent: temporaryRoot,
+        renameFile: async (from, to) => {
+          renameCount += 1;
+          if (renameCount === 2) throw new Error("injected rename failure");
+          await rename(from, to);
+        }
+      }),
+      /injected rename failure/
+    );
+    assert.equal(await readFile(artifacts[0].finalFile, "utf8"), "old-one");
+    assert.equal(await readFile(artifacts[1].finalFile, "utf8"), "old-two");
+  } finally {
+    await rm(temporaryRoot, { recursive: true, force: true });
+  }
 });
