@@ -2,7 +2,7 @@
 
 | Task | Implementation | Spec review | Quality review | Status |
 | --- | --- | --- | --- | --- |
-| 1. Governance tests | tests-only RED | gaps fixed | — | red / quality review pending |
+| 1. Governance tests | tests-only RED | gaps fixed | important gaps fixed | red / final review pending |
 | 2. Apparel registration | — | — | — | pending |
 | 3. PHYSICAL motion | — | — | — | pending |
 | 4. 3D runtime | — | — | — | pending |
@@ -29,3 +29,4 @@
 - `npm run test:interface-hierarchy` — expected failure until the four-route primary navigation, progressive Menu / Index, single Social Access footer route, single status hierarchy and lightweight 404 are implemented.
 - This is a tests-only checkpoint. Task 1 remains unreviewed and no production behavior has been changed.
 - Spec review found six gaps; source-byte/dimension checks, independent homography math, spin budgets, exact navigation destinations, all-page footer coverage and exact 404 action coverage were added.
+- Quality review added byte/dimension verification for every registration asset/output, pixel-level artwork-vs-garment masks, locked apparel surfaces/quads, all-route header/Menu coverage and an exact five-action lightweight 404 shell.

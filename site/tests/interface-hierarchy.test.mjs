@@ -27,35 +27,45 @@ const fragment = (html, pattern, label) => {
   return match[0];
 };
 const count = (html, pattern) => [...html.matchAll(pattern)].length;
-const expectedPrimaryHrefs = (locale) => {
-  const prefix = locale === "en" ? "./" : `../${locale}/`;
-  return [prefix, `${prefix}catalog/`, `${prefix}merch/`, `${prefix}artists/`];
-};
+const localeForOutput = (output) => output.startsWith("it/") ? "it" : output.startsWith("ru/") ? "ru" : "en";
+const publicLocalePrefix = (locale) => locale === "en" ? "/" : `/${locale}/`;
+const resolvedPath = (output, href) => new URL(href, `https://example.test/${output}`).pathname;
 
 test("keeps exactly Home / Catalog / Merch / Artists in the primary desktop navigation", () => {
-  for (const locale of locales) {
-    const html = pageFor(locale, "");
-    const primary = fragment(html, /<nav class="desktop-nav"[\s\S]*?<\/nav>/, `${locale} desktop primary navigation`);
+  for (const [output, buffer] of pages.entries()) {
+    if (output.endsWith("404.html")) continue;
+    const locale = localeForOutput(output);
+    const html = buffer.toString();
+    const primary = fragment(html, /<nav class="desktop-nav"[\s\S]*?<\/nav>/, `${output} desktop primary navigation`);
     const links = [...primary.matchAll(/<a class="nav-link" href="([^"]+)"[^>]*>([^<]+)<\/a>/g)]
       .map(([, href, label]) => ({ href, label }));
     const expected = ["home", "catalog", "merch", "artists"].map((key) => COPY[locale].common.nav[key]);
-    assert.deepEqual(links.map(({ label }) => label), expected, `${locale} primary navigation must contain only the four audience routes`);
-    assert.deepEqual(links.map(({ href }) => href), expectedPrimaryHrefs(locale), `${locale} primary routes must keep their localized destinations`);
-    assert.equal(count(primary, /<(?:a|button|summary)\b/g), 4, `${locale} primary navigation must expose exactly four interactive elements`);
+    assert.deepEqual(links.map(({ label }) => label), expected, `${output} primary navigation must contain only the four audience routes`);
+    assert.deepEqual(links.map(({ href }) => resolvedPath(output, href)), [
+      publicLocalePrefix(locale),
+      `${publicLocalePrefix(locale)}catalog/`,
+      `${publicLocalePrefix(locale)}merch/`,
+      `${publicLocalePrefix(locale)}artists/`
+    ], `${output} primary routes must keep their localized destinations`);
+    assert.equal(count(primary, /<(?:a|button|summary)\b/g), 4, `${output} primary navigation must expose exactly four interactive elements`);
 
-    const index = fragment(html, /<details[^>]+data-site-index[\s\S]*?<\/details>/, `${locale} Menu / Index disclosure`);
-    assert.match(index, new RegExp(`<summary[^>]*>${COPY[locale].common.menu}\\s*/\\s*Index<`), `${locale} disclosure must be labelled Menu / Index`);
+    const index = fragment(html, /<details[^>]+data-site-index[\s\S]*?<\/details>/, `${output} Menu / Index disclosure`);
+    assert.match(index, new RegExp(`<summary[^>]*>${COPY[locale].common.menu}\\s*/\\s*Index<`), `${output} disclosure must be labelled Menu / Index`);
     for (const key of ["process", "about", "press", "download", "contact"]) {
-      assert.match(index, new RegExp(`>${COPY[locale].common.nav[key]}<`), `${locale} Menu / Index is missing ${key}`);
+      const label = COPY[locale].common.nav[key];
+      assert.match(index, new RegExp(`>${label}<`), `${output} Menu / Index is missing ${key}`);
+      const hrefMatch = index.match(new RegExp(`<a[^>]+href="([^"]+)"[^>]*>${label}<`));
+      assert.ok(hrefMatch, `${output} Menu / Index destination is missing for ${key}`);
+      assert.equal(resolvedPath(output, hrefMatch[1]), `${publicLocalePrefix(locale)}${key}/`, `${output} Menu / Index destination drifted for ${key}`);
     }
-    assert.equal(count(index, /data-language-switcher(?:[ >])/g), 1, `${locale} Menu / Index must contain the language switcher`);
+    assert.equal(count(index, /data-language-switcher(?:[ >])/g), 1, `${output} Menu / Index must contain the language switcher`);
   }
 });
 
-test("publishes one Social Access destination in the footer instead of duplicate channel links", () => {
+test("publishes one Social Access destination in every footer instead of duplicate channel links", () => {
   for (const [output, buffer] of pages.entries()) {
     if (output.endsWith("404.html")) continue;
-    const locale = output.startsWith("it/") ? "it" : output.startsWith("ru/") ? "ru" : "en";
+    const locale = localeForOutput(output);
     const footer = fragment(buffer.toString(), /<footer class="site-footer"[\s\S]*?<\/footer>/, `${output} footer`);
     assert.equal(count(footer, /href="[^"]*links\/"/g), 1, `${output} footer needs exactly one Social Access route`);
     assert.ok(footer.includes(COPY[locale].pages.links.title), `${output} footer Social Access label is missing`);
@@ -84,14 +94,26 @@ test("renders 404 with only brand, language and one Return Home action", () => {
   for (const locale of locales) {
     const output = `${locale === "en" ? "" : `${locale}/`}404.html`;
     const html = pages.get(output).toString();
+    assert.ok(html.includes("data-lightweight-shell"), `${locale} 404 must opt into the lightweight shell`);
     assert.equal(count(html, /class="brand-link"/g), 1, `${locale} 404 needs the brand home link`);
     assert.equal(count(html, /data-language-switcher(?:[ >])/g), 1, `${locale} 404 needs the language switcher`);
     const action = fragment(html, /<a class="button" href="([^"]+)">([^<]+)<\/a>/, `${locale} Return Home action`);
     const [, href, label] = action.match(/<a class="button" href="([^"]+)">([^<]+)<\/a>/);
     assert.equal(label, COPY[locale].pages.notFound.cta, `${locale} 404 action label drifted`);
     assert.equal(href, `${SITE_BASE_PATH}/${locale === "en" ? "" : `${locale}/`}`, `${locale} 404 action must return to localized Home`);
-    const content = fragment(html, /<main[\s\S]*?<\/main>/, `${locale} 404 main`);
-    assert.equal(count(content, /<(?:a|button|summary)\b/g), 1, `${locale} 404 must not expose unrelated actions`);
+    const allActions = [...html.matchAll(/<(a|button|summary)\b[^>]*>/g)];
+    assert.equal(allActions.length, 5, `${locale} 404 may expose only brand, three language links and Return Home`);
+    assert.equal(count(html, /<(?:button|summary)\b/g), 0, `${locale} 404 must not add disclosure or control buttons`);
+    const actionPaths = [...html.matchAll(/<a\b[^>]*href="([^"]+)"[^>]*>/g)]
+      .map(([, actionHref]) => new URL(actionHref, "https://example.test/404.html").pathname)
+      .sort();
+    assert.deepEqual(actionPaths, [
+      `${SITE_BASE_PATH}/${locale === "en" ? "" : `${locale}/`}`,
+      `${SITE_BASE_PATH}/${locale === "en" ? "" : `${locale}/`}`,
+      `${SITE_BASE_PATH}/404.html`,
+      `${SITE_BASE_PATH}/it/404.html`,
+      `${SITE_BASE_PATH}/ru/404.html`
+    ].sort(), `${locale} 404 action set must stay limited and correctly localized`);
     for (const forbidden of [
       "data-audio-player",
       "data-hud-frame",

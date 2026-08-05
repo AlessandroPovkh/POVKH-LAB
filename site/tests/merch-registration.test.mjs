@@ -25,8 +25,16 @@ const expectedGarments = Object.freeze({
       placement: [528, 350, 480, 180]
     },
     views: {
-      "print-macro": "assets/merch/t-shirt-print-macro.webp",
-      "on-body": "assets/merch/t-shirt-on-body.webp"
+      "print-macro": {
+        publicPath: "assets/merch/t-shirt-print-macro.webp",
+        artworkQuad: [[250, 290], [1286, 300], [1280, 688], [256, 678]],
+        surfaceAnchors: [[150, 180], [1400, 190], [1390, 820], [160, 810]]
+      },
+      "on-body": {
+        publicPath: "assets/merch/t-shirt-on-body.webp",
+        artworkQuad: [[606, 330], [930, 330], [922, 452], [612, 452]],
+        surfaceAnchors: [[480, 235], [1055, 235], [1025, 700], [510, 700]]
+      }
     }
   },
   hoodie: {
@@ -40,8 +48,16 @@ const expectedGarments = Object.freeze({
       placement: [552, 365, 432, 162]
     },
     views: {
-      "print-macro": "assets/merch/hoodie-print-macro.webp",
-      "worn-rear": "assets/merch/hoodie-worn-rear.webp"
+      "print-macro": {
+        publicPath: "assets/merch/hoodie-print-macro.webp",
+        artworkQuad: [[254, 300], [1280, 310], [1274, 692], [254, 682]],
+        surfaceAnchors: [[140, 170], [1400, 180], [1390, 820], [150, 810]]
+      },
+      "worn-rear": {
+        publicPath: "assets/merch/hoodie-worn-rear.webp",
+        artworkQuad: [[621, 356], [895, 370], [889, 472], [621, 460]],
+        surfaceAnchors: [[520, 300], [1005, 330], [980, 790], [550, 760]]
+      }
     }
   }
 });
@@ -55,10 +71,41 @@ const readRegistration = async () => {
   return JSON.parse(source);
 };
 
-const assertAssetReference = (reference, label) => {
+const assertAssetReference = async (reference, label, expectedDimensions = null) => {
   assert.ok(reference && typeof reference === "object" && !Array.isArray(reference), `${label} must be an object`);
   assert.match(reference.path || "", safeProjectPath, `${label}.path must be a base-safe project path`);
   assert.match(reference.sha256 || "", sha256Pattern, `${label}.sha256 must lock exact source pixels`);
+  const file = path.join(siteRoot, reference.path);
+  const bytes = await readFile(file);
+  assert.equal(createHash("sha256").update(bytes).digest("hex"), reference.sha256, `${label} bytes drifted from the declared hash`);
+  if (expectedDimensions) {
+    const { stdout } = await execFile("ffprobe", [
+      "-v", "error", "-select_streams", "v:0", "-show_entries", "stream=width,height",
+      "-of", "csv=s=x:p=0", file
+    ]);
+    assert.equal(stdout.trim(), `${expectedDimensions.width}x${expectedDimensions.height}`, `${label} dimensions drifted`);
+  }
+};
+
+const pointInPolygon = (point, polygon) => {
+  let inside = false;
+  for (let index = 0, previous = polygon.length - 1; index < polygon.length; previous = index++) {
+    const a = polygon[index];
+    const b = polygon[previous];
+    const intersects = ((a.y > point.y) !== (b.y > point.y))
+      && (point.x < ((b.x - a.x) * (point.y - a.y)) / (b.y - a.y) + a.x);
+    if (intersects) inside = !inside;
+  }
+  return inside;
+};
+
+const decodeGray = async (reference, dimensions) => {
+  const { stdout } = await execFile("ffmpeg", [
+    "-hide_banner", "-loglevel", "error", "-i", path.join(siteRoot, reference.path),
+    "-frames:v", "1", "-f", "rawvideo", "-pix_fmt", "gray", "pipe:1"
+  ], { encoding: "buffer", maxBuffer: 10 * 1024 * 1024 });
+  assert.equal(stdout.length, dimensions.width * dimensions.height, `${reference.path} decoded mask size drifted`);
+  return stdout;
 };
 
 const determinant3 = ([a, b, c, d, e, f, g, h, i]) => (
@@ -130,13 +177,15 @@ test("declares an auditable surface quad, homography, garment mask and fabric la
   for (const [slug, expected] of Object.entries(expectedGarments)) {
     const views = registration.garments?.[slug]?.views;
     assert.deepEqual(Object.keys(views || {}), Object.keys(expected.views), `${slug} view contract must stay complete and ordered`);
-    for (const [role, publicPath] of Object.entries(expected.views)) {
+    for (const [role, expectedView] of Object.entries(expected.views)) {
       const view = views[role];
-      assert.equal(view.publicPath, publicPath);
+      assert.equal(view.publicPath, expectedView.publicPath);
       assert.deepEqual(view.output, { width: 1536, height: 1024 });
-      assertAssetReference(view.base, `${slug}.${role}.base`);
-      assertAssetReference(view.garmentMask, `${slug}.${role}.garmentMask`);
-      assertAssetReference(view.fabricModulation, `${slug}.${role}.fabricModulation`);
+      await assertAssetReference(view.base, `${slug}.${role}.base`, view.output);
+      await assertAssetReference(view.garmentMask, `${slug}.${role}.garmentMask`, view.output);
+      await assertAssetReference(view.appliedArtworkMask, `${slug}.${role}.appliedArtworkMask`, view.output);
+      await assertAssetReference(view.fabricModulation, `${slug}.${role}.fabricModulation`, view.output);
+      await assertAssetReference({ path: view.publicPath, sha256: view.outputSha256 }, `${slug}.${role}.publicOutput`, view.output);
       assert.equal(view.fabricModulation.enabled, true, `${slug}.${role} must preserve fold and fibre modulation`);
       assert.equal(view.surfaceAnchors?.length, 4, `${slug}.${role} needs four declared surface anchors`);
       for (const [index, anchor] of (view.surfaceAnchors || []).entries()) {
@@ -147,6 +196,14 @@ test("declares an auditable surface quad, homography, garment mask and fabric la
       assert.ok(Math.abs(determinant3(view.artworkToOutput)) > 1e-9, `${slug}.${role} homography must be invertible`);
       assert.equal(view.sourceCorners?.length, 4, `${slug}.${role} must declare four governed master corners`);
       assert.equal(view.artworkQuad?.length, 4, `${slug}.${role} must declare four governed output corners`);
+      assert.deepEqual(view.artworkQuad.map(({ x, y }) => [x, y]), expectedView.artworkQuad, `${slug}.${role} approved artwork quad drifted`);
+      assert.deepEqual(view.surfaceAnchors.map(({ x, y }) => [x, y]), expectedView.surfaceAnchors, `${slug}.${role} approved garment surface drifted`);
+      assert.ok(view.artworkQuad.every((point) => pointInPolygon(point, view.surfaceAnchors)), `${slug}.${role} artwork must stay inside the approved garment surface`);
+      const garmentMask = await decodeGray(view.garmentMask, view.output);
+      const artworkMask = await decodeGray(view.appliedArtworkMask, view.output);
+      for (let pixel = 0; pixel < artworkMask.length; pixel += 1) {
+        if (artworkMask[pixel] > 8) assert.ok(garmentMask[pixel] > 8, `${slug}.${role} artwork escapes garment mask at pixel ${pixel}`);
+      }
     }
   }
 });
