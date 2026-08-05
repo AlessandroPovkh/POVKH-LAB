@@ -467,6 +467,7 @@ try {
         }
 
         if (viewport.width === 375) {
+          await page.evaluate(() => { document.documentElement.style.scrollBehavior = "auto"; });
           await page.locator('.merch-hero a[href="#merch-objects"]').click();
           await page.waitForFunction(() => location.hash === "#merch-objects");
           await page.waitForFunction(() => {
@@ -486,10 +487,9 @@ try {
             fail(`${label}: merch hero CTA did not visibly reach the object index ${JSON.stringify(ctaNavigation)}`);
           }
           await page.evaluate(() => {
-            document.documentElement.style.scrollBehavior = "auto";
             window.scrollTo({ top: 0, left: 0, behavior: "instant" });
           });
-          await page.waitForFunction(() => scrollY === 0);
+          await page.waitForFunction(() => Math.abs(scrollY) <= 1);
         }
       }
 
