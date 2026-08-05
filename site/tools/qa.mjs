@@ -486,10 +486,16 @@ try {
           if (ctaNavigation.hash !== "#merch-objects" || !ctaNavigation.targetVisible) {
             fail(`${label}: merch hero CTA did not visibly reach the object index ${JSON.stringify(ctaNavigation)}`);
           }
+          await page.evaluate(() => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))));
           await page.evaluate(() => {
-            window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+            history.replaceState(history.state, "", `${location.pathname}${location.search}`);
+            window.scrollTo(0, 0);
+            document.documentElement.scrollTop = 0;
+            document.body.scrollTop = 0;
           });
-          await page.waitForFunction(() => Math.abs(scrollY) <= 1);
+          await page.evaluate(() => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+          const resetScrollY = await page.evaluate(() => scrollY);
+          if (Math.abs(resetScrollY) > 1) fail(`${label}: merch CTA audit did not reset scroll (${resetScrollY}px)`);
         }
       }
 
