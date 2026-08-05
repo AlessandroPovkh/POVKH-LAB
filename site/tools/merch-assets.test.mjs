@@ -1,22 +1,18 @@
 import assert from "node:assert/strict";
-import { execFile } from "node:child_process";
 import { createHash } from "node:crypto";
-import { mkdtemp, readFile, rm, stat } from "node:fs/promises";
+import { readFile, stat } from "node:fs/promises";
 import { createRequire } from "node:module";
-import os from "node:os";
 import path from "node:path";
-import { promisify } from "node:util";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
+import { chromium } from "playwright";
 import { loadMerchAssetManifest } from "./export-merch-assets.mjs";
 
 const siteRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const repoRoot = path.dirname(siteRoot);
 const library = JSON.parse(await readFile(path.join(siteRoot, "data", "merch.json"), "utf8"));
 const sha256 = (buffer) => createHash("sha256").update(buffer).digest("hex");
-const execFileAsync = promisify(execFile);
 const require = createRequire(import.meta.url);
-const { PNG } = require("pngjs");
 const {
   BinaryBitmap,
   HybridBinarizer,
@@ -25,28 +21,41 @@ const {
 } = require("@zxing/library");
 const publishedQrCrop = Object.freeze({ x: 868, y: 664, width: 126, height: 126, scale: 4 });
 
-const decodePublishedQr = (pngBuffer) => {
-  const png = PNG.sync.read(pngBuffer);
-  const width = publishedQrCrop.width * publishedQrCrop.scale;
-  const height = publishedQrCrop.height * publishedQrCrop.scale;
-  const luminance = new Uint8ClampedArray(width * height);
-
-  for (let y = 0; y < height; y += 1) {
-    const sourceY = publishedQrCrop.y + Math.floor(y / publishedQrCrop.scale);
-    for (let x = 0; x < width; x += 1) {
-      const sourceX = publishedQrCrop.x + Math.floor(x / publishedQrCrop.scale);
-      const sourceOffset = (sourceY * png.width + sourceX) * 4;
-      const targetOffset = y * width + x;
-      const alpha = png.data[sourceOffset + 3] / 255;
-      const red = png.data[sourceOffset] * alpha + 242 * (1 - alpha);
-      const green = png.data[sourceOffset + 1] * alpha + 239 * (1 - alpha);
-      const blue = png.data[sourceOffset + 2] * alpha + 231 * (1 - alpha);
-      luminance[targetOffset] = (red + 2 * green + blue) / 4;
-    }
-  }
-
-  const source = new RGBLuminanceSource(luminance, width, height);
+const decodePublishedQr = ({ luminance, width, height }) => {
+  const source = new RGBLuminanceSource(Uint8ClampedArray.from(luminance), width, height);
   return new QRCodeReader().decode(new BinaryBitmap(new HybridBinarizer(source))).getText();
+};
+
+const readPublishedQrPixels = async (webpPath) => {
+  const browser = await chromium.launch({ headless: true });
+  try {
+    const page = await browser.newPage();
+    const dataUrl = `data:image/webp;base64,${(await readFile(webpPath)).toString("base64")}`;
+    return await page.evaluate(async ({ sourceUrl, crop }) => {
+      const image = new Image();
+      image.src = sourceUrl;
+      await image.decode();
+      if (image.naturalWidth !== 1536 || image.naturalHeight !== 1024) {
+        throw new Error(`unexpected public QR sheet dimensions ${image.naturalWidth}x${image.naturalHeight}`);
+      }
+      const width = crop.width * crop.scale;
+      const height = crop.height * crop.scale;
+      const canvas = document.createElement("canvas");
+      canvas.width = width;
+      canvas.height = height;
+      const context = canvas.getContext("2d", { alpha: false, willReadFrequently: true });
+      context.imageSmoothingEnabled = false;
+      context.drawImage(image, crop.x, crop.y, crop.width, crop.height, 0, 0, width, height);
+      const rgba = context.getImageData(0, 0, width, height).data;
+      const luminance = new Uint8Array(width * height);
+      for (let sourceOffset = 0, targetOffset = 0; sourceOffset < rgba.length; sourceOffset += 4, targetOffset += 1) {
+        luminance[targetOffset] = (rgba[sourceOffset] + 2 * rgba[sourceOffset + 1] + rgba[sourceOffset + 2]) / 4;
+      }
+      return { luminance: [...luminance], width, height };
+    }, { sourceUrl: dataUrl, crop: publishedQrCrop });
+  } finally {
+    await browser.close();
+  }
 };
 
 const webpDimensions = (buffer) => {
@@ -160,22 +169,6 @@ test("the exact 50 public concept exports match source and registry authority", 
 });
 
 test("the QR survives the public WebP export and resolves to the fixed smart-link route", async () => {
-  const temporaryDirectory = await mkdtemp(path.join(os.tmpdir(), "pvkh-merch-qr-"));
-  const decodedPng = path.join(temporaryDirectory, "sticker-pack-sheet.png");
-
-  try {
-    await execFileAsync("ffmpeg", [
-      "-hide_banner",
-      "-loglevel", "error",
-      "-i", path.join(siteRoot, "assets/merch/sticker-pack-sheet.webp"),
-      "-frames:v", "1",
-      decodedPng
-    ]);
-    assert.equal(
-      decodePublishedQr(await readFile(decodedPng)),
-      "https://alessandropovkh.github.io/POVKH-LAB/links/"
-    );
-  } finally {
-    await rm(temporaryDirectory, { recursive: true, force: true });
-  }
+  const pixels = await readPublishedQrPixels(path.join(siteRoot, "assets/merch/sticker-pack-sheet.webp"));
+  assert.equal(decodePublishedQr(pixels), "https://alessandropovkh.github.io/POVKH-LAB/links/");
 });
