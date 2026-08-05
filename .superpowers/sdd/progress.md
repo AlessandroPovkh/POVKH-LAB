@@ -2,7 +2,7 @@
 
 | Task | Implementation | Spec review | Quality review | Status |
 | --- | --- | --- | --- | --- |
-| 1. Governance tests | — | — | — | pending |
+| 1. Governance tests | tests-only RED | — | — | red / implementation pending |
 | 2. Apparel registration | — | — | — | pending |
 | 3. PHYSICAL motion | — | — | — | pending |
 | 4. 3D runtime | — | — | — | pending |
@@ -21,3 +21,10 @@
 - Never modify the shared dirty `data-key-003` worktree; source reads only.
 - Exact brand artwork only; no generated/retyped logos or microtype.
 - Do not mark a task complete until tests and both reviews pass.
+
+## Task 1 RED evidence
+
+- `npm run test:merch-registration` — expected failure until the governed v2 registration file and exact apparel source packet exist.
+- `npm run test:merch-viewer-contract` — expected failure until every DROP 001 object declares poster-first viewer metadata.
+- `npm run test:interface-hierarchy` — expected failure until the four-route primary navigation, progressive Menu / Index, single Social Access footer route, single status hierarchy and lightweight 404 are implemented.
+- This is a tests-only checkpoint. Task 1 remains unreviewed and no production behavior has been changed.
