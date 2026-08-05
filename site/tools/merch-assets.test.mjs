@@ -20,6 +20,12 @@ const {
   RGBLuminanceSource
 } = require("@zxing/library");
 const publishedQrCrop = Object.freeze({ x: 868, y: 664, width: 126, height: 126, scale: 4 });
+const governedApparelRegistrationSources = new Set([
+  "site/tools/fixtures/apparel-registration/renders/t-shirt-print-macro-registration-v02.png",
+  "site/tools/fixtures/apparel-registration/renders/t-shirt-on-body-registration-v02.png",
+  "site/tools/fixtures/apparel-registration/renders/hoodie-print-macro-registration-v02.png",
+  "site/tools/fixtures/apparel-registration/renders/hoodie-worn-rear-registration-v02.png"
+]);
 
 const decodePublishedQr = ({ luminance, width, height }) => {
   const source = new RGBLuminanceSource(Uint8ClampedArray.from(luminance), width, height);
@@ -135,7 +141,11 @@ test("the exact 50 public concept exports match source and registry authority", 
       { objectId: asset.objectId, slug: asset.slug, role: asset.role, path: asset.publicPath },
       { objectId: expected.objectId, slug: expected.slug, role: expected.role, path: expected.path }
     );
-    assert.match(asset.source, /^production\/(?!.*(?:^|\/)\.\.(?:\/|$)).+\.png$/);
+    assert.ok(
+      /^production\/(?!.*(?:^|\/)\.\.(?:\/|$)).+\.png$/.test(asset.source)
+        || governedApparelRegistrationSources.has(asset.source),
+      `source must be private production authority or a governed apparel registration render: ${asset.source}`
+    );
     assert.match(asset.sourceSha256, /^[a-f0-9]{64}$/);
     assert.match(asset.outputSha256, /^[a-f0-9]{64}$/);
     assert.ok(!sourcePaths.has(asset.source), `duplicate source path ${asset.source}`);

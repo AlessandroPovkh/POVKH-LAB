@@ -18,6 +18,7 @@
     "check:pages-base": "node tools/check-pages-base.mjs",
     "qa": "node tools/qa.mjs",
     "assets:merch": "node tools/export-merch-assets.mjs",
+    "assets:apparel-registration": "node tools/render-apparel-registration.mjs",
     "test:merch": "node --test tools/merch.test.mjs",
     "test:merch-assets": "node --test tools/merch-assets.test.mjs",
     "test:merch-assets:source": "PVKH_VERIFY_PRIVATE_MERCH_SOURCES=1 node --test tools/merch-assets.test.mjs",

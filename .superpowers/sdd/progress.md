@@ -2,8 +2,8 @@
 
 | Task | Implementation | Spec review | Quality review | Status |
 | --- | --- | --- | --- | --- |
-| 1. Governance tests | tests-only RED | gaps fixed | important gaps fixed | red / final review pending |
-| 2. Apparel registration | — | — | — | pending |
+| 1. Governance tests | tests-only RED | passed after fixes | passed after fixes | completed / intentional RED |
+| 2. Apparel registration | implemented / tests green | — | — | implementation complete / reviews pending |
 | 3. PHYSICAL motion | — | — | — | pending |
 | 4. 3D runtime | — | — | — | pending |
 | 5. Cassette + hoodie POC | — | — | — | pending |
@@ -30,3 +30,14 @@
 - This is a tests-only checkpoint. Task 1 remains unreviewed and no production behavior has been changed.
 - Spec review found six gaps; source-byte/dimension checks, independent homography math, spin budgets, exact navigation destinations, all-page footer coverage and exact 404 action coverage were added.
 - Quality review added byte/dimension verification for every registration asset/output, pixel-level artwork-vs-garment masks, locked apparel surfaces/quads, all-route header/Menu coverage and an exact five-action lightweight 404 shell.
+
+## Task 2 implementation evidence
+
+- Copied only the two locked 1600×600 artwork masters and four 1536×1024 blank apparel bases into the governed registration fixture; all six source SHA-256 values match the read-only authority.
+- `npm run assets:apparel-registration` deterministically reproduces four source PNGs, garment masks, actual-alpha artwork masks, q88 metadata-stripped public WebPs and `data/apparel-print-registration-v02.json`.
+- A second complete render reproduced the same PNG, mask, WebP and JSON hashes.
+- `npm run test:merch-registration` — passed 5/5.
+- `npm run test:merch-assets` — passed 2/2.
+- `npm run test:merch-pages` — passed 1/1.
+- `npm run test:merch` — passed 10/10.
+- Full-resolution WebPs and 375×250 mobile presentations were inspected; all four retain the exact raster artwork and fabric modulation inside the locked quads.

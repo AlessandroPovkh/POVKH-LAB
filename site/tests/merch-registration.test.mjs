@@ -108,6 +108,15 @@ const decodeGray = async (reference, dimensions) => {
   return stdout;
 };
 
+const decodeRgb = async (reference, dimensions) => {
+  const { stdout } = await execFile("ffmpeg", [
+    "-hide_banner", "-loglevel", "error", "-i", path.join(siteRoot, reference.path),
+    "-frames:v", "1", "-f", "rawvideo", "-pix_fmt", "rgb24", "pipe:1"
+  ], { encoding: "buffer", maxBuffer: 20 * 1024 * 1024 });
+  assert.equal(stdout.length, dimensions.width * dimensions.height * 3, `${reference.path} decoded RGB size drifted`);
+  return stdout;
+};
+
 const determinant3 = ([a, b, c, d, e, f, g, h, i]) => (
   a * (e * i - f * h) - b * (d * i - f * g) + c * (d * h - e * g)
 );
@@ -182,6 +191,7 @@ test("declares an auditable surface quad, homography, garment mask and fabric la
       assert.equal(view.publicPath, expectedView.publicPath);
       assert.deepEqual(view.output, { width: 1536, height: 1024 });
       await assertAssetReference(view.base, `${slug}.${role}.base`, view.output);
+      await assertAssetReference(view.sourceRender, `${slug}.${role}.sourceRender`, view.output);
       await assertAssetReference(view.garmentMask, `${slug}.${role}.garmentMask`, view.output);
       await assertAssetReference(view.appliedArtworkMask, `${slug}.${role}.appliedArtworkMask`, view.output);
       await assertAssetReference(view.fabricModulation, `${slug}.${role}.fabricModulation`, view.output);
@@ -208,6 +218,33 @@ test("declares an auditable surface quad, homography, garment mask and fabric la
   }
 });
 
+test("re-layers hoodie fabric across transparent pixels inside the full artwork quad", async () => {
+  const registration = await readRegistration();
+  for (const [role, view] of Object.entries(registration.garments.hoodie.views)) {
+    assert.equal(view.fabricModulation.artworkBlendMode, "normal", `hoodie.${role} artwork blend drifted`);
+    assert.equal(view.fabricModulation.artworkOpacity, 0.88, `hoodie.${role} artwork opacity drifted`);
+    assert.equal(view.fabricModulation.textureReturnOpacity, 0.16, `hoodie.${role} texture return drifted`);
+    assert.equal(view.fabricModulation.textureReturnClip, "artworkQuad", `hoodie.${role} texture return clip drifted`);
+    const [base, render, artworkMask] = await Promise.all([
+      decodeRgb(view.base, view.output),
+      decodeRgb(view.sourceRender, view.output),
+      decodeGray(view.appliedArtworkMask, view.output)
+    ]);
+    let transparentTexturePixels = 0;
+    for (let y = 0; y < view.output.height; y += 1) {
+      for (let x = 0; x < view.output.width; x += 1) {
+        const pixel = y * view.output.width + x;
+        if (artworkMask[pixel] !== 0 || !pointInPolygon({ x: x + 0.5, y: y + 0.5 }, view.artworkQuad)) continue;
+        const offset = pixel * 3;
+        if (base[offset] !== render[offset] || base[offset + 1] !== render[offset + 1] || base[offset + 2] !== render[offset + 2]) {
+          transparentTexturePixels += 1;
+        }
+      }
+    }
+    assert.ok(transparentTexturePixels > 500, `hoodie.${role} must return base texture across transparent artwork pixels`);
+  }
+});
+
 test("keeps every inverse-projected print within the normalized 0.02 scale and centre tolerances", async () => {
   const registration = await readRegistration();
   const tolerance = registration.canonicalPlane?.tolerances;
@@ -231,4 +268,10 @@ test("keeps every inverse-projected print within the normalized 0.02 scale and c
       assert.deepEqual(bounds(view.sourceCorners), { left: 0, right: 1600, top: 0, bottom: 600 }, `${slug}.${role} source corners must cover the exact master`);
     }
   }
+});
+
+test("the deterministic compositor verifies every governed source and output byte", async () => {
+  const renderer = path.join(siteRoot, "tools", "render-apparel-registration.mjs");
+  const { stdout } = await execFile(process.execPath, [renderer, "--verify"]);
+  assert.match(stdout, /verified 4 apparel registrations/);
 });

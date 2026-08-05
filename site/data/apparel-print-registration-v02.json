@@ -1,0 +1,465 @@
+{
+  "schemaVersion": 2,
+  "canonicalPlane": {
+    "width": 1600,
+    "height": 600,
+    "physicalSizeMm": {
+      "width": 300,
+      "height": 112.5
+    },
+    "tolerances": {
+      "scale": 0.02,
+      "center": 0.02
+    }
+  },
+  "renderer": {
+    "path": "tools/render-apparel-registration.mjs",
+    "method": "inverse-homography bilinear RGBA composition",
+    "publicEncoder": "ffmpeg/libwebp q=88 yuv420p metadata-stripped",
+    "deterministic": true
+  },
+  "garments": {
+    "t-shirt": {
+      "master": {
+        "path": "tools/fixtures/apparel-registration/artwork/PVKH_ASCII_DARK_KNOCKOUT_EXACT_1600x600_v01.png",
+        "sha256": "c46bf6bd82ea2ec6928e9fe4ca9a314b56580af49c044be0395579c43c06dada",
+        "width": 1600,
+        "height": 600
+      },
+      "approvedHero": {
+        "path": "assets/merch/t-shirt-front.webp",
+        "canvas": {
+          "width": 1600,
+          "height": 900
+        },
+        "placement": {
+          "x": 528,
+          "y": 350,
+          "width": 480,
+          "height": 180
+        }
+      },
+      "views": {
+        "print-macro": {
+          "publicPath": "assets/merch/t-shirt-print-macro.webp",
+          "output": {
+            "width": 1536,
+            "height": 1024
+          },
+          "base": {
+            "path": "tools/fixtures/apparel-registration/bases/PVKH_BONE_SOURCE_TEE_PRINT_FIBER_MACRO_BLANK_BASE_v01.png",
+            "sha256": "cf6541fdeb286dd1c127cc3236e586a1907bb1a44ef398fa16bda178ff9bb042"
+          },
+          "sourceRender": {
+            "path": "tools/fixtures/apparel-registration/renders/t-shirt-print-macro-registration-v02.png",
+            "sha256": "284d69231f5fe99f6ba3f5accdc7007a20933709eee96ffd31851897c51d0331"
+          },
+          "garmentMask": {
+            "path": "tools/fixtures/apparel-registration/masks/t-shirt-print-macro-garment-mask-v02.png",
+            "sha256": "5b056ffc83f20309d955fc0b307848f6e0bc134deeecde3df48b47c2472dc9e0"
+          },
+          "appliedArtworkMask": {
+            "path": "tools/fixtures/apparel-registration/masks/t-shirt-print-macro-applied-artwork-mask-v02.png",
+            "sha256": "da66ae20d7c507b5a3a21f008015c0ee02da66f649db2533db8d03deeda3a626"
+          },
+          "fabricModulation": {
+            "enabled": true,
+            "path": "tools/fixtures/apparel-registration/bases/PVKH_BONE_SOURCE_TEE_PRINT_FIBER_MACRO_BLANK_BASE_v01.png",
+            "sha256": "cf6541fdeb286dd1c127cc3236e586a1907bb1a44ef398fa16bda178ff9bb042",
+            "artworkBlendMode": "multiply",
+            "artworkOpacity": 0.92,
+            "textureReturnOpacity": 0,
+            "textureReturnClip": "artworkQuad"
+          },
+          "sourceCorners": [
+            {
+              "x": 0,
+              "y": 0
+            },
+            {
+              "x": 1600,
+              "y": 0
+            },
+            {
+              "x": 1600,
+              "y": 600
+            },
+            {
+              "x": 0,
+              "y": 600
+            }
+          ],
+          "surfaceAnchors": [
+            {
+              "x": 150,
+              "y": 180
+            },
+            {
+              "x": 1400,
+              "y": 190
+            },
+            {
+              "x": 1390,
+              "y": 820
+            },
+            {
+              "x": 160,
+              "y": 810
+            }
+          ],
+          "artworkQuad": [
+            {
+              "x": 250,
+              "y": 290
+            },
+            {
+              "x": 1286,
+              "y": 300
+            },
+            {
+              "x": 1280,
+              "y": 688
+            },
+            {
+              "x": 256,
+              "y": 678
+            }
+          ],
+          "artworkToOutput": [
+            0.6472572803317799,
+            0.01499924503991222,
+            250,
+            0.006193377993416781,
+            0.6599068547020592,
+            290,
+            -1.8874002194408165e-7,
+            0.00001952830093715712,
+            1
+          ],
+          "outputSha256": "0f7a78e92d72a2a874fe842efb6136f72bbb00ce5f04eb481edd9cef0e8d015f",
+          "encoder": "ffmpeg/libwebp q=88 yuv420p metadata-stripped"
+        },
+        "on-body": {
+          "publicPath": "assets/merch/t-shirt-on-body.webp",
+          "output": {
+            "width": 1536,
+            "height": 1024
+          },
+          "base": {
+            "path": "tools/fixtures/apparel-registration/bases/PVKH_BONE_SOURCE_TEE_ON_BODY_FRONT_BLANK_BASE_v01.png",
+            "sha256": "67e2c519ea7fee2d67303bef4088ebb98cca75d4d5325749c057551efd950b5e"
+          },
+          "sourceRender": {
+            "path": "tools/fixtures/apparel-registration/renders/t-shirt-on-body-registration-v02.png",
+            "sha256": "c41f7436f6959e82852ba1f30ca6c271015c8631706900822d84a49ea519f5aa"
+          },
+          "garmentMask": {
+            "path": "tools/fixtures/apparel-registration/masks/t-shirt-on-body-garment-mask-v02.png",
+            "sha256": "87b240af73c2da10f9c65eed1425cc7a90388a468667053a1153ee6762cb37a3"
+          },
+          "appliedArtworkMask": {
+            "path": "tools/fixtures/apparel-registration/masks/t-shirt-on-body-applied-artwork-mask-v02.png",
+            "sha256": "e52fbd62b19efa603e566fd1935a4f8d3c390b2fbdfe592e9051a959467724f8"
+          },
+          "fabricModulation": {
+            "enabled": true,
+            "path": "tools/fixtures/apparel-registration/bases/PVKH_BONE_SOURCE_TEE_ON_BODY_FRONT_BLANK_BASE_v01.png",
+            "sha256": "67e2c519ea7fee2d67303bef4088ebb98cca75d4d5325749c057551efd950b5e",
+            "artworkBlendMode": "multiply",
+            "artworkOpacity": 0.92,
+            "textureReturnOpacity": 0,
+            "textureReturnClip": "artworkQuad"
+          },
+          "sourceCorners": [
+            {
+              "x": 0,
+              "y": 0
+            },
+            {
+              "x": 1600,
+              "y": 0
+            },
+            {
+              "x": 1600,
+              "y": 600
+            },
+            {
+              "x": 0,
+              "y": 600
+            }
+          ],
+          "surfaceAnchors": [
+            {
+              "x": 480,
+              "y": 235
+            },
+            {
+              "x": 1055,
+              "y": 235
+            },
+            {
+              "x": 1025,
+              "y": 700
+            },
+            {
+              "x": 510,
+              "y": 700
+            }
+          ],
+          "artworkQuad": [
+            {
+              "x": 606,
+              "y": 330
+            },
+            {
+              "x": 930,
+              "y": 330
+            },
+            {
+              "x": 922,
+              "y": 452
+            },
+            {
+              "x": 612,
+              "y": 452
+            }
+          ],
+          "artworkToOutput": [
+            0.2025,
+            0.056064516129032634,
+            606,
+            0,
+            0.23735483870967772,
+            330,
+            0,
+            0.00007526881720430169,
+            1
+          ],
+          "outputSha256": "02acf8b05cdb16b227c723235046fc7a0b22e819b3c85bad7181932975f854e8",
+          "encoder": "ffmpeg/libwebp q=88 yuv420p metadata-stripped"
+        }
+      }
+    },
+    "hoodie": {
+      "master": {
+        "path": "tools/fixtures/apparel-registration/artwork/PVKH_ASCII_REVERSE_EXACT_1600x600_v01.png",
+        "sha256": "284e69cfb0e6e7fef2a993f44289577efabd1fae576c9280bab4d4e2f59b398f",
+        "width": 1600,
+        "height": 600
+      },
+      "approvedHero": {
+        "path": "assets/merch/hoodie-rear.webp",
+        "canvas": {
+          "width": 1600,
+          "height": 900
+        },
+        "placement": {
+          "x": 552,
+          "y": 365,
+          "width": 432,
+          "height": 162
+        }
+      },
+      "views": {
+        "print-macro": {
+          "publicPath": "assets/merch/hoodie-print-macro.webp",
+          "output": {
+            "width": 1536,
+            "height": 1024
+          },
+          "base": {
+            "path": "tools/fixtures/apparel-registration/bases/PVKH_VOID_BACKMARK_HOODIE_PRINT_FIBER_MACRO_BLANK_BASE_v01.png",
+            "sha256": "46fe2c064e42d8420eca02b7ef75a0eaa37ad4fe3768e67d2e111d651ad84b15"
+          },
+          "sourceRender": {
+            "path": "tools/fixtures/apparel-registration/renders/hoodie-print-macro-registration-v02.png",
+            "sha256": "887243fbbc7599773b718dc5d8144068db6741f9f2b502b24f53cabef519cbbd"
+          },
+          "garmentMask": {
+            "path": "tools/fixtures/apparel-registration/masks/hoodie-print-macro-garment-mask-v02.png",
+            "sha256": "c8ed116242a7431517fcc2dceda911991f86b9537e569bdd7d251e2605ea361b"
+          },
+          "appliedArtworkMask": {
+            "path": "tools/fixtures/apparel-registration/masks/hoodie-print-macro-applied-artwork-mask-v02.png",
+            "sha256": "9d2fef489311b6d29b3ddb2ac8e5919c8c83250b33ad7a5618be99a56fffea34"
+          },
+          "fabricModulation": {
+            "enabled": true,
+            "path": "tools/fixtures/apparel-registration/bases/PVKH_VOID_BACKMARK_HOODIE_PRINT_FIBER_MACRO_BLANK_BASE_v01.png",
+            "sha256": "46fe2c064e42d8420eca02b7ef75a0eaa37ad4fe3768e67d2e111d651ad84b15",
+            "artworkBlendMode": "normal",
+            "artworkOpacity": 0.88,
+            "textureReturnOpacity": 0.16,
+            "textureReturnClip": "artworkQuad"
+          },
+          "sourceCorners": [
+            {
+              "x": 0,
+              "y": 0
+            },
+            {
+              "x": 1600,
+              "y": 0
+            },
+            {
+              "x": 1600,
+              "y": 600
+            },
+            {
+              "x": 0,
+              "y": 600
+            }
+          ],
+          "surfaceAnchors": [
+            {
+              "x": 140,
+              "y": 170
+            },
+            {
+              "x": 1400,
+              "y": 180
+            },
+            {
+              "x": 1390,
+              "y": 820
+            },
+            {
+              "x": 150,
+              "y": 810
+            }
+          ],
+          "artworkQuad": [
+            {
+              "x": 254,
+              "y": 300
+            },
+            {
+              "x": 1280,
+              "y": 310
+            },
+            {
+              "x": 1274,
+              "y": 692
+            },
+            {
+              "x": 254,
+              "y": 682
+            }
+          ],
+          "artworkToOutput": [
+            0.6411268283294843,
+            0.002489812676417756,
+            254,
+            0.006220169361046965,
+            0.6433519117269695,
+            300,
+            -9.622786759045419e-8,
+            0.000009802412111880934,
+            1
+          ],
+          "outputSha256": "6c211bb6ccbcee5e11eb5e6e4bfa5c549b6d2c386d3fea7e85995b733e5b0f9c",
+          "encoder": "ffmpeg/libwebp q=88 yuv420p metadata-stripped"
+        },
+        "worn-rear": {
+          "publicPath": "assets/merch/hoodie-worn-rear.webp",
+          "output": {
+            "width": 1536,
+            "height": 1024
+          },
+          "base": {
+            "path": "tools/fixtures/apparel-registration/bases/PVKH_VOID_BACKMARK_HOODIE_WORN_REAR_THREE_QUARTER_BLANK_BASE_v01.png",
+            "sha256": "8556c8051f28f0f15bbf42d3ecce780d42b7802db9f556a2e85039f1cd3d666c"
+          },
+          "sourceRender": {
+            "path": "tools/fixtures/apparel-registration/renders/hoodie-worn-rear-registration-v02.png",
+            "sha256": "a3c08bd380fd18a1e124174b2dbaf7896efb79b3d14309080d046d9291cb0f93"
+          },
+          "garmentMask": {
+            "path": "tools/fixtures/apparel-registration/masks/hoodie-worn-rear-garment-mask-v02.png",
+            "sha256": "f1fbcab15dce95a500c432cf9983bdea31d20566191b466b0d74f69a0d66ada6"
+          },
+          "appliedArtworkMask": {
+            "path": "tools/fixtures/apparel-registration/masks/hoodie-worn-rear-applied-artwork-mask-v02.png",
+            "sha256": "38cd91e754fa62b8793149e12d60a2ce3276597be1907d017b1084db3084cb95"
+          },
+          "fabricModulation": {
+            "enabled": true,
+            "path": "tools/fixtures/apparel-registration/bases/PVKH_VOID_BACKMARK_HOODIE_WORN_REAR_THREE_QUARTER_BLANK_BASE_v01.png",
+            "sha256": "8556c8051f28f0f15bbf42d3ecce780d42b7802db9f556a2e85039f1cd3d666c",
+            "artworkBlendMode": "normal",
+            "artworkOpacity": 0.88,
+            "textureReturnOpacity": 0.16,
+            "textureReturnClip": "artworkQuad"
+          },
+          "sourceCorners": [
+            {
+              "x": 0,
+              "y": 0
+            },
+            {
+              "x": 1600,
+              "y": 0
+            },
+            {
+              "x": 1600,
+              "y": 600
+            },
+            {
+              "x": 0,
+              "y": 600
+            }
+          ],
+          "surfaceAnchors": [
+            {
+              "x": 520,
+              "y": 300
+            },
+            {
+              "x": 1005,
+              "y": 330
+            },
+            {
+              "x": 980,
+              "y": 790
+            },
+            {
+              "x": 550,
+              "y": 760
+            }
+          ],
+          "artworkQuad": [
+            {
+              "x": 621,
+              "y": 356
+            },
+            {
+              "x": 895,
+              "y": 370
+            },
+            {
+              "x": 889,
+              "y": 472
+            },
+            {
+              "x": 621,
+              "y": 460
+            }
+          ],
+          "artworkToOutput": [
+            0.18071986281377697,
+            0.023563922942206224,
+            621,
+            0.012664915353181571,
+            0.1907880910683009,
+            356,
+            0.00001058085230589612,
+            0.000037945125510799064,
+            1
+          ],
+          "outputSha256": "9a4bf9c4b080657a1cd23ab5abd54874c04b95a1f97bb8d42092e2bf068776c1",
+          "encoder": "ffmpeg/libwebp q=88 yuv420p metadata-stripped"
+        }
+      }
+    }
+  }
+}
