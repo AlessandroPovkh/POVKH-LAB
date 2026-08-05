@@ -1219,7 +1219,7 @@ main:focus {
 .card-title,
 .empty-title {
   margin: 0;
-  font-family: "Barlow Condensed", "Arial Narrow", sans-serif;
+  font-family: "Barlow Condensed", Arial, sans-serif;
   font-weight: 800;
   line-height: 0.82;
   letter-spacing: -0.035em;
@@ -2637,13 +2637,17 @@ html .artist-profile-heading .page-title {
   min-width: 0;
 }
 
+.social-access-intro {
+  container-type: inline-size;
+}
+
 .social-access-title {
   display: flex;
   flex-direction: column;
   max-width: 10ch;
   margin: 0;
-  font-family: "Barlow Condensed", Impact, sans-serif;
-  font-size: clamp(5rem, 11vw, 10.5rem);
+  font-family: "Barlow Condensed", Arial, sans-serif;
+  font-size: clamp(4rem, 22cqi, 9rem);
   font-weight: 800;
   line-height: 0.76;
   letter-spacing: -0.055em;
@@ -2651,12 +2655,12 @@ html .artist-profile-heading .page-title {
 }
 
 html[lang="it"] .social-access-title {
-  font-size: clamp(4rem, 9vw, 8.5rem);
+  font-size: clamp(3.5rem, 19cqi, 7.5rem);
 }
 
 html[lang="ru"] .social-access-title {
   max-width: none;
-  font-size: clamp(3rem, 5vw, 6rem);
+  font-size: clamp(2.25rem, 11cqi, 4.75rem);
   letter-spacing: -0.045em;
 }
 
@@ -2823,13 +2827,13 @@ html[lang="ru"] .social-access-title {
   .social-access-title,
   html[lang="it"] .social-access-title {
     max-width: 100%;
-    font-size: clamp(2rem, calc(15vw + 0.5rem), 7rem);
+    font-size: clamp(1.5rem, calc(14vw + 0.4rem), 6.5rem);
     line-height: 0.8;
   }
 
   html[lang="ru"] .social-access-title {
     max-width: 100%;
-    font-size: clamp(1.2rem, calc(10vw + 0.5rem), 4.5rem);
+    font-size: clamp(1rem, calc(8vw + 0.25rem), 4rem);
     line-height: 0.84;
   }
 
@@ -3638,11 +3642,12 @@ html[lang="ru"] .page-merch .page-title {
   z-index: 1;
   grid-column: 1 / span 4;
   min-width: 0;
+  container-type: inline-size;
 }
 
 .merch-detail-copy .page-title {
   max-width: 13ch;
-  font-size: clamp(1rem, calc(9vw + 0.35rem), 4.5rem);
+  font-size: clamp(1rem, calc(12cqi + 0.35rem), 3.75rem);
   overflow-wrap: normal;
   word-break: normal;
   hyphens: none;
@@ -3650,7 +3655,7 @@ html[lang="ru"] .page-merch .page-title {
 
 html[lang="ru"] .merch-detail-copy .page-title {
   max-width: 15ch;
-  font-size: clamp(1rem, calc(8vw + 0.35rem), 3.75rem);
+  font-size: clamp(1rem, calc(10cqi + 0.35rem), 3.25rem);
 }
 
 .merch-detail-index {
@@ -3780,9 +3785,13 @@ html[lang="ru"] .merch-detail-copy .page-title {
   border-top: 1px solid var(--line-strong);
 }
 
+.merch-detail-story > div:last-child {
+  container-type: inline-size;
+}
+
 .merch-detail-story .section-title {
   max-width: 16ch;
-  font-size: clamp(1rem, calc(6vw + 0.4rem), 4.5rem);
+  font-size: clamp(0.85rem, calc(8cqi + 0.4rem), 3.75rem);
   overflow-wrap: normal;
   word-break: normal;
   hyphens: none;
@@ -3790,7 +3799,7 @@ html[lang="ru"] .merch-detail-copy .page-title {
 
 html[lang="ru"] .merch-detail-story .section-title {
   max-width: 18ch;
-  font-size: clamp(0.9rem, calc(7vw + 0.25rem), 3.75rem);
+  font-size: clamp(0.75rem, calc(7cqi + 0.3rem), 3.25rem);
 }
 
 .merch-story-datum {
@@ -4005,11 +4014,11 @@ html[lang="ru"] .merch-detail-story .section-title {
 
 @media (min-width: 64.01rem) {
   .merch-detail-story .section-title {
-    font-size: clamp(2rem, calc(3vw + 1.5rem), 4.5rem);
+    font-size: clamp(2rem, calc(10cqi + 0.25rem), 3.75rem);
   }
 
   html[lang="ru"] .merch-detail-story .section-title {
-    font-size: clamp(1.75rem, calc(2.3vw + 1.25rem), 3.75rem);
+    font-size: clamp(1.75rem, calc(8cqi + 0.25rem), 3.25rem);
   }
 }
 
