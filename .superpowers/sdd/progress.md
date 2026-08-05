@@ -3,7 +3,7 @@
 | Task | Implementation | Spec review | Quality review | Status |
 | --- | --- | --- | --- | --- |
 | 1. Governance tests | tests-only RED | passed after fixes | passed after fixes | completed / intentional RED |
-| 2. Apparel registration | implemented / tests green | — | quality fixes implemented | implementation complete / re-review pending |
+| 2. Apparel registration | implemented / tests green | passed | passed after hardening | completed |
 | 3. PHYSICAL motion | — | — | — | pending |
 | 4. 3D runtime | — | — | — | pending |
 | 5. Cassette + hoodie POC | — | — | — | pending |
