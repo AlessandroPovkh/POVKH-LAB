@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "scene": "physical",
+  "sequence": "scan > register > materialise > hold",
+  "renderer": "Playwright + ffmpeg",
+  "sourceSha256": "30c5385589c083f873d6ddbc02d34363ede30aaad0281c81c705888fbb1e26ad",
+  "assets": [
+    {
+      "file": "PVKH_MOTION_BLOB_PHYSICAL_1920x1080_v1.mp4",
+      "width": 1920,
+      "height": 1080,
+      "durationSeconds": 3,
+      "fps": 30,
+      "format": "mp4",
+      "audio": false,
+      "sha256": "ff89ac6bf1861040205ae3a6e8602fe99aac7dad3ae154bd6a028ac6796dcbfe"
+    },
+    {
+      "file": "PVKH_MOTION_BLOB_PHYSICAL_1920x1080_v1.webm",
+      "width": 1920,
+      "height": 1080,
+      "durationSeconds": 3,
+      "fps": 30,
+      "format": "webm",
+      "audio": false,
+      "sha256": "1fcc14b4ccd5620e45788638bbfa0f3c52861a5a68ee3d6c7360c2c0b4c9c99d"
+    },
+    {
+      "file": "PVKH_MOTION_BLOB_PHYSICAL_MOBILE_640x360_v1.mp4",
+      "width": 640,
+      "height": 360,
+      "durationSeconds": 3,
+      "fps": 24,
+      "format": "mp4",
+      "audio": false,
+      "sha256": "1fef0f63d949607c8be7a6aae0e6af3280e1037d9972801bbdc2c9bde4492449"
+    },
+    {
+      "file": "PVKH_MOTION_BLOB_PHYSICAL_MOBILE_640x360_v1.webm",
+      "width": 640,
+      "height": 360,
+      "durationSeconds": 3,
+      "fps": 24,
+      "format": "webm",
+      "audio": false,
+      "sha256": "9fe5fd9f088eb0d32291763fddc1ffabed6592fda73ebdc130e197a4dd7831ad"
+    }
+  ]
+}

@@ -15,6 +15,7 @@
 | `blob-signal` | 1920×1080 | 3.00 s seamless | 30 | amber `SIGNAL` hero background |
 | `blob-link` | 1920×1080 | 3.00 s seamless | 30 | cyan `LINK` hero background |
 | `blob-prime` | 1920×1080 | 3.00 s seamless | 30 | acid `PRIME` hero background |
+| `physical` | 1920×1080 + 640×360 | 3.00 s seamless | 30 / 24 | Signal Red merch materialisation: scan → register → materialise → hold |
 | `ambient-field` | 1280×720 | 4.00 s seamless | 24 | monochrome site-wide analyzer/noise background |
 | `lower-third` | 1920×1080 | 4.00 s | 24 | artist/release lower third |
 | `story` | 1080×1920 | 5.00 s | 30 | вертикальный Story/Reel release preset |
@@ -27,6 +28,7 @@
 
 ```bash
 node render_motion.mjs
+node render_physical_motion.mjs
 node qa_motion.mjs
 ```
 

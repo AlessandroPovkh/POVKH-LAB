@@ -2271,7 +2271,12 @@ try {
     return {
       found: Boolean(card),
       transitionDuration: card ? getComputedStyle(card).transitionDuration : null,
-      animations: card?.getAnimations({ subtree: true }).length ?? -1
+      animations: card?.getAnimations({ subtree: true }).length ?? -1,
+      motion: [...document.querySelectorAll("[data-motion-video]")].map((video) => ({
+        state: video.dataset.motionState,
+        currentSrc: video.currentSrc,
+        sources: [...video.querySelectorAll("source")].map((source) => source.getAttribute("src"))
+      }))
     };
   });
   const reducedMerchDurations = reducedMerch.transitionDuration
@@ -2279,8 +2284,11 @@ try {
     .map((value) => Number.parseFloat(value)) ?? [];
   if (!reducedMerch.found
     || reducedMerch.animations !== 0
+    || reducedMotionRequests.length
+    || reducedMerch.motion.length !== 2
+    || reducedMerch.motion.some(({ state, currentSrc, sources }) => state !== "disabled" || currentSrc || sources.some(Boolean))
     || reducedMerchDurations.some((value) => !Number.isFinite(value) || value > 0.00002)) {
-    fail(`Reduced motion: merch card still moves ${JSON.stringify(reducedMerch)}`);
+    fail(`Reduced motion: merch fallback or card contract failed ${JSON.stringify({ reducedMotionRequests, reducedMerch })}`);
   }
   await reducedPage.goto(`${baseUrl}/links/`, { waitUntil: "load" });
   const reducedSocialAccess = await reducedPage.evaluate(() => {
@@ -2333,6 +2341,17 @@ try {
     || saveDataAudio.currentSrc
     || saveDataAudio.state !== "paused") {
     fail(`Save-Data: deferred media contract failed ${JSON.stringify({ saveDataRequests, saveDataAudioRequests, saveDataStates, saveDataSignalMode, saveDataAudio })}`);
+  }
+  await saveDataPage.goto(`${baseUrl}/merch/`, { waitUntil: "load" });
+  const saveDataMerchStates = await saveDataPage.locator("[data-motion-video]").evaluateAll((videos) => videos.map((video) => ({
+    state: video.dataset.motionState,
+    currentSrc: video.currentSrc,
+    sources: [...video.querySelectorAll("source")].map((source) => source.getAttribute("src"))
+  })));
+  if (saveDataRequests.length
+    || saveDataMerchStates.length !== 2
+    || saveDataMerchStates.some(({ state, currentSrc, sources }) => state !== "disabled" || currentSrc || sources.some(Boolean))) {
+    fail(`Save-Data: merch PHYSICAL media was hydrated ${JSON.stringify({ saveDataRequests, saveDataMerchStates })}`);
   }
   await saveDataPage.goto(`${baseUrl}/links/`, { waitUntil: "load" });
   const saveDataSocialAccess = await saveDataPage.evaluate(() => {

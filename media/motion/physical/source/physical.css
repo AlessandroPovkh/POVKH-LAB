@@ -1,0 +1,177 @@
+@font-face {
+  font-family: "Barlow POVKH";
+  src: url("../../../../assets/fonts/BarlowCondensed-Black.ttf") format("truetype");
+  font-weight: 900;
+  font-style: normal;
+  font-display: block;
+}
+
+@font-face {
+  font-family: "Plex POVKH";
+  src: url("../../../../assets/fonts/IBMPlexMono-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: block;
+}
+
+:root { color-scheme: dark; }
+* { box-sizing: border-box; }
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  background: #080808;
+}
+
+.physical-stage {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 78% 48%, rgba(243, 34, 34, 0.08), transparent 26%),
+    #080808;
+  color: #f2efe7;
+  isolation: isolate;
+}
+
+.physical-stage::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.14;
+  pointer-events: none;
+  background-image:
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.045) 0 1px, transparent 1px 4px),
+    radial-gradient(circle at 50% 50%, transparent 0 48%, rgba(0, 0, 0, 0.6) 100%);
+  mix-blend-mode: screen;
+}
+
+.physical-field {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.physical-grid {
+  opacity: calc(0.18 + (var(--hold, 0) * 0.2));
+}
+
+.physical-contour {
+  fill: none;
+  stroke: #5b5b5b;
+  stroke-width: 2;
+  opacity: calc(var(--materialise, 0) * 0.34);
+  transform: translateX(var(--contour-x, 0));
+}
+
+.physical-contour-two { transform: translateX(calc(var(--contour-x, 0) * -0.8)); }
+
+.physical-register {
+  opacity: var(--register-opacity, 0);
+  transform: translate(var(--register-x, 0), var(--register-y, 0));
+  transform-origin: 1478px 532px;
+}
+
+.physical-ring,
+.physical-axis {
+  fill: none;
+  stroke: #f2efe7;
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+}
+
+.physical-ring {
+  stroke-dasharray: 1750;
+  stroke-dashoffset: var(--ring-offset, 1750);
+}
+
+.physical-ring-mid { stroke: #8f918f; stroke-width: 1; }
+.physical-ring-core { fill: #f32222; stroke: #f32222; }
+.physical-axis { opacity: 0.4; }
+
+.physical-word {
+  font-family: "Barlow POVKH", "Arial Narrow", sans-serif;
+  font-size: 520px;
+  font-weight: 900;
+  letter-spacing: -30px;
+  line-height: 0.78;
+  text-anchor: middle;
+}
+
+.physical-word-field {
+  opacity: var(--word-opacity, 0);
+  clip-path: inset(var(--word-clip, 100%) 0 0 0);
+}
+
+.physical-word-main { fill: #f2efe7; }
+.physical-word-echo {
+  fill: #f32222;
+  opacity: 0.92;
+  transform: translate(var(--echo-x, 0), var(--echo-y, 0));
+}
+
+.physical-slices {
+  opacity: var(--slice-opacity, 0);
+}
+
+.physical-slice { fill: #f2efe7; }
+.physical-slice-a { clip-path: url(#physical-slice-a); transform: translateX(var(--slice-a-x, 0)); }
+.physical-slice-b { clip-path: url(#physical-slice-b); transform: translateX(var(--slice-b-x, 0)); }
+.physical-slice-c { clip-path: url(#physical-slice-c); transform: translateX(var(--slice-c-x, 0)); }
+
+.physical-datum {
+  fill: none;
+  stroke: #f2efe7;
+  stroke-width: 3;
+  opacity: var(--datum-opacity, 0);
+}
+
+.physical-datum-red { stroke: #f32222; stroke-width: 6; }
+
+.physical-shards {
+  fill: #f2efe7;
+  opacity: var(--shard-opacity, 0);
+  transform: translateY(var(--shard-y, 0));
+}
+
+.physical-shards .signal { fill: #f32222; }
+
+.physical-scan {
+  fill: #f32222;
+  opacity: var(--scan-opacity, 0);
+  transform: translateX(var(--scan-x, 0));
+}
+
+.physical-hold-line {
+  fill: #f32222;
+  opacity: var(--hold, 0);
+  transform: scaleX(var(--hold, 0));
+  transform-origin: left;
+}
+
+.physical-index {
+  fill: #8f918f;
+  font: 500 17px "Plex POVKH", monospace;
+  letter-spacing: 0.12em;
+  opacity: var(--meta-opacity, 0);
+}
+
+.physical-mark {
+  position: absolute;
+  right: 3.75%;
+  bottom: 5.2%;
+  display: block;
+  width: clamp(2.5rem, 4vw, 4.5rem);
+  height: auto;
+  opacity: var(--mark-opacity, 0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}

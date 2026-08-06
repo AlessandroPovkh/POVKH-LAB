@@ -828,8 +828,13 @@ const createLocalePages = (locale, catalog, audioLibrary, artistLibrary, merchLi
         <p class="eyebrow">${escapeHtml(merch.eyebrow)}</p>
         <h1 class="page-title" id="merch-title">${escapeHtml(merch.heroTitle)}</h1>
       </div>
-      <div class="merch-hero-object" aria-hidden="true">
-        <span>OBJECT / 01</span><i></i><b>${escapeHtml(merch.heroTitle)}</b>
+      <div class="merch-motion-stage" data-merch-motion-stage>
+        ${heroMotionMarkup(locale, "merch", "PHYSICAL")}
+        <div class="merch-motion-fallback" data-merch-motion-fallback aria-hidden="true">
+          <span class="merch-motion-ring"></span>
+          <span class="merch-motion-datum"></span>
+          <span class="merch-motion-signal"></span>
+        </div>
       </div>
       <div class="hero-bottom">
         <p class="lede">${escapeHtml(merch.lede)}</p>
