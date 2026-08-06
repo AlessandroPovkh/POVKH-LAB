@@ -7,7 +7,6 @@ import { fileURLToPath } from "node:url";
 import { Document, NodeIO } from "@gltf-transform/core";
 import { dedup, inspect, prune } from "@gltf-transform/functions";
 import { validateBytes } from "gltf-validator";
-import sharp from "sharp";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const siteRoot = path.resolve(here, "../..");
@@ -142,15 +141,10 @@ const createMaterial = (doc, name, preset) => {
   return material;
 };
 
-const rasterizeMaster = async (filename, width, background) => sharp(await readFile(path.join(here, filename)), {density: 144})
-  .resize(width, width, {fit: "fill", kernel: "lanczos3"})
-  .flatten({background})
-  .png({compressionLevel: 9, adaptiveFiltering: false, effort: 10, palette: false})
-  .toBuffer();
-
-const createTextureMaterial = async (doc, name, identity, width, roughness, background) => {
-  const image = identity.derivedRaster ? await readFile(path.join(here, identity.derivedRaster.path)) : await rasterizeMaster(identity.path, width, background);
-  if (identity.derivedRaster) assert.equal(sha256(image), identity.derivedRaster.sha256, `${name} governed derivative drift`);
+const createTextureMaterial = async (doc, name, identity, roughness) => {
+  assert.ok(identity.derivedRaster, `${name} needs a governed cross-architecture raster`);
+  const image = await readFile(path.join(here, identity.derivedRaster.path));
+  assert.equal(sha256(image), identity.derivedRaster.sha256, `${name} governed derivative drift`);
   const texture = doc.createTexture(`${name}_Texture`)
     .setImage(image)
     .setMimeType("image/png")
@@ -164,34 +158,9 @@ const createTextureMaterial = async (doc, name, identity, width, roughness, back
   return {material, image};
 };
 
-const createRecordMaterial = async (doc) => {
-  const size=512,channels=4,pixels=Buffer.alloc(size*size*channels);
-  const fract=(value)=>value-Math.floor(value);
-  const smooth=(value)=>value*value*(3-2*value);
-  const hash=(x,y)=>fract(Math.sin(x*127.1+y*311.7)*43758.5453123);
-  const noise=(x,y)=>{
-    const ix=Math.floor(x),iy=Math.floor(y),fx=smooth(x-ix),fy=smooth(y-iy);
-    const a=hash(ix,iy),b=hash(ix+1,iy),c=hash(ix,iy+1),d=hash(ix+1,iy+1);
-    return (a+(b-a)*fx)+((c+(d-c)*fx)-(a+(b-a)*fx))*fy;
-  };
-  const fbm=(x,y)=>{let total=0,amplitude=0.56,scale=1,norm=0;for(let octave=0;octave<5;octave+=1){total+=noise(x*scale,y*scale)*amplitude;norm+=amplitude;scale*=2.03;amplitude*=0.48;}return total/norm;};
-  for(let y=0;y<size;y+=1){
-    for(let x=0;x<size;x+=1){
-      const nx=(x+0.5)/size*2-1,ny=(y+0.5)/size*2-1,r=Math.hypot(nx,ny),angle=Math.atan2(ny,nx);
-      const warpX=fbm(nx*2.4+7.3,ny*2.4+1.1),warpY=fbm(nx*2.4-3.7,ny*2.4+8.2);
-      const broad=fbm(nx*4.5+warpX*2.8,ny*4.5+warpY*2.8);
-      const detail=fbm(nx*9.5+warpY*3.2,ny*9.5-warpX*3.2);
-      const smokyVein=Math.max(0,(0.42-broad))*1.35;
-      const groove=0.94+0.06*Math.sin(r*510+angle*0.35);
-      const smoke=Math.max(0.14,Math.min(0.93,(0.18+broad*0.57+detail*0.25-smokyVein)*groove));
-      const offset=(y*size+x)*channels;
-      pixels[offset]=Math.round(255*smoke);
-      pixels[offset+1]=Math.round(220*(0.70+smoke*0.30));
-      pixels[offset+2]=Math.round(225*(0.72+smoke*0.28));
-      pixels[offset+3]=r<=1?238:0;
-    }
-  }
-  const image=await sharp(pixels,{raw:{width:size,height:size,channels}}).png({compressionLevel:9,adaptiveFiltering:false,effort:10}).toBuffer();
+const createRecordMaterial = async (doc, source) => {
+  const reference=source.derivedMaterials.recordSmoke,image=await readFile(path.join(here,reference.path));
+  assert.equal(sha256(image),reference.sha256,"record smoke fixture drift");
   const texture=doc.createTexture("Vinyl_001_Deterministic_Smoke_Texture").setImage(image).setMimeType("image/png").setExtras({proceduralRecipe:"pvkh-signal-red-smoke-v1",derivedRasterSha256:sha256(image)});
   const material=doc.createMaterial("MAT_SIGNAL_RED_SMOKE_RECORD").setBaseColorTexture(texture).setBaseColorFactor([0.31,0.004,0.012,0.86]).setMetallicFactor(0.16).setRoughnessFactor(0.22).setAlphaMode("BLEND").setDoubleSided(true);
   return {material,image};
@@ -230,7 +199,13 @@ const verifySources = async (source) => {
     assert.equal(fixture.canonicalSha256, entry.sha256);
     authority[key] = {fixturePath: entry.fixturePath, fixtureSha256: entry.fixtureSha256, canonicalPath: entry.path, canonicalSha256: entry.sha256};
   }
-  return {identity, authority};
+  const derivedMaterials = {};
+  for (const [key, entry] of Object.entries(source.derivedMaterials)) {
+    const bytes = await readFile(path.join(here, entry.path));
+    assert.equal(sha256(bytes), entry.sha256, `${key} derived material drift`);
+    derivedMaterials[key] = {path: entry.path, sha256: entry.sha256, method: entry.method, bytes: bytes.byteLength};
+  }
+  return {identity, authority, derivedMaterials};
 };
 
 const buildDocument = async (source) => {
@@ -245,11 +220,11 @@ const buildDocument = async (source) => {
     void: createMaterial(doc, "MAT_VOID_INNER", source.materials.void),
     red: null
   };
-  const recordMaterial = await createRecordMaterial(doc);
+  const recordMaterial = await createRecordMaterial(doc, source);
   materials.red=recordMaterial.material;
-  const front = await createTextureMaterial(doc, "MAT_VINYL_OUTER_FRONT_MASTER_V05", source.identity.outerFront, 1024, 0.84, "#F2EFE7");
-  const reverse = await createTextureMaterial(doc, "MAT_VINYL_OUTER_REVERSE_MASTER_V05", source.identity.outerReverse, 1024, 0.84, "#F2EFE7");
-  const label = await createTextureMaterial(doc, "MAT_VINYL_CENTER_LABEL_MASTER_V05", source.identity.centerLabel, 768, 0.44, "#080808");
+  const front = await createTextureMaterial(doc, "MAT_VINYL_OUTER_FRONT_MASTER_V05", source.identity.outerFront, 0.84);
+  const reverse = await createTextureMaterial(doc, "MAT_VINYL_OUTER_REVERSE_MASTER_V05", source.identity.outerReverse, 0.84);
+  const label = await createTextureMaterial(doc, "MAT_VINYL_CENTER_LABEL_MASTER_V05", source.identity.centerLabel, 0.44);
 
   const outer = new Geometry();
   addBeveledSleeve(outer,mm(315),mm(315),mm(4),mm(1.1));
@@ -305,6 +280,7 @@ const buildArtifact = async () => {
     assetKey: source.assetKey,
     sourceIntegrity: integrity.identity,
     authorityIntegrity: integrity.authority,
+    derivedMaterialIntegrity: integrity.derivedMaterials,
     derivedRasterSha256: built.rasters,
     physicalEvidence: {method: "reopened-glb-accessor-bounds", dimensionsMm: source.dimensionsMm, centreHoleDiameterMm: 7.2, displayState: source.display.state},
     cameraRecommendations: source.camera,

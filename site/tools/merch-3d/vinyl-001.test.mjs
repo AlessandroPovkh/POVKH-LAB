@@ -65,6 +65,24 @@ test("vinyl sources pin canonical masters and minimal authorities by exact SHA",
   for (const identity of Object.values(source.identity)) {
     assert.equal(sha256(await readFile(path.join(here, identity.path))), identity.sha256);
   }
+  assert.deepEqual(source.identity.outerFront.derivedRaster, {
+    path: "sources/vinyl-001/PVKH_VINYL_OUTER_FRONT_MASTER_v05.chromium-768.png",
+    sha256: "6cf6ee29f29820e6e24145fca29c8089c8836f4c4ac90cc1f0c72bf3fa842565",
+    method: "approved GLB texture promoted to a governed cross-architecture build fixture"
+  });
+  assert.deepEqual(source.identity.outerReverse.derivedRaster, {
+    path: "sources/vinyl-001/PVKH_VINYL_OUTER_REVERSE_MASTER_v05.chromium-768.png",
+    sha256: "82f784270fb2f8cb3dd55f1cd8fa410381f43167484e0a2274097c149438c4fd",
+    method: "approved GLB texture promoted to a governed cross-architecture build fixture"
+  });
+  assert.deepEqual(source.derivedMaterials.recordSmoke, {
+    path: "sources/vinyl-001/PVKH_VINYL_SIGNAL_RED_SMOKE_TEXTURE_v01.png",
+    sha256: "df710dc1f298215b9029d192167ae2e0fd8de40da7601b9941dbeaf8f5793c7d",
+    method: "approved GLB texture promoted to a governed cross-architecture build fixture"
+  });
+  for (const reference of [source.identity.outerFront.derivedRaster, source.identity.outerReverse.derivedRaster, source.derivedMaterials.recordSmoke]) {
+    assert.equal(sha256(await readFile(path.join(here, reference.path))), reference.sha256);
+  }
   assert.doesNotMatch(await readFile(path.join(here, source.identity.centerLabel.path), "utf8"), /\bDEV\b/i);
 });
 
@@ -111,4 +129,6 @@ test("vinyl GLB validates without warnings and checked-in output is deterministi
   assert.equal(validation.issues.numWarnings, 0);
   const {stdout} = await execFile(process.execPath, [path.join(here, "build-vinyl-001.mjs"), "--verify"], {cwd: siteRoot});
   assert.match(stdout, /verified [a-f0-9]{64}/);
+  const fixtureCheck = await execFile(process.execPath, [path.join(here, "extract-governed-material-fixtures.mjs")], {cwd: siteRoot});
+  assert.match(fixtureCheck.stdout, /PVKH_VINYL_SIGNAL_RED_SMOKE_TEXTURE_v01\.png/);
 });

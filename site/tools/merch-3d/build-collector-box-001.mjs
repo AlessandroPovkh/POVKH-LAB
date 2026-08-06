@@ -7,7 +7,6 @@ import { fileURLToPath } from "node:url";
 import { Document, NodeIO } from "@gltf-transform/core";
 import { dedup, inspect, prune } from "@gltf-transform/functions";
 import { validateBytes } from "gltf-validator";
-import sharp from "sharp";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const siteRoot = path.resolve(here, "../..");
@@ -50,21 +49,22 @@ const createMaterial=(doc,name,preset)=>doc.createMaterial(name).setBaseColorFac
 const primitiveFor=(doc,buffer,name,g,material)=>doc.createPrimitive().setAttribute("POSITION",doc.createAccessor(`${name}_POSITION`).setType("VEC3").setArray(new Float32Array(g.positions)).setBuffer(buffer)).setAttribute("NORMAL",doc.createAccessor(`${name}_NORMAL`).setType("VEC3").setArray(new Float32Array(g.normals)).setBuffer(buffer)).setAttribute("TANGENT",doc.createAccessor(`${name}_TANGENT`).setType("VEC4").setArray(new Float32Array(g.tangents)).setBuffer(buffer)).setAttribute("TEXCOORD_0",doc.createAccessor(`${name}_TEXCOORD_0`).setType("VEC2").setArray(new Float32Array(g.uvs)).setBuffer(buffer)).setIndices(doc.createAccessor(`${name}_INDICES`).setType("SCALAR").setArray(new Uint32Array(g.indices)).setBuffer(buffer)).setMaterial(material);
 const addMeshNode=(doc,parent,buffer,name,g,material,translation=[0,0,0],extras={})=>{const node=doc.createNode(name).setTranslation(translation).setExtras(extras).setMesh(doc.createMesh(`${name}_Mesh`).addPrimitive(primitiveFor(doc,buffer,name,g,material)));parent.addChild(node);return node;};
 
-const createBookclothNormal=async()=>{
-  const size=256,channels=4,pixels=Buffer.alloc(size*size*channels);
-  for(let y=0;y<size;y+=1)for(let x=0;x<size;x+=1){const hash=(a,b)=>{const value=Math.sin(a*12.9898+b*78.233)*43758.5453;return value-Math.floor(value);};const nx=Math.round(128+(hash(x,y)-0.5)*3.2),ny=Math.round(128+(hash(x+37,y+91)-0.5)*3.2),offset=(y*size+x)*channels;pixels[offset]=nx;pixels[offset+1]=ny;pixels[offset+2]=255;pixels[offset+3]=255;}
-  return sharp(pixels,{raw:{width:size,height:size,channels}}).png({compressionLevel:9,adaptiveFiltering:false,effort:10}).toBuffer();
+const createBookclothNormal=async(source)=>{
+  const reference=source.derivedMaterials.bookclothNormal,bytes=await readFile(path.join(here,reference.path));
+  assert.equal(sha256(bytes),reference.sha256,"bookcloth normal fixture drift");
+  return bytes;
 };
 
 const verifySources=async(source)=>{
   const authority={};for(const [key,entry] of Object.entries(source.canonicalSource)){const bytes=await readFile(path.join(here,entry.fixturePath));assert.equal(sha256(bytes),entry.fixtureSha256,`${key} fixture drift`);const fixture=JSON.parse(bytes);assert.equal(fixture.authorityType,"governed-minimal-copy");assert.equal(fixture.canonicalPath,entry.path);assert.equal(fixture.canonicalSha256,entry.sha256);authority[key]={fixturePath:entry.fixturePath,fixtureSha256:entry.fixtureSha256,canonicalPath:entry.path,canonicalSha256:entry.sha256,...(entry.application?{application:entry.application}:{})};}
-  const identity={};for(const [key,entry] of Object.entries(source.identity)){const bytes=await readFile(path.join(here,entry.path));assert.equal(sha256(bytes),entry.sha256,`${key} identity drift`);identity[key]={path:entry.path,sha256:entry.sha256,application:entry.application,bytes:bytes.byteLength};}return {authority,identity};
+  const identity={};for(const [key,entry] of Object.entries(source.identity)){const bytes=await readFile(path.join(here,entry.path));assert.equal(sha256(bytes),entry.sha256,`${key} identity drift`);identity[key]={path:entry.path,sha256:entry.sha256,application:entry.application,bytes:bytes.byteLength};}
+  const derivedMaterials={};for(const [key,entry] of Object.entries(source.derivedMaterials)){const bytes=await readFile(path.join(here,entry.path));assert.equal(sha256(bytes),entry.sha256,`${key} derived material drift`);derivedMaterials[key]={path:entry.path,sha256:entry.sha256,method:entry.method,bytes:bytes.byteLength};}return {authority,identity,derivedMaterials};
 };
 
 const buildDocument=async(source)=>{
   const doc=new Document(),scene=doc.createScene("Collector_Box_001_Closed_Archive_Clamshell");doc.getRoot().setDefaultScene(scene);
   const buffer=doc.createBuffer("Collector_Box_001_Buffer"),assembly=doc.createNode("Collector_Box_001_Centred_Grounded_Pivot").setExtras({groundY:0,pivotPolicy:"closed-box-centred",releasedState:"closed-only"});scene.addChild(assembly);
-  const clothBytes=await createBookclothNormal(),clothTexture=doc.createTexture("Collector_Box_001_Bookcloth_Normal").setImage(clothBytes).setMimeType("image/png").setExtras({proceduralRecipe:"pvkh-bookcloth-normal-v1",containsIdentity:false,derivedRasterSha256:sha256(clothBytes)});
+  const clothBytes=await createBookclothNormal(source),clothTexture=doc.createTexture("Collector_Box_001_Bookcloth_Normal").setImage(clothBytes).setMimeType("image/png").setExtras({proceduralRecipe:"pvkh-bookcloth-normal-v1",containsIdentity:false,derivedRasterSha256:sha256(clothBytes)});
   const board=createMaterial(doc,"MAT_VOID_PAPER_WRAPPED_BOARD",source.materials.board).setNormalTexture(clothTexture);
   const lid=createMaterial(doc,"MAT_VOID_BOOKCLOTH_LID",source.materials.lid).setNormalTexture(clothTexture);
   const seam=createMaterial(doc,"MAT_VOID_LID_SEAM",source.materials.seam),signal=createMaterial(doc,"MAT_SIGNAL_RED_PULL_TAB",source.materials.signal);
@@ -98,7 +98,7 @@ const buildArtifact=async()=>{
   const source=await readJson(sourcePath),integrity=await verifySources(source),doc=await buildDocument(source),io=new NodeIO(),bytes=Buffer.from(await io.writeBinary(doc)),reopened=await io.readBinary(bytes),metrics=metricsFor(reopened);
   const validation=await validateBytes(new Uint8Array(bytes),{uri:"collector-box-001.glb",format:"glb",writeTimestamp:false,maxIssues:100}),summary=validationSummary(validation);if(summary.errors||summary.warnings)process.stderr.write(`${JSON.stringify(validation.issues.messages,null,2)}\n`);assert.equal(summary.errors,0,"Khronos validator errors");assert.equal(summary.warnings,0,"Khronos validator warnings");assert.ok(bytes.byteLength<=source.budgets.maxBytes);assert.ok(metrics.triangles<=source.budgets.maxTriangles);assert.ok(metrics.drawCalls<=source.budgets.maxDrawCalls);
   const cloth=reopened.getRoot().listTextures().find(texture=>texture.getExtras().proceduralRecipe==="pvkh-bookcloth-normal-v1");
-  const report={schemaVersion:1,assetKey:source.assetKey,sourceIntegrity:integrity.identity,authorityIntegrity:integrity.authority,derivedMaterialSha256:{bookclothNormal:sha256(cloth.getImage())},physicalEvidence:{method:"reopened-glb-accessor-bounds",viewerEnvelopeMm:source.dimensions.viewerEnvelopeMm,dimensionAuthority:source.dimensions.authority,state:"closed-only",selectedForm:source.selectedForm,lidUvRecord:source.identity.lid.uvRecord,excluded:["drawer","open state","interior","contents","working hinge","machinability claim"]},cameraRecommendations:source.camera,validation:summary,budget:{...metrics,bytes:bytes.byteLength,ceilings:source.budgets},output:{path:"assets/merch-3d/collector-box-001.glb",sha256:sha256(bytes)},deterministic:{verifiedBySecondInMemoryBuild:false},visualComparison:{canonicalSelected:[source.visualReference.path],reviewStatus:"captured-six-views-readability-source-compare",browserQa:"tools/merch-3d/reports/collector-box-001.browser-qa.json"}};
+  const report={schemaVersion:1,assetKey:source.assetKey,sourceIntegrity:integrity.identity,authorityIntegrity:integrity.authority,derivedMaterialIntegrity:integrity.derivedMaterials,derivedMaterialSha256:{bookclothNormal:sha256(cloth.getImage())},physicalEvidence:{method:"reopened-glb-accessor-bounds",viewerEnvelopeMm:source.dimensions.viewerEnvelopeMm,dimensionAuthority:source.dimensions.authority,state:"closed-only",selectedForm:source.selectedForm,lidUvRecord:source.identity.lid.uvRecord,excluded:["drawer","open state","interior","contents","working hinge","machinability claim"]},cameraRecommendations:source.camera,validation:summary,budget:{...metrics,bytes:bytes.byteLength,ceilings:source.budgets},output:{path:"assets/merch-3d/collector-box-001.glb",sha256:sha256(bytes)},deterministic:{verifiedBySecondInMemoryBuild:false},visualComparison:{canonicalSelected:[source.visualReference.path],reviewStatus:"captured-six-views-readability-source-compare",browserQa:"tools/merch-3d/reports/collector-box-001.browser-qa.json"}};
   return {source,bytes,report,validation,inspection:inspect(reopened)};
 };
 

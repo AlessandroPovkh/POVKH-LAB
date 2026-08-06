@@ -42,6 +42,14 @@
       "application": "uncertainty-record-only-not-modeled"
     }
   },
+  "derivedMaterialIntegrity": {
+    "bookclothNormal": {
+      "path": "sources/collector-box-001/PVKH_COLLECTOR_BOX_BOOKCLOTH_NORMAL_v01.png",
+      "sha256": "8b04ece8038f37ecf6fe1379615e2e0a6deac983e3ad55baf1167aef74eec373",
+      "method": "approved GLB texture promoted to a governed cross-architecture build fixture",
+      "bytes": 36958
+    }
+  },
   "derivedMaterialSha256": {
     "bookclothNormal": "8b04ece8038f37ecf6fe1379615e2e0a6deac983e3ad55baf1167aef74eec373"
   },

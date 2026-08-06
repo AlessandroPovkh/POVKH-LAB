@@ -52,6 +52,13 @@
       "application": "audit-only-reverse-raster-is-embedded"
     }
   },
+  "derivedMaterials": {
+    "bookclothNormal": {
+      "path": "sources/collector-box-001/PVKH_COLLECTOR_BOX_BOOKCLOTH_NORMAL_v01.png",
+      "sha256": "8b04ece8038f37ecf6fe1379615e2e0a6deac983e3ad55baf1167aef74eec373",
+      "method": "approved GLB texture promoted to a governed cross-architecture build fixture"
+    }
+  },
   "visualReference": {
     "path": "production/physical-merch/concepts/drop-001/renders/archive-objects/collector-box-001/renders/selected/PVKH_DROP001_COLLECTOR_BOX_001_CLOSED_HERO_CONCEPT_v02.png",
     "sha256": "07a84bdcc039eb10038ce5a6486cda4bbe1455f01572307e78d9c646add8408e"

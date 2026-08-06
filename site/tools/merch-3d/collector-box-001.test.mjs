@@ -62,6 +62,12 @@ test("collector sources pin ARCHIVE CLAMSHELL closed hero, exact lid identity an
   assert.equal(source.state, "CLOSED ONLY");
   assert.equal(source.dimensions.authority, "provisional-viewer-envelope-not-machinable");
   assert.equal(source.canonicalSource.compositionOnly.application, "uncertainty-record-only-not-modeled");
+  assert.deepEqual(source.derivedMaterials.bookclothNormal, {
+    path: "sources/collector-box-001/PVKH_COLLECTOR_BOX_BOOKCLOTH_NORMAL_v01.png",
+    sha256: "8b04ece8038f37ecf6fe1379615e2e0a6deac983e3ad55baf1167aef74eec373",
+    method: "approved GLB texture promoted to a governed cross-architecture build fixture"
+  });
+  assert.equal(sha256(await readFile(path.join(here, source.derivedMaterials.bookclothNormal.path))), source.derivedMaterials.bookclothNormal.sha256);
   assert.equal(sha256(await readFile(path.join(here, source.identity.lid.path))), "284e69cfb0e6e7fef2a993f44289577efabd1fae576c9280bab4d4e2f59b398f");
   assert.deepEqual(source.identity.lid.uvRecord.surfaceMm, {width: 202, height: 75.75, centreX: 4, centreY: 152});
   assert.deepEqual(source.identity.lid.uvRecord.uvBounds, [0, 0, 1, 1]);
@@ -127,4 +133,6 @@ test("collector validates without warnings and checked-in output is deterministi
   assert.equal(validation.issues.numWarnings, 0);
   const {stdout} = await execFile(process.execPath, [path.join(here, "build-collector-box-001.mjs"), "--verify"], {cwd: siteRoot});
   assert.match(stdout, /verified [a-f0-9]{64}/);
+  const fixtureCheck = await execFile(process.execPath, [path.join(here, "extract-governed-material-fixtures.mjs")], {cwd: siteRoot});
+  assert.match(fixtureCheck.stdout, /PVKH_COLLECTOR_BOX_BOOKCLOTH_NORMAL_v01\.png/);
 });
