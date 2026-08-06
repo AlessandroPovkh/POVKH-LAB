@@ -127,11 +127,13 @@ const languageMarkup = (locale, route) => {
 
 const siteIndexMarkup = (locale, route) => {
   const t = COPY[locale].common;
-  const list = navLinksMarkup(locale, route, NAV_ITEMS.filter(([key]) => !PRIMARY_NAV_KEYS.has(key)));
+  const primaryList = navLinksMarkup(locale, route, NAV_ITEMS.filter(([key]) => PRIMARY_NAV_KEYS.has(key)));
+  const secondaryList = navLinksMarkup(locale, route, NAV_ITEMS.filter(([key]) => !PRIMARY_NAV_KEYS.has(key)));
   return `<details class="site-index" data-site-index>
     <summary class="menu-summary">${escapeHtml(t.menu)} / Index</summary>
     <div class="site-index-panel">
-      <nav aria-label="${escapeHtml(t.mobilePrimaryNav)}"><ul class="nav-list">${list}</ul></nav>
+      <nav class="site-index-primary" aria-label="${escapeHtml(t.mobilePrimaryNav)}"><ul class="nav-list">${primaryList}</ul></nav>
+      <nav class="site-index-secondary" aria-label="${escapeHtml(t.secondaryNav)}"><ul class="nav-list">${secondaryList}</ul></nav>
       ${languageMarkup(locale, route)}
     </div>
   </details>`;

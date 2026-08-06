@@ -2906,6 +2906,12 @@ html[lang="ru"] .social-access-title {
   display: grid;
 }
 
+.site-index-secondary {
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--line);
+}
+
 .site-index-panel .nav-link {
   justify-content: flex-start;
 }
@@ -3161,6 +3167,10 @@ body.audio-player-ready.page-merch .merch-hero {
 
   .site-index {
     flex: 0 0 auto;
+  }
+
+  .site-index-primary {
+    display: none;
   }
 }
 

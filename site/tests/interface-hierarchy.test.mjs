@@ -51,6 +51,17 @@ test("keeps exactly Home / Catalog / Merch / Artists in the primary desktop navi
 
     const index = fragment(html, /<details[^>]+data-site-index[\s\S]*?<\/details>/, `${output} Menu / Index disclosure`);
     assert.match(index, new RegExp(`<summary[^>]*>${COPY[locale].common.menu}\\s*/\\s*Index<`), `${output} disclosure must be labelled Menu / Index`);
+    const mobilePrimary = fragment(index, /<nav class="site-index-primary"[\s\S]*?<\/nav>/, `${output} Menu / Index primary routes`);
+    assert.deepEqual(
+      [...mobilePrimary.matchAll(/<a class="nav-link" href="([^"]+)"[^>]*>([^<]+)<\/a>/g)].map(([, href, label]) => ({ href: resolvedPath(output, href), label })),
+      [
+        { href: publicLocalePrefix(locale), label: COPY[locale].common.nav.home },
+        { href: `${publicLocalePrefix(locale)}catalog/`, label: COPY[locale].common.nav.catalog },
+        { href: `${publicLocalePrefix(locale)}merch/`, label: COPY[locale].common.nav.merch },
+        { href: `${publicLocalePrefix(locale)}artists/`, label: COPY[locale].common.nav.artists }
+      ],
+      `${output} Menu / Index must preserve all four audience routes when desktop navigation is hidden`
+    );
     for (const key of ["process", "about", "press", "download", "contact"]) {
       const label = COPY[locale].common.nav[key];
       assert.match(index, new RegExp(`>${label}<`), `${output} Menu / Index is missing ${key}`);
