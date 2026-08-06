@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "assetKey": "hoodie-001",
+  "outcome": "source-blocked",
+  "syntheticSpinFromGallery": false,
+  "gates": {
+    "authoritativeMesh": false,
+    "approvedPhysicalSample": false,
+    "silhouetteIou": null,
+    "maxLandmarkErrorPercent": null,
+    "printRegistrationErrorPercent": null
+  },
+  "reason": "No authoritative vendor or licensed measured hoodie mesh and no approved physical sample turntable capture are available. The four concept gallery views cannot truthfully establish garment depth, hood construction, drape, seams, or a complete rotation.",
+  "releaseDecision": "Keep the existing 2D gallery. Do not publish hoodie-001.glb and do not synthesize a 360 sequence. Re-open the POC only after receiving a vendor size-M mesh or measured tech pack plus an approved physical sample.",
+  "requiredEvidence": [
+    "licensed or vendor-authoritative size-M base mesh",
+    "measured approved physical sample and tech pack",
+    "rear, rear-three-quarter, and front silhouette comparisons",
+    "300 x 112.5 mm back-print registration measurement",
+    "source licence and SHA-256 provenance"
+  ]
+}

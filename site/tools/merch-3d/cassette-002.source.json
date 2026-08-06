@@ -1,0 +1,81 @@
+{
+  "schemaVersion": 1,
+  "assetKey": "cassette-002",
+  "releaseMode": "glb-poc",
+  "coordinateSystem": {
+    "unit": "metre",
+    "up": "+Y",
+    "front": "+Z",
+    "pivot": "centred-overall-display",
+    "groundY": 0
+  },
+  "dimensionsMm": {
+    "cassette": [100.4, 63.8, 12],
+    "case": [109, 70, 17]
+  },
+  "dimensionsAuthority": {
+    "status": "nominal-provisional",
+    "description": "IEC compact-cassette and Norelco-case standard nominal viewer envelopes; replace with selected vendor drawings before manufacture."
+  },
+  "canonicalSource": {
+    "placements": {
+      "path": "production/physical-merch/concepts/drop-001/renders/archive-objects/cassette-002/placements.json",
+      "sha256": "398cf719dc099c785858baab7876ff95aead00763b000db46c899f90c6f0b783"
+    },
+    "provenance": {
+      "path": "production/physical-merch/concepts/drop-001/renders/archive-objects/cassette-002/provenance.json",
+      "sha256": "e274081bc3844843edc5b533f3d26085c40dc55a6646571c5f23c39eaf7242bb"
+    }
+  },
+  "identity": {
+    "ascii": {
+      "path": "sources/cassette-002/PVKH_ASCII_DARK_EXACT_1600x600_v01.png",
+      "canonicalPath": "production/physical-merch/concepts/drop-001/renders/archive-objects/cassette-002/source/identity/PVKH_ASCII_DARK_EXACT_1600x600_v01.png",
+      "sha256": "c46bf6bd82ea2ec6928e9fe4ca9a314b56580af49c044be0395579c43c06dada",
+      "colourSpace": "sRGB",
+      "uvBounds": [0, 0, 1, 1]
+    },
+    "compactDark": {
+      "path": "sources/cassette-002/PVKH_COMPACT_DARK_EXACT_1000x1000_v01.png",
+      "canonicalPath": "production/physical-merch/concepts/drop-001/renders/archive-objects/cassette-002/source/identity/PVKH_COMPACT_DARK_EXACT_1000x1000_v01.png",
+      "sha256": "66dd2eeff4ba4c963b891a7968eb50226cbb17f4b78953803aeae8c11fe880dd",
+      "colourSpace": "sRGB",
+      "uvBounds": [0, 0, 1, 1]
+    },
+    "compactReverse": {
+      "path": "sources/cassette-002/PVKH_COMPACT_REVERSE_EXACT_1000x1000_v01.png",
+      "canonicalPath": "production/physical-merch/concepts/drop-001/renders/archive-objects/cassette-002/source/identity/PVKH_COMPACT_REVERSE_EXACT_1000x1000_v01.png",
+      "sha256": "9d273a3fe83d93a321342d0e7da86d8fd4654f85efedc228ae6b41f53d98bd9b",
+      "colourSpace": "sRGB",
+      "uvBounds": [0, 0, 1, 1]
+    }
+  },
+  "materials": {
+    "bone": {"baseColor": [0.8879, 0.8632, 0.7991, 1], "metallic": 0, "roughness": 0.9},
+    "smoke": {"baseColor": [0.03, 0.035, 0.04, 0.46], "metallic": 0, "roughness": 0.23, "alphaMode": "BLEND"},
+    "clear": {"baseColor": [0.78, 0.82, 0.85, 0.22], "metallic": 0, "roughness": 0.12, "alphaMode": "BLEND"},
+    "black": {"baseColor": [0.01, 0.01, 0.01, 1], "metallic": 0.15, "roughness": 0.38},
+    "tape": {"baseColor": [0.075, 0.026, 0.012, 1], "metallic": 0, "roughness": 0.55},
+    "felt": {"baseColor": [0.22, 0.22, 0.21, 1], "metallic": 0, "roughness": 1}
+  },
+  "geometry": {
+    "displayState": "open-case",
+    "requiredParts": {
+      "screws": 5,
+      "hubs": 2,
+      "guideRollers": 2,
+      "spindles": 2,
+      "pressurePad": 1,
+      "continuousTapePath": 1,
+      "emptyWindowBetweenHubs": 1
+    }
+  },
+  "registration": {
+    "asciiJCard": {"surfaceMm": [55, 20.625], "actualMm": [55, 20.625], "centreMm": [-62, 49.5], "actualCentreMm": [-62, 49.5]},
+    "compactDarkJCard": {"surfaceMm": [9, 9], "actualMm": [9, 9], "centreMm": [-31, 28], "actualCentreMm": [-31, 28]},
+    "compactReverseShell": {"surfaceMm": [7.5, 7.5], "actualMm": [7.5, 7.5], "centreMm": [36, 37], "actualCentreMm": [36, 37]}
+  },
+  "camera": {"orbit": "0deg 75deg 105%", "poster": "assets/merch/cassette-hero.webp"},
+  "budgets": {"targetBytes": 2200000, "maxBytes": 2500000, "targetTriangles": 45000, "maxTriangles": 50000, "targetDrawCalls": 10, "maxDrawCalls": 12},
+  "toolchain": {"gltfTransform": "4.4.2", "gltfValidator": "2.0.0-dev.3.10"}
+}

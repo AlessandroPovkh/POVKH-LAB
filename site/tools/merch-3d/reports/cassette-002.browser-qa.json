@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "assetKey": "cassette-002",
+  "structuralGeometryReview": {
+    "status": "pass",
+    "evidence": [
+      "The final GLB reopens locally with nine material primitives and 1750 triangles.",
+      "The decoded scene contains exactly five screw, two hub, two spindle and two guide-roller landmarks.",
+      "The continuous tape route crosses the pressure pad and retains an explicit empty between-hubs window.",
+      "The overall display bounds are grounded at Y=0 and centred in X and Z."
+    ]
+  },
+  "browserIntegration": {
+    "status": "pending-host-csp-fix",
+    "assetRequest": "pass",
+    "modelDecode": "pass",
+    "modelViewerLoadedEvent": "pass",
+    "textureDisplay": "blocked",
+    "reason": "The current host Content-Security-Policy blocks model-viewer blob texture URLs through connect-src and also reports inline-style and WebAssembly policy violations. This is a runtime integration issue outside the cassette asset scope.",
+    "requiredBeforeRelease": [
+      "Retest after the host CSP permits the minimum model-viewer runtime requirements.",
+      "Capture canonical front and three-quarter screenshots in the target browser matrix.",
+      "Approve silhouette, transparency order, identity legibility and absence of z-fighting.",
+      "Measure activation-to-interactive and drag frame stability on the agreed mid-range Android profile."
+    ]
+  },
+  "screenshotDiff": {
+    "status": "pending",
+    "reason": "No release screenshot baseline is valid until the host CSP allows embedded identity textures to render."
+  },
+  "releaseDecision": "asset-pass-integration-pending"
+}

@@ -1,0 +1,165 @@
+{
+  "scenes": {
+    "properties": [
+      {
+        "name": "Cassette_002_Open_Display",
+        "rootName": "Cassette_002_Centred_Pivot",
+        "bboxMin": [
+          -0.10735,
+          0,
+          -0.0168
+        ],
+        "bboxMax": [
+          0.10735,
+          0.077,
+          0.0168
+        ],
+        "renderVertexCount": 5250,
+        "uploadVertexCount": 3606,
+        "uploadNaiveVertexCount": 3606
+      }
+    ]
+  },
+  "meshes": {
+    "properties": [
+      {
+        "name": "Cassette_002_Physical_Geometry",
+        "mode": [
+          "TRIANGLES"
+        ],
+        "meshPrimitives": 9,
+        "glPrimitives": 1750,
+        "vertices": 3606,
+        "indices": [
+          "u32"
+        ],
+        "attributes": [
+          "NORMAL:f32",
+          "POSITION:f32",
+          "TEXCOORD_0:f32"
+        ],
+        "instances": 1,
+        "size": 136392
+      }
+    ]
+  },
+  "materials": {
+    "properties": [
+      {
+        "name": "MAT_CLEAR_POLYMER",
+        "instances": 1,
+        "textures": [],
+        "alphaMode": "BLEND",
+        "doubleSided": true
+      },
+      {
+        "name": "MAT_SMOKE_POLYMER",
+        "instances": 1,
+        "textures": [],
+        "alphaMode": "BLEND",
+        "doubleSided": true
+      },
+      {
+        "name": "MAT_PAPER_BONE",
+        "instances": 1,
+        "textures": [],
+        "alphaMode": "OPAQUE",
+        "doubleSided": false
+      },
+      {
+        "name": "MAT_BLACK_HARDWARE",
+        "instances": 1,
+        "textures": [],
+        "alphaMode": "OPAQUE",
+        "doubleSided": false
+      },
+      {
+        "name": "MAT_MAGNETIC_TAPE",
+        "instances": 1,
+        "textures": [],
+        "alphaMode": "OPAQUE",
+        "doubleSided": false
+      },
+      {
+        "name": "MAT_PRESSURE_FELT",
+        "instances": 1,
+        "textures": [],
+        "alphaMode": "OPAQUE",
+        "doubleSided": false
+      },
+      {
+        "name": "MAT_IDENTITY_ASCII_DARK",
+        "instances": 1,
+        "textures": [
+          "baseColorTexture"
+        ],
+        "alphaMode": "BLEND",
+        "doubleSided": true
+      },
+      {
+        "name": "MAT_IDENTITY_COMPACT_DARK",
+        "instances": 1,
+        "textures": [
+          "baseColorTexture"
+        ],
+        "alphaMode": "BLEND",
+        "doubleSided": true
+      },
+      {
+        "name": "MAT_IDENTITY_COMPACT_REVERSE",
+        "instances": 1,
+        "textures": [
+          "baseColorTexture"
+        ],
+        "alphaMode": "BLEND",
+        "doubleSided": true
+      }
+    ]
+  },
+  "textures": {
+    "properties": [
+      {
+        "name": "MAT_IDENTITY_ASCII_DARK_Texture",
+        "uri": "",
+        "slots": [
+          "baseColorTexture"
+        ],
+        "instances": 1,
+        "mimeType": "image/png",
+        "compression": "",
+        "resolution": "1600x600",
+        "size": 137134,
+        "gpuSize": 5119556
+      },
+      {
+        "name": "MAT_IDENTITY_COMPACT_DARK_Texture",
+        "uri": "",
+        "slots": [
+          "baseColorTexture"
+        ],
+        "instances": 1,
+        "mimeType": "image/png",
+        "compression": "",
+        "resolution": "1000x1000",
+        "size": 54206,
+        "gpuSize": 5332856
+      },
+      {
+        "name": "MAT_IDENTITY_COMPACT_REVERSE_Texture",
+        "uri": "",
+        "slots": [
+          "baseColorTexture"
+        ],
+        "instances": 1,
+        "mimeType": "image/png",
+        "compression": "",
+        "resolution": "1000x1000",
+        "size": 53859,
+        "gpuSize": 5332856
+      }
+    ]
+  },
+  "animations": {
+    "properties": []
+  }
+}
