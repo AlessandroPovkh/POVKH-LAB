@@ -66,12 +66,12 @@ test("vinyl sources pin canonical masters and minimal authorities by exact SHA",
     assert.equal(sha256(await readFile(path.join(here, identity.path))), identity.sha256);
   }
   assert.deepEqual(source.identity.outerFront.derivedRaster, {
-    path: "sources/vinyl-001/PVKH_VINYL_OUTER_FRONT_MASTER_v05.chromium-768.png",
+    path: "sources/vinyl-001/PVKH_VINYL_OUTER_FRONT_MASTER_v05.approved-1024.png",
     sha256: "6cf6ee29f29820e6e24145fca29c8089c8836f4c4ac90cc1f0c72bf3fa842565",
     method: "approved GLB texture promoted to a governed cross-architecture build fixture"
   });
   assert.deepEqual(source.identity.outerReverse.derivedRaster, {
-    path: "sources/vinyl-001/PVKH_VINYL_OUTER_REVERSE_MASTER_v05.chromium-768.png",
+    path: "sources/vinyl-001/PVKH_VINYL_OUTER_REVERSE_MASTER_v05.approved-1024.png",
     sha256: "82f784270fb2f8cb3dd55f1cd8fa410381f43167484e0a2274097c149438c4fd",
     method: "approved GLB texture promoted to a governed cross-architecture build fixture"
   });

@@ -25,12 +25,12 @@ const fixtures = [
   {
     glb: "assets/merch-3d/vinyl-001.glb",
     texture: "MAT_VINYL_OUTER_FRONT_MASTER_V05_Texture",
-    output: "tools/merch-3d/sources/vinyl-001/PVKH_VINYL_OUTER_FRONT_MASTER_v05.chromium-768.png"
+    output: "tools/merch-3d/sources/vinyl-001/PVKH_VINYL_OUTER_FRONT_MASTER_v05.approved-1024.png"
   },
   {
     glb: "assets/merch-3d/vinyl-001.glb",
     texture: "MAT_VINYL_OUTER_REVERSE_MASTER_V05_Texture",
-    output: "tools/merch-3d/sources/vinyl-001/PVKH_VINYL_OUTER_REVERSE_MASTER_v05.chromium-768.png"
+    output: "tools/merch-3d/sources/vinyl-001/PVKH_VINYL_OUTER_REVERSE_MASTER_v05.approved-1024.png"
   }
 ];
 

@@ -7,7 +7,7 @@
       "sha256": "6a3a80aa9a45b273fe840395a03f4c46f2a6aed5b0b4d3b39139373399113b1b",
       "bytes": 555395,
       "derivedRaster": {
-        "path": "sources/vinyl-001/PVKH_VINYL_OUTER_FRONT_MASTER_v05.chromium-768.png",
+        "path": "sources/vinyl-001/PVKH_VINYL_OUTER_FRONT_MASTER_v05.approved-1024.png",
         "sha256": "6cf6ee29f29820e6e24145fca29c8089c8836f4c4ac90cc1f0c72bf3fa842565",
         "method": "approved GLB texture promoted to a governed cross-architecture build fixture"
       }
@@ -17,7 +17,7 @@
       "sha256": "69746c784d303957e608a13747d83725a2a96c7872f7143cf76314302922eca6",
       "bytes": 556745,
       "derivedRaster": {
-        "path": "sources/vinyl-001/PVKH_VINYL_OUTER_REVERSE_MASTER_v05.chromium-768.png",
+        "path": "sources/vinyl-001/PVKH_VINYL_OUTER_REVERSE_MASTER_v05.approved-1024.png",
         "sha256": "82f784270fb2f8cb3dd55f1cd8fa410381f43167484e0a2274097c149438c4fd",
         "method": "approved GLB texture promoted to a governed cross-architecture build fixture"
       }
