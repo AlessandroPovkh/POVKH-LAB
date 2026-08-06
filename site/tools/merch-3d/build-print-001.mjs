@@ -54,21 +54,27 @@ const bowedSheet = ({ width, height, thickness, bow, segments }) => {
   return { paper, art };
 };
 
-const materialFor = (doc, name, preset) => doc.createMaterial(name)
+const materialFor = (doc, preset) => doc.createMaterial(preset.name)
   .setBaseColorFactor(preset.baseColor)
   .setMetallicFactor(preset.metallic)
   .setRoughnessFactor(preset.roughness);
 
-const textureMaterial = async (doc, name, entry) => {
+const textureMaterial = async (doc, entry, preset) => {
   const sourceBytes = await readFile(path.join(here, entry.path));
-  assert.equal(sha256(sourceBytes), entry.sha256, `${name} source drift`);
-  const image = await sharp(sourceBytes).resize(700, 990, { fit: "fill", kernel: "lanczos3" })
+  assert.equal(sha256(sourceBytes), entry.sha256, `${preset.name} source drift`);
+  const metadata = await sharp(sourceBytes).metadata();
+  assert.deepEqual([metadata.width, metadata.height], entry.resolutionPx, `${preset.name} source resolution drift`);
+  assert.equal(entry.texture.sourceUse, "full-image-no-crop");
+  assert.deepEqual(entry.texture.cropPx, [0, 0, ...entry.resolutionPx]);
+  assert.equal(entry.texture.mimeType, "image/png");
+  const image = await sharp(sourceBytes).resize(...entry.texture.resolutionPx, { fit: entry.texture.fit, kernel: "lanczos3" })
     .png({ compressionLevel: 9, adaptiveFiltering: false, palette: true, colours: 256, effort: 10 })
     .toBuffer();
-  const texture = doc.createTexture(`${name}_Texture`).setImage(image).setMimeType("image/png")
+  assert.equal(sha256(image), entry.texture.derivedSha256, `${preset.name} derived texture drift`);
+  const texture = doc.createTexture(`${preset.name}_Texture`).setImage(image).setMimeType(entry.texture.mimeType)
     .setExtras({ canonicalSourceSha256: entry.sha256, derivedRasterSha256: sha256(image) });
-  const material = doc.createMaterial(name).setBaseColorTexture(texture).setBaseColorFactor([1, 1, 1, 1])
-    .setMetallicFactor(0).setRoughnessFactor(0.92);
+  const material = doc.createMaterial(preset.name).setBaseColorTexture(texture).setBaseColorFactor(preset.baseColor)
+    .setMetallicFactor(preset.metallic).setRoughnessFactor(preset.roughness);
   return { material, sourceBytes, image };
 };
 
@@ -79,14 +85,15 @@ const primitiveFor = (doc, buffer, name, geometry, material) => doc.createPrimit
   .setIndices(doc.createAccessor(`${name}_INDICES`).setType("SCALAR").setArray(new Uint16Array(geometry.indices)).setBuffer(buffer))
   .setMaterial(material);
 
-const addSheet = async (doc, assembly, buffer, source, { key, name, x, paperMaterial }) => {
-  const geometry = bowedSheet({ width: mm(420), height: mm(594), thickness: mm(0.4), bow: mm(1.5), segments: 12 });
-  const textured = await textureMaterial(doc, `MAT_PRINT_${key.toUpperCase()}`, source.identity[key]);
+const addSheet = async (doc, assembly, buffer, source, { key, name, x, paperMaterial, artworkMaterial }) => {
+  const [widthMm, heightMm, thicknessMm] = source.dimensionsMm.sheet;
+  const geometry = bowedSheet({ width: mm(widthMm), height: mm(heightMm), thickness: mm(thicknessMm), bow: mm(source.dimensionsMm.bow), segments: source.geometry.segmentsPerSheet });
+  const textured = await textureMaterial(doc, source.identity[key], artworkMaterial);
   const mesh = doc.createMesh(`${name}_Mesh`)
     .addPrimitive(primitiveFor(doc, buffer, `${name}_Paper`, geometry.paper, paperMaterial))
     .addPrimitive(primitiveFor(doc, buffer, `${name}_Artwork`, geometry.art, textured.material));
-  const node = doc.createNode(name).setMesh(mesh).setTranslation([mm(x), 0, mm(-0.75)])
-    .setExtras({ artworkRole: key, nominalDimensionsMm: [420, 594, 0.4], bowMm: 1.5 });
+  const node = doc.createNode(name).setMesh(mesh).setTranslation([mm(x), 0, mm(-source.dimensionsMm.bow / 2)])
+    .setExtras({ artworkRole: key, nominalDimensionsMm: source.dimensionsMm.sheet, bowMm: source.dimensionsMm.bow });
   assembly.addChild(node);
   return { node, sourceBytes: textured.sourceBytes, raster: textured.image };
 };
@@ -96,25 +103,55 @@ const metricsFor = (doc) => doc.getRoot().listMeshes().reduce((result, mesh) => 
   return result;
 }, { triangles: 0, drawCalls: 0 });
 
+const inventoryFor = (doc, declared) => {
+  const nodes = doc.getRoot().listNodes().map((node) => node.getName());
+  const meshes = doc.getRoot().listMeshes().map((mesh) => mesh.getName());
+  const primitives = [];
+  for (const node of doc.getRoot().listNodes()) {
+    const mesh = node.getMesh();
+    if (!mesh) continue;
+    for (const primitive of mesh.listPrimitives()) {
+      const material = primitive.getMaterial().getName();
+      const entry = declared.primitives.find((candidate) => candidate.node === node.getName() && candidate.material === material);
+      assert.ok(entry, `undeclared PRINT primitive ${node.getName()} / ${material}`);
+      primitives.push(entry);
+    }
+  }
+  return { nodes, meshes, primitives };
+};
+
 const buildArtifact = async () => {
   const source = JSON.parse(await readFile(sourcePath, "utf8"));
+  const posterBytes = await readFile(path.join(siteRoot, source.poster.path));
+  assert.equal(sha256(posterBytes), source.poster.sha256, "PRINT poster reference drift");
   const doc = new Document();
-  const scene = doc.createScene("Print_001_Upright_A2_Pair");
+  const scene = doc.createScene(source.geometry.scene);
   doc.getRoot().setDefaultScene(scene);
   const buffer = doc.createBuffer("Print_001_Buffer");
-  const assembly = doc.createNode("Print_001_Centred_Grounded_Pivot").setExtras({ gapMm: 30, groundY: 0 });
+  const assembly = doc.createNode(source.geometry.nodes[0]).setExtras({ gapMm: source.dimensionsMm.gap, groundY: 0 });
   scene.addChild(assembly);
-  const bonePaper = materialFor(doc, "MAT_BONE_PAPER", source.materials.bonePaper);
-  const voidPaper = materialFor(doc, "MAT_VOID_PAPER", source.materials.voidPaper);
-  const left = await addSheet(doc, assembly, buffer, source, { key: "boneLeft", name: "Print_001_Bone_Left", x: -225, paperMaterial: bonePaper });
-  const right = await addSheet(doc, assembly, buffer, source, { key: "voidRight", name: "Print_001_Void_Right", x: 225, paperMaterial: voidPaper });
-  await doc.transform(dedup(), prune({ keepExtras: true }));
+  const bonePaper = materialFor(doc, source.materials.bonePaper);
+  const voidPaper = materialFor(doc, source.materials.voidPaper);
+  const sheetCentreMm = (source.dimensionsMm.sheet[0] + source.dimensionsMm.gap) / 2;
+  const left = await addSheet(doc, assembly, buffer, source, { key: "boneLeft", name: source.geometry.nodes[1], x: -sheetCentreMm, paperMaterial: bonePaper, artworkMaterial: source.materials.boneArtwork });
+  const right = await addSheet(doc, assembly, buffer, source, { key: "voidRight", name: source.geometry.nodes[2], x: sheetCentreMm, paperMaterial: voidPaper, artworkMaterial: source.materials.voidArtwork });
   const io = new NodeIO();
+  const unoptimizedBytes = Buffer.from(await io.writeBinary(doc));
+  const unoptimized = await io.readBinary(unoptimizedBytes);
+  const unoptimizedInspection = inspect(unoptimized);
+  const unoptimizedMetrics = metricsFor(unoptimized);
+  await doc.transform(dedup(), prune({ keepExtras: true }));
   const bytes = Buffer.from(await io.writeBinary(doc));
   const reopened = await io.readBinary(bytes);
+  const optimizedInspection = inspect(reopened);
   const bounds = getBounds(reopened.getRoot().getDefaultScene());
   const nodeBounds = Object.fromEntries(reopened.getRoot().listNodes().filter((node) => /^Print_001_(Bone|Void)_/.test(node.getName())).map((node) => [node.getName(), getBounds(node)]));
   const metrics = metricsFor(reopened);
+  const actualInventory = inventoryFor(reopened, source.geometry);
+  assert.deepEqual(actualInventory.nodes, source.geometry.nodes, "PRINT node inventory drift");
+  assert.deepEqual(actualInventory.meshes, source.geometry.meshes, "PRINT mesh inventory drift");
+  assert.deepEqual(actualInventory.primitives, source.geometry.primitives, "PRINT primitive inventory drift");
+  assert.equal(reopened.getRoot().listAnimations().length, source.geometry.animations, "PRINT animation inventory drift");
   const validation = await validateBytes(new Uint8Array(bytes), { uri: "print-001.glb", format: "glb", writeTimestamp: false, maxIssues: 100 });
   const validationSummary = { errors: validation.issues.numErrors, warnings: validation.issues.numWarnings, infos: validation.issues.numInfos, hints: validation.issues.numHints };
   assert.equal(validationSummary.errors, 0); assert.equal(validationSummary.warnings, 0);
@@ -123,15 +160,41 @@ const buildArtifact = async () => {
   return {
     bytes,
     validation,
-    inspection: inspect(reopened),
+    inspections: {
+      schemaVersion: 1,
+      assetKey: source.assetKey,
+      unoptimized: unoptimizedInspection,
+      optimized: optimizedInspection
+    },
     report: {
       schemaVersion: 1,
       assetKey: source.assetKey,
       sourceIntegrity: {
-        boneLeft: { path: source.identity.boneLeft.path, canonicalPath: source.identity.boneLeft.canonicalPath, sha256: sha256(left.sourceBytes), bytes: left.sourceBytes.byteLength, derivedRasterSha256: sha256(left.raster) },
-        voidRight: { path: source.identity.voidRight.path, canonicalPath: source.identity.voidRight.canonicalPath, sha256: sha256(right.sourceBytes), bytes: right.sourceBytes.byteLength, derivedRasterSha256: sha256(right.raster) }
+        boneLeft: { path: source.identity.boneLeft.path, canonicalPath: source.identity.boneLeft.canonicalPath, sha256: sha256(left.sourceBytes), bytes: left.sourceBytes.byteLength, resolutionPx: source.identity.boneLeft.resolutionPx, colourSpace: source.identity.boneLeft.colourSpace, derivedRasterSha256: sha256(left.raster) },
+        voidRight: { path: source.identity.voidRight.path, canonicalPath: source.identity.voidRight.canonicalPath, sha256: sha256(right.sourceBytes), bytes: right.sourceBytes.byteLength, resolutionPx: source.identity.voidRight.resolutionPx, colourSpace: source.identity.voidRight.colourSpace, derivedRasterSha256: sha256(right.raster) }
       },
-      physicalEvidence: { method: "reopened-glb-bounds-and-node-registration", boundsMm: { min: toMm(bounds.min), max: toMm(bounds.max) }, nodeBoundsMm: Object.fromEntries(Object.entries(nodeBounds).map(([key, value]) => [key, { min: toMm(value.min), max: toMm(value.max) }])), sheetMm: [420, 594, 0.4], gapMm: 30, bowMm: 1.5, leftArtwork: "boneLeft", rightArtwork: "voidRight" },
+      governedBuildRecord: {
+        productId: source.productId,
+        dimensionAuthority: source.dimensionAuthority,
+        geometry: { declared: source.geometry, actual: actualInventory },
+        materials: source.materials,
+        textures: Object.fromEntries(Object.entries(source.identity).map(([key, entry]) => [key, {
+          sourcePath: entry.path,
+          canonicalPath: entry.canonicalPath,
+          sourceSha256: entry.sha256,
+          sourceResolutionPx: entry.resolutionPx,
+          colourSpace: entry.colourSpace,
+          derivation: entry.texture,
+          registration: entry.registration
+        }])),
+        camera: source.camera,
+        poster: source.poster,
+        inspections: {
+          unoptimized: { stage: source.inspectionPolicy.unoptimized.stage, reportPath: `${source.inspectionPolicy.reportPath}#/unoptimized`, ...unoptimizedMetrics },
+          optimized: { stage: source.inspectionPolicy.optimized.stage, reportPath: `${source.inspectionPolicy.reportPath}#/optimized`, ...metrics, bytes: bytes.byteLength }
+        }
+      },
+      physicalEvidence: { method: "reopened-glb-bounds-and-node-registration", boundsMm: { min: toMm(bounds.min), max: toMm(bounds.max) }, nodeBoundsMm: Object.fromEntries(Object.entries(nodeBounds).map(([key, value]) => [key, { min: toMm(value.min), max: toMm(value.max) }])), sheetMm: source.dimensionsMm.sheet, gapMm: source.dimensionsMm.gap, bowMm: source.dimensionsMm.bow, leftArtwork: "boneLeft", rightArtwork: "voidRight" },
       excludedPresentation: ["frames", "tape", "shadows"],
       cameraRecommendations: source.camera,
       validation: validationSummary,
@@ -148,9 +211,16 @@ const main = async () => {
   assert.equal(sha256(artifact.bytes), sha256(second.bytes), "PRINT build is not byte-deterministic");
   artifact.report.deterministic.verifiedBySecondInMemoryBuild = true;
   if (verifyOnly) {
-    const [existingBytes, existingReport] = await Promise.all([readFile(outputPath), readFile(reportPath, "utf8").then(JSON.parse)]);
+    const [existingBytes, existingReport, existingValidator, existingInspections] = await Promise.all([
+      readFile(outputPath),
+      readFile(reportPath, "utf8").then(JSON.parse),
+      readFile(validatorPath, "utf8").then(JSON.parse),
+      readFile(inspectPath, "utf8").then(JSON.parse)
+    ]);
     assert.equal(sha256(existingBytes), sha256(artifact.bytes), "checked-in PRINT GLB is stale");
     assert.deepEqual(existingReport, artifact.report, "checked-in PRINT report is stale");
+    assert.deepEqual(existingValidator, artifact.validation, "checked-in PRINT validator report is stale");
+    assert.deepEqual(existingInspections, artifact.inspections, "checked-in PRINT inspection report is stale");
     assert.equal((await stat(outputPath)).size, artifact.report.budget.bytes);
     process.stdout.write(`verified ${artifact.report.output.sha256} (${artifact.report.budget.bytes} bytes, ${artifact.report.budget.triangles} triangles, ${artifact.report.budget.drawCalls} draw calls)\n`);
     return;
@@ -159,7 +229,7 @@ const main = async () => {
     writeFile(outputPath, artifact.bytes),
     writeFile(reportPath, stableJson(artifact.report)),
     writeFile(validatorPath, stableJson(artifact.validation)),
-    writeFile(inspectPath, stableJson(artifact.inspection))
+    writeFile(inspectPath, stableJson(artifact.inspections))
   ]);
   process.stdout.write(`built ${artifact.report.output.sha256} (${artifact.report.budget.bytes} bytes, ${artifact.report.budget.triangles} triangles, ${artifact.report.budget.drawCalls} draw calls)\n`);
 };

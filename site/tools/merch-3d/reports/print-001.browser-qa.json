@@ -2,70 +2,198 @@
   "schemaVersion": 1,
   "assetKey": "print-001",
   "baseUrlPolicy": "ephemeral-local-static-server",
+  "capturePolicy": {
+    "deviceScaleFactor": 2,
+    "pixelDensity": "2x",
+    "defaultLabel": "governed-source-camera",
+    "defaultAuthority": "print-001.source.json#camera",
+    "defaultApplication": "live-page-manifest-verified-against-source",
+    "readability": "native-DPR2-crop-without-enlargement"
+  },
   "screenshots": {
     "desktop-default": {
       "path": "reports/screenshots/print-001-desktop-default.png",
-      "sha256": "fce34ade690cffe3f6b53538323e30177abda25b6d3ad06e2e358f7239d4283b",
-      "viewportPx": [
+      "sha256": "0d239e2e2ce512ffeeeb071d65b00c18f5b4d5e880b7e2ebafdd758c1312e2fc",
+      "viewportCssPx": [
         1440,
         1000
       ],
-      "entropy": 2.5114
+      "stageCssPx": [
+        756,
+        504
+      ],
+      "screenshotPx": [
+        1512,
+        1008
+      ],
+      "deviceScaleFactor": 2,
+      "viewRole": "default",
+      "cameraAuthority": "print-001.source.json#camera",
+      "cameraProfile": {
+        "orbit": "0deg 75deg 115%",
+        "fieldOfView": "30deg",
+        "target": "auto auto auto"
+      },
+      "cameraApplication": "live-page-manifest-verified-against-source",
+      "entropy": 2.3579
     },
     "desktop-front": {
       "path": "reports/screenshots/print-001-desktop-front.png",
-      "sha256": "be25e8af954c52cf8337f3bbd37a78f03298fb89b59293472fd1daa04f431af4",
-      "viewportPx": [
+      "sha256": "6f216d5c7bf30c51d8f5fa33f09bf266fd914cb86996d883090e3625b72e8972",
+      "viewportCssPx": [
         1440,
         1000
       ],
-      "entropy": 2.5267
+      "stageCssPx": [
+        756,
+        504
+      ],
+      "screenshotPx": [
+        1512,
+        1008
+      ],
+      "deviceScaleFactor": 2,
+      "viewRole": "front",
+      "cameraAuthority": "print-001.source.json#camera",
+      "cameraProfile": {
+        "orbit": "0deg 90deg 115%",
+        "fieldOfView": "30deg",
+        "target": "auto auto auto"
+      },
+      "cameraApplication": "governed-qa-view-applied-from-source",
+      "entropy": 2.3799
     },
     "desktop-rear": {
       "path": "reports/screenshots/print-001-desktop-rear.png",
-      "sha256": "05d2745e51e2450557b101f2bb9d354c9589af4cf07715801b7d61e0e3718c0b",
-      "viewportPx": [
+      "sha256": "f3faaa1181067f3e1d2f8dae46a2c4d06fe746b58233af6b895294489e5f88b9",
+      "viewportCssPx": [
         1440,
         1000
       ],
-      "entropy": 1.9934
+      "stageCssPx": [
+        756,
+        504
+      ],
+      "screenshotPx": [
+        1512,
+        1008
+      ],
+      "deviceScaleFactor": 2,
+      "viewRole": "rear",
+      "cameraAuthority": "print-001.source.json#camera",
+      "cameraProfile": {
+        "orbit": "180deg 90deg 115%",
+        "fieldOfView": "30deg",
+        "target": "auto auto auto"
+      },
+      "cameraApplication": "governed-qa-view-applied-from-source",
+      "entropy": 1.9692
     },
     "mobile-default": {
       "path": "reports/screenshots/print-001-mobile-default.png",
-      "sha256": "7dfe77d763410526f0dd925406096e86f8e7e232596003ddc1e42e1fe50f9413",
-      "viewportPx": [
+      "sha256": "90106298c67d8137b515189f672f47f0d7ee67a72b5def862d2b9a777e83071b",
+      "viewportCssPx": [
         390,
         844
       ],
-      "entropy": 2.6744
+      "stageCssPx": [
+        358,
+        239
+      ],
+      "screenshotPx": [
+        716,
+        478
+      ],
+      "deviceScaleFactor": 2,
+      "viewRole": "default",
+      "cameraAuthority": "print-001.source.json#camera",
+      "cameraProfile": {
+        "orbit": "0deg 75deg 115%",
+        "fieldOfView": "30deg",
+        "target": "auto auto auto"
+      },
+      "cameraApplication": "live-page-manifest-verified-against-source",
+      "entropy": 2.5292
     },
     "mobile-front": {
       "path": "reports/screenshots/print-001-mobile-front.png",
-      "sha256": "c85aaed72f221fa2a7795536399a50263555637ce728a85e2b83e9d3b2b0aa09",
-      "viewportPx": [
+      "sha256": "d36bca205f5fd55fcdfface880fb5af777a9a34aa2a48d0723e8f681e7cc5f90",
+      "viewportCssPx": [
         390,
         844
       ],
-      "entropy": 2.5814
+      "stageCssPx": [
+        358,
+        239
+      ],
+      "screenshotPx": [
+        716,
+        478
+      ],
+      "deviceScaleFactor": 2,
+      "viewRole": "front",
+      "cameraAuthority": "print-001.source.json#camera",
+      "cameraProfile": {
+        "orbit": "0deg 90deg 115%",
+        "fieldOfView": "30deg",
+        "target": "auto auto auto"
+      },
+      "cameraApplication": "governed-qa-view-applied-from-source",
+      "entropy": 2.5443
     },
     "mobile-rear": {
       "path": "reports/screenshots/print-001-mobile-rear.png",
-      "sha256": "b9e761cc22669141fd279e51620e30a3c93c366528850773bf6b7f39b90582fd",
-      "viewportPx": [
+      "sha256": "df27b00f7297ff83a47a6bef8e408ae13e4748c099364a4f581ad12678500527",
+      "viewportCssPx": [
         390,
         844
       ],
-      "entropy": 1.9999
+      "stageCssPx": [
+        358,
+        239
+      ],
+      "screenshotPx": [
+        716,
+        478
+      ],
+      "deviceScaleFactor": 2,
+      "viewRole": "rear",
+      "cameraAuthority": "print-001.source.json#camera",
+      "cameraProfile": {
+        "orbit": "180deg 90deg 115%",
+        "fieldOfView": "30deg",
+        "target": "auto auto auto"
+      },
+      "cameraApplication": "governed-qa-view-applied-from-source",
+      "entropy": 1.9927
     },
     "desktop-readability-crop": {
       "path": "reports/screenshots/print-001-desktop-readability-crop.png",
-      "sha256": "e58d69cd3bd886a9055bc87ce0d13fd6b0f402e2932858d52dbdbdd3e71280a5",
+      "sha256": "8436f1a57a2557c23939a071800bebb89f80a5bfd9bb65f5d72463a07d5c860b",
+      "screenshotPx": [
+        1270,
+        846
+      ],
+      "deviceScaleFactor": 2,
+      "cameraAuthority": "print-001.source.json#camera",
+      "cameraProfile": {
+        "orbit": "0deg 90deg 115%",
+        "fieldOfView": "30deg",
+        "target": "auto auto auto"
+      },
+      "captureMethod": "native-DPR2-crop-without-enlargement",
+      "sourceScreenshot": "desktop-front",
       "expected": "Bone master left / Void reverse master right"
     }
   },
   "metrics": {
     "desktop-default": {
       "loaded": true,
+      "declaredCamera": {
+        "orbit": "0deg 75deg 115%",
+        "fieldOfView": "30deg",
+        "target": "auto auto auto"
+      },
       "dimensionsM": [
         0.8699999868869781,
         0.593999981880188,
@@ -85,6 +213,11 @@
     },
     "desktop-front": {
       "loaded": true,
+      "declaredCamera": {
+        "orbit": "0deg 75deg 115%",
+        "fieldOfView": "30deg",
+        "target": "auto auto auto"
+      },
       "dimensionsM": [
         0.8699999868869781,
         0.593999981880188,
@@ -104,6 +237,11 @@
     },
     "desktop-rear": {
       "loaded": true,
+      "declaredCamera": {
+        "orbit": "0deg 75deg 115%",
+        "fieldOfView": "30deg",
+        "target": "auto auto auto"
+      },
       "dimensionsM": [
         0.8699999868869781,
         0.593999981880188,
@@ -123,6 +261,11 @@
     },
     "mobile-default": {
       "loaded": true,
+      "declaredCamera": {
+        "orbit": "0deg 75deg 115%",
+        "fieldOfView": "30deg",
+        "target": "auto auto auto"
+      },
       "dimensionsM": [
         0.8699999868869781,
         0.593999981880188,
@@ -142,6 +285,11 @@
     },
     "mobile-front": {
       "loaded": true,
+      "declaredCamera": {
+        "orbit": "0deg 75deg 115%",
+        "fieldOfView": "30deg",
+        "target": "auto auto auto"
+      },
       "dimensionsM": [
         0.8699999868869781,
         0.593999981880188,
@@ -161,6 +309,11 @@
     },
     "mobile-rear": {
       "loaded": true,
+      "declaredCamera": {
+        "orbit": "0deg 75deg 115%",
+        "fieldOfView": "30deg",
+        "target": "auto auto auto"
+      },
       "dimensionsM": [
         0.8699999868869781,
         0.593999981880188,
@@ -184,13 +337,26 @@
   "cameraRecommendation": {
     "orbit": "0deg 75deg 115%",
     "fieldOfView": "30deg",
-    "target": "auto auto auto"
+    "target": "auto auto auto",
+    "evidenceViews": {
+      "front": {
+        "orbit": "0deg 90deg 115%",
+        "fieldOfView": "30deg",
+        "target": "auto auto auto"
+      },
+      "rear": {
+        "orbit": "180deg 90deg 115%",
+        "fieldOfView": "30deg",
+        "target": "auto auto auto"
+      }
+    }
   },
   "visualComparison": {
     "status": "pass",
     "method": "exact-source-pair-left / live-browser-front-right",
+    "capturePixelDensity": "2x",
     "artifactPath": "reports/screenshots/print-001-source-compare.png",
-    "artifactSha256": "791bdb340dcad50a644efbfc67fc23925e241c5ca63f9ef3966334a62d21a2f9",
+    "artifactSha256": "1fe51d23b76f92106750972dd13b3a7ccd95f02eada5c50189889838a475b5fd",
     "checks": [
       "Bone artwork remains left",
       "Void artwork remains right",
