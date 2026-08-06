@@ -134,14 +134,32 @@ const addRibbon = (group, points, width, z) => {
   }
 };
 
-const addFrontQuad = (group, [cx, cy, z], [width, height]) => {
+const addFrontQuad = (group, [cx, cy, z], [width, height], {flipV = false} = {}) => {
+  const uvs = flipV ? [[0, 1], [1, 1], [1, 0], [0, 0]] : undefined;
   group.quad(
     [cx - width / 2, cy - height / 2, z],
     [cx + width / 2, cy - height / 2, z],
     [cx + width / 2, cy + height / 2, z],
     [cx - width / 2, cy + height / 2, z],
-    [0, 0, 1]
+    [0, 0, 1],
+    uvs
   );
+};
+
+const addTrapezoidPrism = (group, [cx, cy, cz], [topWidth, bottomWidth, height, depth]) => {
+  const z0 = cz - depth / 2;
+  const z1 = cz + depth / 2;
+  const front = [
+    [cx - bottomWidth / 2, cy - height / 2, z1], [cx + bottomWidth / 2, cy - height / 2, z1],
+    [cx + topWidth / 2, cy + height / 2, z1], [cx - topWidth / 2, cy + height / 2, z1]
+  ];
+  const back = front.map(([x, y]) => [x, y, z0]);
+  group.quad(front[0], front[1], front[2], front[3], [0, 0, 1]);
+  group.quad(back[1], back[0], back[3], back[2], [0, 0, -1]);
+  group.quad(back[0], front[0], front[3], back[3], [-1, 0, 0]);
+  group.quad(front[1], back[1], back[2], front[2], [1, 0, 0]);
+  group.quad(front[3], front[2], back[2], back[3], [0, 1, 0]);
+  group.quad(back[0], back[1], front[1], front[0], [0, -1, 0]);
 };
 
 const createMaterial = (doc, name, preset) => {
@@ -179,19 +197,21 @@ const buildDocument = async (source) => {
   const buffer = doc.createBuffer("Cassette_002_Buffer");
   // Re-centres the authored display envelope in X/Z while retaining Y=0 ground.
   const assembly = doc.createNode("Cassette_002_Centred_Pivot")
-    .setTranslation([mm(12.15), 0, mm(9.7)])
-    .setExtras({pivot: "centred-overall-display", groundY: 0});
+    .setTranslation([mm(12.15), 0, mm(4.4)])
+    .setExtras({pivotPolicy: "centred-overall-display", groundY: 0});
   scene.addChild(assembly);
 
+  const clearMaterial = createMaterial(doc, "MAT_CLEAR_POLYMER", source.materials.clear);
   const materials = {
-    clear: createMaterial(doc, "MAT_CLEAR_POLYMER", source.materials.clear),
+    clearPanel: clearMaterial,
+    clearEdge: createMaterial(doc, "MAT_CLEAR_EDGE", source.materials.clearEdge),
     smoke: createMaterial(doc, "MAT_SMOKE_POLYMER", source.materials.smoke),
     bone: createMaterial(doc, "MAT_PAPER_BONE", source.materials.bone),
     black: createMaterial(doc, "MAT_BLACK_HARDWARE", source.materials.black),
     tape: createMaterial(doc, "MAT_MAGNETIC_TAPE", source.materials.tape),
     felt: createMaterial(doc, "MAT_PRESSURE_FELT", source.materials.felt),
+    signalRed: createMaterial(doc, "MAT_SIGNAL_RED", {baseColor: [0.95, 0.012, 0.025, 1], metallic: 0, roughness: 0.7}),
     ascii: await createTextureMaterial(doc, "MAT_IDENTITY_ASCII_DARK", source.identity.ascii.path),
-    compactDark: await createTextureMaterial(doc, "MAT_IDENTITY_COMPACT_DARK", source.identity.compactDark.path),
     compactReverse: await createTextureMaterial(doc, "MAT_IDENTITY_COMPACT_REVERSE", source.identity.compactReverse.path)
   };
 
@@ -200,17 +220,30 @@ const buildDocument = async (source) => {
   // Open Norelco display case and insert, arranged left of the cassette with no intersections.
   const caseX = mm(-65);
   const caseY = mm(35);
+  const caseLidY = mm(105);
+  const caseHingeY = mm(70);
   const caseZ = mm(-10);
-  addBox(groups.clear, [caseX, caseY, caseZ], [mm(109), mm(70), mm(2)]);
-  addBox(groups.clear, [caseX, mm(0.9), caseZ + mm(2)], [mm(109), mm(1.8), mm(17)]);
-  addBox(groups.clear, [caseX, mm(69.1), caseZ + mm(2)], [mm(109), mm(1.8), mm(17)]);
-  addBox(groups.clear, [mm(-118.6), caseY, caseZ + mm(2)], [mm(1.8), mm(70), mm(17)]);
-  addBox(groups.clear, [mm(-11.4), caseY, caseZ + mm(2)], [mm(1.8), mm(70), mm(17)]);
-  // Raised open lid above/behind the base; kept separate from the J-card plane.
-  addBox(groups.clear, [caseX, mm(76), mm(-18)], [mm(109), mm(2), mm(17)]);
+  // Lower 109 x 70 mm tray.
+  addBox(groups.clearPanel, [caseX, caseY, caseZ], [mm(109), mm(70), mm(2)]);
+  addBox(groups.clearEdge, [caseX, mm(0.9), caseZ + mm(2)], [mm(109), mm(1.8), mm(17)]);
+  addBox(groups.clearEdge, [caseX, mm(69.1), caseZ + mm(2)], [mm(109), mm(1.8), mm(17)]);
+  addBox(groups.clearEdge, [mm(-118.6), caseY, caseZ + mm(2)], [mm(1.8), mm(70), mm(17)]);
+  addBox(groups.clearEdge, [mm(-11.4), caseY, caseZ + mm(2)], [mm(1.8), mm(70), mm(17)]);
+  for (const [x, y] of [[-95, 45], [-35, 45], [-65, 18]]) {
+    addCylinderZ(groups.clearEdge, [mm(x), mm(y), mm(-5)], mm(2.4), mm(8), 20);
+  }
+  // Upper 109 x 70 mm lid and insert, joined edge-to-edge at the full-width hinge.
+  addBox(groups.clearPanel, [caseX, caseLidY, caseZ], [mm(109), mm(70), mm(2)]);
+  addBox(groups.clearEdge, [caseX, mm(70.9), caseZ + mm(2)], [mm(109), mm(1.8), mm(17)]);
+  addBox(groups.clearEdge, [caseX, mm(139.1), caseZ + mm(2)], [mm(109), mm(1.8), mm(17)]);
+  addBox(groups.clearEdge, [mm(-118.6), caseLidY, caseZ + mm(2)], [mm(1.8), mm(70), mm(17)]);
+  addBox(groups.clearEdge, [mm(-11.4), caseLidY, caseZ + mm(2)], [mm(1.8), mm(70), mm(17)]);
+  addBox(groups.clearEdge, [caseX, caseHingeY, caseZ + mm(2)], [mm(109), mm(2), mm(17)]);
+  for (const x of [-105, -85, -65, -45, -25]) addBox(groups.clearEdge, [mm(x), caseHingeY, mm(-1.5)], [mm(14), mm(2.4), mm(4)]);
+  // Insert and governed marks remain authored in upper-half-local coordinates.
   addBox(groups.bone, [caseX, caseY, mm(-7.8)], [mm(98), mm(58), mm(0.45)]);
-  addFrontQuad(groups.ascii, [mm(-65), mm(47.5), mm(-7.5)], [mm(55), mm(20.625)]);
-  addFrontQuad(groups.compactDark, [mm(-31), mm(27), mm(-7.45)], [mm(9), mm(9)]);
+  addFrontQuad(groups.ascii, [...source.registration.asciiJCard.centreMm.map(mm), mm(-7.5)], source.registration.asciiJCard.surfaceMm.map(mm), {flipV: true});
+  addFrontQuad(groups.signalRed, [...source.registration.signalRuleJCard.centreMm.map(mm), mm(-7.49)], source.registration.signalRuleJCard.surfaceMm.map(mm));
 
   // Nominal compact cassette shell, centred on its own local origin at X=45 mm.
   const shellX = mm(45);
@@ -218,21 +251,41 @@ const buildDocument = async (source) => {
   // Moulded top/bottom rails give the transparent silhouette a manufactured read.
   addBox(groups.smoke, [shellX, mm(61.7), mm(0.3)], [mm(94), mm(1.6), mm(12.4)]);
   addBox(groups.smoke, [shellX, mm(2.1), mm(0.3)], [mm(94), mm(1.6), mm(12.4)]);
+  addBox(groups.smoke, [mm(-3.6), mm(31.9), mm(0.3)], [mm(1.6), mm(56), mm(12.4)]);
+  addBox(groups.smoke, [mm(93.6), mm(31.9), mm(0.3)], [mm(1.6), mm(56), mm(12.4)]);
+  // Moulded front recesses: a clear central window frame and lower trapezoid transport panel.
+  addBox(groups.smoke, [mm(36.6), mm(37), mm(6.5)], [mm(1.2), mm(16), mm(0.8)]);
+  addBox(groups.smoke, [mm(53.4), mm(37), mm(6.5)], [mm(1.2), mm(16), mm(0.8)]);
+  addBox(groups.smoke, [mm(45), mm(29.6), mm(6.5)], [mm(18), mm(1.2), mm(0.8)]);
+  addBox(groups.smoke, [mm(45), mm(44.4), mm(6.5)], [mm(18), mm(1.2), mm(0.8)]);
+  addBox(groups.smoke, [mm(45), mm(37), mm(5.65)], [mm(72), mm(28), mm(0.7)]);
+  addTrapezoidPrism(groups.smoke, [mm(45), mm(14), mm(6.4)], [mm(50), mm(38), mm(16), mm(1.2)]);
 
   const hubCentres = [[mm(24), mm(37)], [mm(66), mm(37)]];
   for (const [x, y] of hubCentres) {
     addCylinderZ(groups.tape, [x, y, mm(4.5)], mm(13.2), mm(1.6), 32, mm(8));
     addCylinderZ(groups.black, [x, y, mm(5.6)], mm(8), mm(2), 20, mm(3.2));
     addCylinderZ(groups.black, [x, y, mm(5.9)], mm(3), mm(1.4), 16, mm(1.7));
+    addCylinderZ(groups.clearEdge, [x, y, mm(6.9)], mm(9.2), mm(0.8), 32, mm(5.5));
+    for (let tooth = 0; tooth < 8; tooth += 1) {
+      const angle = tooth / 8 * Math.PI * 2;
+      addBox(groups.felt, [x + Math.cos(angle) * mm(8.3), y + Math.sin(angle) * mm(8.3), mm(6.2)], [mm(1.8), mm(1.8), mm(1)]);
+    }
   }
 
   const screwCentres = [
     [mm(2), mm(57)], [mm(88), mm(57)], [mm(2), mm(7)], [mm(88), mm(7)], [mm(45), mm(6.5)]
   ];
-  for (const [x, y] of screwCentres) addCylinderZ(groups.black, [x, y, mm(6.5)], mm(1.45), mm(0.8), 12);
+  for (const [x, y] of screwCentres) {
+    addCylinderZ(groups.black, [x, y, mm(6.5)], mm(1.45), mm(0.8), 12);
+    addBox(groups.felt, [x, y, mm(6.96)], [mm(2), mm(0.35), mm(0.12)]);
+    addBox(groups.felt, [x, y, mm(6.96)], [mm(0.35), mm(2), mm(0.12)]);
+  }
 
   const rollerCentres = [[mm(10), mm(13)], [mm(80), mm(13)]];
   for (const [x, y] of rollerCentres) addCylinderZ(groups.black, [x, y, mm(6.2)], mm(3.1), mm(1.6), 16, mm(1));
+  for (const x of [31, 39, 51, 59]) addCylinderZ(groups.black, [mm(x), mm(9.5), mm(7.4)], mm(1.7), mm(0.6), 16);
+  for (const x of [20, 70]) addCylinderZ(groups.black, [mm(x), mm(9.5), mm(7.4)], mm(2.4), mm(0.6), 20);
   addBox(groups.felt, [mm(45), mm(11.2), mm(6.45)], [mm(8), mm(4), mm(1.2)]);
   addBox(groups.black, [mm(45), mm(9), mm(5.8)], [mm(12), mm(0.7), mm(0.8)]);
 
@@ -243,9 +296,15 @@ const buildDocument = async (source) => {
   addRibbon(groups.tape, tapeRoute, mm(1.6), mm(7.1));
 
   // Exact governed identity raster, overlaid without warping on the shell front.
-  addFrontQuad(groups.compactReverse, [mm(81), mm(47), mm(6.35)], [mm(7.5), mm(7.5)]);
+  for (const y of [53.5, 56.5]) {
+    for (let x = 3; x <= 87; x += 4) addCylinderZ(groups.clearEdge, [mm(x), mm(y), mm(6.65)], mm(0.35), mm(0.35), 8);
+  }
+
+  addFrontQuad(groups.compactReverse, [...source.registration.compactReverseShell.centreMm.map(mm), mm(6.35)], source.registration.compactReverseShell.surfaceMm.map(mm), {flipV: true});
 
   const mesh = doc.createMesh("Cassette_002_Physical_Geometry");
+  const upperCaseMesh = doc.createMesh("Cassette_002_Upper_Case_Insert");
+  const upperCaseMaterials = new Set(["bone", "signalRed", "ascii"]);
   for (const [name, group] of Object.entries(groups)) {
     assert.ok(group.indices.length > 0, `${name} geometry must not be empty`);
     const position = doc.createAccessor(`${name}_POSITION`).setType("VEC3").setArray(new Float32Array(group.positions)).setBuffer(buffer);
@@ -259,16 +318,22 @@ const buildDocument = async (source) => {
       .setIndices(indices)
       .setMaterial(materials[name])
       .setExtras({role: name});
-    mesh.addPrimitive(primitive);
+    (upperCaseMaterials.has(name) ? upperCaseMesh : mesh).addPrimitive(primitive);
   }
   assembly.addChild(doc.createNode("Cassette_002_Display_Geometry").setMesh(mesh));
+  const upperCaseNode = doc.createNode("Cassette_002_Upper_Case_Coordinates")
+    .setTranslation([0, mm(70), 0])
+    .setExtras({coordinateSpace: "upper-case-local-mm", hingeYmm: 70})
+    .setMesh(upperCaseMesh);
+  assembly.addChild(upperCaseNode);
 
   const unoptimized = inspect(doc);
   await doc.transform(dedup(), prune({keepExtras: true}));
 
   addAnchor(doc, assembly, "Case_Base", [caseX, caseY, caseZ], {nominalDimensionsMm: source.dimensionsMm.case, authority: source.dimensionsAuthority.status});
-  addAnchor(doc, assembly, "Case_Open_Lid", [caseX, mm(76), mm(-18)], {state: "open", intersectsCassette: false});
-  addAnchor(doc, assembly, "J_Card_Bone", [caseX, caseY, mm(-7.8)], {material: "MAT_PAPER_BONE"});
+  addAnchor(doc, assembly, "Case_Open_Lid", [caseX, caseLidY, caseZ], {state: "open", fullHalf: true, intersectsCassette: false});
+  addAnchor(doc, assembly, "Case_Hinge", [caseX, caseHingeY, caseZ + mm(2)], {continuous: true, joins: ["Case_Base", "Case_Open_Lid"]});
+  addAnchor(doc, assembly, "J_Card_Bone", [caseX, caseLidY, mm(-7.8)], {material: "MAT_PAPER_BONE"});
   addAnchor(doc, assembly, "Cassette_Shell", [shellX, mm(31.9), 0], {nominalDimensionsMm: source.dimensionsMm.cassette, authority: source.dimensionsAuthority.status});
   screwCentres.forEach(([x, y], index) => addAnchor(doc, assembly, `Screw_${String(index + 1).padStart(2, "0")}`, [x, y, mm(6.5)], {part: "screw"}));
   hubCentres.forEach(([x, y], index) => {
@@ -280,12 +345,77 @@ const buildDocument = async (source) => {
   addAnchor(doc, assembly, "Pressure_Pad", [mm(45), mm(11.2), mm(6.45)], {part: "pressure-pad", touchesTapeInProjection: true});
   addAnchor(doc, assembly, "Tape_Path", [mm(45), mm(11.2), mm(7.1)], {part: "tape-path", continuous: true, orderedRoute: ["left-reel", "left-guide", "pressure-pad", "right-guide", "right-reel"]});
   addAnchor(doc, assembly, "Empty_Window", [mm(45), mm(37), mm(6.2)], {part: "empty-window", betweenHubs: true, containsGeometry: false});
-  addAnchor(doc, assembly, "Identity_ASCII_JCard", [mm(-65), mm(47.5), mm(-7.5)], {sha256: source.identity.ascii.sha256, registrationKey: "asciiJCard"});
-  addAnchor(doc, assembly, "Identity_Compact_Dark_JCard", [mm(-31), mm(27), mm(-7.45)], {sha256: source.identity.compactDark.sha256, registrationKey: "compactDarkJCard"});
-  addAnchor(doc, assembly, "Identity_Compact_Reverse_Shell", [mm(81), mm(47), mm(6.35)], {sha256: source.identity.compactReverse.sha256, registrationKey: "compactReverseShell"});
+  addAnchor(doc, upperCaseNode, "Identity_ASCII_JCard", [...source.registration.asciiJCard.centreMm.map(mm), mm(-7.5)], {sha256: source.identity.ascii.sha256, registrationKey: "asciiJCard"});
+  addAnchor(doc, upperCaseNode, "Signal_Rule_JCard", [...source.registration.signalRuleJCard.centreMm.map(mm), mm(-7.49)], {registrationKey: "signalRuleJCard", governedPlacement: "open.signalRule"});
+  addAnchor(doc, assembly, "Identity_Compact_Reverse_Shell", [...source.registration.compactReverseShell.centreMm.map(mm), mm(6.35)], {sha256: source.identity.compactReverse.sha256, registrationKey: "compactReverseShell"});
 
   return {doc, unoptimized, optimized: inspect(doc)};
 };
+
+const componentMeasurements = (primitive, epsilon = 1e-7) => {
+  const position = primitive.getAttribute("POSITION");
+  const positions = position.getArray();
+  const indices = primitive.getIndices().getArray();
+  const vertexToCanonical = [];
+  const canonicalByPosition = new Map();
+  const points = [];
+  for (let vertex = 0; vertex < position.getCount(); vertex += 1) {
+    const point = [positions[vertex * 3], positions[vertex * 3 + 1], positions[vertex * 3 + 2]];
+    const key = point.map((value) => Math.round(value / epsilon)).join(":");
+    if (!canonicalByPosition.has(key)) {
+      canonicalByPosition.set(key, points.length);
+      points.push(point);
+    }
+    vertexToCanonical[vertex] = canonicalByPosition.get(key);
+  }
+  const adjacency = points.map(() => new Set());
+  const used = new Set();
+  for (let offset = 0; offset < indices.length; offset += 3) {
+    const triangle = [indices[offset], indices[offset + 1], indices[offset + 2]].map((vertex) => vertexToCanonical[vertex]);
+    triangle.forEach((vertex) => used.add(vertex));
+    for (let edge = 0; edge < 3; edge += 1) {
+      adjacency[triangle[edge]].add(triangle[(edge + 1) % 3]);
+      adjacency[triangle[(edge + 1) % 3]].add(triangle[edge]);
+    }
+  }
+  const remaining = new Set(used);
+  const components = [];
+  while (remaining.size) {
+    const queue = [remaining.values().next().value];
+    const members = [];
+    remaining.delete(queue[0]);
+    while (queue.length) {
+      const current = queue.pop();
+      members.push(current);
+      for (const next of adjacency[current]) {
+        if (!remaining.has(next)) continue;
+        remaining.delete(next);
+        queue.push(next);
+      }
+    }
+    const min = [Infinity, Infinity, Infinity];
+    const max = [-Infinity, -Infinity, -Infinity];
+    members.forEach((member) => points[member].forEach((value, axis) => {
+      min[axis] = Math.min(min[axis], value);
+      max[axis] = Math.max(max[axis], value);
+    }));
+    components.push({
+      minMm: min.map((value) => value * 1000),
+      maxMm: max.map((value) => value * 1000),
+      centreMm: min.map((value, axis) => (value + max[axis]) / 2 * 1000),
+      sizeMm: min.map((value, axis) => (max[axis] - value) * 1000),
+      pointsMm: members.map((member) => points[member].map((value) => value * 1000)),
+      vertices: members.length
+    });
+  }
+  return components;
+};
+
+const near = (actual, expected, tolerance = 0.03) => Math.abs(actual - expected) <= tolerance;
+const matchesSize = (component, expected, tolerance = 0.03) => expected.every((value, axis) => near(component.sizeMm[axis], value, tolerance));
+const overlapsWindow = (component, window) => component.maxMm.every((value, axis) => value >= window.minMm[axis]) && component.minMm.every((value, axis) => value <= window.maxMm[axis]);
+const nearestXyDistance = (component, [x, y]) => Math.min(...component.pointsMm.map((point) => Math.hypot(point[0] - x, point[1] - y)));
+const roundedVector = (values) => values.map((value) => Number(value.toFixed(4)));
 
 const deriveMetrics = (doc) => {
   let triangles = 0;
@@ -300,30 +430,113 @@ const deriveMetrics = (doc) => {
       drawCalls += 1;
     }
   }
-  const nodes = doc.getRoot().listNodes();
-  const count = (pattern) => nodes.filter((node) => pattern.test(node.getName())).length;
-  const named = (name) => nodes.find((node) => node.getName() === name);
+  const primitives = doc.getRoot().listMeshes().flatMap((mesh) => mesh.listPrimitives());
+  const byMaterial = (name) => {
+    const primitive = primitives.find((entry) => entry.getMaterial()?.getName() === name);
+    assert.ok(primitive, `${name} primitive missing`);
+    return primitive;
+  };
+  const hardware = componentMeasurements(byMaterial("MAT_BLACK_HARDWARE"));
+  const felt = componentMeasurements(byMaterial("MAT_PRESSURE_FELT"));
+  const tape = componentMeasurements(byMaterial("MAT_MAGNETIC_TAPE"));
+  const identity = ["MAT_IDENTITY_ASCII_DARK", "MAT_IDENTITY_COMPACT_REVERSE"].flatMap((name) => componentMeasurements(byMaterial(name)));
+  const screws = hardware.filter((component) => matchesSize(component, [2.9, 2.9, 0.8]));
+  const hubs = hardware.filter((component) => matchesSize(component, [16, 16, 2]));
+  const spindles = hardware.filter((component) => matchesSize(component, [6, 6, 1.4]));
+  const rollers = hardware.filter((component) => matchesSize(component, [6.2, 6.2, 1.6]));
+  const pressurePads = felt.filter((component) => matchesSize(component, [8, 4, 1.2]));
+  const ribbons = tape.filter((component) => component.sizeMm[0] > 60 && component.sizeMm[1] < 25 && component.sizeMm[2] < 0.01);
+  const ribbon = ribbons.length === 1 ? ribbons[0] : null;
+  const landmarks = {leftGuide: [10, 13], pressurePad: [45, 11.2], rightGuide: [80, 13]};
+  const landmarkDistanceMm = Object.fromEntries(Object.entries(landmarks).map(([key, point]) => [key, ribbon ? nearestXyDistance(ribbon, point) : Infinity]));
+  const emptyWindow = {minMm: [37.5, 30, 6], maxMm: [52.5, 44, 8]};
+  const emptyWindowClear = ![...hardware, ...identity].some((component) => overlapsWindow(component, emptyWindow));
   return {
     triangles,
     drawCalls,
     mechanics: {
-      screws: count(/^Screw_\d{2}$/),
-      hubs: count(/^Hub_(Left|Right)$/),
-      guideRollers: count(/^Guide_Roller_(Left|Right)$/),
-      spindles: count(/^Spindle_(Left|Right)$/),
-      continuousTapePath: named("Tape_Path")?.getExtras().continuous === true,
-      pressurePad: Boolean(named("Pressure_Pad")),
-      emptyWindowBetweenHubs: named("Empty_Window")?.getExtras().containsGeometry === false
+      evidence: "reopened-glb-topology-spatial",
+      componentCounts: {hardware: hardware.length, feltAndScrewHighlights: felt.length, tape: tape.length},
+      screws: screws.length,
+      hubs: hubs.length,
+      guideRollers: rollers.length,
+      spindles: spindles.length,
+      continuousTapePath: Boolean(ribbon) && Object.values(landmarkDistanceMm).every((distance) => distance <= 1),
+      pressurePad: pressurePads.length === 1,
+      emptyWindowBetweenHubs: emptyWindowClear,
+      measurements: {
+        screwCentresMm: screws.map((component) => roundedVector(component.centreMm)),
+        hubCentresMm: hubs.map((component) => roundedVector(component.centreMm)),
+        spindleCentresMm: spindles.map((component) => roundedVector(component.centreMm)),
+        guideRollerCentresMm: rollers.map((component) => roundedVector(component.centreMm)),
+        pressurePadBoundsMm: pressurePads.length === 1 ? {min: roundedVector(pressurePads[0].minMm), max: roundedVector(pressurePads[0].maxMm)} : null,
+        tapeRibbonBoundsMm: ribbon ? {min: roundedVector(ribbon.minMm), max: roundedVector(ribbon.maxMm)} : null,
+        tapeLandmarkDistanceMm: Object.fromEntries(Object.entries(landmarkDistanceMm).map(([key, value]) => [key, Number(value.toFixed(4))])),
+        emptyWindowMm: emptyWindow
+      }
     }
   };
 };
 
-const deriveRegistration = (source) => {
-  const entries = Object.entries(source.registration).map(([key, record]) => {
-    const dimensionErrors = record.surfaceMm.map((target, index) => Math.abs(record.actualMm[index] - target) / target * 100);
-    const centreScale = Math.max(...record.surfaceMm);
-    const centreErrors = record.centreMm.map((target, index) => Math.abs(record.actualCentreMm[index] - target) / centreScale * 100);
-    return {key, maxErrorPercent: Math.max(...dimensionErrors, ...centreErrors)};
+const boundsForAccessor = (accessor) => {
+  const values = accessor.getArray();
+  const itemSize = accessor.getElementSize();
+  const min = Array(itemSize).fill(Infinity);
+  const max = Array(itemSize).fill(-Infinity);
+  for (let offset = 0; offset < values.length; offset += itemSize) {
+    for (let axis = 0; axis < itemSize; axis += 1) {
+      min[axis] = Math.min(min[axis], values[offset + axis]);
+      max[axis] = Math.max(max[axis], values[offset + axis]);
+    }
+  }
+  return {min, max, centre: min.map((value, axis) => (value + max[axis]) / 2), size: min.map((value, axis) => max[axis] - value)};
+};
+
+const transformPoint = (point, matrix) => [
+  matrix[0] * point[0] + matrix[4] * point[1] + matrix[8] * point[2] + matrix[12],
+  matrix[1] * point[0] + matrix[5] * point[1] + matrix[9] * point[2] + matrix[13],
+  matrix[2] * point[0] + matrix[6] * point[1] + matrix[10] * point[2] + matrix[14]
+];
+
+const deriveRegistration = (doc, source) => {
+  const meshNodes = doc.getRoot().listNodes().filter((node) => node.getMesh());
+  const assembly = doc.getRoot().listNodes().find((node) => node.getName() === "Cassette_002_Centred_Pivot");
+  assert.ok(assembly, "centred cassette assembly missing");
+  const assemblyTranslationMm = assembly.getWorldTranslation().slice(0, 2).map((value) => value * 1000);
+  const entries = Object.entries(source.registration).map(([key, target]) => {
+    const meshNode = meshNodes.find((node) => node.getMesh().listPrimitives().some((entry) => entry.getMaterial()?.getName() === target.material));
+    assert.ok(meshNode, `${key} coordinate node missing`);
+    const primitive = meshNode.getMesh().listPrimitives().find((entry) => entry.getMaterial()?.getName() === target.material);
+    assert.ok(primitive, `${key} material primitive missing`);
+    const position = boundsForAccessor(primitive.getAttribute("POSITION"));
+    const uvAccessor = primitive.getAttribute("TEXCOORD_0");
+    assert.equal(Boolean(uvAccessor), Boolean(target.uvRequired), `${key} UV authority mismatch`);
+    const actualCentreMm = position.centre.slice(0, 2).map((value) => value * 1000);
+    const actualSizeMm = position.size.slice(0, 2).map((value) => value * 1000);
+    const actualWorldCentreMm = transformPoint(position.centre, meshNode.getWorldMatrix()).slice(0, 2).map((value) => value * 1000);
+    const dimensionErrors = target.surfaceMm.map((value, index) => Math.abs(actualSizeMm[index] - value) / value * 100);
+    const centreScale = Math.max(...target.surfaceMm);
+    const centreErrors = target.centreMm.map((value, index) => Math.abs(actualCentreMm[index] - value) / centreScale * 100);
+    const uvBounds = uvAccessor ? (() => {
+      const uv = boundsForAccessor(uvAccessor);
+      return [...uv.min, ...uv.max];
+    })() : null;
+    const uvError = uvBounds ? Math.max(...uvBounds.map((value, index) => Math.abs(value - [0, 0, 1, 1][index]) * 100)) : 0;
+    return {
+      key,
+      material: target.material,
+      coordinateSpace: target.coordinateSpace,
+      coordinateNode: meshNode.getName(),
+      coordinateTranslationMm: meshNode.getWorldTranslation().slice(0, 2).map((value) => value * 1000),
+      targetCentreMm: target.centreMm,
+      actualCentreMm,
+      actualWorldCentreMm,
+      assemblyTranslationMm,
+      targetSizeMm: target.surfaceMm,
+      actualSizeMm,
+      uvBounds,
+      maxErrorPercent: Math.max(...dimensionErrors, ...centreErrors, uvError)
+    };
   });
   return {maxErrorPercent: Math.max(...entries.map((entry) => entry.maxErrorPercent)), entries};
 };
@@ -339,6 +552,26 @@ const verifyIdentity = async (source) => {
   return records;
 };
 
+const verifyAuthorityFixtures = async (source) => {
+  const records = {};
+  for (const [key, entry] of Object.entries(source.canonicalSource)) {
+    const bytes = await readFile(path.join(here, entry.fixturePath));
+    const actual = sha256(bytes);
+    assert.equal(actual, entry.fixtureSha256, `${key} authority fixture hash drift`);
+    const fixture = JSON.parse(bytes);
+    assert.equal(fixture.authorityType, "governed-minimal-copy", `${key} authority fixture type drift`);
+    assert.equal(fixture.canonicalPath, entry.path, `${key} canonical path drift`);
+    assert.equal(fixture.canonicalSha256, entry.sha256, `${key} canonical SHA drift`);
+    records[key] = {
+      fixturePath: entry.fixturePath,
+      fixtureSha256: actual,
+      canonicalPath: fixture.canonicalPath,
+      canonicalSha256: fixture.canonicalSha256
+    };
+  }
+  return records;
+};
+
 const validationSummary = (validation) => ({
   errors: validation.issues.numErrors,
   warnings: validation.issues.numWarnings,
@@ -348,7 +581,7 @@ const validationSummary = (validation) => ({
 
 const buildArtifact = async () => {
   const source = await readJson(sourcePath);
-  const identity = await verifyIdentity(source);
+  const [identity, authorityIntegrity] = await Promise.all([verifyIdentity(source), verifyAuthorityFixtures(source)]);
   const io = new NodeIO();
   const first = await buildDocument(source);
   const bytes = Buffer.from(await io.writeBinary(first.doc));
@@ -360,19 +593,19 @@ const buildArtifact = async () => {
     writeTimestamp: false,
     maxIssues: 100
   });
-  const registration = deriveRegistration(source);
+  const registration = deriveRegistration(reopened, source);
   const summary = validationSummary(validation);
   assert.equal(summary.errors, 0, "Khronos validator errors");
   assert.equal(summary.warnings, 0, "Khronos validator warnings");
-  assert.deepEqual(metrics.mechanics, {
-    screws: 5,
-    hubs: 2,
-    guideRollers: 2,
-    spindles: 2,
-    continuousTapePath: true,
-    pressurePad: true,
-    emptyWindowBetweenHubs: true
-  });
+  assert.equal(metrics.mechanics.evidence, "reopened-glb-topology-spatial");
+  assert.deepEqual(metrics.mechanics.componentCounts, {hardware: 18, feltAndScrewHighlights: 27, tape: 3});
+  assert.equal(metrics.mechanics.screws, 5);
+  assert.equal(metrics.mechanics.hubs, 2);
+  assert.equal(metrics.mechanics.guideRollers, 2);
+  assert.equal(metrics.mechanics.spindles, 2);
+  assert.equal(metrics.mechanics.continuousTapePath, true);
+  assert.equal(metrics.mechanics.pressurePad, true);
+  assert.equal(metrics.mechanics.emptyWindowBetweenHubs, true);
   assert.ok(registration.maxErrorPercent <= 1, "identity registration exceeds 1%");
   assert.ok(bytes.byteLength <= source.budgets.maxBytes, "GLB byte hard ceiling exceeded");
   assert.ok(metrics.triangles <= source.budgets.maxTriangles, "triangle hard ceiling exceeded");
@@ -382,8 +615,10 @@ const buildArtifact = async () => {
     schemaVersion: 1,
     assetKey: source.assetKey,
     sourceIntegrity: identity,
+    authorityIntegrity,
     dimensionsAuthority: source.dimensionsAuthority,
     coordinates: source.coordinateSystem,
+    camera: source.camera,
     validation: summary,
     mechanics: metrics.mechanics,
     registration,

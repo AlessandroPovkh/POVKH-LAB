@@ -5,7 +5,7 @@
   "issues": {
     "numErrors": 0,
     "numWarnings": 0,
-    "numInfos": 3,
+    "numInfos": 2,
     "numHints": 0,
     "messages": [
       {
@@ -19,12 +19,6 @@
         "message": "Image has non-power-of-two dimensions: 1000x1000.",
         "severity": 2,
         "pointer": "/images/1"
-      },
-      {
-        "code": "IMAGE_NPOT_DIMENSIONS",
-        "message": "Image has non-power-of-two dimensions: 1000x1000.",
-        "severity": 2,
-        "pointer": "/images/2"
       }
     ],
     "truncated": false
@@ -37,7 +31,7 @@
         "pointer": "/buffers/0",
         "mimeType": "application/gltf-buffer",
         "storage": "glb",
-        "byteLength": 352208
+        "byteLength": 509440
       },
       {
         "pointer": "/images/0",
@@ -64,30 +58,17 @@
           "transfer": "srgb",
           "bits": 8
         }
-      },
-      {
-        "pointer": "/images/2",
-        "mimeType": "image/png",
-        "storage": "buffer-view",
-        "image": {
-          "width": 1000,
-          "height": 1000,
-          "format": "rgba",
-          "primaries": "srgb",
-          "transfer": "srgb",
-          "bits": 8
-        }
       }
     ],
     "animationCount": 0,
-    "materialCount": 9,
+    "materialCount": 10,
     "hasMorphTargets": false,
     "hasSkins": false,
     "hasTextures": true,
     "hasDefaultScene": true,
-    "drawCallCount": 9,
-    "totalVertexCount": 3606,
-    "totalTriangleCount": 1750,
+    "drawCallCount": 10,
+    "totalVertexCount": 10846,
+    "totalTriangleCount": 4854,
     "maxUVs": 1,
     "maxInfluences": 0,
     "maxAttributes": 3

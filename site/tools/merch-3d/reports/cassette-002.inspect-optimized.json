@@ -7,16 +7,16 @@
         "bboxMin": [
           -0.10735,
           0,
-          -0.0168
+          -0.0121
         ],
         "bboxMax": [
           0.10735,
-          0.077,
-          0.0168
+          0.14,
+          0.0121
         ],
-        "renderVertexCount": 5250,
-        "uploadVertexCount": 3606,
-        "uploadNaiveVertexCount": 3606
+        "renderVertexCount": 14562,
+        "uploadVertexCount": 10846,
+        "uploadNaiveVertexCount": 10846
       }
     ]
   },
@@ -27,9 +27,9 @@
         "mode": [
           "TRIANGLES"
         ],
-        "meshPrimitives": 9,
-        "glPrimitives": 1750,
-        "vertices": 3606,
+        "meshPrimitives": 7,
+        "glPrimitives": 4838,
+        "vertices": 10814,
         "indices": [
           "u32"
         ],
@@ -39,7 +39,26 @@
           "TEXCOORD_0:f32"
         ],
         "instances": 1,
-        "size": 107000
+        "size": 317624
+      },
+      {
+        "name": "Cassette_002_Upper_Case_Insert",
+        "mode": [
+          "TRIANGLES"
+        ],
+        "meshPrimitives": 3,
+        "glPrimitives": 16,
+        "vertices": 32,
+        "indices": [
+          "u32"
+        ],
+        "attributes": [
+          "NORMAL:f32",
+          "POSITION:f32",
+          "TEXCOORD_0:f32"
+        ],
+        "instances": 1,
+        "size": 920
       }
     ]
   },
@@ -47,6 +66,13 @@
     "properties": [
       {
         "name": "MAT_CLEAR_POLYMER",
+        "instances": 1,
+        "textures": [],
+        "alphaMode": "BLEND",
+        "doubleSided": true
+      },
+      {
+        "name": "MAT_CLEAR_EDGE",
         "instances": 1,
         "textures": [],
         "alphaMode": "BLEND",
@@ -88,16 +114,14 @@
         "doubleSided": false
       },
       {
-        "name": "MAT_IDENTITY_ASCII_DARK",
+        "name": "MAT_SIGNAL_RED",
         "instances": 1,
-        "textures": [
-          "baseColorTexture"
-        ],
-        "alphaMode": "BLEND",
-        "doubleSided": true
+        "textures": [],
+        "alphaMode": "OPAQUE",
+        "doubleSided": false
       },
       {
-        "name": "MAT_IDENTITY_COMPACT_DARK",
+        "name": "MAT_IDENTITY_ASCII_DARK",
         "instances": 1,
         "textures": [
           "baseColorTexture"
@@ -130,19 +154,6 @@
         "resolution": "1600x600",
         "size": 137134,
         "gpuSize": 5119556
-      },
-      {
-        "name": "MAT_IDENTITY_COMPACT_DARK_Texture",
-        "uri": "",
-        "slots": [
-          "baseColorTexture"
-        ],
-        "instances": 1,
-        "mimeType": "image/png",
-        "compression": "",
-        "resolution": "1000x1000",
-        "size": 54206,
-        "gpuSize": 5332856
       },
       {
         "name": "MAT_IDENTITY_COMPACT_REVERSE_Texture",

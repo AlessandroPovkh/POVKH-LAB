@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "authorityType": "governed-minimal-copy",
+  "canonicalPath": "production/physical-merch/concepts/drop-001/renders/archive-objects/cassette-002/placements.json",
+  "canonicalSha256": "398cf719dc099c785858baab7876ff95aead00763b000db46c899f90c6f0b783",
+  "payload": {
+    "canvas": {"width": 1536, "height": 1024},
+    "front": {
+      "compactSeal": {"x": 1148, "y": 202, "width": 50, "height": 50},
+      "signalRule": {"x": 846, "y": 225, "width": 250, "height": 4}
+    },
+    "open": {
+      "ascii": {"x": 230, "y": 225, "width": 520, "height": 195},
+      "signalRule": {"x": 230, "y": 431, "width": 520, "height": 4},
+      "metadata": {"x": 230, "y": 443, "fontSize": 10, "lineSpacing": 3}
+    },
+    "shell": {
+      "reverseCompact": {"x": 1090, "y": 318, "width": 64, "height": 64}
+    },
+    "rear": {
+      "ascii": {"x": 376, "y": 286, "width": 784, "height": 294},
+      "signalRule": {"x": 376, "y": 626, "width": 784, "height": 4},
+      "metadata": {"x": 376, "y": 666, "fontSize": 15, "lineSpacing": 9}
+    },
+    "detail": {
+      "reverseCompact": {"x": 820, "y": 620, "width": 84, "height": 84}
+    }
+  }
+}

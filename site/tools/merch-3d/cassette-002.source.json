@@ -20,11 +20,15 @@
   "canonicalSource": {
     "placements": {
       "path": "production/physical-merch/concepts/drop-001/renders/archive-objects/cassette-002/placements.json",
-      "sha256": "398cf719dc099c785858baab7876ff95aead00763b000db46c899f90c6f0b783"
+      "sha256": "398cf719dc099c785858baab7876ff95aead00763b000db46c899f90c6f0b783",
+      "fixturePath": "sources/cassette-002/authority/placements.authority.json",
+      "fixtureSha256": "8b0a2662bcff4d9fa25f87694ca4ec898aa231dcdf70c614401738292633196f"
     },
     "provenance": {
       "path": "production/physical-merch/concepts/drop-001/renders/archive-objects/cassette-002/provenance.json",
-      "sha256": "e274081bc3844843edc5b533f3d26085c40dc55a6646571c5f23c39eaf7242bb"
+      "sha256": "e274081bc3844843edc5b533f3d26085c40dc55a6646571c5f23c39eaf7242bb",
+      "fixturePath": "sources/cassette-002/authority/provenance.authority.json",
+      "fixtureSha256": "58fb2d965e01dac12fd7f2639f1f8acc87e5a74b646c2e7c42dc53b1a736f262"
     }
   },
   "identity": {
@@ -52,10 +56,11 @@
   },
   "materials": {
     "bone": {"baseColor": [0.8879, 0.8632, 0.7991, 1], "metallic": 0, "roughness": 0.9},
-    "smoke": {"baseColor": [0.03, 0.035, 0.04, 0.46], "metallic": 0, "roughness": 0.23, "alphaMode": "BLEND"},
-    "clear": {"baseColor": [0.78, 0.82, 0.85, 0.22], "metallic": 0, "roughness": 0.12, "alphaMode": "BLEND"},
-    "black": {"baseColor": [0.01, 0.01, 0.01, 1], "metallic": 0.15, "roughness": 0.38},
-    "tape": {"baseColor": [0.075, 0.026, 0.012, 1], "metallic": 0, "roughness": 0.55},
+    "smoke": {"baseColor": [0.022, 0.029, 0.038, 0.32], "metallic": 0.04, "roughness": 0.14, "alphaMode": "BLEND"},
+    "clear": {"baseColor": [0.45, 0.52, 0.58, 0.06], "metallic": 0, "roughness": 0.04, "alphaMode": "BLEND"},
+    "clearEdge": {"baseColor": [0.68, 0.76, 0.82, 0.3], "metallic": 0.08, "roughness": 0.05, "alphaMode": "BLEND"},
+    "black": {"baseColor": [0.008, 0.009, 0.011, 1], "metallic": 0.32, "roughness": 0.24},
+    "tape": {"baseColor": [0.022, 0.008, 0.005, 1], "metallic": 0.02, "roughness": 0.42},
     "felt": {"baseColor": [0.22, 0.22, 0.21, 1], "metallic": 0, "roughness": 1}
   },
   "geometry": {
@@ -71,11 +76,14 @@
     }
   },
   "registration": {
-    "asciiJCard": {"surfaceMm": [55, 20.625], "actualMm": [55, 20.625], "centreMm": [-62, 49.5], "actualCentreMm": [-62, 49.5]},
-    "compactDarkJCard": {"surfaceMm": [9, 9], "actualMm": [9, 9], "centreMm": [-31, 28], "actualCentreMm": [-31, 28]},
-    "compactReverseShell": {"surfaceMm": [7.5, 7.5], "actualMm": [7.5, 7.5], "centreMm": [36, 37], "actualCentreMm": [36, 37]}
+    "asciiJCard": {"material": "MAT_IDENTITY_ASCII_DARK", "coordinateSpace": "upper-case-local-mm", "surfaceMm": [87, 32.625], "centreMm": [-66.5, 39.5], "uvRequired": true, "derivation": "OPEN_SET placement 520x195 mapped without aspect warp to the approved 98x58 mm viewer insert envelope"},
+    "signalRuleJCard": {"material": "MAT_SIGNAL_RED", "coordinateSpace": "upper-case-local-mm", "surfaceMm": [87, 0.6692], "centreMm": [-66.5, 21.0135], "derivation": "OPEN_SET governed 520x4 signal rule mapped at the same 0.1673077 mm-per-pixel scale as the approved ASCII placement"},
+    "compactReverseShell": {"material": "MAT_IDENTITY_COMPACT_REVERSE", "coordinateSpace": "assembly-local-mm", "surfaceMm": [7.5, 7.5], "centreMm": [81, 54], "shellLocalCentreMm": [36, 54], "uvRequired": true}
   },
-  "camera": {"orbit": "0deg 75deg 105%", "poster": "assets/merch/cassette-hero.webp"},
+  "readabilityAnchors": {
+    "asciiJCard": {"asciiSide": "left", "labelSide": "right", "signalRuleRelation": "above-label", "expectedText": "POVKH_LAB::SIGNAL"}
+  },
+  "camera": {"orbit": "18deg 70deg 103%", "fieldOfView": "22deg", "mobileOrbit": "14deg 72deg 105%", "mobileFieldOfView": "19deg", "mobileTarget": "auto 0.078m auto", "poster": "assets/merch/cassette-hero.webp"},
   "budgets": {"targetBytes": 2200000, "maxBytes": 2500000, "targetTriangles": 45000, "maxTriangles": 50000, "targetDrawCalls": 10, "maxDrawCalls": 12},
   "toolchain": {"gltfTransform": "4.4.2", "gltfValidator": "2.0.0-dev.3.10"}
 }

@@ -1,32 +1,63 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 3,
   "assetKey": "cassette-002",
   "structuralGeometryReview": {
     "status": "pass",
     "evidence": [
-      "The final GLB reopens locally with nine material primitives and 1750 triangles.",
-      "The decoded scene contains exactly five screw, two hub, two spindle and two guide-roller landmarks.",
-      "The continuous tape route crosses the pressure pad and retains an explicit empty between-hubs window.",
+      "The final GLB reopens locally with ten draw calls and 4854 triangles.",
+      "Mechanical counts come from connected decoded geometry, not navigation anchors.",
+      "The display contains full lower and upper 109 x 70 mm clear panels, continuous hinge, five hinge knuckles, three visible retainers, upper J-card and a separate cassette at lower right.",
+      "Cassette detail includes side rails, clear hub rings, forty-four shell stipple elements, six transport ports, a connected central recess, a thicker lower trapezoid panel, hub teeth and Phillips screw strokes.",
+      "The OPEN_SET J-card contains only the governed ASCII identity and mapped signal-red rule; the unauthorized compact-dark square is absent.",
+      "Asymmetric UV anchors preserve ASCII on the left, POVKH_LAB::SIGNAL on the right, its short rule above, and the governed full-width rule below.",
       "The overall display bounds are grounded at Y=0 and centred in X and Z."
     ]
   },
   "browserIntegration": {
-    "status": "pending-host-csp-fix",
+    "status": "pass",
+    "runtime": "self-hosted @google/model-viewer 4.3.1",
     "assetRequest": "pass",
     "modelDecode": "pass",
-    "modelViewerLoadedEvent": "pass",
-    "textureDisplay": "blocked",
-    "reason": "The current host Content-Security-Policy blocks model-viewer blob texture URLs through connect-src and also reports inline-style and WebAssembly policy violations. This is a runtime integration issue outside the cassette asset scope.",
-    "requiredBeforeRelease": [
-      "Retest after the host CSP permits the minimum model-viewer runtime requirements.",
-      "Capture canonical front and three-quarter screenshots in the target browser matrix.",
-      "Approve silhouette, transparency order, identity legibility and absence of z-fighting.",
-      "Measure activation-to-interactive and drag frame stability on the agreed mid-range Android profile."
-    ]
+    "embeddedTextureDisplay": "pass",
+    "consoleErrors": 0,
+    "profiles": [
+      {"name": "desktop", "viewportPx": [1440, 1000], "views": ["default", "front", "rear"], "loaded": true, "visible": true},
+      {"name": "mobile", "viewportPx": [390, 844], "views": ["default", "front", "rear"], "loaded": true, "visible": true}
+    ],
+    "modelViewerSemantics": {
+      "dimensionsM": [0.2146999985, 0.1400000006, 0.02419999987],
+      "centreM": [0.0000000029, 0.0700000003, 0],
+      "fieldOfViewDeg": 22,
+      "mobileFieldOfViewDeg": 19,
+      "allFinite": true,
+      "positiveDimensions": true
+    },
+    "governedCameraEvidence": {
+      "captureMode": "source metadata applied programmatically for asset QA; production runtime contract remains a separate integration gate",
+      "desktop": {"orbit": "18deg 70deg 103%", "fieldOfView": "22deg"},
+      "mobile": {"orbit": "14deg 72deg 105%", "fieldOfView": "19deg", "cameraTarget": "auto 0.078m auto"}
+    }
   },
+  "screenshots": [
+    {"view": "desktop-default", "path": "tools/merch-3d/reports/screenshots/cassette-002-desktop-default.png", "sha256": "145e3369162b0f16398a7b0f1b773578ed4eb46fc89f560f00425a1421926cc0"},
+    {"view": "desktop-front", "path": "tools/merch-3d/reports/screenshots/cassette-002-desktop-front.png", "sha256": "496a1fa90262792c3ae24d389673287208765658165e8599e003498694ace2f6"},
+    {"view": "desktop-rear", "path": "tools/merch-3d/reports/screenshots/cassette-002-desktop-rear.png", "sha256": "51cdc769b630c1569a08debb49486186719eb9b57700efb432390bdc4fc26c05"},
+    {"view": "mobile-default", "path": "tools/merch-3d/reports/screenshots/cassette-002-mobile-default.png", "sha256": "f06c7fb94d3780c4567ed2a3c46f0c98ed43e368a845a97e722abc10627d73df"},
+    {"view": "mobile-front", "path": "tools/merch-3d/reports/screenshots/cassette-002-mobile-front.png", "sha256": "6c1f5408d9a4c4c0d5014220145fc6f5202e3c5d81a3bc2646c865dc3d99eab0"},
+    {"view": "mobile-rear", "path": "tools/merch-3d/reports/screenshots/cassette-002-mobile-rear.png", "sha256": "400bca7e9daa7d015f17fea4760c93566bfaab95d1f6f7e8aea6e732ad3aec9b"},
+    {"view": "desktop-readability-crop", "path": "tools/merch-3d/reports/screenshots/cassette-002-desktop-readability-crop.png", "sha256": "db123d42fcace05a0d05af80a91ead8c4e89aa39f8c087dd2167556d334be9d7"}
+  ],
   "screenshotDiff": {
-    "status": "pending",
-    "reason": "No release screenshot baseline is valid until the host CSP allows embedded identity textures to render."
+    "status": "manual-poc-pass",
+    "referencePaths": [
+      "production/physical-merch/concepts/drop-001/renders/archive-objects/cassette-002/renders/PVKH_DROP001_CASSETTE_002_OPEN_SET_CONCEPT_v01.png",
+      "production/physical-merch/concepts/drop-001/renders/archive-objects/cassette-002/renders/PVKH_DROP001_CASSETTE_002_SHELL_HERO_CONCEPT_v01.png"
+    ],
+    "assessment": "The OPEN_SET hierarchy, readable upper identity insert, continuous clear clamshell, separate detailed smoke cassette, signal-red registration and material separation pass as an interactive POC supplement to the photoreal product gallery, not as a replacement for the canonical photography."
   },
-  "releaseDecision": "asset-pass-integration-pending"
+  "remainingGates": [
+    "Integrate desktop/mobile field-of-view and mobile camera-target metadata into the production viewer contract, then repeat live-page screenshots without programmatic camera overrides.",
+    "Measure activation-to-interactive and drag frame stability on the agreed physical mid-range Android / Fast 4G profile."
+  ],
+  "releaseDecision": "asset-poc-pass-runtime-camera-and-device-performance-pending"
 }
