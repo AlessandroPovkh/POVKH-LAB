@@ -35,7 +35,7 @@ First update tests to require 11 GLB products, zero blocked products and three c
 - Regenerate: collector GLB, report, inspection and captures
 - Modify: `site/data/merch.json`
 
-Replace closed-only assertions with failing tests for open lid, interior trays and named contents. Build and validate the open assembly, make the approved open photo the poster, tune desktop/mobile cameras, and capture default/front/rear views.
+Replace closed-only assertions with failing tests for open lid, interior trays and named contents. Build and validate the open assembly, preserve the immutable approved closed hero as its poster, tune desktop/mobile cameras for the activated open model, and capture default/front/rear views.
 
 ## Task 4: Integrate and verify
 

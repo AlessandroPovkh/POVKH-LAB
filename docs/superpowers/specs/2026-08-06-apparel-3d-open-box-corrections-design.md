@@ -58,7 +58,7 @@ Replace the closed envelope with a default-open presentation matching the approv
 - cassette, CD, data key and vinyl/archive sleeve elements in individual recesses;
 - sticker/identity inserts.
 
-The parts are visually faithful concept geometry rather than replicas of manufacturing internals. The poster changes to the approved open view and cameras frame both lid and contents.
+The parts are visually faithful concept geometry rather than replicas of manufacturing internals. The immutable approved closed hero remains the poster; after activation, the 3D model defaults open and its cameras frame both lid and contents.
 
 ## Acceptance
 
