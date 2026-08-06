@@ -5,11 +5,11 @@
 | 1. Governance tests | tests-only RED | passed after fixes | passed after fixes | completed / intentional RED |
 | 2. Apparel registration | implemented / tests green | passed | passed after hardening | completed |
 | 3. PHYSICAL motion | implemented / tests green | passed | passed after hardening | completed |
-| 4. 3D runtime | implementation in progress | — | — | in progress |
-| 5. Cassette + hoodie POC | — | — | — | pending |
-| 6. All product viewers | — | — | — | pending |
-| 7. Interface hierarchy | — | — | — | pending |
-| 8. Full verification | — | — | — | pending |
+| 4. 3D runtime | implemented / tests green | passed | passed after hardening | completed |
+| 5. Cassette + hoodie POC | cassette complete; hoodie intentionally blocked | passed | passed | completed |
+| 6. All product viewers | eight evidence-backed GLBs / tests green | passed | passed after hardening | completed |
+| 7. Interface hierarchy | implemented / tests green | passed | passed | completed |
+| 8. Full verification | clean immutable checkout green | passed | final release audit in progress | in progress |
 | 9. Release | — | — | — | pending |
 
 ## Shared constraints
@@ -52,3 +52,22 @@
 - Every encoded delivery passes both global normalized seam MAE ≤0.0025 and pixel-local max-channel delta ≤8/255, as well as codec, duration, frame-rate and silence probes.
 - Motion contracts passed 4/4; build and 153-page static QA passed; the prior full browser matrix passed 1050 viewport, 450 fallback-font and 300 axe checks in Chromium/WebKit.
 - Independent review passed after provenance and localized seam gates were hardened.
+
+## Tasks 4–7 implementation evidence
+
+- Self-hosted pinned `@google/model-viewer` 4.3.1 ships poster-first: no runtime, model or decoder request occurs before explicit activation; reduced-motion and Save-Data retain the lightweight poster path.
+- Eight products have deterministic, locally built GLBs with governed source identity, physical dimensions, camera contracts and validator evidence: vinyl, cassette, CD, data key, poster, sticker pack, zine and collector box.
+- Tee, hoodie and cap remain deliberately `sourceBlocked` until a physical sample scan or vendor mesh is available; the site does not imply a fake garment 3D experience.
+- The cassette proof of concept passed model, runtime, camera and browser checks. The same evidence gates were then applied to the seven remaining supported objects.
+- The CD was reduced from 1,270,180 bytes / 12,442 triangles to 523,660 bytes / 2,842 triangles while retaining its 120 mm body, 15 mm centre hole and deterministic identity. The recorded visual comparison has worst SSIM 0.998926 and RMSE 0.956/255.
+- Primary navigation is now Home / Catalog / Merch / Artists; Menu / Index is progressive disclosure. The player keeps 60% default volume and timeline seeking, while Social Access and page status are no longer duplicated.
+- Runtime, camera, catalog browser, model governance, deterministic builds and hierarchy tests all pass. The independent model-performance reviewer reported no remaining findings.
+
+## Task 8 verification evidence
+
+- A second immutable checkout created from `git archive HEAD` passed `npm ci` with 45 packages and zero vulnerabilities, then passed the complete `npm test` matrix.
+- The clean run covered 11 merch contracts, asset/page/social/registration/motion/viewer/runtime/camera/browser/model/hierarchy suites, 38 deterministic model checks, a 342-file build and 153-page static validation.
+- Full QA covered 1,050 route/viewport cases, 450 failed-font typography cases, 300 axe checks, three languages, Chromium and WebKit, keyboard/touch/no-JS, audio/video ranges, reduced motion, Save-Data, print, redirects, localized 404s and security headers.
+- A production build with the GitHub Pages base path `/POVKH-LAB` passed both static checking and 9,039 local-reference checks across 153 pages.
+- The opt-in emulated mobile benchmark passed all four governed scenarios with zero context losses and no third-party or eager 3D requests. It remains explicitly non-substitutive for physical Android validation.
+- Deferred release-quality evidence is limited to physical Android measurements and real garment geometry; neither is represented as complete.
