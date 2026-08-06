@@ -11,6 +11,7 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 const siteRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const execFile = promisify(execFileCallback);
 const registrationPath = path.join(siteRoot, "data", "apparel-print-registration-v02.json");
+const designSpecPath = path.join(siteRoot, "..", "docs", "superpowers", "specs", "2026-08-06-povkh-merch-3d-optimization-design.md");
 const safeProjectPath = /^(?!\/)(?!.*(?:^|\/)\.\.(?:\/|$))[A-Za-z0-9._/-]+$/;
 const sha256Pattern = /^[a-f0-9]{64}$/;
 
@@ -28,7 +29,7 @@ const expectedGarments = Object.freeze({
       sha256: "89cac41d6abf06cccc1952823b5c2dcdf4a063a063a98dfebb998b19c428db4e",
       pixelSha256: "2455ce7afdcc054e7b90eefda55dd3f4af6d3243c614b30826e4dabeec751cbf",
       assetDimensions: { width: 1536, height: 1024 },
-      canvas: { width: 1600, height: 900 },
+      placementCoordinateSpace: "assetPixels",
       placement: [528, 350, 480, 180]
     },
     views: {
@@ -37,8 +38,8 @@ const expectedGarments = Object.freeze({
         artworkQuad: [[380, 340], [1156, 347], [1152, 638], [384, 631]],
         surfaceAnchors: [[150, 180], [1400, 190], [1390, 820], [160, 810]],
         heroRelative: {
-          centerOffset: { x: 0.005098, y: -0.005926 },
-          scale: { x: 1.673418, y: 1.452534 }
+          centerOffset: { x: -0.014009, y: 0.054933 },
+          scale: { x: 1.606481, y: 1.652661 }
         },
         appliedArtworkCentroid: { x: 712.193025, y: 508.56822 }
       },
@@ -47,8 +48,8 @@ const expectedGarments = Object.freeze({
         artworkQuad: [[598, 327], [938, 327], [930, 455], [604, 455]],
         surfaceAnchors: [[480, 235], [1055, 235], [1025, 700], [510, 700]],
         heroRelative: {
-          centerOffset: { x: 0.025469, y: -0.11164 },
-          scale: { x: 0.716146, y: 0.62779 }
+          centerOffset: { x: 0.006362, y: -0.050781 },
+          scale: { x: 0.6875, y: 0.714286 }
         },
         appliedArtworkCentroid: { x: 743.482783, y: 400.317024 }
       }
@@ -67,7 +68,7 @@ const expectedGarments = Object.freeze({
       sha256: "d46462cbac738c17c4f4aaddb1ba1fc7c35f13ebe09cc70d967377927219aefa",
       pixelSha256: "687c77e118bcad6c5bc7b6dbfd1292c75c6e93f52face89fa1bdcbfb4a6b1a9b",
       assetDimensions: { width: 1536, height: 1024 },
-      canvas: { width: 1600, height: 900 },
+      placementCoordinateSpace: "assetPixels",
       placement: [552, 365, 432, 162]
     },
     views: {
@@ -76,8 +77,8 @@ const expectedGarments = Object.freeze({
         artworkQuad: [[357, 339], [1177, 347], [1173, 653], [357, 645]],
         surfaceAnchors: [[140, 170], [1400, 180], [1390, 820], [150, 810]],
         heroRelative: {
-          centerOffset: { x: -0.000318, y: -0.003439 },
-          scale: { x: 1.9692, y: 1.695991 }
+          centerOffset: { x: -0.019515, y: 0.058062 },
+          scale: { x: 1.890432, y: 1.929661 }
         },
         appliedArtworkCentroid: { x: 707.165163, y: 516.540254 }
       },
@@ -86,8 +87,8 @@ const expectedGarments = Object.freeze({
         artworkQuad: [[593, 353], [923, 370], [916, 492], [593, 478]],
         surfaceAnchors: [[520, 300], [1005, 330], [980, 790], [550, 760]],
         heroRelative: {
-          centerOffset: { x: 0.016513, y: -0.087521 },
-          scale: { x: 0.785001, y: 0.738577 }
+          centerOffset: { x: -0.002683, y: -0.026021 },
+          scale: { x: 0.753601, y: 0.840336 }
         },
         appliedArtworkCentroid: { x: 733.017758, y: 430.439836 }
       }
@@ -199,13 +200,15 @@ const round6 = (value) => Number(value.toFixed(6));
 const heroRelativeRegistration = (garment, view, appliedArtworkBounds, appliedArtworkCentroid) => {
   const hero = garment.approvedHero;
   const master = garment.master;
+  assert.equal(hero.placementCoordinateSpace, "assetPixels", "approved hero placement must declare asset-pixel coordinates");
+  assert.equal(Object.hasOwn(hero, "canvas"), false, "approved hero must not carry a stale virtual canvas");
   const heroVisibleBounds = {
     width: master.visibleBounds.width / master.width * hero.placement.width,
     height: master.visibleBounds.height / master.height * hero.placement.height
   };
   const heroCenter = {
-    x: (hero.placement.x + master.visibleCentroid.x / master.width * hero.placement.width) / hero.canvas.width,
-    y: (hero.placement.y + master.visibleCentroid.y / master.height * hero.placement.height) / hero.canvas.height
+    x: (hero.placement.x + master.visibleCentroid.x / master.width * hero.placement.width) / hero.assetDimensions.width,
+    y: (hero.placement.y + master.visibleCentroid.y / master.height * hero.placement.height) / hero.assetDimensions.height
   };
   const viewCenter = {
     x: appliedArtworkCentroid.x / view.output.width,
@@ -217,8 +220,8 @@ const heroRelativeRegistration = (garment, view, appliedArtworkBounds, appliedAr
       y: round6(viewCenter.y - heroCenter.y)
     },
     scale: {
-      x: round6((appliedArtworkBounds.width / view.output.width) / (heroVisibleBounds.width / hero.canvas.width)),
-      y: round6((appliedArtworkBounds.height / view.output.height) / (heroVisibleBounds.height / hero.canvas.height))
+      x: round6((appliedArtworkBounds.width / view.output.width) / (heroVisibleBounds.width / hero.assetDimensions.width)),
+      y: round6((appliedArtworkBounds.height / view.output.height) / (heroVisibleBounds.height / hero.assetDimensions.height))
     }
   };
 };
@@ -288,7 +291,8 @@ test("locks the canonical 1600x600 / 300x112.5 mm plane and exact artwork master
     ]);
     assert.equal(stdout.trim(), "1600x600", `${slug} master raster dimensions drifted`);
     assert.equal(garment.approvedHero.path, expected.approvedHero.path, `${slug} approved hero source drifted`);
-    assert.deepEqual(garment.approvedHero.canvas, expected.approvedHero.canvas, `${slug} approved hero canvas drifted`);
+    assert.equal(garment.approvedHero.placementCoordinateSpace, expected.approvedHero.placementCoordinateSpace, `${slug} approved hero placement coordinate authority drifted`);
+    assert.equal(Object.hasOwn(garment.approvedHero, "canvas"), false, `${slug} approved hero must use its decoded asset dimensions without a virtual canvas`);
     const { x, y, width, height } = garment.approvedHero.placement || {};
     assert.deepEqual([x, y, width, height], expected.approvedHero.placement, `${slug} approved hero placement drifted`);
   }
@@ -385,9 +389,22 @@ test("declares an auditable surface quad, homography, garment mask and fabric la
   }
 });
 
-test("reconstructs the contaminated hoodie macro fabric without changing unrelated source pixels", async () => {
+test("audits the single bounded hoodie macro base retouch as an explicit design exception", async () => {
   const registration = await readRegistration();
   const view = registration.garments.hoodie.views["print-macro"];
+  const repairViews = [];
+  for (const [slug, garment] of Object.entries(registration.garments)) {
+    for (const [role, candidate] of Object.entries(garment.views)) {
+      if (candidate.baseRepair) repairViews.push(`${slug}/${role}`);
+    }
+  }
+  assert.deepEqual(repairViews, ["hoodie/print-macro"], "only the governed hoodie macro may retouch its blank base");
+  const designSpec = await readFile(designSpecPath, "utf8");
+  assert.match(
+    designSpec,
+    /The only permitted blank-base retouch is the governed hoodie print-macro v1→v2 repair/,
+    "the fixed design constraints must explicitly authorize the one bounded hoodie macro repair"
+  );
   assert.equal(
     view.base.path,
     "tools/fixtures/apparel-registration/bases/PVKH_VOID_BACKMARK_HOODIE_PRINT_FIBER_MACRO_BLANK_BASE_v02.png"
@@ -404,15 +421,18 @@ test("reconstructs the contaminated hoodie macro fabric without changing unrelat
     fullStrengthBounds: { left: 820, top: 515, right: 1365, bottom: 790 },
     donorOffset: { x: -520, y: 0 },
     changedPixels: view.baseRepair.changedPixels,
+    changedOutsideFinalArtworkMaskPixels: view.baseRepair.changedOutsideFinalArtworkMaskPixels,
     outsideRepairBoundsChangedPixels: 0
   });
   assert.ok(view.baseRepair.changedPixels > 100_000, "hoodie macro repair must replace the contaminated fabric plane");
-  const [source, repaired] = await Promise.all([
+  const [source, repaired, artworkMask] = await Promise.all([
     decodeRgb(view.baseRepair.source, view.output),
-    decodeRgb(view.base, view.output)
+    decodeRgb(view.base, view.output),
+    decodeGray(view.appliedArtworkMask, view.output)
   ]);
   let changedInside = 0;
   let changedOutside = 0;
+  let changedOutsideFinalArtworkMask = 0;
   const { left, top, right, bottom } = view.baseRepair.repairBounds;
   for (let y = 0; y < view.output.height; y += 1) {
     for (let x = 0; x < view.output.width; x += 1) {
@@ -421,12 +441,20 @@ test("reconstructs the contaminated hoodie macro fabric without changing unrelat
         || source[offset + 1] !== repaired[offset + 1]
         || source[offset + 2] !== repaired[offset + 2];
       if (!changed) continue;
+      const pixel = y * view.output.width + x;
+      if (artworkMask[pixel] === 0) changedOutsideFinalArtworkMask += 1;
       if (x >= left && x < right && y >= top && y < bottom) changedInside += 1;
       else changedOutside += 1;
     }
   }
   assert.equal(changedOutside, 0, "hoodie macro repair must preserve every source pixel outside the declared repair bounds");
   assert.equal(changedInside, view.baseRepair.changedPixels, "hoodie macro repair changed-pixel audit drifted");
+  assert.equal(
+    changedOutsideFinalArtworkMask,
+    view.baseRepair.changedOutsideFinalArtworkMaskPixels,
+    "the intentional v1→v2 retouch outside the final artwork must remain exactly audited"
+  );
+  assert.ok(changedOutsideFinalArtworkMask > 0, "the report must not misrepresent the v1 photo as unchanged outside final artwork");
 });
 
 test("preserves the blank base for every pixel outside the actual applied-artwork mask in all four views", async () => {

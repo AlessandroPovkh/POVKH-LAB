@@ -45,8 +45,8 @@ Both decode to the locked visible-alpha bounds `70,60 -> 1510,536`. The authorit
 
 - Contact sheet: `site/tools/fixtures/apparel-registration/apparel-registration-contact-sheet-v02.png`
 - Layout: t-shirt hero / print macro / on-body; hoodie hero / print macro / worn rear
-- Encoded SHA-256: `72b419422832991e62085cdde5709d0e6da2cf914e64c3d1344e1d4e2b8c8fe6`
-- Decoded RGBA SHA-256: `f26047c69b0cd955452faefe2e91a65083603e92c7afc5d99ed5bcb3715570c2`
+- Encoded SHA-256: `db677701f1ad170c293c64f615eb940b16d2fe3ff40c2be57ff928d86e0d737d`
+- Decoded RGBA SHA-256: `47e7a870ed73d450d46ebe2f897349f11061a80032c6b1cefd9d5f779939864a`
 
 Original-resolution review confirmed:
 
@@ -55,7 +55,7 @@ Original-resolution review confirmed:
 - on-body/worn views have consistent perceived placement and scale;
 - no print escapes the garment masks;
 - no rectangular matte remains in either hoodie view;
-- garment pixels outside the print layer remain unchanged.
+- final source-render pixels outside the print layer remain byte-identical to each governed blank base (including the intentional hoodie macro v2 repair base).
 
 ## Files and provenance
 
@@ -67,7 +67,7 @@ The existing apparel renderer regenerated four public WebPs, four governed sourc
 
 Fresh final run:
 
-- `npm run test:merch-registration` — 8/8 passed; includes a full dry rerender and pixel comparison of all four public images, source renders, masks, bounds, homographies, and the contact sheet.
+- `npm run test:merch-registration` — 9/9 passed; includes a full dry rerender and pixel comparison of all four public images, source renders, masks, bounds, homographies, and the contact sheet.
 - `npm run test:merch-assets` — 2/2 passed.
 - `npm run test:merch-pages` — 2/2 passed.
 - `npm run test:merch` — 11/11 passed.
@@ -77,7 +77,7 @@ Fresh final run:
 
 - Scope: only apparel registration source/tests/data, four public derivative images, governed derivative fixtures/contact sheet, and their four manifest mappings are included.
 - Identity: no artwork was generated, retyped, redrawn, or modified; exact masters are validated by encoded and decoded hashes plus visible-alpha bounds.
-- Determinism: staged bundle validation now covers 18 artifacts; dry verification independently rerenders and compares the contact sheet and all governed pixels.
+- Determinism: staged bundle validation now covers 19 artifacts; dry verification independently rerenders and compares the repaired base, contact sheet and all governed pixels.
 - Visual defect prevention: transparent hoodie master pixels are asserted byte-identical to the garment base, preventing recurrence of rectangular texture-return matte.
 - Shared worktree safety: unrelated concurrent 3D/catalog changes were left untouched and will not be staged in this commit.
 - Remaining concerns: none within Task 1 scope.
@@ -107,3 +107,20 @@ Fresh test evidence:
 - `npm run test:merch` — 11/11 passed.
 
 No 3D model, viewer catalog, or `merch.json` file is part of this fix.
+
+## Review-fix evidence — hero coordinate authority and repair exception
+
+The approved hero placements `(528,350,480,180)` and `(552,365,432,162)` are coordinates in the decoded 1536×1024 hero assets. The former 1600×900 `canvas` field was stale and caused hero-relative normalization to mix coordinate systems. It has been removed; each hero now declares `placementCoordinateSpace: "assetPixels"`, and the renderer/test divide placements only by `assetDimensions`.
+
+Corrected mask-derived hero-relative targets are:
+
+| View | Center offset | Visible scale |
+| --- | --- | --- |
+| t-shirt / print macro | `(-0.014009, 0.054933)` | `(1.606481, 1.652661)` |
+| t-shirt / on-body | `(0.006362, -0.050781)` | `(0.687500, 0.714286)` |
+| hoodie / print macro | `(-0.019515, 0.058062)` | `(1.890432, 1.929661)` |
+| hoodie / worn rear | `(-0.002683, -0.026021)` | `(0.753601, 0.840336)` |
+
+The v1→v2 hoodie macro operation is explicitly an intentional, tightly bounded blank-base retouch—not a claim that the original photo stayed unchanged outside the final artwork. Exactly 261,343 v1 pixels change inside repair bounds `735,430 → 1415,870`; 255,186 of those changes are outside the final applied-artwork mask, while zero changes occur outside the declared repair bounds. Final v2→source-render preservation remains separate and requires byte identity for every mask-zero pixel.
+
+The approved design spec now permits this one exception only. Registration validation and direct tests reject `baseRepair` on the other three views and require the sole repair identity to be `hoodie/print-macro`.

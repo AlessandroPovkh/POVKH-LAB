@@ -13,6 +13,7 @@ The merch area must feel like one governed physical archive rather than a collec
 - Preserve the current POVKH LAB void/bone/signal palette, typography, grid, scan-line texture and archival language.
 - Use only canonical source logos and exact artwork. AI may not redraw logos, microtype, track lists or artist names.
 - The approved main T-shirt and hoodie renders define artwork scale and placement.
+- Blank garment pixels remain source-identical outside the applied artwork by default. The only permitted blank-base retouch is the governed hoodie print-macro v1→v2 repair: its exact changed pixels must stay confined to the declared repair bounds, and the repaired v2 base—not the pre-retouch v1 source—is the byte-preservation authority for final compositing.
 - Home remains Home; Social Access remains a separate route and is not substituted for Home.
 - 3D is an enhancement, never a gate to product photography, description or navigation.
 - All new runtime assets are self-hosted and compatible with the GitHub Pages project base path.
@@ -49,8 +50,9 @@ The master artwork has these invariant properties:
 
 - canonical raster plane: 1600×600;
 - physical intent: 300×112.5 mm;
-- T-shirt approved placement: master rendered 480×180 at `(528, 350)` in the 1600×900 hero;
-- hoodie approved placement: master rendered 432×162 at `(552, 365)` in the 1600×900 hero;
+- T-shirt approved placement: master rendered 480×180 at `(528, 350)` in the decoded 1536×1024 hero asset;
+- hoodie approved placement: master rendered 432×162 at `(552, 365)` in the decoded 1536×1024 hero asset;
+- approved-hero placement coordinates are asset pixels and all normalized comparisons use each hero's decoded asset dimensions; no virtual design canvas may be mixed into this calculation;
 - physical center and width are transferred through a declared garment surface, not inferred independently from the crop.
 
 Create `apparel-print-registration-v02.json` with master file hashes, dimensions, physical size, garment surface anchors, view homographies, occlusion masks and public asset destinations. A deterministic compositor produces macro/on-body/worn derivatives. The macro camera may move closer, but it must show the same physical print.
