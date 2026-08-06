@@ -1,0 +1,142 @@
+{
+  "schemaVersion": 1,
+  "assetKey": "vinyl-001",
+  "sourceIntegrity": {
+    "outerFront": {
+      "path": "sources/vinyl-001/PVKH_VINYL_OUTER_FRONT_MASTER_v05.svg",
+      "sha256": "6a3a80aa9a45b273fe840395a03f4c46f2a6aed5b0b4d3b39139373399113b1b",
+      "bytes": 555395,
+      "derivedRaster": null
+    },
+    "outerReverse": {
+      "path": "sources/vinyl-001/PVKH_VINYL_OUTER_REVERSE_MASTER_v05.svg",
+      "sha256": "69746c784d303957e608a13747d83725a2a96c7872f7143cf76314302922eca6",
+      "bytes": 556745,
+      "derivedRaster": null
+    },
+    "centerLabel": {
+      "path": "sources/vinyl-001/PVKH_VINYL_CENTER_LABEL_MASTER_v05.svg",
+      "sha256": "23b918489decf0a7b2ae1d0ac0b14fc9eea5b5e3e6bf2b6f1074f7a9ea115c18",
+      "bytes": 188641,
+      "derivedRaster": {
+        "path": "sources/vinyl-001/PVKH_VINYL_CENTER_LABEL_MASTER_v05.chromium-768.png",
+        "sha256": "840c88f650ebee4f2306eb3c79d394f64813ceaa5f0a7505dc6723fb6ab00703",
+        "method": "Chromium rasterization of exact SVG master; no retyped content"
+      }
+    }
+  },
+  "authorityIntegrity": {
+    "masterAuthorities": {
+      "fixturePath": "sources/vinyl-001/authority/master-authorities.json",
+      "fixtureSha256": "792b32eea2b9806839db58603a4dd3cb23446faeeef4e69296959c86efd42611",
+      "canonicalPath": "production/physical-merch/concepts/drop-001/renders/vinyl/smoke-archive/source/artwork/master-authorities-v05.json",
+      "canonicalSha256": "adf0d3d5d15cee2b8a2dc5ee3243a0c5c8c71526a5213c4fd9f4d38f3d6fc10a"
+    },
+    "placements": {
+      "fixturePath": "sources/vinyl-001/authority/placements.json",
+      "fixtureSha256": "dc12d6fc696823a98b391d69cdfd6c0dbb8522796fb1d445aadf73064a5e5c44",
+      "canonicalPath": "production/physical-merch/concepts/drop-001/renders/vinyl/smoke-archive/placements.json",
+      "canonicalSha256": "2585de2c157c5823308ae7514f6c15404aa3a938b0563c728d0199ab6d1ea7e4"
+    },
+    "provenance": {
+      "fixturePath": "sources/vinyl-001/authority/provenance.json",
+      "fixtureSha256": "7fa20a4af8cdfdc4c12f65a7e70e0c14b4dbc69298ddfc75176f87e39188ab9b",
+      "canonicalPath": "production/physical-merch/concepts/drop-001/renders/vinyl/smoke-archive/provenance.json",
+      "canonicalSha256": "1f3f67e11b49d8fc3d9590a1431c3dd5f3d174463121d1caab4de4164b05d7d9"
+    }
+  },
+  "derivedRasterSha256": {
+    "outerFront": "6cf6ee29f29820e6e24145fca29c8089c8836f4c4ac90cc1f0c72bf3fa842565",
+    "outerReverse": "82f784270fb2f8cb3dd55f1cd8fa410381f43167484e0a2274097c149438c4fd",
+    "centerLabel": "840c88f650ebee4f2306eb3c79d394f64813ceaa5f0a7505dc6723fb6ab00703",
+    "signalRedSmoke": "df710dc1f298215b9029d192167ae2e0fd8de40da7601b9941dbeaf8f5793c7d"
+  },
+  "physicalEvidence": {
+    "method": "reopened-glb-accessor-bounds",
+    "dimensionsMm": {
+      "record": {
+        "diameter": 300,
+        "depth": 1.9,
+        "centreHoleDiameter": 7.2
+      },
+      "outerSleeve": [
+        315,
+        315,
+        4
+      ],
+      "innerSleeve": [
+        307,
+        307,
+        0.5
+      ],
+      "centerLabelDiameter": 100
+    },
+    "centreHoleDiameterMm": 7.2,
+    "displayState": "partially-exposed"
+  },
+  "cameraRecommendations": {
+    "poster": "assets/merch/vinyl-hero.webp",
+    "desktop": {
+      "default": {
+        "orbit": "20deg 75deg 110%",
+        "target": "auto 0.156m auto",
+        "fieldOfView": "24deg"
+      },
+      "front": {
+        "orbit": "0deg 75deg 106%",
+        "target": "auto 0.156m auto",
+        "fieldOfView": "23deg"
+      },
+      "rear": {
+        "orbit": "180deg 75deg 108%",
+        "target": "auto 0.156m auto",
+        "fieldOfView": "23deg"
+      }
+    },
+    "mobile": {
+      "default": {
+        "orbit": "18deg 76deg 114%",
+        "target": "auto 0.158m auto",
+        "fieldOfView": "20deg"
+      },
+      "front": {
+        "orbit": "0deg 76deg 110%",
+        "target": "auto 0.158m auto",
+        "fieldOfView": "20deg"
+      },
+      "rear": {
+        "orbit": "180deg 76deg 112%",
+        "target": "auto 0.158m auto",
+        "fieldOfView": "20deg"
+      }
+    }
+  },
+  "validation": {
+    "errors": 0,
+    "warnings": 0,
+    "infos": 1,
+    "hints": 0
+  },
+  "budget": {
+    "triangles": 10288,
+    "drawCalls": 6,
+    "bytes": 1095628,
+    "ceilings": {
+      "maxBytes": 1400000,
+      "maxTriangles": 18000,
+      "maxDrawCalls": 6
+    }
+  },
+  "output": {
+    "path": "assets/merch-3d/vinyl-001.glb",
+    "sha256": "fb68e0d306cce67871e8fea51e9dfcbf2f101a323fe8c0ba5774f2f82e6f5180"
+  },
+  "deterministic": {
+    "verifiedBySecondInMemoryBuild": true
+  },
+  "visualComparison": {
+    "canonicalSelected": "PVKH_DROP001_VINYL_SIGNAL_RED_PHYSICAL_MASTER_FULL_KIT_HERO_CONCEPT_v05.png",
+    "reviewStatus": "captured-six-views-readability-selected-compare",
+    "browserQa": "tools/merch-3d/reports/vinyl-001.browser-qa.json"
+  }
+}

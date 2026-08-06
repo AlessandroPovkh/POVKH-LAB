@@ -1,0 +1,252 @@
+{
+  "scenes": {
+    "properties": [
+      {
+        "name": "Vinyl_001_Physical_Display",
+        "rootName": "Vinyl_001_Centred_Grounded_Pivot",
+        "bboxMin": [
+          -0.313,
+          0,
+          -0.00345
+        ],
+        "bboxMax": [
+          0.313,
+          0.315,
+          0.00478
+        ],
+        "renderVertexCount": 30864,
+        "uploadVertexCount": 20578,
+        "uploadNaiveVertexCount": 20578
+      }
+    ]
+  },
+  "meshes": {
+    "properties": [
+      {
+        "name": "Vinyl_Outer_Sleeve_Mesh",
+        "mode": [
+          "TRIANGLES"
+        ],
+        "meshPrimitives": 1,
+        "glPrimitives": 32,
+        "vertices": 66,
+        "indices": [
+          "u32"
+        ],
+        "attributes": [
+          "NORMAL:f32",
+          "POSITION:f32"
+        ],
+        "instances": 1,
+        "size": 1968
+      },
+      {
+        "name": "Vinyl_Outer_Front_Artwork_Mesh",
+        "mode": [
+          "TRIANGLES"
+        ],
+        "meshPrimitives": 1,
+        "glPrimitives": 2,
+        "vertices": 4,
+        "indices": [
+          "u32"
+        ],
+        "attributes": [
+          "NORMAL:f32",
+          "POSITION:f32",
+          "TEXCOORD_0:f32"
+        ],
+        "instances": 1,
+        "size": 152
+      },
+      {
+        "name": "Vinyl_Outer_Reverse_Artwork_Mesh",
+        "mode": [
+          "TRIANGLES"
+        ],
+        "meshPrimitives": 1,
+        "glPrimitives": 2,
+        "vertices": 4,
+        "indices": [
+          "u32"
+        ],
+        "attributes": [
+          "NORMAL:f32",
+          "POSITION:f32",
+          "TEXCOORD_0:f32"
+        ],
+        "instances": 1,
+        "size": 152
+      },
+      {
+        "name": "Vinyl_Inner_Sleeve_Mesh",
+        "mode": [
+          "TRIANGLES"
+        ],
+        "meshPrimitives": 1,
+        "glPrimitives": 12,
+        "vertices": 24,
+        "indices": [
+          "u32"
+        ],
+        "attributes": [
+          "NORMAL:f32",
+          "POSITION:f32"
+        ],
+        "instances": 1,
+        "size": 720
+      },
+      {
+        "name": "Vinyl_Record_Mesh",
+        "mode": [
+          "TRIANGLES"
+        ],
+        "meshPrimitives": 1,
+        "glPrimitives": 8192,
+        "vertices": 16384,
+        "indices": [
+          "u32"
+        ],
+        "attributes": [
+          "NORMAL:f32",
+          "POSITION:f32",
+          "TEXCOORD_0:f32"
+        ],
+        "instances": 1,
+        "size": 622592
+      },
+      {
+        "name": "Vinyl_Center_Label_Mesh",
+        "mode": [
+          "TRIANGLES"
+        ],
+        "meshPrimitives": 1,
+        "glPrimitives": 2048,
+        "vertices": 4096,
+        "indices": [
+          "u32"
+        ],
+        "attributes": [
+          "NORMAL:f32",
+          "POSITION:f32",
+          "TEXCOORD_0:f32"
+        ],
+        "instances": 1,
+        "size": 155648
+      }
+    ]
+  },
+  "materials": {
+    "properties": [
+      {
+        "name": "MAT_BONE_SLEEVE",
+        "instances": 1,
+        "textures": [],
+        "alphaMode": "OPAQUE",
+        "doubleSided": false
+      },
+      {
+        "name": "MAT_VOID_INNER",
+        "instances": 1,
+        "textures": [],
+        "alphaMode": "OPAQUE",
+        "doubleSided": false
+      },
+      {
+        "name": "MAT_SIGNAL_RED_SMOKE_RECORD",
+        "instances": 1,
+        "textures": [
+          "baseColorTexture"
+        ],
+        "alphaMode": "BLEND",
+        "doubleSided": true
+      },
+      {
+        "name": "MAT_VINYL_OUTER_FRONT_MASTER_V05",
+        "instances": 1,
+        "textures": [
+          "baseColorTexture"
+        ],
+        "alphaMode": "OPAQUE",
+        "doubleSided": true
+      },
+      {
+        "name": "MAT_VINYL_OUTER_REVERSE_MASTER_V05",
+        "instances": 1,
+        "textures": [
+          "baseColorTexture"
+        ],
+        "alphaMode": "OPAQUE",
+        "doubleSided": true
+      },
+      {
+        "name": "MAT_VINYL_CENTER_LABEL_MASTER_V05",
+        "instances": 1,
+        "textures": [
+          "baseColorTexture"
+        ],
+        "alphaMode": "OPAQUE",
+        "doubleSided": true
+      }
+    ]
+  },
+  "textures": {
+    "properties": [
+      {
+        "name": "Vinyl_001_Deterministic_Smoke_Texture",
+        "uri": "",
+        "slots": [
+          "baseColorTexture"
+        ],
+        "instances": 1,
+        "mimeType": "image/png",
+        "compression": "",
+        "resolution": "512x512",
+        "size": 169937,
+        "gpuSize": 1398100
+      },
+      {
+        "name": "MAT_VINYL_OUTER_FRONT_MASTER_V05_Texture",
+        "uri": "",
+        "slots": [
+          "baseColorTexture"
+        ],
+        "instances": 1,
+        "mimeType": "image/png",
+        "compression": "",
+        "resolution": "1024x1024",
+        "size": 65548,
+        "gpuSize": 5592404
+      },
+      {
+        "name": "MAT_VINYL_OUTER_REVERSE_MASTER_V05_Texture",
+        "uri": "",
+        "slots": [
+          "baseColorTexture"
+        ],
+        "instances": 1,
+        "mimeType": "image/png",
+        "compression": "",
+        "resolution": "1024x1024",
+        "size": 33212,
+        "gpuSize": 5592404
+      },
+      {
+        "name": "MAT_VINYL_CENTER_LABEL_MASTER_V05_Texture",
+        "uri": "",
+        "slots": [
+          "baseColorTexture"
+        ],
+        "instances": 1,
+        "mimeType": "image/png",
+        "compression": "",
+        "resolution": "768x768",
+        "size": 37370,
+        "gpuSize": 3145720
+      }
+    ]
+  },
+  "animations": {
+    "properties": []
+  }
+}

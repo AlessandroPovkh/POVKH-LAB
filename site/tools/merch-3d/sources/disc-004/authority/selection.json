@@ -1,0 +1,10 @@
+{
+  "authorityType": "governed-minimal-copy",
+  "canonicalPath": "production/physical-merch/concepts/drop-001/renders/archive-objects/disc-004/candidate-selection.json",
+  "canonicalSha256": "4dc10ad7fb52f18c5c8e977bd56afae9bd43a1b49a1daed836987bea98c2d1d2",
+  "payload": {
+    "selected": "BALANCED_CLEAR",
+    "packetApproval": "approved",
+    "compactReverse": "audit-only-not-applied"
+  }
+}
