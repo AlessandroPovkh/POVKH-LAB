@@ -39,7 +39,7 @@
       "fixtureSha256": "c9d7819b003560e5d09f4dbdcc71fe83cbf23c6c6ce9a0882971b89fb7f6f0f0",
       "canonicalPath": "production/physical-merch/concepts/drop-001/renders/archive-objects/collector-box-001/source/final-contents-geometry-v04.json",
       "canonicalSha256": "7ba671184f982ba03f24f6281f6d3685c78cd4cd0f4c6cfd7fc03fd01b32313a",
-      "application": "uncertainty-record-only-not-modeled"
+      "application": "concept-composition-reference-only-not-machinable"
     }
   },
   "derivedMaterialIntegrity": {
@@ -55,14 +55,15 @@
   },
   "physicalEvidence": {
     "method": "reopened-glb-accessor-bounds",
-    "viewerEnvelopeMm": [
+    "nominalClosedEnvelopeMm": [
       250,
       315,
       55
     ],
     "dimensionAuthority": "provisional-viewer-envelope-not-machinable",
-    "state": "closed-only",
+    "state": "default-open-archive-set",
     "selectedForm": "01 / ARCHIVE CLAMSHELL",
+    "openAngleDeg": 105,
     "lidUvRecord": {
       "sourcePx": [
         1600,
@@ -97,12 +98,21 @@
       "rotationDeg": 0,
       "warped": false
     },
+    "modeled": [
+      "open base and lid",
+      "bone lid lining",
+      "modular tray and recesses",
+      "zine",
+      "cassette",
+      "cd",
+      "data-key",
+      "vinyl-archive-sleeve",
+      "sticker-identity"
+    ],
     "excluded": [
-      "drawer",
-      "open state",
-      "interior",
-      "contents",
       "working hinge",
+      "vendor dieline",
+      "manufacturing internals",
       "machinability claim"
     ]
   },
@@ -110,36 +120,36 @@
     "poster": "assets/merch/collector-box-set-closed.webp",
     "desktop": {
       "default": {
-        "orbit": "30deg 65deg 115%",
-        "target": "auto 0.1575m auto",
-        "fieldOfView": "24deg"
+        "orbit": "25deg 56deg 135%",
+        "target": "auto 0.075m auto",
+        "fieldOfView": "29deg"
       },
       "front": {
-        "orbit": "0deg 65deg 110%",
-        "target": "auto 0.1575m auto",
-        "fieldOfView": "23deg"
+        "orbit": "0deg 54deg 138%",
+        "target": "auto 0.075m auto",
+        "fieldOfView": "29deg"
       },
       "rear": {
-        "orbit": "180deg 65deg 112%",
-        "target": "auto 0.1575m auto",
-        "fieldOfView": "23deg"
+        "orbit": "180deg 57deg 140%",
+        "target": "auto 0.075m auto",
+        "fieldOfView": "30deg"
       }
     },
     "mobile": {
       "default": {
-        "orbit": "30deg 68deg 133%",
-        "target": "auto 0.1575m auto",
-        "fieldOfView": "30deg"
+        "orbit": "25deg 58deg 145%",
+        "target": "auto 0.075m auto",
+        "fieldOfView": "34deg"
       },
       "front": {
-        "orbit": "0deg 68deg 132%",
-        "target": "auto 0.1575m auto",
-        "fieldOfView": "30deg"
+        "orbit": "0deg 56deg 145%",
+        "target": "auto 0.075m auto",
+        "fieldOfView": "34deg"
       },
       "rear": {
-        "orbit": "180deg 68deg 132%",
-        "target": "auto 0.1575m auto",
-        "fieldOfView": "30deg"
+        "orbit": "180deg 58deg 148%",
+        "target": "auto 0.075m auto",
+        "fieldOfView": "34deg"
       }
     }
   },
@@ -150,9 +160,9 @@
     "hints": 0
   },
   "budget": {
-    "triangles": 686,
-    "drawCalls": 5,
-    "bytes": 253200,
+    "triangles": 626,
+    "drawCalls": 10,
+    "bytes": 244040,
     "ceilings": {
       "maxBytes": 2100000,
       "maxTriangles": 40000,
@@ -164,14 +174,14 @@
   },
   "output": {
     "path": "assets/merch-3d/collector-box-001.glb",
-    "sha256": "081126a858787d8b5717a10f5b6e2f0cf7d3083adac3d128ed9e928c2dc273e7"
+    "sha256": "2bf98876e57104cd434a6236b6c8ecc36b20fd7ad620832cdffda148e03d1249"
   },
   "deterministic": {
     "verifiedBySecondInMemoryBuild": true
   },
   "visualComparison": {
     "canonicalSelected": [
-      "production/physical-merch/concepts/drop-001/renders/archive-objects/collector-box-001/renders/selected/PVKH_DROP001_COLLECTOR_BOX_001_CLOSED_HERO_CONCEPT_v02.png"
+      "assets/merch/collector-box-set-open.webp"
     ],
     "reviewStatus": "captured-six-views-readability-source-compare",
     "browserQa": "tools/merch-3d/reports/collector-box-001.browser-qa.json"

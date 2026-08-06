@@ -2,34 +2,34 @@
   "scenes": {
     "properties": [
       {
-        "name": "Collector_Box_001_Closed_Archive_Clamshell",
+        "name": "Collector_Box_001_Default_Open_Archive_Set",
         "rootName": "Collector_Box_001_Centred_Grounded_Pivot",
         "bboxMin": [
           -0.125,
           0,
-          -0.0275
+          -0.11997
         ],
         "bboxMax": [
           0.125,
-          0.315,
-          0.02753
+          0.22108,
+          0.125
         ],
-        "renderVertexCount": 2058,
-        "uploadVertexCount": 1232,
-        "uploadNaiveVertexCount": 1232
+        "renderVertexCount": 2322,
+        "uploadVertexCount": 1140,
+        "uploadNaiveVertexCount": 1260
       }
     ]
   },
   "meshes": {
     "properties": [
       {
-        "name": "Collector_Box_Closed_Envelope_Mesh",
+        "name": "Collector_Box_Board_Unit_Mesh",
         "mode": [
           "TRIANGLES"
         ],
         "meshPrimitives": 1,
-        "glPrimitives": 60,
-        "vertices": 120,
+        "glPrimitives": 12,
+        "vertices": 24,
         "indices": [
           "u32"
         ],
@@ -39,37 +39,53 @@
           "TANGENT:f32",
           "TEXCOORD_0:f32"
         ],
-        "instances": 1,
-        "size": 6480
+        "instances": 2,
+        "size": 1296
       },
       {
-        "name": "Collector_Box_Closed_Lid_Mesh",
+        "name": "Collector_Box_Bone_Unit_Mesh",
         "mode": [
           "TRIANGLES"
         ],
         "meshPrimitives": 1,
-        "glPrimitives": 288,
-        "vertices": 506,
+        "glPrimitives": 12,
+        "vertices": 24,
         "indices": [
           "u32"
         ],
         "attributes": [
           "NORMAL:f32",
-          "POSITION:f32",
-          "TANGENT:f32",
-          "TEXCOORD_0:f32"
+          "POSITION:f32"
         ],
-        "instances": 1,
-        "size": 27744
+        "instances": 4,
+        "size": 720
       },
       {
-        "name": "Collector_Box_Lid_Seam_Mesh",
+        "name": "Collector_Box_Tray_Unit_Mesh",
         "mode": [
           "TRIANGLES"
         ],
         "meshPrimitives": 1,
-        "glPrimitives": 48,
-        "vertices": 96,
+        "glPrimitives": 12,
+        "vertices": 24,
+        "indices": [
+          "u32"
+        ],
+        "attributes": [
+          "NORMAL:f32",
+          "POSITION:f32"
+        ],
+        "instances": 7,
+        "size": 720
+      },
+      {
+        "name": "Collector_Box_Zine_Unit_Mesh",
+        "mode": [
+          "TRIANGLES"
+        ],
+        "meshPrimitives": 1,
+        "glPrimitives": 12,
+        "vertices": 24,
         "indices": [
           "u32"
         ],
@@ -78,16 +94,16 @@
           "POSITION:f32"
         ],
         "instances": 1,
-        "size": 2880
+        "size": 720
       },
       {
-        "name": "Collector_Box_Signal_Red_Tab_Mesh",
+        "name": "Collector_Box_Data_Key_Unit_Mesh",
         "mode": [
           "TRIANGLES"
         ],
         "meshPrimitives": 1,
-        "glPrimitives": 288,
-        "vertices": 506,
+        "glPrimitives": 12,
+        "vertices": 24,
         "indices": [
           "u32"
         ],
@@ -96,10 +112,28 @@
           "POSITION:f32"
         ],
         "instances": 1,
-        "size": 15600
+        "size": 720
       },
       {
-        "name": "Collector_Box_Lid_Identity_Mesh",
+        "name": "Collector_Box_Signal_Unit_Mesh",
+        "mode": [
+          "TRIANGLES"
+        ],
+        "meshPrimitives": 1,
+        "glPrimitives": 12,
+        "vertices": 24,
+        "indices": [
+          "u32"
+        ],
+        "attributes": [
+          "NORMAL:f32",
+          "POSITION:f32"
+        ],
+        "instances": 3,
+        "size": 720
+      },
+      {
+        "name": "Collector_Box_Exact_Identity_Plane_Mesh",
         "mode": [
           "TRIANGLES"
         ],
@@ -114,8 +148,62 @@
           "POSITION:f32",
           "TEXCOORD_0:f32"
         ],
-        "instances": 1,
+        "instances": 3,
         "size": 152
+      },
+      {
+        "name": "Collector_Box_Cassette_Concept_Mesh",
+        "mode": [
+          "TRIANGLES"
+        ],
+        "meshPrimitives": 1,
+        "glPrimitives": 236,
+        "vertices": 476,
+        "indices": [
+          "u32"
+        ],
+        "attributes": [
+          "NORMAL:f32",
+          "POSITION:f32"
+        ],
+        "instances": 1,
+        "size": 14256
+      },
+      {
+        "name": "Collector_Box_CD_Case_Concept_Mesh",
+        "mode": [
+          "TRIANGLES"
+        ],
+        "meshPrimitives": 1,
+        "glPrimitives": 12,
+        "vertices": 24,
+        "indices": [
+          "u32"
+        ],
+        "attributes": [
+          "NORMAL:f32",
+          "POSITION:f32"
+        ],
+        "instances": 1,
+        "size": 720
+      },
+      {
+        "name": "Collector_Box_CD_Disc_Concept_Mesh",
+        "mode": [
+          "TRIANGLES"
+        ],
+        "meshPrimitives": 1,
+        "glPrimitives": 304,
+        "vertices": 612,
+        "indices": [
+          "u32"
+        ],
+        "attributes": [
+          "NORMAL:f32",
+          "POSITION:f32"
+        ],
+        "instances": 1,
+        "size": 18336
       }
     ]
   },
@@ -131,16 +219,42 @@
         "doubleSided": true
       },
       {
-        "name": "MAT_VOID_BOOKCLOTH_LID",
+        "name": "MAT_BONE_LINING_AND_PAPER",
         "instances": 1,
-        "textures": [
-          "normalTexture"
-        ],
+        "textures": [],
         "alphaMode": "OPAQUE",
         "doubleSided": true
       },
       {
-        "name": "MAT_VOID_LID_SEAM",
+        "name": "MAT_DARK_MODULAR_TRAY",
+        "instances": 1,
+        "textures": [],
+        "alphaMode": "OPAQUE",
+        "doubleSided": true
+      },
+      {
+        "name": "MAT_VOID_ZINE",
+        "instances": 1,
+        "textures": [],
+        "alphaMode": "OPAQUE",
+        "doubleSided": true
+      },
+      {
+        "name": "MAT_SMOKE_CASSETTE",
+        "instances": 2,
+        "textures": [],
+        "alphaMode": "BLEND",
+        "doubleSided": true
+      },
+      {
+        "name": "MAT_OPTICAL_DISC",
+        "instances": 1,
+        "textures": [],
+        "alphaMode": "OPAQUE",
+        "doubleSided": true
+      },
+      {
+        "name": "MAT_DATA_KEY",
         "instances": 1,
         "textures": [],
         "alphaMode": "OPAQUE",
@@ -157,7 +271,8 @@
         "name": "MAT_EXACT_REVERSE_LID_IDENTITY",
         "instances": 1,
         "textures": [
-          "baseColorTexture"
+          "baseColorTexture",
+          "emissiveTexture"
         ],
         "alphaMode": "BLEND",
         "doubleSided": true
@@ -172,7 +287,7 @@
         "slots": [
           "normalTexture"
         ],
-        "instances": 2,
+        "instances": 1,
         "mimeType": "image/png",
         "compression": "",
         "resolution": "256x256",
@@ -183,7 +298,8 @@
         "name": "Collector_Box_001_Lid_Identity_Exact",
         "uri": "",
         "slots": [
-          "baseColorTexture"
+          "baseColorTexture",
+          "emissiveTexture"
         ],
         "instances": 1,
         "mimeType": "image/png",

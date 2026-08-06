@@ -3,8 +3,15 @@
   "assetKey": "collector-box-001",
   "productId": "MRCH-011",
   "selectedForm": "01 / ARCHIVE CLAMSHELL",
-  "state": "CLOSED ONLY",
+  "state": "DEFAULT OPEN ARCHIVE SET",
   "coordinateSystem": "metres, Y-up, +Z-front, grounded at Y=0",
+  "openAssembly": {
+    "defaultOpen": true,
+    "lidAngleDeg": 105,
+    "hingeAuthority": "provisional-visual-concept",
+    "contentsAuthority": "composition-only-not-manufacturing-internals",
+    "namedContents": ["zine", "cassette", "cd", "data-key", "vinyl-archive-sleeve", "sticker-identity"]
+  },
   "canonicalSource": {
     "provenanceV04": {
       "path": "production/physical-merch/concepts/drop-001/renders/archive-objects/collector-box-001/provenance-v04.json",
@@ -29,7 +36,7 @@
       "sha256": "7ba671184f982ba03f24f6281f6d3685c78cd4cd0f4c6cfd7fc03fd01b32313a",
       "fixturePath": "sources/collector-box-001/authority/composition-only.authority.json",
       "fixtureSha256": "c9d7819b003560e5d09f4dbdcc71fe83cbf23c6c6ce9a0882971b89fb7f6f0f0",
-      "application": "uncertainty-record-only-not-modeled"
+      "application": "concept-composition-reference-only-not-machinable"
     }
   },
   "identity": {
@@ -60,8 +67,10 @@
     }
   },
   "visualReference": {
-    "path": "production/physical-merch/concepts/drop-001/renders/archive-objects/collector-box-001/renders/selected/PVKH_DROP001_COLLECTOR_BOX_001_CLOSED_HERO_CONCEPT_v02.png",
-    "sha256": "07a84bdcc039eb10038ce5a6486cda4bbe1455f01572307e78d9c646add8408e"
+    "path": "assets/merch/collector-box-set-open.webp",
+    "sha256": "4c890def8723dea116c0b12fbe092f5f52aa3560916396d651171d79882ebf82",
+    "authoritySource": "production/physical-merch/concepts/drop-001/renders/archive-objects/collector-box-001/renders/selected/PVKH_DROP001_COLLECTOR_BOX_001_OPEN_FINAL_CONTENTS_CONCEPT_v04.png",
+    "authoritySourceSha256": "39fb9506f9274ba1aaceb0848b24de33fbb18898d2732440097e4d2f83862294"
   },
   "dimensions": {
     "viewerEnvelopeMm": [250, 315, 55],
@@ -72,26 +81,32 @@
     "board": {"baseColor": [0.008, 0.009, 0.011, 1], "metallic": 0.02, "roughness": 0.83},
     "lid": {"baseColor": [0.014, 0.015, 0.017, 1], "metallic": 0.01, "roughness": 0.76},
     "seam": {"baseColor": [0.001, 0.001, 0.001, 1], "metallic": 0, "roughness": 0.66},
-    "signal": {"baseColor": [0.9529, 0.1333, 0.1333, 1], "metallic": 0, "roughness": 0.58}
+    "signal": {"baseColor": [0.9529, 0.1333, 0.1333, 1], "metallic": 0, "roughness": 0.58},
+    "bone": {"baseColor": [0.72, 0.69, 0.62, 1], "metallic": 0, "roughness": 0.84},
+    "tray": {"baseColor": [0.021, 0.023, 0.026, 1], "metallic": 0.02, "roughness": 0.71},
+    "zine": {"baseColor": [0.035, 0.037, 0.041, 1], "metallic": 0, "roughness": 0.77},
+    "cassette": {"baseColor": [0.11, 0.115, 0.12, 0.86], "metallic": 0.12, "roughness": 0.36},
+    "disc": {"baseColor": [0.48, 0.50, 0.52, 1], "metallic": 0.78, "roughness": 0.24},
+    "dataKey": {"baseColor": [0.045, 0.047, 0.05, 1], "metallic": 0.36, "roughness": 0.42}
   },
   "camera": {
     "poster": "assets/merch/collector-box-set-closed.webp",
     "desktop": {
-      "default": {"orbit": "30deg 65deg 115%", "target": "auto 0.1575m auto", "fieldOfView": "24deg"},
-      "front": {"orbit": "0deg 65deg 110%", "target": "auto 0.1575m auto", "fieldOfView": "23deg"},
-      "rear": {"orbit": "180deg 65deg 112%", "target": "auto 0.1575m auto", "fieldOfView": "23deg"}
+      "default": {"orbit": "25deg 56deg 135%", "target": "auto 0.075m auto", "fieldOfView": "29deg"},
+      "front": {"orbit": "0deg 54deg 138%", "target": "auto 0.075m auto", "fieldOfView": "29deg"},
+      "rear": {"orbit": "180deg 57deg 140%", "target": "auto 0.075m auto", "fieldOfView": "30deg"}
     },
     "mobile": {
-      "default": {"orbit": "30deg 68deg 133%", "target": "auto 0.1575m auto", "fieldOfView": "30deg"},
-      "front": {"orbit": "0deg 68deg 132%", "target": "auto 0.1575m auto", "fieldOfView": "30deg"},
-      "rear": {"orbit": "180deg 68deg 132%", "target": "auto 0.1575m auto", "fieldOfView": "30deg"}
+      "default": {"orbit": "25deg 58deg 145%", "target": "auto 0.075m auto", "fieldOfView": "34deg"},
+      "front": {"orbit": "0deg 56deg 145%", "target": "auto 0.075m auto", "fieldOfView": "34deg"},
+      "rear": {"orbit": "180deg 58deg 148%", "target": "auto 0.075m auto", "fieldOfView": "34deg"}
     }
   },
   "budgets": {"maxBytes": 2100000, "maxTriangles": 40000, "maxDrawCalls": 10, "hardMaxBytes": 2500000, "hardMaxTriangles": 50000, "hardMaxDrawCalls": 12},
   "uncertainty": {
-    "openStateModeled": false,
-    "interiorModeled": false,
-    "contentsModeled": false,
+    "openStateModeled": true,
+    "interiorModeled": true,
+    "contentsModeled": true,
     "workingHingeModeled": false,
     "drawerModeled": false,
     "vendorDielineConfirmed": false,

@@ -39,7 +39,7 @@ const metricsFor = (doc) => doc.getRoot().listMeshes().reduce((totals, mesh) => 
   return totals;
 }, {triangles: 0, drawCalls: 0});
 
-test("collector sources pin ARCHIVE CLAMSHELL closed hero, exact lid identity and provisional boundary", async () => {
+test("collector sources govern a default-open ARCHIVE CLAMSHELL concept without manufacturing claims", async () => {
   const source = await readJson(path.join(here, "collector-box-001.source.json"));
   const expected = {
     provenanceV04: ["production/physical-merch/concepts/drop-001/renders/archive-objects/collector-box-001/provenance-v04.json", "55070315d383fa3dfea8ecbf1fbfe4ab3e9c2f6a0e1ef3bed480fada50731ee2"],
@@ -59,9 +59,16 @@ test("collector sources pin ARCHIVE CLAMSHELL closed hero, exact lid identity an
     assert.equal(fixture.canonicalSha256, canonicalSha256);
   }
   assert.equal(source.selectedForm, "01 / ARCHIVE CLAMSHELL");
-  assert.equal(source.state, "CLOSED ONLY");
+  assert.equal(source.state, "DEFAULT OPEN ARCHIVE SET");
+  assert.deepEqual(source.openAssembly, {
+    defaultOpen: true,
+    lidAngleDeg: 105,
+    hingeAuthority: "provisional-visual-concept",
+    contentsAuthority: "composition-only-not-manufacturing-internals",
+    namedContents: ["zine", "cassette", "cd", "data-key", "vinyl-archive-sleeve", "sticker-identity"]
+  });
   assert.equal(source.dimensions.authority, "provisional-viewer-envelope-not-machinable");
-  assert.equal(source.canonicalSource.compositionOnly.application, "uncertainty-record-only-not-modeled");
+  assert.equal(source.canonicalSource.compositionOnly.application, "concept-composition-reference-only-not-machinable");
   assert.deepEqual(source.derivedMaterials.bookclothNormal, {
     path: "sources/collector-box-001/PVKH_COLLECTOR_BOX_BOOKCLOTH_NORMAL_v01.png",
     sha256: "8b04ece8038f37ecf6fe1379615e2e0a6deac983e3ad55baf1167aef74eec373",
@@ -71,15 +78,31 @@ test("collector sources pin ARCHIVE CLAMSHELL closed hero, exact lid identity an
   assert.equal(sha256(await readFile(path.join(here, source.identity.lid.path))), "284e69cfb0e6e7fef2a993f44289577efabd1fae576c9280bab4d4e2f59b398f");
   assert.deepEqual(source.identity.lid.uvRecord.surfaceMm, {width: 202, height: 75.75, centreX: 4, centreY: 152});
   assert.deepEqual(source.identity.lid.uvRecord.uvBounds, [0, 0, 1, 1]);
-  assert.equal(source.camera.poster, "assets/merch/collector-box-set-closed.webp");
+  assert.deepEqual(source.visualReference, {
+    path: "assets/merch/collector-box-set-open.webp",
+    sha256: "4c890def8723dea116c0b12fbe092f5f52aa3560916396d651171d79882ebf82",
+    authoritySource: "production/physical-merch/concepts/drop-001/renders/archive-objects/collector-box-001/renders/selected/PVKH_DROP001_COLLECTOR_BOX_001_OPEN_FINAL_CONTENTS_CONCEPT_v04.png",
+    authoritySourceSha256: "39fb9506f9274ba1aaceb0848b24de33fbb18898d2732440097e4d2f83862294"
+  });
+  assert.equal(source.camera.poster, "assets/merch/collector-box-set-closed.webp", "governed gallery-order contract keeps the inert closed hero poster");
   assert.deepEqual(source.camera.mobile, {
-    default: {orbit: "30deg 68deg 133%", target: "auto 0.1575m auto", fieldOfView: "30deg"},
-    front: {orbit: "0deg 68deg 132%", target: "auto 0.1575m auto", fieldOfView: "30deg"},
-    rear: {orbit: "180deg 68deg 132%", target: "auto 0.1575m auto", fieldOfView: "30deg"}
+    default: {orbit: "25deg 58deg 145%", target: "auto 0.075m auto", fieldOfView: "34deg"},
+    front: {orbit: "0deg 56deg 145%", target: "auto 0.075m auto", fieldOfView: "34deg"},
+    rear: {orbit: "180deg 58deg 148%", target: "auto 0.075m auto", fieldOfView: "34deg"}
+  });
+  assert.deepEqual(source.uncertainty, {
+    openStateModeled: true,
+    interiorModeled: true,
+    contentsModeled: true,
+    workingHingeModeled: false,
+    drawerModeled: false,
+    vendorDielineConfirmed: false,
+    physicalProofConfirmed: false,
+    machinabilityClaim: false
   });
 });
 
-test("collector GLB is only a closed 250 x 315 x 55 mm clamshell with seam, lid art and red tab", async () => {
+test("collector GLB defaults open with a lined lid, modular tray and separately named archive contents", async () => {
   const [source, bytes, report, browserQa] = await Promise.all([
     readJson(path.join(here, "collector-box-001.source.json")),
     readFile(glbPath),
@@ -88,15 +111,46 @@ test("collector GLB is only a closed 250 x 315 x 55 mm clamshell with seam, lid 
   ]);
   const doc = await new NodeIO().readBinary(bytes);
   const nodes = new Map(doc.getRoot().listNodes().map((node) => [node.getName(), node]));
-  for (const name of ["Collector_Box_Closed_Envelope", "Collector_Box_Closed_Lid", "Collector_Box_Lid_Seam", "Collector_Box_Signal_Red_Tab", "Collector_Box_Lid_Identity"]) {
+  const required = [
+    "Collector_Box_Open_Base",
+    "Collector_Box_Open_Lid",
+    "Collector_Box_Lid_Interior",
+    "Collector_Box_Modular_Tray",
+    "Collector_Box_Zine_Recess",
+    "Collector_Box_Cassette_Recess",
+    "Collector_Box_CD_Recess",
+    "Collector_Box_Data_Key_Recess",
+    "Collector_Box_Vinyl_Recess",
+    "Collector_Box_Upper_Zine",
+    "Collector_Box_Zine_Identity_Exact",
+    "Collector_Box_Cassette",
+    "Collector_Box_CD",
+    "Collector_Box_CD_Disc",
+    "Collector_Box_Data_Key",
+    "Collector_Box_Data_Key_Connector",
+    "Collector_Box_Vinyl_Archive_Sleeve",
+    "Collector_Box_Vinyl_Archive_Signal",
+    "Collector_Box_Sticker_Identity_Insert",
+    "Collector_Box_Signal_Red_Pull_Tab",
+    "Collector_Box_Lid_Identity_Backplate",
+    "Collector_Box_Lid_Identity"
+  ];
+  for (const name of required) {
     assert.ok(nodes.get(name)?.getMesh(), `${name} mesh missing`);
   }
-  assert.deepEqual(boundsFor(nodes.get("Collector_Box_Closed_Envelope").getMesh().listPrimitives()[0].getAttribute("POSITION")), [250, 315, 55]);
-  assert.equal(nodes.get("Collector_Box_Closed_Envelope").getExtras().state, "closed-only");
-  assert.equal(nodes.get("Collector_Box_Closed_Envelope").getExtras().dimensionAuthority, "provisional-viewer-envelope-not-machinable");
+  assert.deepEqual(boundsFor(nodes.get("Collector_Box_Open_Base").getMesh().listPrimitives()[0].getAttribute("POSITION")), [1000, 1000, 1000]);
+  assert.deepEqual(nodes.get("Collector_Box_Open_Base").getScale().map((value) => Number((value * 1000).toFixed(3))), [250, 36, 190]);
+  assert.equal(nodes.get("Collector_Box_Open_Base").getExtras().state, "default-open-archive-set");
+  assert.equal(nodes.get("Collector_Box_Open_Base").getExtras().dimensionAuthority, "provisional-viewer-envelope-not-machinable");
+  assert.equal(nodes.get("Collector_Box_Lid_Pivot_Provisional").getExtras().openAngleDeg, 105);
+  assert.equal(nodes.get("Collector_Box_Lid_Pivot_Provisional").getExtras().workingHinge, false);
   assert.deepEqual(nodes.get("Collector_Box_Lid_Identity").getExtras().uvRecord, source.identity.lid.uvRecord);
+  assert.equal(nodes.get("Collector_Box_Zine_Identity_Exact").getExtras().canonicalSourceSha256, source.identity.lid.sha256);
+  for (const name of required.filter((name) => /Zine|Cassette|_CD|Data_Key|Vinyl|Sticker/.test(name))) {
+    assert.equal(nodes.get(name).getExtras().conceptOnly, true, `${name} must disclose concept-only geometry`);
+  }
   assert.equal(doc.getRoot().listAnimations().length, 0);
-  assert.equal(doc.getRoot().listNodes().some((node) => /drawer|open|interior|content|hinge|cavity|tray/i.test(node.getName())), false);
+  assert.equal(doc.getRoot().listNodes().some((node) => /closed|drawer|working_hinge/i.test(node.getName())), false);
   assert.equal(doc.getRoot().listTextures().length, 2, "only exact lid identity and a non-identity bookcloth normal may be embedded");
   assert.equal(doc.getRoot().listTextures().filter((texture) => texture.getExtras().canonicalSourceSha256 === source.identity.lid.sha256).length, 1);
   assert.equal(doc.getRoot().listTextures().filter((texture) => texture.getExtras().proceduralRecipe === "pvkh-bookcloth-normal-v1" && texture.getExtras().containsIdentity === false).length, 1);
@@ -106,8 +160,11 @@ test("collector GLB is only a closed 250 x 315 x 55 mm clamshell with seam, lid 
   assert.ok(metrics.drawCalls <= 10);
   assert.deepEqual(report.budget, {...metrics, bytes: bytes.byteLength, ceilings: source.budgets});
   assert.equal(report.output.sha256, sha256(bytes));
-  assert.deepEqual(report.cameraRecommendations.desktop.default, {orbit: "30deg 65deg 115%", target: "auto 0.1575m auto", fieldOfView: "24deg"});
-  assert.deepEqual(browserQa.checks, {sixRequiredViews: true, noBrowserErrors: true, readabilityCrop: true, sourceCompare: true, modelLoaded: true, mobileBreathingRoom: true, mobileTabVisible: true});
+  assert.equal(report.physicalEvidence.state, "default-open-archive-set");
+  assert.deepEqual(report.physicalEvidence.modeled, ["open base and lid", "bone lid lining", "modular tray and recesses", ...source.openAssembly.namedContents]);
+  assert.deepEqual(report.physicalEvidence.excluded, ["working hinge", "vendor dieline", "manufacturing internals", "machinability claim"]);
+  assert.deepEqual(report.cameraRecommendations.desktop.default, {orbit: "25deg 56deg 135%", target: "auto 0.075m auto", fieldOfView: "29deg"});
+  assert.deepEqual(browserQa.checks, {sixRequiredViews: true, noBrowserErrors: true, readabilityCrop: true, sourceCompare: true, modelLoaded: true, mobileBreathingRoom: true, mobileInteriorVisible: true, mobileTabVisible: true});
   assert.equal(browserQa.capturedAtPolicy, "timestamp-omitted; checked-in hashes prove snapshot integrity only, while cross-rerender acceptance uses semantic gates and human visual review");
   assert.deepEqual(browserQa.rerenderPolicy, {
     pixelHashes: "snapshot-integrity-only",
@@ -120,6 +177,7 @@ test("collector GLB is only a closed 250 x 315 x 55 mm clamshell with seam, lid 
     assert.ok(view.visualMarginsPx.every((value) => value >= 12), `${view.view} clips the model: ${view.visualMarginsPx}`);
   }
   for (const view of browserQa.views.filter((entry) => /^mobile-(default|front)$/.test(entry.view))) {
+    assert.ok(view.boneInteriorPixels >= 100, `${view.view} loses the bone lid interior`);
     assert.ok(view.signalRedTabPixels >= 20, `${view.view} loses the Signal Red tab`);
   }
   for (const view of browserQa.views) assert.equal(sha256(await readFile(path.join(siteRoot, view.path))), view.sha256, `${view.view} screenshot drift`);
@@ -135,4 +193,17 @@ test("collector validates without warnings and checked-in output is deterministi
   assert.match(stdout, /verified [a-f0-9]{64}/);
   const fixtureCheck = await execFile(process.execPath, [path.join(here, "extract-governed-material-fixtures.mjs")], {cwd: siteRoot});
   assert.match(fixtureCheck.stdout, /PVKH_COLLECTOR_BOX_BOOKCLOTH_NORMAL_v01\.png/);
+});
+
+test("collector catalog viewer preserves the governed poster while activating the open camera", async () => {
+  const [source, merch] = await Promise.all([
+    readJson(path.join(here, "collector-box-001.source.json")),
+    readJson(path.join(siteRoot, "data/merch.json"))
+  ]);
+  const collector = merch.objects.find(({slug}) => slug === "collector-box-set");
+  assert.equal(collector.viewer.poster, "assets/merch/collector-box-set-closed.webp");
+  assert.deepEqual(collector.viewer.cameraOrbit, {desktop: source.camera.desktop.default.orbit, mobile: source.camera.mobile.default.orbit});
+  assert.deepEqual(collector.viewer.fieldOfView, {desktop: source.camera.desktop.default.fieldOfView, mobile: source.camera.mobile.default.fieldOfView});
+  assert.deepEqual(collector.viewer.cameraTarget, {desktop: source.camera.desktop.default.target, mobile: source.camera.mobile.default.target});
+  for (const alt of Object.values(collector.viewer.alt)) assert.match(alt, /open|aperto|открытого/i);
 });
