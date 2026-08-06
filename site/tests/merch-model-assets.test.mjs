@@ -14,6 +14,11 @@ test("pins the audited local model build and validation toolchain", async () => 
   assert.equal(packageJson.devDependencies?.["@gltf-transform/functions"], "4.4.2");
   assert.equal(packageJson.devDependencies?.["gltf-validator"], "2.0.0-dev.3.10");
   assert.equal(packageJson.devDependencies?.sharp, "0.35.3");
+  assert.equal(
+    packageJson.scripts?.["test:merch-model-builds"],
+    "node --test tools/merch-3d/*.test.mjs"
+  );
+  assert.match(packageJson.scripts?.test ?? "", /npm run test:merch-model-builds/);
 });
 
 test("governs the cassette source, deterministic build and release report", async () => {
@@ -66,9 +71,11 @@ test("binds released rigid and flat viewers to their governed build records", as
   const records = [
     ["vinyl", "vinyl-001", "nested"],
     ["cd", "disc-004", "nested"],
+    ["usb-edition", "data-key-003", "nested"],
     ["poster", "print-001", "flat"],
     ["sticker-pack", "signal-kit-001", "flat"],
-    ["zine-booklet", "zine-001", "flat"]
+    ["zine-booklet", "zine-001", "flat"],
+    ["collector-box-set", "collector-box-001", "nested"]
   ];
 
   for (const [slug, assetKey, cameraShape] of records) {

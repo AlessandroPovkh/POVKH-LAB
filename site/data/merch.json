@@ -361,23 +361,23 @@
         "poster": "assets/merch/usb-edition-packaging.webp",
         "src": "assets/merch-3d/data-key-003.glb",
         "cameraOrbit": {
-          "desktop": "32deg 66deg 116%",
-          "mobile": "32deg 66deg 116%"
+          "desktop": "35deg 75deg 120%",
+          "mobile": "35deg 78deg 126%"
         },
         "fieldOfView": {
-          "desktop": "auto",
-          "mobile": "auto"
+          "desktop": "24deg",
+          "mobile": "20deg"
         },
         "cameraTarget": {
-          "desktop": "auto auto auto",
-          "mobile": "auto auto auto"
+          "desktop": "auto 0.010m auto",
+          "mobile": "auto 0.010m auto"
         },
         "alt": {
-          "en": "Interactive 3D view of the black POVKH LAB dual-connector data key and packaging.",
-          "it": "Vista 3D interattiva della data key nera POVKH LAB a doppio connettore e confezione.",
-          "ru": "Интерактивный 3D-вид чёрного накопителя POVKH LAB с двумя разъёмами и упаковки."
+          "en": "Interactive 3D view of the closed black POVKH LAB data key with its recessed slider rail.",
+          "it": "Vista 3D interattiva della data key nera POVKH LAB chiusa con guida del cursore incassata.",
+          "ru": "Интерактивный 3D-вид закрытого чёрного накопителя POVKH LAB с утопленной направляющей переключателя."
         },
-        "budget": { "bytes": 1800000, "triangles": 32000, "drawCalls": 9 }
+        "budget": { "bytes": 1200000, "triangles": 18000, "drawCalls": 7 }
       },
       "releaseGate": {
         "state": "requiredBeforeProduction",
@@ -912,23 +912,23 @@
         "poster": "assets/merch/collector-box-set-closed.webp",
         "src": "assets/merch-3d/collector-box-001.glb",
         "cameraOrbit": {
-          "desktop": "28deg 66deg 116%",
-          "mobile": "28deg 66deg 116%"
+          "desktop": "30deg 65deg 115%",
+          "mobile": "30deg 68deg 133%"
         },
         "fieldOfView": {
-          "desktop": "auto",
-          "mobile": "auto"
+          "desktop": "24deg",
+          "mobile": "30deg"
         },
         "cameraTarget": {
-          "desktop": "auto auto auto",
-          "mobile": "auto auto auto"
+          "desktop": "auto 0.1575m auto",
+          "mobile": "auto 0.1575m auto"
         },
         "alt": {
-          "en": "Interactive 3D view of the closed POVKH LAB collector archive box and drawer construction.",
-          "it": "Vista 3D interattiva del box archivio da collezione POVKH LAB chiuso con struttura a cassetto.",
-          "ru": "Интерактивный 3D-вид закрытого коллекционного архива POVKH LAB с выдвижной конструкцией."
+          "en": "Interactive 3D view of the closed POVKH LAB Archive clamshell box with a lid seam and red pull tab.",
+          "it": "Vista 3D interattiva del box archivio POVKH LAB chiuso a conchiglia, con giunto del coperchio e linguetta rossa.",
+          "ru": "Интерактивный 3D-вид закрытого архивного бокса POVKH LAB: линия крышки и красный язычок."
         },
-        "budget": { "bytes": 2300000, "triangles": 44000, "drawCalls": 11 }
+        "budget": { "bytes": 2100000, "triangles": 40000, "drawCalls": 10 }
       },
       "releaseGate": {
         "state": "requiredBeforeProduction",
