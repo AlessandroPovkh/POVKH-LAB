@@ -2,14 +2,14 @@
   "schemaVersion": 2,
   "assetKey": "t-shirt-001",
   "renderer": "@google/model-viewer",
-  "capturePolicy": "built-product-page before/after activation at 390x844 plus isolated desktop/mobile/rear views; await loaded visible dimensions and rendered pixels",
+  "capturePolicy": "built-product-page before/after activation at 390x844 plus isolated desktop/mobile/rear views and a deliberately tight elevated hood-cavity detail; await loaded visible dimensions and rendered pixels",
   "hashPolicy": "snapshot integrity only; semantic gates and human visual review govern acceptance",
   "views": [
     {
       "view": "desktop-default",
       "surface": "isolated-model-viewer",
       "path": "tools/merch-3d/reports/screenshots/t-shirt-001-desktop-default.png",
-      "sha256": "4d7e567ec43ad683d608ff3bb960286a79003d3a3fe7107b49ba08dabb6dd827",
+      "sha256": "e61a697b0b7a22f669b1a08ae56e1df2d8124f3dd3e632e72d6b8445e297dc8a",
       "viewportPx": [
         900,
         900
@@ -23,7 +23,7 @@
       "loaded": true,
       "modelIsVisible": true,
       "dimensionsM": [
-        1.1368001699447632,
+        1.1368566751480103,
         1.0410000085830688,
         0.16499999910593033
       ],
@@ -38,7 +38,7 @@
         "radius": 3.2610789938026876
       },
       "fieldOfViewDeg": 23,
-      "foregroundPixels": 342802,
+      "foregroundPixels": 350061,
       "foregroundBoundsPx": [
         71,
         110,
@@ -56,7 +56,7 @@
       "view": "mobile-default",
       "surface": "isolated-model-viewer",
       "path": "tools/merch-3d/reports/screenshots/t-shirt-001-mobile-default.png",
-      "sha256": "30ddb92bfccb4387e9e98f5bfc92a31bacfe6026d5ea6f80892af4b06553b920",
+      "sha256": "0830429e14977444a5c4ad0013ca30bdcdc2634658819403b8f88a606b39df05",
       "viewportPx": [
         390,
         600
@@ -70,7 +70,7 @@
       "loaded": true,
       "modelIsVisible": true,
       "dimensionsM": [
-        1.1368001699447632,
+        1.1368566751480103,
         1.0410000085830688,
         0.16499999910593033
       ],
@@ -82,10 +82,10 @@
       "cameraOrbit": {
         "theta": 0.10471975511965977,
         "phi": 1.3962634015954636,
-        "radius": 3.7139994355796198
+        "radius": 3.703748746279437
       },
-      "fieldOfViewDeg": 29.645889628433594,
-      "foregroundPixels": 70342,
+      "fieldOfViewDeg": 29.69180329081985,
+      "foregroundPixels": 71945,
       "foregroundBoundsPx": [
         23,
         141,
@@ -121,7 +121,7 @@
       "surface": "built-product-page",
       "activated": true,
       "path": "tools/merch-3d/reports/screenshots/t-shirt-001-mobile-product-stage.png",
-      "sha256": "1e13397f22f4cea7c7574a324b20c67cf5ff4fda0afccdf144423aa502619284",
+      "sha256": "e99a4f2e4146e7bdbf01c1c5f049e4d9ad8cd5eb7b4f3c2ff9b233040a372f7b",
       "browserViewportPx": [
         390,
         844
@@ -145,7 +145,7 @@
       "loaded": true,
       "modelIsVisible": true,
       "dimensionsM": [
-        1.1368001699447632,
+        1.1368566751480103,
         1.0410000085830688,
         0.16499999910593033
       ],
@@ -157,15 +157,15 @@
       "cameraOrbit": {
         "theta": 0.10471975511965977,
         "phi": 1.3962634015954636,
-        "radius": 3.7139994355796198
+        "radius": 3.703748746279437
       },
-      "fieldOfViewDeg": 28.10406473141534,
+      "fieldOfViewDeg": 28.147791612042063,
       "canvasPx": [
         356,
         518
       ],
-      "foregroundPixels": 60917,
-      "artworkContrastPixels": 2661,
+      "foregroundPixels": 62247,
+      "artworkContrastPixels": 2658,
       "foregroundBoundsPx": [
         21,
         114,

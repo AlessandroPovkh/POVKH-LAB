@@ -19,8 +19,8 @@
   "geometry": {
     "scene": "Hoodie_001_Concept_Visualization",
     "pivot": "Hoodie_001_Centred_Grounded_Pivot",
-    "requiredNodes": ["Hoodie_Draped_Shell", "Hoodie_Shaped_Cuffs", "Hoodie_Waistband", "Hoodie_Open_Hood_Shell", "Hoodie_Hood_Throat_Overlap", "Hoodie_Hood_Centre_Seam", "Hoodie_Back_Artwork"],
-    "features": ["tailored tubular torso with attached shaped long sleeves", "explicit internal shoulder bridge patches", "conforming open rib cuffs and waistband", "attached two-panel hood down with two upper-back fabric lobes", "upward neckline-facing unfilled cavity, overlapped neckline fold and rear centre seam", "readable front and back", "exact back artwork surface"]
+    "requiredNodes": ["Hoodie_Draped_Shell", "Hoodie_Shaped_Cuffs", "Hoodie_Waistband", "Hoodie_Open_Hood_Shell", "Hoodie_Hood_Interior_Cavity", "Hoodie_Hood_Centre_Seam", "Hoodie_Back_Artwork"],
+    "features": ["tailored tubular torso with cut armholes stitched to matching shared long-sleeve root rings", "single indexed garment shell with blended armhole normals and coherent global garment-space UVs", "conforming open rib cuffs and waistband", "attached two-panel hood down with two upper-back fabric lobes", "one thin asymmetric opening lip joined to a material-backed uncapped interior descending rearward into a deep throat", "rear centre seam", "readable front and back", "exact back artwork surface"]
   },
   "artwork": {
     "path": "sources/hoodie-001/PVKH_ASCII_REVERSE_EXACT_1600x600_v01.png",
@@ -42,7 +42,7 @@
     "poster": "assets/merch/hoodie-rear.webp",
     "desktop": {
       "default": { "orbit": "155deg 78deg 118%", "target": "auto 0.590m auto", "fieldOfView": "24deg" },
-      "front": { "orbit": "0deg 82deg 116%", "target": "auto 0.590m auto", "fieldOfView": "23deg" },
+      "front": { "orbit": "0deg 42deg 50%", "target": "auto 0.955m auto", "fieldOfView": "22deg" },
       "rear": { "orbit": "180deg 82deg 116%", "target": "auto 0.590m auto", "fieldOfView": "23deg" }
     },
     "mobile": {

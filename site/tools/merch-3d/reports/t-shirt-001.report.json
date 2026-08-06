@@ -51,8 +51,8 @@
         "T_Shirt_Front_Artwork"
       ],
       "features": [
-        "tailored tubular torso with continuous outer shoulders and underlapping attached short-sleeve roots",
-        "explicit internal shoulder bridge patches",
+        "tailored tubular torso with cut armholes stitched to matching shared short-sleeve root rings",
+        "single indexed garment shell with blended armhole normals and coherent global garment-space UVs",
         "open tubular sleeve hems",
         "level curved hem",
         "open dimensional rib collar with dark inner wall",
@@ -212,17 +212,17 @@
     "method": "reopened-glb-bounds-node-and-texture-metadata",
     "boundsMm": {
       "min": [
-        -568.4000849723816,
+        -568.4283375740051,
         5.249159118131756e-32,
         -79.99999821186066
       ],
       "max": [
-        568.4000849723816,
+        568.4283375740051,
         1041.0000085830688,
         85.00000089406967
       ],
       "size": [
-        1136.8001699447632,
+        1136.8566751480103,
         1041.0000085830688,
         164.99999910593033
       ]
@@ -274,9 +274,9 @@
     "hints": 0
   },
   "budget": {
-    "triangles": 2988,
+    "triangles": 3128,
     "drawCalls": 6,
-    "bytes": 465260,
+    "bytes": 328120,
     "ceilings": {
       "maxBytes": 4000000,
       "maxTriangles": 80000,
@@ -285,7 +285,7 @@
   },
   "output": {
     "path": "assets/merch-3d/t-shirt-001.glb",
-    "sha256": "933668f46ff6f89532ef1eac7ae0ff1b6f69ed608c5b1ce545969a7e5a0be2b4"
+    "sha256": "2f28e7723b6458d780ea1b2cf6e89a44090be15216262344c948c8906f8f03ab"
   },
   "deterministic": {
     "verifiedBySecondInMemoryBuild": true

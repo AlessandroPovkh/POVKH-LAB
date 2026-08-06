@@ -8,18 +8,18 @@
           "name": "T_Shirt_001_Concept_Visualization",
           "rootName": "T_Shirt_001_Centred_Grounded_Pivot",
           "bboxMin": [
-            -0.5684,
+            -0.56843,
             0,
             -0.08
           ],
           "bboxMax": [
-            0.5684,
+            0.56843,
             1.041,
             0.085
           ],
-          "renderVertexCount": 8964,
-          "uploadVertexCount": 6032,
-          "uploadNaiveVertexCount": 6032
+          "renderVertexCount": 9384,
+          "uploadVertexCount": 3136,
+          "uploadNaiveVertexCount": 3136
         }
       ]
     },
@@ -31,8 +31,8 @@
             "TRIANGLES"
           ],
           "meshPrimitives": 1,
-          "glPrimitives": 2020,
-          "vertices": 4096,
+          "glPrimitives": 2160,
+          "vertices": 1200,
           "indices": [
             "u32"
           ],
@@ -43,7 +43,7 @@
             "TEXCOORD_0:f32"
           ],
           "instances": 1,
-          "size": 220848
+          "size": 83520
         },
         {
           "name": "T_Shirt_Collar_Mesh",

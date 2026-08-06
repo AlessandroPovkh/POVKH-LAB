@@ -223,3 +223,55 @@ test("activates the real cassette directly into the governed mobile profile", { 
   assertCamera(await cameraState(page, { pixels: true }), governed.mobile, { pixels: true });
   await context.close();
 });
+
+test("publishes ready only after the latest load-time media and reset settlement", { timeout: 30_000 }, async () => {
+  const context = await browser.newContext({ reducedMotion: "no-preference" });
+  const page = await context.newPage();
+  await page.addInitScript(() => {
+    const nativeMatchMedia = window.matchMedia.bind(window);
+    const mobile = new EventTarget();
+    mobile.matches = false;
+    mobile.media = "(max-width: 640px)";
+    mobile.onchange = null;
+    mobile.addListener = (listener) => mobile.addEventListener("change", listener);
+    mobile.removeListener = (listener) => mobile.removeEventListener("change", listener);
+    window.matchMedia = (query) => query === mobile.media ? mobile : nativeMatchMedia(query);
+    window.__forceMobileCamera = () => {
+      mobile.matches = true;
+      mobile.dispatchEvent(new Event("change"));
+    };
+  });
+  await page.route("**/assets/merch-3d/cassette-002.glb", async (route) => {
+    await new Promise((resolve) => setTimeout(resolve, 500));
+    await route.continue();
+  });
+  await page.goto(`${baseUrl}/merch/cassette/`, { waitUntil: "load" });
+  await page.locator("[data-product-viewer-activate]").click();
+  const viewer = page.locator("model-viewer");
+  await viewer.waitFor({ state: "attached" });
+  await viewer.evaluate((model) => {
+    const root = model.closest("[data-product-viewer]");
+    window.__readySnapshots = [];
+    new MutationObserver(() => {
+      if (root.dataset.viewerState !== "ready") return;
+      window.__readySnapshots.push({
+        orbit: model.getAttribute("camera-orbit"),
+        fieldOfView: model.getAttribute("field-of-view"),
+        target: model.getAttribute("camera-target")
+      });
+    }).observe(root, { attributes: true, attributeFilter: ["data-viewer-state"] });
+    model.addEventListener("load", () => {
+      window.__forceMobileCamera();
+      root.querySelector("[data-product-viewer-reset]").click();
+    }, { once: true });
+  });
+  await page.waitForFunction(() => document.querySelector("[data-product-viewer]")?.dataset.viewerState === "ready");
+  await page.waitForTimeout(100);
+  assert.deepEqual(await page.evaluate(() => window.__readySnapshots), [{
+    orbit: governed.mobile.orbit,
+    fieldOfView: governed.mobile.fieldOfView,
+    target: governed.mobile.target
+  }]);
+  assertCamera(await cameraState(page), governed.mobile);
+  await context.close();
+});

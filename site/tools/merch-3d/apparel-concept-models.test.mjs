@@ -17,6 +17,7 @@ const here = path.dirname(fileURLToPath(import.meta.url));
 const siteRoot = path.resolve(here, "../..");
 const readJson = async (filename) => JSON.parse(await readFile(filename, "utf8"));
 const sha256 = (bytes) => createHash("sha256").update(bytes).digest("hex");
+const builderSource = await readFile(path.join(here, "lib/apparel-concept-builder.mjs"), "utf8");
 const records = [
   {
     assetKey: "t-shirt-001",
@@ -32,7 +33,7 @@ const records = [
   {
     assetKey: "hoodie-001",
     productId: "MRCH-006",
-    requiredNodes: ["Hoodie_Draped_Shell", "Hoodie_Shaped_Cuffs", "Hoodie_Waistband", "Hoodie_Open_Hood_Shell", "Hoodie_Hood_Throat_Overlap", "Hoodie_Hood_Centre_Seam", "Hoodie_Back_Artwork"],
+    requiredNodes: ["Hoodie_Draped_Shell", "Hoodie_Shaped_Cuffs", "Hoodie_Waistband", "Hoodie_Open_Hood_Shell", "Hoodie_Hood_Interior_Cavity", "Hoodie_Hood_Centre_Seam", "Hoodie_Back_Artwork"],
     artworkNode: "Hoodie_Back_Artwork",
     fabricMaterial: "MAT_HOODIE_VOID_FABRIC",
     artworkSurfaceMm: [300, 112.5],
@@ -103,6 +104,34 @@ const connectedTriangleComponents = (node) => {
   return components;
 };
 
+const indexedTriangleComponents = (node) => {
+  const primitive = node.getMesh().listPrimitives()[0];
+  const indices = Array.from(primitive.getIndices().getArray());
+  const vertexTriangles = new Map();
+  for (let offset = 0; offset < indices.length; offset += 3) {
+    for (const vertex of indices.slice(offset, offset + 3)) {
+      if (!vertexTriangles.has(vertex)) vertexTriangles.set(vertex, []);
+      vertexTriangles.get(vertex).push(offset / 3);
+    }
+  }
+  const unseen = new Set(Array.from({ length: indices.length / 3 }, (_, index) => index));
+  let components = 0;
+  while (unseen.size) {
+    components += 1;
+    const queue = [unseen.values().next().value];
+    unseen.delete(queue[0]);
+    while (queue.length) {
+      const triangle = queue.pop();
+      for (const vertex of indices.slice(triangle * 3, triangle * 3 + 3)) {
+        for (const neighbour of vertexTriangles.get(vertex)) {
+          if (unseen.delete(neighbour)) queue.push(neighbour);
+        }
+      }
+    }
+  }
+  return components;
+};
+
 const boundaryEdgeCount = (node) => {
   const primitive = node.getMesh().listPrimitives()[0];
   const indices = primitive.getIndices().getArray();
@@ -115,6 +144,78 @@ const boundaryEdgeCount = (node) => {
     }
   }
   return Array.from(edges.values()).filter((uses) => uses === 1).length;
+};
+
+const boundaryEdgesInArmholes = (node) => {
+  const primitive = node.getMesh().listPrimitives()[0];
+  const positions = primitive.getAttribute("POSITION").getArray();
+  const indices = primitive.getIndices().getArray();
+  const edges = new Map();
+  for (let offset = 0; offset < indices.length; offset += 3) {
+    const triangle = [indices[offset], indices[offset + 1], indices[offset + 2]];
+    for (const [a, b] of [[triangle[0], triangle[1]], [triangle[1], triangle[2]], [triangle[2], triangle[0]]]) {
+      const key = a < b ? `${a}:${b}` : `${b}:${a}`;
+      edges.set(key, { a, b, uses: (edges.get(key)?.uses || 0) + 1 });
+    }
+  }
+  return Array.from(edges.values()).filter(({ a, b, uses }) => {
+    if (uses !== 1) return false;
+    const midpoint = [0, 1, 2].map((axis) => (positions[a * 3 + axis] + positions[b * 3 + axis]) / 2);
+    return Math.abs(midpoint[0]) >= 0.20 && Math.abs(midpoint[0]) <= 0.46 && midpoint[1] >= 0.73 && midpoint[1] <= 1.035;
+  }).length;
+};
+
+const sharedPositionCount = (firstNode, secondNode) => {
+  const keys = (node) => {
+    const positions = node.getMesh().listPrimitives()[0].getAttribute("POSITION").getArray();
+    const result = new Set();
+    for (let offset = 0; offset < positions.length; offset += 3) {
+      result.add(`${positions[offset].toFixed(6)}:${positions[offset + 1].toFixed(6)}:${positions[offset + 2].toFixed(6)}`);
+    }
+    return result;
+  };
+  const first = keys(firstNode);
+  return Array.from(keys(secondNode)).filter((key) => first.has(key)).length;
+};
+
+const minimumShoulderNormalDot = (node) => {
+  const primitive = node.getMesh().listPrimitives()[0];
+  const positions = primitive.getAttribute("POSITION").getArray();
+  const normals = primitive.getAttribute("NORMAL").getArray();
+  const indices = primitive.getIndices().getArray();
+  let minimum = 1;
+  let inspected = 0;
+  for (let offset = 0; offset < indices.length; offset += 3) {
+    const triangle = [indices[offset], indices[offset + 1], indices[offset + 2]];
+    for (const [a, b] of [[triangle[0], triangle[1]], [triangle[1], triangle[2]], [triangle[2], triangle[0]]]) {
+      const midpointX = (positions[a * 3] + positions[b * 3]) / 2;
+      const midpointY = (positions[a * 3 + 1] + positions[b * 3 + 1]) / 2;
+      if (Math.abs(midpointX) < 0.20 || midpointY < 0.72 || midpointY > 1.04) continue;
+      const dot = normals[a * 3] * normals[b * 3]
+        + normals[a * 3 + 1] * normals[b * 3 + 1]
+        + normals[a * 3 + 2] * normals[b * 3 + 2];
+      minimum = Math.min(minimum, dot);
+      inspected += 1;
+    }
+  }
+  assert.ok(inspected >= 100, "shoulder continuity test must inspect a substantial stitched region");
+  return minimum;
+};
+
+const maximumGlobalUvDeviation = (node) => {
+  const primitive = node.getMesh().listPrimitives()[0];
+  const positions = primitive.getAttribute("POSITION").getArray();
+  const uvs = primitive.getAttribute("TEXCOORD_0").getArray();
+  const mapping = node.getExtras().garmentUvMapping;
+  assert.equal(mapping?.type, "global-xy-projection");
+  const [minX, minY, maxX, maxY] = mapping.boundsM;
+  let maximum = 0;
+  for (let vertex = 0; vertex < positions.length / 3; vertex += 1) {
+    const expectedU = (positions[vertex * 3] - minX) / (maxX - minX);
+    const expectedV = (positions[vertex * 3 + 1] - minY) / (maxY - minY);
+    maximum = Math.max(maximum, Math.abs(uvs[vertex * 2] - expectedU), Math.abs(uvs[vertex * 2 + 1] - expectedV));
+  }
+  return maximum;
 };
 
 const crownTrianglesInRearAperture = (nodes) => {
@@ -320,8 +421,16 @@ for (const record of records) {
       assert.ok(depthRatio >= 0.11 && depthRatio <= 0.20, "t-shirt must carry relaxed torso and sleeve depth without becoming a rigid tube");
       assert.equal(shell.getExtras().construction, "tailored-torso-attached-sleeves");
       assert.ok(shell.getExtras().shoulderDropM >= 0.06, "t-shirt must preserve a natural oversized shoulder drop");
-      assert.equal(shell.getExtras().sleeveAttachment, "explicit-bridge-patches");
-      assert.equal(shell.getExtras().armholeCoverage, "continuous-torso-shoulders-over-underlapping-sleeve-roots");
+      assert.doesNotMatch(builderSource, /shoulderBridge/, "standalone shoulder repair patches must not exist in the builder");
+      assert.equal(shell.getExtras().sleeveAttachment, "shared-armhole-rings");
+      assert.equal(shell.getExtras().armholeCoverage, "torso-holes-stitched-to-matching-sleeve-root-rings");
+      assert.equal(shell.getExtras().sleeveRootCaps, 0);
+      assert.equal(shell.getExtras().armholeRingVertexCount, 28);
+      assert.equal(shell.getExtras().stitchFacesPerSide, 28);
+      assert.equal(indexedTriangleComponents(shell), 1, "t-shirt shell must share real indices across torso, stitch bands and sleeves");
+      assert.equal(boundaryEdgesInArmholes(shell), 0, "t-shirt armhole loops must be fully stitched without open repair gaps");
+      assert.ok(minimumShoulderNormalDot(shell) >= 0.70, "t-shirt shoulder normals must transition smoothly across the armhole seam");
+      assert.ok(maximumGlobalUvDeviation(shell) <= 1e-6, "t-shirt torso and sleeves must use one documented garment-space UV projection");
       assert.ok(projectedFrontCoverage(shell, [[0.275, 0.970], [0.305, 0.958], [0.345, 0.945], [-0.275, 0.970], [-0.305, 0.958], [-0.345, 0.945]]).every(Boolean), "t-shirt front shoulder projection must not expose triangular armhole gaps");
       assert.ok(triangleCount(shell) >= 1200, "t-shirt tailored shell must have enough sections for shaped torso and sleeve transitions");
       assert.equal(nodes.get("T_Shirt_Collar").getExtras().opening, "unfilled-neckline");
@@ -337,10 +446,19 @@ for (const record of records) {
     if (record.assetKey === "hoodie-001") {
       const shell = nodes.get("Hoodie_Draped_Shell");
       const hood = nodes.get("Hoodie_Open_Hood_Shell");
+      const hoodInterior = nodes.get("Hoodie_Hood_Interior_Cavity");
       assert.equal(connectedTriangleComponents(shell), 1, "hoodie body, shoulders and sleeves must be one connected shell");
       assert.equal(shell.getExtras().construction, "tailored-torso-attached-sleeves");
-      assert.equal(shell.getExtras().sleeveAttachment, "explicit-bridge-patches");
-      assert.equal(shell.getExtras().armholeCoverage, "continuous-torso-shoulders-over-underlapping-sleeve-roots");
+      assert.doesNotMatch(builderSource, /shoulderBridge/, "standalone shoulder repair patches must not exist in the builder");
+      assert.equal(shell.getExtras().sleeveAttachment, "shared-armhole-rings");
+      assert.equal(shell.getExtras().armholeCoverage, "torso-holes-stitched-to-matching-sleeve-root-rings");
+      assert.equal(shell.getExtras().sleeveRootCaps, 0);
+      assert.equal(shell.getExtras().armholeRingVertexCount, 28);
+      assert.equal(shell.getExtras().stitchFacesPerSide, 28);
+      assert.equal(indexedTriangleComponents(shell), 1, "hoodie shell must share real indices across torso, stitch bands and sleeves");
+      assert.equal(boundaryEdgesInArmholes(shell), 0, "hoodie armhole loops must be fully stitched without open repair gaps");
+      assert.ok(minimumShoulderNormalDot(shell) >= 0.68, "hoodie shoulder normals must transition smoothly across the armhole seam");
+      assert.ok(maximumGlobalUvDeviation(shell) <= 1e-6, "hoodie torso and sleeves must use one documented garment-space UV projection");
       assert.ok(projectedFrontCoverage(shell, [[0.270, 0.995], [0.320, 0.970], [0.350, 0.940], [-0.270, 0.995], [-0.320, 0.970], [-0.350, 0.940]]).every(Boolean), "hoodie front shoulder projection must not expose triangular armhole gaps");
       assert.ok(triangleCount(shell) >= 1800, "hoodie shell must have enough shaped sections for body, sleeves and shoulders");
       assert.ok(boundaryEdgeCount(hood) >= 24, "hood must preserve a real open face cavity");
@@ -353,11 +471,20 @@ for (const record of records) {
       assert.ok(hood.getExtras().necklineOverlapM >= 0.08, "hood must visibly drape into the neckline and shoulders");
       assert.ok(hood.getExtras().shoulderDrapeWidthM >= 0.50, "down hood must spread as two fabric lobes across the upper back");
       assert.equal(connectedTriangleComponents(hood), 1, "hood back, side walls and opening rim must remain attached");
+      assert.equal(hoodInterior.getMesh().listPrimitives()[0].getMaterial().getName(), "MAT_HOODIE_HOOD_INTERIOR", "hood interior material must be assigned to actual cavity geometry");
+      assert.equal(indexedTriangleComponents(hoodInterior), 1, "hood inner throat must be one connected surface");
+      assert.equal(boundaryEdgeCount(hoodInterior), 80, "uncapped hood interior must preserve open entrance and throat boundary loops");
+      assert.ok(sharedPositionCount(hood, hoodInterior) >= 40, "hood interior entrance must join the upward hood opening positionally");
+      const interiorBounds = getBounds(hoodInterior);
+      assert.ok(interiorBounds.max[1] - interiorBounds.min[1] >= 0.10, "hood cavity must have visible vertical depth");
+      assert.ok(interiorBounds.max[2] - interiorBounds.min[2] >= 0.06, "hood cavity must deepen rearward instead of collapsing to a slit");
+      assert.equal(hoodInterior.getExtras().opening, "uncapped-entrance-and-throat");
+      assert.equal(faceNormalAgreement(hoodInterior), 0, "hood interior winding must agree with inward-facing vertex normals");
       const hoodBounds = getBounds(hood);
       const hoodAspect = (hoodBounds.max[0] - hoodBounds.min[0]) / (hoodBounds.max[1] - hoodBounds.min[1]);
       assert.ok(hoodAspect >= 1.45 && hoodAspect <= 1.95, "down hood must read as a broad folded garment lobe rather than an upright halo or sphere");
       assert.ok(hoodBounds.min[1] <= 0.80, "down hood must rest low enough on the upper back to read as attached drape");
-      assert.equal(nodes.get("Hoodie_Hood_Throat_Overlap").getExtras().construction, "overlapped-neckline-fold");
+      assert.equal(nodes.has("Hoodie_Hood_Throat_Overlap"), false, "hood must not stack a second rigid neckline ring beneath its opening lip");
       assert.equal(nodes.get("Hoodie_Shaped_Cuffs").getExtras().opening, "unfilled-cuff-rims");
       assert.equal(nodes.get("Hoodie_Waistband").getExtras().integration, "conforming-body-overlap");
       for (const name of ["Hoodie_Draped_Shell", "Hoodie_Open_Hood_Shell"]) assert.equal(faceNormalAgreement(nodes.get(name)), 0, `${name} winding must agree with its vertex normals`);

@@ -2,7 +2,7 @@
   "schemaVersion": 2,
   "assetKey": "cap-001",
   "renderer": "@google/model-viewer",
-  "capturePolicy": "built-product-page before/after activation at 390x844 plus isolated desktop/mobile/rear views; await loaded visible dimensions and rendered pixels",
+  "capturePolicy": "built-product-page before/after activation at 390x844 plus isolated desktop/mobile/rear views and a deliberately tight elevated hood-cavity detail; await loaded visible dimensions and rendered pixels",
   "hashPolicy": "snapshot integrity only; semantic gates and human visual review govern acceptance",
   "views": [
     {

@@ -5,15 +5,9 @@
   "issues": {
     "numErrors": 0,
     "numWarnings": 0,
-    "numInfos": 2,
+    "numInfos": 1,
     "numHints": 0,
     "messages": [
-      {
-        "code": "UNUSED_OBJECT",
-        "message": "This object may be unused.",
-        "severity": 2,
-        "pointer": "/materials/3"
-      },
       {
         "code": "IMAGE_NPOT_DIMENSIONS",
         "message": "Image has non-power-of-two dimensions: 1600x600.",
@@ -31,7 +25,7 @@
         "pointer": "/buffers/0",
         "mimeType": "application/gltf-buffer",
         "storage": "glb",
-        "byteLength": 588672
+        "byteLength": 366288
       },
       {
         "pointer": "/images/0",
@@ -106,8 +100,8 @@
     "hasTextures": true,
     "hasDefaultScene": true,
     "drawCallCount": 7,
-    "totalVertexCount": 7780,
-    "totalTriangleCount": 3842,
+    "totalVertexCount": 3212,
+    "totalTriangleCount": 3582,
     "maxUVs": 1,
     "maxInfluences": 0,
     "maxAttributes": 4

@@ -135,3 +135,66 @@ Native-size review accepted the continuous tee shoulders and collar void, the ho
 ### Remaining concern
 
 The cap intentionally spends most of the current release budget (3.57 MB and 19 of 20 draw calls) to keep the rear aperture and crown rim smooth at inspection distance. It is within policy, but any future detail should replace or consolidate existing geometry rather than add another draw call. As before, all three assets remain concept visualizations and are not fit, construction or manufacturing references.
+
+---
+
+## Task 6 review-fix wave — stitched armholes, hood cavity and camera settlement — 2026-08-07
+
+Status: DONE
+
+### Outcome
+
+All three Important independent-review findings are resolved in one scoped wave.
+
+- The tee and hoodie no longer use standalone `shoulderBridge` repair quads or capped sleeve roots. Each torso now has two real armhole holes, ordered 28-vertex boundaries, matching sleeve-root rings and 28 indexed stitch faces per side. Torso, transition bands and sleeves reopen as one shared-index component with zero boundary edges in both armhole zones.
+- Both garment shells use one documented global XY garment-space UV projection. The tests reopen every position/UV pair and require formula deviation at or below `1e-6`; stitched-region normal-dot and face-winding gates also pass.
+- The hoodie now has an actual material-backed `Hoodie_Hood_Interior_Cavity`: one connected uncapped 40-section wall with 80 boundary edges, at least 40 entrance positions shared with the exterior opening, more than 100 mm vertical depth and more than 60 mm front/back depth. It uses `MAT_HOODIE_HOOD_INTERIOR` and leaves the rear exterior panel solid.
+- Native visual review rejected the first close-up because it was too distant, then rejected the tightened version because the old neckline overlap and opening lip read as concentric mechanical rings. The final hood removes `Hoodie_Hood_Throat_Overlap`, keeps one thin asymmetric teardrop lip, descends the inner wall rearward and leaves the broad exterior hood lobes behind it. The auxiliary 900 x 900 detail is intentionally tight; default and mobile product cameras remain unchanged and fully framed.
+- Responsive camera application now returns explicit `{ status: "settled" | "superseded" | "aborted", revision }` outcomes. Only the owning revision may clear its applying marker, the load handler follows the latest settlement promise, and `ready` is published only for the latest settled revision. The regression delays the real cassette GLB, forces a load-time mobile media change plus reset, and observes exactly one ready snapshot with the final mobile orbit/FOV/target. Existing aspect-adjusted FOV, pointer-orbit preservation and reset framing remain green.
+
+### RED evidence
+
+- Focused apparel/browser run: 1/4 passed and 3/4 failed on the legacy `shoulderBridge`, stale hoodie required-node record and `desktop-front-cavity` evidence.
+- Focused camera run: 2/3 passed and 1/3 failed because the first ready snapshot exposed the stale desktop profile after a load-time media/reset race.
+- The first rebuilt geometry reached the strict viewer-envelope gates before topology assertions (tee width +7.1 mm, hoodie depth +0.7 mm); endpoint and cavity/fold dimensions were trimmed back inside the original governed envelopes before acceptance.
+
+### Final artifacts
+
+| Model | GLB SHA-256 | Bytes | Triangles | Draw calls | Reopened bounds mm | Validator |
+| --- | --- | ---: | ---: | ---: | --- | --- |
+| t-shirt | `2f28e7723b6458d780ea1b2cf6e89a44090be15216262344c948c8906f8f03ab` | 328,120 | 3,128 | 6 | 1136.857 x 1041.000 x 165.000 | 0 errors / 0 warnings |
+| hoodie | `cfcc495f63a65fa4934aa65c6b01273b01a770b62148374118e1f2213b296482` | 378,684 | 3,582 | 7 | 1178.938 x 1065.000 x 266.250 | 0 errors / 0 warnings |
+| cap (unchanged geometry) | `2c52d94ecff7fa083f22afc0d7fb06db6bda764ede10b075fed2c23621fd84a3` | 3,565,776 | 38,090 | 19 | 269.862 x 266.000 x 382.500 | 0 errors / 0 warnings |
+
+All three deterministic `--verify` builds reproduced these exact bytes and remain below 4,000,000 bytes, 80,000 triangles and 20 draw calls.
+
+### Final browser evidence
+
+| View | Size | SHA-256 |
+| --- | ---: | --- |
+| tee desktop default | 900 x 900 | `e61a697b0b7a22f669b1a08ae56e1df2d8124f3dd3e632e72d6b8445e297dc8a` |
+| tee built mobile stage | 358 x 521 | `e99a4f2e4146e7bdbf01c1c5f049e4d9ad8cd5eb7b4f3c2ff9b233040a372f7b` |
+| hoodie desktop default/rear | 900 x 900 | `745d865e87e900789ce251aaec5dd1a37bdfb7149caf0da3af906e129ac564c9` |
+| hoodie elevated cavity detail | 900 x 900 | `e4fee4f45d6c5c015955cfe772cd4d4ad06891d3aeaa0e5e96e03b27036da1c5` |
+| hoodie built mobile stage | 358 x 521 | `bd9ea160d74ececcfe24ed3ce58aec36ae718ef058dee67cf15bb0d81595299e` |
+| cap desktop default | 900 x 900 | `d15c39eda8ecbab1720254f1cadd7cbcf74b441d6d5c18f46ba1902ea716e1a6` |
+| cap desktop rear aperture | 900 x 900 | `1c64a863208bb301a821698e95376a35ad02c2aaf4df7d01a8a1c018244f3d1e` |
+| cap built mobile stage | 358 x 521 | `9d2a8a9d7d07c4fef8ccaf14b18c78d1f22bd50c9084120ae669db231a333d24` |
+
+The isolated default/mobile and built-product-page views retain at least 8 px breathing room. The hoodie detail alone is deliberately cropped as a governed close-up and requires at least 700 px of foreground width; it uses only the auxiliary `0deg 42deg 50%`, target Y `0.955m`, 22deg FOV profile.
+
+### Exact final verification
+
+- `node site/tools/merch-3d/build-t-shirt-001.mjs --verify` — exact SHA verified; 328,120 bytes / 3,128 triangles / 6 draw calls.
+- `node site/tools/merch-3d/build-hoodie-001.mjs --verify` — exact SHA verified; 378,684 bytes / 3,582 triangles / 7 draw calls.
+- `node site/tools/merch-3d/build-cap-001.mjs --verify` — exact SHA verified; 3,565,776 bytes / 38,090 triangles / 19 draw calls.
+- `node --test site/tools/merch-3d/apparel-concept-models.test.mjs site/tools/merch-3d/apparel-concept-browser-qa.test.mjs` — 4/4 passed.
+- `node --test site/tests/merch-model-assets.test.mjs` — 5/5 passed.
+- `node --test --test-concurrency=1 site/tests/product-viewer-runtime.test.mjs site/tests/product-viewer-camera-browser.test.mjs site/tests/product-viewer-catalog-browser.test.mjs` — 12/12 passed. Serialization prevents shared `dist` rebuild races.
+- `node site/tools/merch-3d/capture-apparel-concepts.mjs` — all three isolated and built-product-page evidence sets captured successfully; all stored semantic checks are true.
+- `git diff --check` — passed.
+- `git status --short -- .superpowers/sdd/progress.md` — empty; the progress file is untouched.
+
+### Remaining concern
+
+No remaining concern exists for these review findings. The prior cap budget note still applies, and all apparel artifacts remain explicit concept visualizations rather than manufacturing references.

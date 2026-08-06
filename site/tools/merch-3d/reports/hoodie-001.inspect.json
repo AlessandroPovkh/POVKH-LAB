@@ -8,18 +8,18 @@
           "name": "Hoodie_001_Concept_Visualization",
           "rootName": "Hoodie_001_Centred_Grounded_Pivot",
           "bboxMin": [
-            -0.58951,
+            -0.58947,
             0,
-            -0.175
+            -0.17
           ],
           "bboxMax": [
-            0.58951,
+            0.58947,
             1.065,
-            0.09639
+            0.09625
           ],
-          "renderVertexCount": 11526,
-          "uploadVertexCount": 7780,
-          "uploadNaiveVertexCount": 7780
+          "renderVertexCount": 10746,
+          "uploadVertexCount": 3212,
+          "uploadNaiveVertexCount": 3212
         }
       ]
     },
@@ -31,8 +31,8 @@
             "TRIANGLES"
           ],
           "meshPrimitives": 1,
-          "glPrimitives": 2468,
-          "vertices": 4992,
+          "glPrimitives": 2608,
+          "vertices": 1424,
           "indices": [
             "u32"
           ],
@@ -43,7 +43,7 @@
             "TEXCOORD_0:f32"
           ],
           "instances": 1,
-          "size": 269232
+          "size": 99648
         },
         {
           "name": "Hoodie_Shaped_Cuffs_Mesh",
@@ -91,8 +91,8 @@
             "TRIANGLES"
           ],
           "meshPrimitives": 1,
-          "glPrimitives": 442,
-          "vertices": 924,
+          "glPrimitives": 202,
+          "vertices": 444,
           "indices": [
             "u32"
           ],
@@ -103,16 +103,16 @@
             "TEXCOORD_0:f32"
           ],
           "instances": 1,
-          "size": 49656
+          "size": 23736
         },
         {
-          "name": "Hoodie_Hood_Throat_Overlap_Mesh",
+          "name": "Hoodie_Hood_Interior_Cavity_Mesh",
           "mode": [
             "TRIANGLES"
           ],
           "meshPrimitives": 1,
-          "glPrimitives": 320,
-          "vertices": 640,
+          "glPrimitives": 160,
+          "vertices": 120,
           "indices": [
             "u32"
           ],
@@ -123,7 +123,7 @@
             "TEXCOORD_0:f32"
           ],
           "instances": 1,
-          "size": 34560
+          "size": 7680
         },
         {
           "name": "Hoodie_Hood_Centre_Seam_Mesh",
@@ -189,7 +189,7 @@
         },
         {
           "name": "MAT_HOODIE_VOID_RIB",
-          "instances": 4,
+          "instances": 3,
           "textures": [
             "normalTexture",
             "metallicRoughnessTexture"
@@ -199,7 +199,7 @@
         },
         {
           "name": "MAT_HOODIE_HOOD_INTERIOR",
-          "instances": 0,
+          "instances": 1,
           "textures": [
             "normalTexture",
             "metallicRoughnessTexture"

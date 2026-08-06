@@ -18,7 +18,7 @@ test("apparel concept browser QA stores isolated and built-product-page mobile e
     assert.equal(report.schemaVersion, 2);
     assert.equal(report.assetKey, assetKey);
     assert.equal(report.renderer, "@google/model-viewer");
-    assert.equal(report.capturePolicy, "built-product-page before/after activation at 390x844 plus isolated desktop/mobile/rear views; await loaded visible dimensions and rendered pixels");
+    assert.equal(report.capturePolicy, "built-product-page before/after activation at 390x844 plus isolated desktop/mobile/rear views and a deliberately tight elevated hood-cavity detail; await loaded visible dimensions and rendered pixels");
     assert.deepEqual(report.checks, {
       requiredViews: true,
       noBrowserErrors: true,
@@ -31,7 +31,7 @@ test("apparel concept browser QA stores isolated and built-product-page mobile e
       interactionAndReset: true,
       noLayoutOverflow: true
     });
-    const auxiliary = assetKey === "hoodie-001" ? ["desktop-front-cavity"] : assetKey === "cap-001" ? ["desktop-rear-aperture"] : [];
+    const auxiliary = assetKey === "hoodie-001" ? ["desktop-elevated-cavity"] : assetKey === "cap-001" ? ["desktop-rear-aperture"] : [];
     assert.deepEqual(report.views.map((view) => view.view), ["desktop-default", "mobile-default", ...auxiliary, "mobile-product-poster", "mobile-product-stage"]);
     for (const view of report.views) {
       const screenshot = await readFile(path.join(siteRoot, view.path));
@@ -50,7 +50,12 @@ test("apparel concept browser QA stores isolated and built-product-page mobile e
       assert.equal(view.loaded, true);
       assert.equal(view.modelIsVisible, true);
       assert.ok(view.foregroundPixels >= 1000);
-      assert.ok(view.visualMarginsPx.every((margin) => margin >= 8), `${assetKey} ${view.view} must be fully framed`);
+      if (view.view === "desktop-elevated-cavity") {
+        assert.deepEqual(view.camera, { orbit: "0deg 42deg 50%", target: "auto 0.955m auto", fieldOfView: "22deg" });
+        assert.ok(view.foregroundBoundsPx[2] - view.foregroundBoundsPx[0] >= 700, "hood cavity evidence must occupy the central detail frame");
+      } else {
+        assert.ok(view.visualMarginsPx.every((margin) => margin >= 8), `${assetKey} ${view.view} must be fully framed`);
+      }
       if (view.view === "mobile-product-stage") {
         assert.equal(view.surface, "built-product-page");
         assert.equal(view.activated, true);

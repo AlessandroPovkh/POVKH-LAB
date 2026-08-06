@@ -20,7 +20,7 @@
     "scene": "T_Shirt_001_Concept_Visualization",
     "pivot": "T_Shirt_001_Centred_Grounded_Pivot",
     "requiredNodes": ["T_Shirt_Draped_Shell", "T_Shirt_Collar", "T_Shirt_Collar_Interior", "T_Shirt_Sleeve_Hems", "T_Shirt_Curved_Hem", "T_Shirt_Front_Artwork"],
-    "features": ["tailored tubular torso with continuous outer shoulders and underlapping attached short-sleeve roots", "explicit internal shoulder bridge patches", "open tubular sleeve hems", "level curved hem", "open dimensional rib collar with dark inner wall", "readable front and back", "exact front artwork surface"]
+    "features": ["tailored tubular torso with cut armholes stitched to matching shared short-sleeve root rings", "single indexed garment shell with blended armhole normals and coherent global garment-space UVs", "open tubular sleeve hems", "level curved hem", "open dimensional rib collar with dark inner wall", "readable front and back", "exact front artwork surface"]
   },
   "artwork": {
     "path": "sources/t-shirt-001/PVKH_ASCII_DARK_KNOCKOUT_EXACT_1600x600_v01.png",

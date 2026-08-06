@@ -47,16 +47,17 @@
         "Hoodie_Shaped_Cuffs",
         "Hoodie_Waistband",
         "Hoodie_Open_Hood_Shell",
-        "Hoodie_Hood_Throat_Overlap",
+        "Hoodie_Hood_Interior_Cavity",
         "Hoodie_Hood_Centre_Seam",
         "Hoodie_Back_Artwork"
       ],
       "features": [
-        "tailored tubular torso with attached shaped long sleeves",
-        "explicit internal shoulder bridge patches",
+        "tailored tubular torso with cut armholes stitched to matching shared long-sleeve root rings",
+        "single indexed garment shell with blended armhole normals and coherent global garment-space UVs",
         "conforming open rib cuffs and waistband",
         "attached two-panel hood down with two upper-back fabric lobes",
-        "upward neckline-facing unfilled cavity, overlapped neckline fold and rear centre seam",
+        "one thin asymmetric opening lip joined to a material-backed uncapped interior descending rearward into a deep throat",
+        "rear centre seam",
         "readable front and back",
         "exact back artwork surface"
       ]
@@ -139,9 +140,9 @@
           "fieldOfView": "24deg"
         },
         "front": {
-          "orbit": "0deg 82deg 116%",
-          "target": "auto 0.590m auto",
-          "fieldOfView": "23deg"
+          "orbit": "0deg 42deg 50%",
+          "target": "auto 0.955m auto",
+          "fieldOfView": "22deg"
         },
         "rear": {
           "orbit": "180deg 82deg 116%",
@@ -179,7 +180,7 @@
         "Hoodie_Shaped_Cuffs",
         "Hoodie_Waistband",
         "Hoodie_Open_Hood_Shell",
-        "Hoodie_Hood_Throat_Overlap",
+        "Hoodie_Hood_Interior_Cavity",
         "Hoodie_Hood_Centre_Seam",
         "Hoodie_Back_Artwork"
       ],
@@ -188,7 +189,7 @@
         "Hoodie_Shaped_Cuffs_Mesh",
         "Hoodie_Waistband_Mesh",
         "Hoodie_Open_Hood_Shell_Mesh",
-        "Hoodie_Hood_Throat_Overlap_Mesh",
+        "Hoodie_Hood_Interior_Cavity_Mesh",
         "Hoodie_Hood_Centre_Seam_Mesh",
         "Hoodie_Back_Artwork_Mesh"
       ],
@@ -213,19 +214,19 @@
     "method": "reopened-glb-bounds-node-and-texture-metadata",
     "boundsMm": {
       "min": [
-        -589.5118117332458,
+        -589.4690155982971,
         0,
-        -174.99999701976776
+        -170.00000178813934
       ],
       "max": [
-        589.5118117332458,
+        589.4690155982971,
         1065.000057220459,
-        96.38719260692596
+        96.24982625246048
       ],
       "size": [
-        1179.0236234664917,
+        1178.9380311965942,
         1065.000057220459,
-        271.3871896266937
+        266.2498280405998
       ]
     },
     "geometryPurpose": "volumetric placement and front/back readability",
@@ -240,9 +241,9 @@
         "fieldOfView": "24deg"
       },
       "front": {
-        "orbit": "0deg 82deg 116%",
-        "target": "auto 0.590m auto",
-        "fieldOfView": "23deg"
+        "orbit": "0deg 42deg 50%",
+        "target": "auto 0.955m auto",
+        "fieldOfView": "22deg"
       },
       "rear": {
         "orbit": "180deg 82deg 116%",
@@ -271,13 +272,13 @@
   "validation": {
     "errors": 0,
     "warnings": 0,
-    "infos": 2,
+    "infos": 1,
     "hints": 0
   },
   "budget": {
-    "triangles": 3842,
+    "triangles": 3582,
     "drawCalls": 7,
-    "bytes": 600844,
+    "bytes": 378684,
     "ceilings": {
       "maxBytes": 4000000,
       "maxTriangles": 80000,
@@ -286,7 +287,7 @@
   },
   "output": {
     "path": "assets/merch-3d/hoodie-001.glb",
-    "sha256": "dcdc70995f27079ad1f80931eeb3aa369a7c90dcdbca215825d7e5aabb828fbb"
+    "sha256": "cfcc495f63a65fa4934aa65c6b01273b01a770b62148374118e1f2213b296482"
   },
   "deterministic": {
     "verifiedBySecondInMemoryBuild": true

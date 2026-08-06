@@ -168,7 +168,7 @@ try {
     const profiles = [
       { view: "desktop-default", viewport: { width: 900, height: 900 }, camera: source.camera.desktop.default },
       { view: "mobile-default", viewport: { width: 390, height: 600 }, camera: source.camera.mobile.default },
-      ...(record.assetKey === "hoodie-001" ? [{ view: "desktop-front-cavity", viewport: { width: 900, height: 900 }, camera: source.camera.desktop.front }] : []),
+      ...(record.assetKey === "hoodie-001" ? [{ view: "desktop-elevated-cavity", viewport: { width: 900, height: 900 }, camera: source.camera.desktop.front }] : []),
       ...(record.assetKey === "cap-001" ? [{ view: "desktop-rear-aperture", viewport: { width: 900, height: 900 }, camera: source.camera.desktop.rear }] : [])
     ];
     const views = [];
@@ -191,7 +191,12 @@ try {
       const bytes = await page.screenshot({ animations: "disabled" });
       const frame = await analyseSyntheticFrame(bytes);
       assert.ok(frame.foregroundPixels >= 1000, `${record.assetKey} ${profile.view} produced no substantial frame`);
-      assert.ok(frame.visualMarginsPx.every((margin) => margin >= 8), `${record.assetKey} ${profile.view} is cropped: ${frame.visualMarginsPx}`);
+      const isElevatedCavityDetail = profile.view === "desktop-elevated-cavity";
+      if (isElevatedCavityDetail) {
+        assert.ok(frame.foregroundBoundsPx[2] - frame.foregroundBoundsPx[0] >= 700, `${record.assetKey} ${profile.view} must tightly frame the hood detail`);
+      } else {
+        assert.ok(frame.visualMarginsPx.every((margin) => margin >= 8), `${record.assetKey} ${profile.view} is cropped: ${frame.visualMarginsPx}`);
+      }
       await writeFile(filename, bytes);
       views.push({
         view: profile.view,
@@ -268,8 +273,9 @@ try {
     });
     await page.close();
 
-    const requiredViewNames = ["desktop-default", "mobile-default", ...(record.assetKey === "hoodie-001" ? ["desktop-front-cavity"] : []), ...(record.assetKey === "cap-001" ? ["desktop-rear-aperture"] : []), "mobile-product-poster", "mobile-product-stage"];
+    const requiredViewNames = ["desktop-default", "mobile-default", ...(record.assetKey === "hoodie-001" ? ["desktop-elevated-cavity"] : []), ...(record.assetKey === "cap-001" ? ["desktop-rear-aperture"] : []), "mobile-product-poster", "mobile-product-stage"];
     const activeViews = views.filter((view) => view.activated !== false);
+    const fullyFramedViews = activeViews.filter((view) => view.view !== "desktop-elevated-cavity");
     const productStage = views.find((view) => view.view === "mobile-product-stage");
     const checks = {
       requiredViews: JSON.stringify(views.map((view) => view.view)) === JSON.stringify(requiredViewNames),
@@ -277,7 +283,7 @@ try {
       noThirdPartyRequests: views.every((view) => !view.thirdPartyRequests || view.thirdPartyRequests.length === 0),
       modelLoaded: activeViews.every((view) => view.loaded && view.modelIsVisible),
       nonBlankFrames: activeViews.every((view) => view.foregroundPixels >= 1000),
-      breathingRoom: activeViews.every((view) => view.visualMarginsPx.every((margin) => margin >= 8)),
+      breathingRoom: fullyFramedViews.every((view) => view.visualMarginsPx.every((margin) => margin >= 8)),
       builtPageBeforeAfter: views.some((view) => view.view === "mobile-product-poster") && Boolean(productStage),
       expandedMobileInspectionStage: productStage.viewportPx[1] >= 500,
       interactionAndReset: productStage.interaction.pointerOrbitChanged && productStage.interaction.resetRestored,
@@ -288,7 +294,7 @@ try {
       schemaVersion: 2,
       assetKey: record.assetKey,
       renderer: "@google/model-viewer",
-      capturePolicy: "built-product-page before/after activation at 390x844 plus isolated desktop/mobile/rear views; await loaded visible dimensions and rendered pixels",
+      capturePolicy: "built-product-page before/after activation at 390x844 plus isolated desktop/mobile/rear views and a deliberately tight elevated hood-cavity detail; await loaded visible dimensions and rendered pixels",
       hashPolicy: "snapshot integrity only; semantic gates and human visual review govern acceptance",
       views,
       checks
