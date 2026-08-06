@@ -98,6 +98,12 @@ const hasRenderableBounds = (model) => {
   }
 };
 
+const cameraProfileFor = (root, mobile) => ({
+  orbit: root.dataset[mobile ? "viewerOrbitMobile" : "viewerOrbitDesktop"] || "0deg 75deg 105%",
+  fieldOfView: root.dataset[mobile ? "viewerFieldOfViewMobile" : "viewerFieldOfViewDesktop"] || "auto",
+  target: root.dataset[mobile ? "viewerCameraTargetMobile" : "viewerCameraTargetDesktop"] || "auto auto auto"
+});
+
 const waitForImage = (image) => new Promise((resolve, reject) => {
   if (image.complete && image.naturalWidth) return resolve();
   image.addEventListener("load", resolve, { once: true });
@@ -198,7 +204,21 @@ const activateModel = async (root, elements, routeSignal) => {
   const controller = new AbortController();
   const { signal } = controller;
   const model = document.createElement("model-viewer");
-  const initialOrbit = root.dataset.viewerOrbit || "0deg 75deg 105%";
+  const mobileCamera = window.matchMedia("(max-width: 640px)");
+  let userAdjustedOrbit = false;
+  const applyCameraProfile = ({ preserveUserOrbit = false, jump = true } = {}) => {
+    const preservedOrbit = preserveUserOrbit ? model.getCameraOrbit?.() : null;
+    const profile = cameraProfileFor(root, mobileCamera.matches);
+    model.setAttribute("field-of-view", profile.fieldOfView);
+    model.setAttribute("camera-target", profile.target);
+    if (preservedOrbit
+      && [preservedOrbit.theta, preservedOrbit.phi, preservedOrbit.radius].every(Number.isFinite)) {
+      model.setAttribute("camera-orbit", preservedOrbit.toString());
+    } else {
+      model.setAttribute("camera-orbit", profile.orbit);
+    }
+    if (jump) model.jumpCameraToGoal?.();
+  };
   model.className = "product-viewer-model";
   model.setAttribute("camera-controls", "");
   model.setAttribute("touch-action", "pan-y");
@@ -208,7 +228,7 @@ const activateModel = async (root, elements, routeSignal) => {
   model.setAttribute("shadow-intensity", "0.7");
   model.setAttribute("shadow-softness", "0.85");
   model.setAttribute("exposure", "0.9");
-  model.setAttribute("camera-orbit", initialOrbit);
+  applyCameraProfile({ jump: false });
   model.setAttribute("alt", elements.poster.alt);
   model.setAttribute("aria-describedby", elements.instructions.id);
   model.a11y = { "interaction-prompt": elements.instructions.textContent.trim() };
@@ -243,10 +263,15 @@ const activateModel = async (root, elements, routeSignal) => {
     elements.reset.focus({ preventScroll: true });
   }, { signal });
   model.addEventListener("error", fail, { signal });
+  model.addEventListener("camera-change", (event) => {
+    if (event.detail?.source === "user-interaction") userAdjustedOrbit = true;
+  }, { signal });
+  mobileCamera.addEventListener("change", () => {
+    applyCameraProfile({ preserveUserOrbit: userAdjustedOrbit });
+  }, { signal });
   elements.reset.addEventListener("click", () => {
-    model.cameraOrbit = initialOrbit;
-    model.fieldOfView = "auto";
-    model.jumpCameraToGoal?.();
+    userAdjustedOrbit = false;
+    applyCameraProfile();
     (model.shadowRoot?.querySelector(".userInput") || model).focus({ preventScroll: true });
   }, { signal });
 

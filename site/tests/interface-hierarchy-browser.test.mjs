@@ -10,6 +10,11 @@ let app;
 let baseUrl;
 let browser;
 
+const applyTextZoom = async (page) => {
+  await page.evaluate(() => { document.documentElement.style.fontSize = "200%"; });
+  await page.evaluate(() => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+};
+
 before(async () => {
   app = createStaticServer({ root: path.join(siteRoot, "dist") });
   baseUrl = await app.listen();
@@ -180,4 +185,90 @@ test("keeps the compact player measurable while its upward tray preserves contro
   assert.ok(desktopSafety.height <= 72, `desktop product player is ${desktopSafety.height}px tall`);
   assert.equal(desktopSafety.overlaps, false);
   await context.close();
+});
+
+test("keeps every localized merch heading clear of the compact player at desktop 200% text zoom", async () => {
+  for (const width of [1024, 1440]) {
+    const context = await browser.newContext({ viewport: { width, height: 1000 }, reducedMotion: "reduce" });
+    const page = await context.newPage();
+    for (const route of ["/merch/", "/it/merch/", "/ru/merch/"]) {
+      await page.goto(`${baseUrl}${route}`, { waitUntil: "load" });
+      await applyTextZoom(page);
+      await page.waitForFunction(() => document.querySelector("[data-audio-player]")?.classList.contains("is-ready"));
+      const geometry = await page.evaluate(() => {
+        const overlaps = (a, b) => a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top;
+        const player = document.querySelector("[data-audio-player]").getBoundingClientRect();
+        const title = document.querySelector("#merch-title");
+        const range = document.createRange();
+        range.selectNodeContents(title);
+        const titleLines = [...range.getClientRects()]
+          .filter(({ width: lineWidth, height: lineHeight }) => lineWidth > 0 && lineHeight > 0)
+          .map(({ top, right, bottom, left, width: lineWidth, height: lineHeight }) => ({
+            top, right, bottom, left, width: lineWidth, height: lineHeight
+          }));
+        const hero = document.querySelector(".merch-hero");
+        return {
+          player: { top: player.top, bottom: player.bottom, height: player.height },
+          titleLines,
+          intersections: titleLines.filter((line) => overlaps(player, line)),
+          heroPaddingBottom: Number.parseFloat(getComputedStyle(hero).paddingBottom),
+          titleMarginTop: Number.parseFloat(getComputedStyle(hero.firstElementChild).marginTop),
+          measuredPlayerHeight: Number.parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--player-height")),
+          overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth
+        };
+      });
+      assert.ok(geometry.player.height >= 52 && geometry.player.height <= 72, `${route} @ ${width}px player is ${geometry.player.height}px tall`);
+      assert.equal(geometry.intersections.length, 0, `${route} @ ${width}px player intersects merch title: ${JSON.stringify(geometry)}`);
+      assert.ok(geometry.heroPaddingBottom >= geometry.measuredPlayerHeight, `${route} @ ${width}px hero does not reserve measured player clearance`);
+      assert.equal(geometry.titleMarginTop, 0, `${route} @ ${width}px legacy merch heading offset returned`);
+      assert.ok(geometry.overflow <= 1, `${route} @ ${width}px overflows by ${geometry.overflow}px`);
+    }
+    await context.close();
+  }
+});
+
+test("keeps the Russian roadmap inside 320px at 200% text zoom with bundled and fallback fonts", async () => {
+  for (const fallback of [false, true]) {
+    const context = await browser.newContext({ viewport: { width: 320, height: 780 }, reducedMotion: "reduce" });
+    if (fallback) await context.route(/\.ttf(?:$|\?)/, (route) => route.abort("failed"));
+    const page = await context.newPage();
+    await page.goto(`${baseUrl}/ru/merch/`, { waitUntil: "load" });
+    await page.evaluate(() => document.fonts.ready);
+    await applyTextZoom(page);
+    const geometry = await page.evaluate(() => {
+      const details = document.querySelector("[data-merch-roadmap]");
+      const viewport = document.documentElement.clientWidth;
+      const elements = [...details.querySelectorAll(".merch-roadmap-summary .section-title, .merch-roadmap-summary .body-copy")].map((element) => {
+        const rect = element.getBoundingClientRect();
+        const range = document.createRange();
+        range.selectNodeContents(element);
+        const textLines = [...range.getClientRects()].map((line) => ({ left: line.left, right: line.right }));
+        return {
+          tagName: element.tagName,
+          text: element.textContent.trim(),
+          left: rect.left,
+          right: rect.right,
+          width: rect.width,
+          fontSize: Number.parseFloat(getComputedStyle(element).fontSize),
+          overflowWrap: getComputedStyle(element).overflowWrap,
+          scrollWidth: element.scrollWidth,
+          textLines,
+          textOverhang: Math.max(0, ...textLines.map((line) => line.right - rect.right))
+        };
+      });
+      return {
+        viewport,
+        documentWidth: document.documentElement.scrollWidth,
+        overflow: document.documentElement.scrollWidth - viewport,
+        outside: elements.filter(({ left, right, scrollWidth, width: elementWidth, textOverhang }) => left < -0.5 || right > viewport + 0.5 || scrollWidth > elementWidth + 0.5 || textOverhang > 0.5),
+        elements
+      };
+    });
+    assert.ok(geometry.overflow <= 1, `Russian roadmap ${fallback ? "fallback" : "bundled"} font overflows by ${geometry.overflow}px: ${JSON.stringify(geometry)}`);
+    assert.deepEqual(geometry.outside, [], `Russian roadmap ${fallback ? "fallback" : "bundled"} font clips content`);
+    const title = geometry.elements.find(({ text }) => text === "Направления в разработке");
+    assert.ok(title?.fontSize <= 32, `Russian roadmap ${fallback ? "fallback" : "bundled"} title exceeds its small-width cap`);
+    assert.notEqual(title?.overflowWrap, "anywhere", "Russian roadmap title must not use anywhere word breaking");
+    await context.close();
+  }
 });

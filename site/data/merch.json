@@ -87,7 +87,18 @@
         "decoderPolicy": "uncompressed-only",
         "poster": "assets/merch/vinyl-hero.webp",
         "src": "assets/merch-3d/vinyl-001.glb",
-        "cameraOrbit": "24deg 72deg 112%",
+        "cameraOrbit": {
+          "desktop": "24deg 72deg 112%",
+          "mobile": "24deg 72deg 112%"
+        },
+        "fieldOfView": {
+          "desktop": "auto",
+          "mobile": "auto"
+        },
+        "cameraTarget": {
+          "desktop": "auto auto auto",
+          "mobile": "auto auto auto"
+        },
         "alt": {
           "en": "Interactive 3D view of the red POVKH LAB vinyl edition and sleeve.",
           "it": "Vista 3D interattiva dell'edizione in vinile rosso POVKH LAB e della custodia.",
@@ -167,7 +178,18 @@
         "decoderPolicy": "uncompressed-only",
         "poster": "assets/merch/cassette-hero.webp",
         "src": "assets/merch-3d/cassette-002.glb",
-        "cameraOrbit": "28deg 68deg 108%",
+        "cameraOrbit": {
+          "desktop": "18deg 70deg 103%",
+          "mobile": "14deg 72deg 105%"
+        },
+        "fieldOfView": {
+          "desktop": "22deg",
+          "mobile": "19deg"
+        },
+        "cameraTarget": {
+          "desktop": "auto auto auto",
+          "mobile": "auto 0.078m auto"
+        },
         "alt": {
           "en": "Interactive 3D view of the POVKH LAB cassette, shell and printed label.",
           "it": "Vista 3D interattiva della cassetta POVKH LAB, guscio ed etichetta stampata.",
@@ -247,7 +269,18 @@
         "decoderPolicy": "uncompressed-only",
         "poster": "assets/merch/cd-case.webp",
         "src": "assets/merch-3d/disc-004.glb",
-        "cameraOrbit": "26deg 70deg 110%",
+        "cameraOrbit": {
+          "desktop": "26deg 70deg 110%",
+          "mobile": "26deg 70deg 110%"
+        },
+        "fieldOfView": {
+          "desktop": "auto",
+          "mobile": "auto"
+        },
+        "cameraTarget": {
+          "desktop": "auto auto auto",
+          "mobile": "auto auto auto"
+        },
         "alt": {
           "en": "Interactive 3D view of the POVKH LAB clear jewel case and silver compact disc.",
           "it": "Vista 3D interattiva del jewel case trasparente POVKH LAB e del compact disc argentato.",
@@ -327,7 +360,18 @@
         "decoderPolicy": "uncompressed-only",
         "poster": "assets/merch/usb-edition-packaging.webp",
         "src": "assets/merch-3d/data-key-003.glb",
-        "cameraOrbit": "32deg 66deg 116%",
+        "cameraOrbit": {
+          "desktop": "32deg 66deg 116%",
+          "mobile": "32deg 66deg 116%"
+        },
+        "fieldOfView": {
+          "desktop": "auto",
+          "mobile": "auto"
+        },
+        "cameraTarget": {
+          "desktop": "auto auto auto",
+          "mobile": "auto auto auto"
+        },
         "alt": {
           "en": "Interactive 3D view of the black POVKH LAB dual-connector data key and packaging.",
           "it": "Vista 3D interattiva della data key nera POVKH LAB a doppio connettore e confezione.",
@@ -604,7 +648,18 @@
         "decoderPolicy": "uncompressed-only",
         "poster": "assets/merch/poster-diptych.webp",
         "src": "assets/merch-3d/print-001.glb",
-        "cameraOrbit": "8deg 82deg 118%",
+        "cameraOrbit": {
+          "desktop": "8deg 82deg 118%",
+          "mobile": "8deg 82deg 118%"
+        },
+        "fieldOfView": {
+          "desktop": "auto",
+          "mobile": "auto"
+        },
+        "cameraTarget": {
+          "desktop": "auto auto auto",
+          "mobile": "auto auto auto"
+        },
         "alt": {
           "en": "Interactive 3D view of the POVKH LAB archival poster set on bone paper.",
           "it": "Vista 3D interattiva del set di poster d'archivio POVKH LAB su carta bone.",
@@ -674,7 +729,18 @@
         "decoderPolicy": "uncompressed-only",
         "poster": "assets/merch/sticker-pack-sheet.webp",
         "src": "assets/merch-3d/signal-kit-001.glb",
-        "cameraOrbit": "12deg 78deg 114%",
+        "cameraOrbit": {
+          "desktop": "12deg 78deg 114%",
+          "mobile": "12deg 78deg 114%"
+        },
+        "fieldOfView": {
+          "desktop": "auto",
+          "mobile": "auto"
+        },
+        "cameraTarget": {
+          "desktop": "auto auto auto",
+          "mobile": "auto auto auto"
+        },
         "alt": {
           "en": "Interactive 3D view of the black POVKH LAB sticker sheet and separate die-cut marks.",
           "it": "Vista 3D interattiva del foglio di sticker nero POVKH LAB e dei marchi fustellati.",
@@ -764,7 +830,18 @@
         "decoderPolicy": "uncompressed-only",
         "poster": "assets/merch/zine-booklet-closed.webp",
         "src": "assets/merch-3d/zine-001.glb",
-        "cameraOrbit": "22deg 68deg 112%",
+        "cameraOrbit": {
+          "desktop": "22deg 68deg 112%",
+          "mobile": "22deg 68deg 112%"
+        },
+        "fieldOfView": {
+          "desktop": "auto",
+          "mobile": "auto"
+        },
+        "cameraTarget": {
+          "desktop": "auto auto auto",
+          "mobile": "auto auto auto"
+        },
         "alt": {
           "en": "Interactive 3D view of the POVKH LAB art zine with its bound bone-paper cover.",
           "it": "Vista 3D interattiva dello zine d'arte POVKH LAB con copertina rilegata in carta bone.",
@@ -834,7 +911,18 @@
         "decoderPolicy": "uncompressed-only",
         "poster": "assets/merch/collector-box-set-closed.webp",
         "src": "assets/merch-3d/collector-box-001.glb",
-        "cameraOrbit": "28deg 66deg 116%",
+        "cameraOrbit": {
+          "desktop": "28deg 66deg 116%",
+          "mobile": "28deg 66deg 116%"
+        },
+        "fieldOfView": {
+          "desktop": "auto",
+          "mobile": "auto"
+        },
+        "cameraTarget": {
+          "desktop": "auto auto auto",
+          "mobile": "auto auto auto"
+        },
         "alt": {
           "en": "Interactive 3D view of the closed POVKH LAB collector archive box and drawer construction.",
           "it": "Vista 3D interattiva del box archivio da collezione POVKH LAB chiuso con struttura a cassetto.",

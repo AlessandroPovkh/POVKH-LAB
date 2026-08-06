@@ -3137,40 +3137,6 @@ body.audio-player-ready.page-merch .merch-hero {
   }
 }
 
-@media (min-width: 48rem) {
-  body.audio-player-ready.page-merch .merch-hero > :first-child {
-    margin-top: 0;
-  }
-}
-
-/* The compact bar stays physically compact when users enlarge document text. */
-.hud-audio.is-ready,
-.hud-audio.is-ready.is-scrolled {
-  padding-top: 4px;
-  padding-bottom: calc(4px + env(safe-area-inset-bottom));
-}
-
-.hud-audio-bar {
-  min-height: 44px;
-  gap: 12px;
-}
-
-.hud-audio-bar .hud-audio-track strong {
-  font-size: 12.5px;
-  line-height: 1;
-}
-
-.hud-audio-primary-controls {
-  gap: 6px;
-}
-
-.hud-audio-primary-controls button,
-.hud-audio-primary-controls .hud-audio-queue {
-  min-height: 44px;
-  padding: 8px 12px;
-  font-size: 11px;
-}
-
 @media (max-width: 48rem) {
   .merch-roadmap-summary {
     grid-template-columns: minmax(0, 1fr) auto;
@@ -4531,6 +4497,10 @@ html[lang="ru"] .merch-detail-story .section-title {
 }
 
 @media (max-width: 24rem) {
+  html[lang="ru"] .merch-roadmap-summary .section-title {
+    font-size: min(clamp(0.75rem, calc(14cqi + 0.25rem), 6.5rem), 1rem);
+  }
+
   .merch-detail {
     padding-inline: max(0.75rem, env(safe-area-inset-left));
   }
@@ -4569,15 +4539,15 @@ body.audio-player-ready {
   display: block;
   width: 100%;
   max-width: none;
-  padding: 0.5rem var(--gutter) calc(0.5rem + env(safe-area-inset-bottom));
+  padding: 4px var(--gutter) calc(4px + env(safe-area-inset-bottom));
   border-width: 1px 0 0;
 }
 
 .hud-audio-bar {
   display: flex;
-  min-height: 2.75rem;
+  min-height: 44px;
   align-items: center;
-  gap: 0.75rem;
+  gap: 12px;
 }
 
 .hud-audio-bar .hud-audio-track {
@@ -4592,7 +4562,19 @@ body.audio-player-ready {
 .hud-audio-primary-controls {
   display: flex;
   flex: 0 0 auto;
-  gap: 0.35rem;
+  gap: 6px;
+}
+
+.hud-audio-bar .hud-audio-track strong {
+  font-size: 12.5px;
+  line-height: 1;
+}
+
+.hud-audio-primary-controls button,
+.hud-audio-primary-controls .hud-audio-queue {
+  min-height: 44px;
+  padding: 8px 12px;
+  font-size: 11px;
 }
 
 .hud-player-tray {
@@ -4639,5 +4621,12 @@ body.audio-player-ready.page-merch-detail .product-viewer-controls {
 }
 
 body.audio-player-ready.page-merch .merch-hero {
-  padding-bottom: var(--space-3);
+  padding-top: max(var(--space-3), calc(clamp(3rem, 9vw, 7rem) - var(--player-height, 0px)));
+  padding-bottom: calc(var(--space-3) + var(--player-height, 0px));
+}
+
+@media (min-width: 48rem) {
+  body.audio-player-ready.page-merch .merch-hero > :first-child {
+    margin-top: 0;
+  }
 }

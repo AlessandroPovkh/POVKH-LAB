@@ -19,6 +19,8 @@ test("pins the audited local model build and validation toolchain", async () => 
 test("governs the cassette source, deterministic build and release report", async () => {
   const source = await readJson("tools/merch-3d/cassette-002.source.json");
   const report = await readJson("tools/merch-3d/reports/cassette-002.report.json");
+  const merch = await readJson("data/merch.json");
+  const cassette = merch.objects.find(({ slug }) => slug === "cassette");
   const assetPath = path.join(siteRoot, "assets/merch-3d/cassette-002.glb");
   const asset = await stat(assetPath);
 
@@ -31,6 +33,19 @@ test("governs the cassette source, deterministic build and release report", asyn
   assert.match(source.identity.compactReverse.sha256, /^[a-f0-9]{64}$/);
 
   assert.equal(report.assetKey, source.assetKey);
+  assert.deepEqual(report.camera, source.camera);
+  assert.deepEqual(cassette.viewer.cameraOrbit, {
+    desktop: source.camera.orbit,
+    mobile: source.camera.mobileOrbit
+  });
+  assert.deepEqual(cassette.viewer.fieldOfView, {
+    desktop: source.camera.fieldOfView,
+    mobile: source.camera.mobileFieldOfView
+  });
+  assert.deepEqual(cassette.viewer.cameraTarget, {
+    desktop: "auto auto auto",
+    mobile: source.camera.mobileTarget
+  });
   assert.equal(report.validation.errors, 0);
   assert.equal(report.validation.warnings, 0);
   assert.equal(report.mechanics.screws, 5);
@@ -67,4 +82,3 @@ test("records an evidence-based hoodie GLB or honest physical-sample fallback", 
     assert.match(decision.reason, /authoritative|physical sample/i);
   }
 });
-

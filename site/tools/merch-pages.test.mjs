@@ -19,6 +19,12 @@ const pages = createPages(catalog, audioLibrary, artistLibrary, merchLibrary);
 
 const localePath = (locale, route) => `${locale === "en" ? "" : `${locale}/`}${route}/index.html`;
 const count = (html, pattern) => [...html.matchAll(pattern)].length;
+const escapeHtml = (value) => String(value)
+  .replaceAll("&", "&amp;")
+  .replaceAll("<", "&lt;")
+  .replaceAll(">", "&gt;")
+  .replaceAll('"', "&quot;")
+  .replaceAll("'", "&#039;");
 const structuredData = (html) => {
   const match = html.match(/<script type="application\/ld\+json" data-route-head>(.*?)<\/script>/s);
   assert.ok(match, "page needs JSON-LD");
@@ -41,14 +47,14 @@ test("renders 33 localized concept detail routes and linked overview cards", () 
       assert.match(html, new RegExp(`data-merch-detail-id="${object.id}"`));
       assert.match(html, /data-merch-stage="concept"/);
       assert.match(html, /data-merch-breadcrumb/);
-      assert.equal(count(html, /data-merch-gallery-item(?:[ >])/g), object.gallery.length);
+      assert.equal(count(html, /data-merch-gallery-item(?:[ >])/g), object.gallery.length - 1);
       assert.match(html, new RegExp(`>${object.content[locale].name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}<`));
       assert.match(html, new RegExp(object.content[locale].metaDescription.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
       for (const [index, image] of object.gallery.entries()) {
         assert.ok(html.includes(image.path), `${locale}/${object.slug}/${image.role} asset missing`);
         assert.ok(html.includes(`width="${image.width}" height="${image.height}"`));
-        assert.ok(html.includes(image.alt[locale]));
-        assert.ok(html.includes(image.caption[locale]));
+        assert.ok(html.includes(escapeHtml(index === 0 ? object.viewer.alt[locale] : image.alt[locale])));
+        assert.ok(html.includes(escapeHtml(image.caption[locale])));
         if (index === 0) assert.match(html, new RegExp(`${image.path}[^>]+loading="eager"[^>]+fetchpriority="high"`));
       }
       assert.ok(html.includes(merchLibrary.copy[locale].backToDrop));

@@ -114,7 +114,7 @@ const validAuthorities = () => {
         kind: "glb",
         poster: `assets/merch/${slug}-${ROLE_CONTRACT[slug][0]}.webp`,
         src: `assets/merch-3d/${slug}-${String(index + 1).padStart(3, "0")}.glb`,
-        cameraOrbit: "20deg 70deg 110%",
+        ...cameraProfileFor(slug),
         alt: Object.fromEntries(LOCALES.map((locale) => [locale, `Interactive 3D concept view of the ${slug} archive object.`])),
         budget: { bytes: 700000, triangles: 4000, drawCalls: 4 },
         decoderPolicy: "uncompressed-only"
@@ -158,6 +158,16 @@ const readAsset = async (relative) => ({
 });
 const verifyEvidence = async ({ sha256 }) => /^[a-f0-9]{64}$/.test(sha256);
 
+const cameraProfileFor = (slug) => slug === "cassette" ? {
+  cameraOrbit: { desktop: "18deg 70deg 103%", mobile: "14deg 72deg 105%" },
+  fieldOfView: { desktop: "22deg", mobile: "19deg" },
+  cameraTarget: { desktop: "auto auto auto", mobile: "auto 0.078m auto" }
+} : {
+  cameraOrbit: { desktop: "20deg 70deg 110%", mobile: "20deg 70deg 110%" },
+  fieldOfView: { desktop: "auto", mobile: "auto" },
+  cameraTarget: { desktop: "auto auto auto", mobile: "auto auto auto" }
+};
+
 test("accepts and resolves the exact DROP 001 concept registry", async () => {
   const { library, copyAuthority } = validAuthorities();
   const resolved = await validateMerchLibrary(library, copyAuthority, { readAsset, verifyEvidence });
@@ -174,6 +184,33 @@ test("accepts and resolves the exact DROP 001 concept registry", async () => {
     it: "hero / concept render",
     ru: "hero / concept render"
   });
+});
+
+test("requires exact desktop and mobile camera metadata for every GLB viewer", async () => {
+  const { library, copyAuthority } = validAuthorities();
+  const cassette = library.objects.find(({ slug }) => slug === "cassette");
+  assert.deepEqual(cassette.viewer.cameraOrbit, {
+    desktop: "18deg 70deg 103%",
+    mobile: "14deg 72deg 105%"
+  });
+  assert.deepEqual(cassette.viewer.fieldOfView, { desktop: "22deg", mobile: "19deg" });
+  assert.deepEqual(cassette.viewer.cameraTarget, {
+    desktop: "auto auto auto",
+    mobile: "auto 0.078m auto"
+  });
+  await validateMerchLibrary(library, copyAuthority, { readAsset, verifyEvidence });
+
+  delete cassette.viewer.fieldOfView.mobile;
+  await assert.rejects(
+    validateMerchLibrary(library, copyAuthority, { readAsset, verifyEvidence }),
+    /MRCH-002.*field of view.*desktop.*mobile/i
+  );
+  cassette.viewer.fieldOfView.mobile = "19deg";
+  cassette.viewer.cameraTarget.mobile = "0.078m";
+  await assert.rejects(
+    validateMerchLibrary(library, copyAuthority, { readAsset, verifyEvidence }),
+    /MRCH-002.*mobile camera target is invalid/i
+  );
 });
 
 test("requires schema v2 concept and coming-soon state", async () => {

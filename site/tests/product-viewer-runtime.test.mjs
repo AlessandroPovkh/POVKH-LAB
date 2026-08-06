@@ -59,6 +59,14 @@ test("renders every localized product as an inert poster-first viewer shell", ()
       assert.match(viewer, new RegExp(`data-viewer-src="[^"]*${object.viewer.src.replaceAll("/", "\\/")}"`));
       assert.match(viewer, /data-viewer-module="[^"]*assets\/product-viewer\.js"/);
       assert.match(viewer, /data-viewer-runtime="[^"]*assets\/vendor\/model-viewer\.min\.js"/);
+      if (object.viewer.kind === "glb") {
+        assert.match(viewer, new RegExp(`data-viewer-orbit-desktop="${object.viewer.cameraOrbit.desktop}"`));
+        assert.match(viewer, new RegExp(`data-viewer-orbit-mobile="${object.viewer.cameraOrbit.mobile}"`));
+        assert.match(viewer, new RegExp(`data-viewer-field-of-view-desktop="${object.viewer.fieldOfView.desktop}"`));
+        assert.match(viewer, new RegExp(`data-viewer-field-of-view-mobile="${object.viewer.fieldOfView.mobile}"`));
+        assert.match(viewer, new RegExp(`data-viewer-camera-target-desktop="${object.viewer.cameraTarget.desktop}"`));
+        assert.match(viewer, new RegExp(`data-viewer-camera-target-mobile="${object.viewer.cameraTarget.mobile}"`));
+      }
       assert.doesNotMatch(viewer, /<model-viewer\b/i, `${locale}/${object.slug} must not instantiate WebGL before activation`);
       assert.doesNotMatch(viewer, /<script\b/i, `${locale}/${object.slug} viewer shell must stay inert at parse time`);
       if (object.viewer.availability === "sourceBlocked") {
@@ -97,7 +105,30 @@ test("keeps the viewer launcher local, explicit, recoverable and route-disposabl
   assert.match(viewerSource, /getDimensions\(\)/, "model readiness must inspect geometry dimensions");
   assert.match(viewerSource, /getBoundingBoxCenter\(\)/, "model readiness must inspect its bounding center");
   assert.match(viewerSource, /Number\.isFinite/, "non-finite model bounds must be rejected");
+  assert.match(viewerSource, /matchMedia\(["']\(max-width: 640px\)["']\)/, "camera profiles must use the governed breakpoint");
+  assert.match(viewerSource, /addEventListener\(["']change["']/, "camera profile must react to breakpoint changes");
+  assert.match(viewerSource, /addEventListener\(["']camera-change["']/, "runtime must distinguish user camera interaction");
+  assert.match(viewerSource, /source\s*===\s*["']user-interaction["']/, "responsive switching must preserve a user-adjusted orbit");
+  assert.match(viewerSource, /setAttribute\(["']field-of-view["']/, "runtime must apply the profile field of view");
+  assert.match(viewerSource, /setAttribute\(["']camera-target["']/, "runtime must apply the profile camera target");
   assert.doesNotMatch(viewerSource, /https?:\/\//i, "runtime must not call a cloud converter, CDN or remote decoder");
+});
+
+test("renders the governed cassette camera profiles identically in every locale", () => {
+  for (const locale of locales) {
+    const html = pages.get(outputFor(locale, "cassette")).toString();
+    const viewer = fragment(html, /<section class="product-viewer"[\s\S]*?<\/section>/, `${locale}/cassette product viewer`);
+    for (const attribute of [
+      'data-viewer-orbit-desktop="18deg 70deg 103%"',
+      'data-viewer-orbit-mobile="14deg 72deg 105%"',
+      'data-viewer-field-of-view-desktop="22deg"',
+      'data-viewer-field-of-view-mobile="19deg"',
+      'data-viewer-camera-target-desktop="auto auto auto"',
+      'data-viewer-camera-target-mobile="auto 0.078m auto"'
+    ]) {
+      assert.ok(viewer.includes(attribute), `${locale}/cassette is missing ${attribute}`);
+    }
+  }
 });
 
 test("authorizes model-viewer wasm and shadow styles without widening network policy", () => {
@@ -114,6 +145,7 @@ test("authorizes model-viewer wasm and shadow styles without widening network po
 
 test("rejects release GLBs that would require non-vendored decoders or Lottie loaders", async () => {
   const qaSource = await readFile(path.join(siteRoot, "tools", "qa.mjs"), "utf8");
+  assert.doesNotMatch(qaSource, /\.cameraOrbit\s*=/, "QA must verify camera behavior through real interaction, not an assigned orbit");
   for (const extension of [
     "KHR_draco_mesh_compression",
     "KHR_texture_basisu",

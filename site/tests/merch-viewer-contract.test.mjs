@@ -7,6 +7,9 @@ const locales = ["en", "it", "ru"];
 const apparel = new Set(["t-shirt", "hoodie", "cap"]);
 const flat = new Set(["poster", "sticker-pack", "zine-booklet"]);
 const safeProjectPath = /^(?!\/)(?!.*(?:^|\/)\.\.(?:\/|$))(?![a-z][a-z0-9+.-]*:)[A-Za-z0-9._/-]+$/i;
+const orbit = /^-?\d+(?:\.\d+)?deg \d+(?:\.\d+)?deg \d+(?:\.\d+)?%$/;
+const fieldOfView = /^(?:auto|\d+(?:\.\d+)?deg)$/;
+const cameraTarget = /^(?:auto|-?\d+(?:\.\d+)?m) (?:auto|-?\d+(?:\.\d+)?m) (?:auto|-?\d+(?:\.\d+)?m)$/;
 const sourceBlocked = new Map([
   ["t-shirt", "assets/merch-360/t-shirt/manifest.json"],
   ["hoodie", "assets/merch-360/hoodie/manifest.json"],
@@ -46,13 +49,33 @@ test("declares one poster-first interactive viewer for every DROP 001 object", (
 
     if (viewer.kind === "glb") {
       assert.match(viewer.src, /^assets\/merch-3d\/[a-z0-9-]+\.glb$/);
-      assert.match(viewer.cameraOrbit || "", /^-?\d+(?:\.\d+)?deg \d+(?:\.\d+)?deg \d+(?:\.\d+)?%$/, `${object.id} needs a deterministic camera orbit`);
+      assert.deepEqual(Object.keys(viewer.cameraOrbit || {}).sort(), ["desktop", "mobile"]);
+      assert.deepEqual(Object.keys(viewer.fieldOfView || {}).sort(), ["desktop", "mobile"]);
+      assert.deepEqual(Object.keys(viewer.cameraTarget || {}).sort(), ["desktop", "mobile"]);
+      for (const profile of ["desktop", "mobile"]) {
+        assert.match(viewer.cameraOrbit[profile] || "", orbit, `${object.id} needs a deterministic ${profile} camera orbit`);
+        assert.match(viewer.fieldOfView[profile] || "", fieldOfView, `${object.id} needs a deterministic ${profile} field of view`);
+        assert.match(viewer.cameraTarget[profile] || "", cameraTarget, `${object.id} needs a deterministic ${profile} camera target`);
+      }
       assert.equal(viewer.decoderPolicy, "uncompressed-only", `${object.id} must prohibit remote-decoder GLB extensions`);
     } else {
       assert.ok(apparel.has(object.slug), `${object.id} may use spin360 only for apparel`);
       assert.match(viewer.src, /^assets\/merch-360\/[a-z0-9-]+\/manifest\.json$/);
     }
   }
+});
+
+test("binds the cassette viewer camera metadata to its governed desktop and mobile profiles", () => {
+  const cassette = library.objects.find(({ slug }) => slug === "cassette");
+  assert.deepEqual(cassette.viewer.cameraOrbit, {
+    desktop: "18deg 70deg 103%",
+    mobile: "14deg 72deg 105%"
+  });
+  assert.deepEqual(cassette.viewer.fieldOfView, { desktop: "22deg", mobile: "19deg" });
+  assert.deepEqual(cassette.viewer.cameraTarget, {
+    desktop: "auto auto auto",
+    mobile: "auto 0.078m auto"
+  });
 });
 
 test("provides concise EN / IT / RU alternative text for every viewer", () => {

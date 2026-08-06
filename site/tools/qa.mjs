@@ -2640,11 +2640,43 @@ try {
     const forwardToReset = await readyViewerPage.locator("[data-product-viewer-reset]").evaluate((reset) => document.activeElement === reset);
     readyTabOrder = { backwardToInput, forwardToReset };
   }
+  let pointerOrbit = null;
   if (readyViewerContract.state === "ready") {
-    await readyViewerPage.locator("model-viewer").evaluate((model) => { model.cameraOrbit = "140deg 80deg 130%"; });
+    const modelBox = await readyViewerPage.locator("model-viewer").boundingBox();
+    const initialTheta = await readyViewerPage.locator("model-viewer").evaluate((model) => model.getCameraOrbit().theta);
+    if (modelBox) {
+      await readyViewerPage.mouse.move(modelBox.x + modelBox.width * 0.5, modelBox.y + modelBox.height * 0.5);
+      await readyViewerPage.mouse.down();
+      await readyViewerPage.mouse.move(modelBox.x + modelBox.width * 0.72, modelBox.y + modelBox.height * 0.58, { steps: 12 });
+      await readyViewerPage.mouse.up();
+      await readyViewerPage.waitForFunction((theta) => {
+        const current = document.querySelector("model-viewer")?.getCameraOrbit().theta;
+        return Number.isFinite(current) && Math.abs(current - theta) > 0.03;
+      }, initialTheta);
+      pointerOrbit = await readyViewerPage.locator("model-viewer").evaluate((model) => model.getCameraOrbit().theta);
+    }
     await readyViewerPage.locator("[data-product-viewer-reset]").click();
+    await readyViewerPage.waitForFunction(() => {
+      const model = document.querySelector("model-viewer");
+      return model?.getAttribute("camera-orbit") === "14deg 72deg 105%"
+        && Math.abs(model.getCameraOrbit().theta - 14 * Math.PI / 180) < 0.002
+        && Math.abs(model.getFieldOfView() - 19) < 0.02;
+    });
   }
-  const resetOrbit = await readyViewerPage.locator("model-viewer").evaluate((model) => model.cameraOrbit).catch(() => null);
+  const resetCamera = await readyViewerPage.locator("model-viewer").evaluate((model) => {
+    const orbit = model.getCameraOrbit();
+    const target = model.getCameraTarget();
+    return {
+      attributes: {
+        orbit: model.getAttribute("camera-orbit"),
+        fieldOfView: model.getAttribute("field-of-view"),
+        target: model.getAttribute("camera-target")
+      },
+      orbit: { theta: orbit.theta, phi: orbit.phi, radius: orbit.radius },
+      fieldOfView: model.getFieldOfView(),
+      target: { x: target.x, y: target.y, z: target.z }
+    };
+  }).catch(() => null);
   const readyActivationRequests = readyViewerRequests.slice(readyViewerRequestStart);
   if (readyViewerContract.state !== "ready"
     || readyViewerContract.status !== readyViewerContract.expectedStatus
@@ -2660,13 +2692,25 @@ try {
     || activationHitTest.points.some(({ viewer, player }) => !viewer || player)
     || !resetHitTest?.insideViewport
     || resetHitTest.points.some(({ viewer, player }) => !viewer || player)
-    || resetOrbit !== "28deg 68deg 108%"
+    || !Number.isFinite(pointerOrbit)
+    || resetCamera?.attributes.orbit !== "14deg 72deg 105%"
+    || resetCamera?.attributes.fieldOfView !== "19deg"
+    || resetCamera?.attributes.target !== "auto 0.078m auto"
+    || !Number.isFinite(resetCamera?.orbit.theta)
+    || !Number.isFinite(resetCamera?.orbit.phi)
+    || Math.abs(resetCamera?.orbit.theta - 14 * Math.PI / 180) > 0.002
+    || Math.abs(resetCamera?.orbit.phi - 72 * Math.PI / 180) > 0.002
+    || !Number.isFinite(resetCamera?.orbit.radius)
+    || !Number.isFinite(resetCamera?.fieldOfView)
+    || Math.abs(resetCamera?.fieldOfView - 19) > 0.02
+    || !Number.isFinite(resetCamera?.target.y)
+    || Math.abs(resetCamera?.target.y - 0.078) > 0.002
     || readyViewerContract.cspViolations.length
     || readyViewerConsoleErrors.length
     || readyViewerPageErrors.length
     || readyActivationRequests.some((url) => /model-viewer-support/.test(url))
     || readyActivationRequests.some((url) => new URL(url).origin !== baseUrl)) {
-    fail(`Product viewer: successful localized GLB contract failed ${JSON.stringify({ readyViewerContract, readyTabOrder, activationHitTest, resetHitTest, resetOrbit, readyViewerConsoleErrors, readyViewerPageErrors, readyActivationRequests })}`);
+    fail(`Product viewer: successful localized GLB contract failed ${JSON.stringify({ readyViewerContract, readyTabOrder, activationHitTest, resetHitTest, pointerOrbit, resetCamera, readyViewerConsoleErrors, readyViewerPageErrors, readyActivationRequests })}`);
   }
   await readyViewerContext.close();
 
@@ -2707,6 +2751,8 @@ try {
     const model = root?.querySelector("model-viewer");
     const dimensions = model?.getDimensions();
     const center = model?.getBoundingBoxCenter();
+    const orbit = model?.getCameraOrbit();
+    const target = model?.getCameraTarget();
     let renderedPixels = 0;
     try {
       const blob = await model?.toBlob();
@@ -2728,6 +2774,14 @@ try {
     }
     return {
       state: root?.dataset.viewerState,
+      attributes: {
+        orbit: model?.getAttribute("camera-orbit"),
+        fieldOfView: model?.getAttribute("field-of-view"),
+        target: model?.getAttribute("camera-target")
+      },
+      orbit: orbit ? [orbit.theta, orbit.phi, orbit.radius] : null,
+      fieldOfView: model?.getFieldOfView(),
+      target: target ? [target.x, target.y, target.z] : null,
       dimensions: dimensions ? [dimensions.x, dimensions.y, dimensions.z] : null,
       center: center ? [center.x, center.y, center.z] : null,
       renderedPixels
@@ -2735,6 +2789,17 @@ try {
   });
   const cassetteActivationRequests = cassetteRequests.slice(cassetteRequestStart);
   if (cassetteGeometry.state !== "ready"
+    || cassetteGeometry.attributes.orbit !== "18deg 70deg 103%"
+    || cassetteGeometry.attributes.fieldOfView !== "22deg"
+    || cassetteGeometry.attributes.target !== "auto auto auto"
+    || !Number.isFinite(cassetteGeometry.orbit?.[0])
+    || !Number.isFinite(cassetteGeometry.orbit?.[1])
+    || Math.abs(cassetteGeometry.orbit?.[0] - 18 * Math.PI / 180) > 0.002
+    || Math.abs(cassetteGeometry.orbit?.[1] - 70 * Math.PI / 180) > 0.002
+    || !Number.isFinite(cassetteGeometry.orbit?.[2])
+    || !Number.isFinite(cassetteGeometry.fieldOfView)
+    || Math.abs(cassetteGeometry.fieldOfView - 22) > 0.02
+    || !cassetteGeometry.target?.every(Number.isFinite)
     || !cassetteGeometry.dimensions?.every((value) => Number.isFinite(value) && value > 0)
     || !cassetteGeometry.center?.every(Number.isFinite)
     || cassetteGeometry.renderedPixels < 1
