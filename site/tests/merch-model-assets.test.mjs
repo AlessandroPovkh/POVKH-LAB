@@ -61,6 +61,37 @@ test("governs the cassette source, deterministic build and release report", asyn
   assert.match(report.output.sha256, /^[a-f0-9]{64}$/);
 });
 
+test("binds released vinyl, disc and print viewers to their governed build records", async () => {
+  const merch = await readJson("data/merch.json");
+  const records = [
+    ["vinyl", "vinyl-001", "nested"],
+    ["cd", "disc-004", "nested"],
+    ["poster", "print-001", "flat"]
+  ];
+
+  for (const [slug, assetKey, cameraShape] of records) {
+    const object = merch.objects.find((entry) => entry.slug === slug);
+    const source = await readJson(`tools/merch-3d/${assetKey}.source.json`);
+    const report = await readJson(`tools/merch-3d/reports/${assetKey}.report.json`);
+    const asset = await stat(path.join(siteRoot, `assets/merch-3d/${assetKey}.glb`));
+    const desktop = cameraShape === "nested" ? source.camera.desktop.default : source.camera;
+    const mobile = cameraShape === "nested" ? source.camera.mobile.default : source.camera;
+
+    assert.equal(object.viewer.src, `assets/merch-3d/${assetKey}.glb`);
+    assert.deepEqual(object.viewer.cameraOrbit, { desktop: desktop.orbit, mobile: mobile.orbit });
+    assert.deepEqual(object.viewer.fieldOfView, { desktop: desktop.fieldOfView, mobile: mobile.fieldOfView });
+    assert.deepEqual(object.viewer.cameraTarget, { desktop: desktop.target, mobile: mobile.target });
+    assert.deepEqual(object.viewer.budget, {
+      bytes: source.budgets.maxBytes,
+      triangles: source.budgets.maxTriangles,
+      drawCalls: source.budgets.maxDrawCalls
+    });
+    assert.equal(asset.size, report.budget.bytes);
+    assert.equal(report.validation.errors, 0);
+    assert.equal(report.validation.warnings, 0);
+  }
+});
+
 test("records an evidence-based hoodie GLB or honest physical-sample fallback", async () => {
   const decision = await readJson("tools/merch-3d/hoodie-001.decision.json");
   assert.equal(decision.assetKey, "hoodie-001");

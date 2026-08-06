@@ -88,23 +88,23 @@
         "poster": "assets/merch/vinyl-hero.webp",
         "src": "assets/merch-3d/vinyl-001.glb",
         "cameraOrbit": {
-          "desktop": "24deg 72deg 112%",
-          "mobile": "24deg 72deg 112%"
+          "desktop": "20deg 75deg 110%",
+          "mobile": "18deg 76deg 114%"
         },
         "fieldOfView": {
-          "desktop": "auto",
-          "mobile": "auto"
+          "desktop": "24deg",
+          "mobile": "20deg"
         },
         "cameraTarget": {
-          "desktop": "auto auto auto",
-          "mobile": "auto auto auto"
+          "desktop": "auto 0.156m auto",
+          "mobile": "auto 0.158m auto"
         },
         "alt": {
           "en": "Interactive 3D view of the red POVKH LAB vinyl edition and sleeve.",
           "it": "Vista 3D interattiva dell'edizione in vinile rosso POVKH LAB e della custodia.",
           "ru": "Интерактивный 3D-вид красной пластинки POVKH LAB и её конверта."
         },
-        "budget": { "bytes": 2200000, "triangles": 42000, "drawCalls": 10 }
+        "budget": { "bytes": 1400000, "triangles": 18000, "drawCalls": 6 }
       },
       "releaseGate": {
         "state": "requiredBeforeProduction",
@@ -270,23 +270,23 @@
         "poster": "assets/merch/cd-case.webp",
         "src": "assets/merch-3d/disc-004.glb",
         "cameraOrbit": {
-          "desktop": "26deg 70deg 110%",
-          "mobile": "26deg 70deg 110%"
+          "desktop": "25deg 70deg 110%",
+          "mobile": "22deg 72deg 114%"
         },
         "fieldOfView": {
-          "desktop": "auto",
-          "mobile": "auto"
+          "desktop": "24deg",
+          "mobile": "20deg"
         },
         "cameraTarget": {
-          "desktop": "auto auto auto",
-          "mobile": "auto auto auto"
+          "desktop": "auto 0.063m auto",
+          "mobile": "auto 0.064m auto"
         },
         "alt": {
           "en": "Interactive 3D view of the POVKH LAB clear jewel case and silver compact disc.",
           "it": "Vista 3D interattiva del jewel case trasparente POVKH LAB e del compact disc argentato.",
           "ru": "Интерактивный 3D-вид прозрачного футляра POVKH LAB и серебристого компакт-диска."
         },
-        "budget": { "bytes": 2000000, "triangles": 38000, "drawCalls": 10 }
+        "budget": { "bytes": 1800000, "triangles": 35000, "drawCalls": 10 }
       },
       "releaseGate": {
         "state": "requiredBeforeProduction",
@@ -649,12 +649,12 @@
         "poster": "assets/merch/poster-diptych.webp",
         "src": "assets/merch-3d/print-001.glb",
         "cameraOrbit": {
-          "desktop": "8deg 82deg 118%",
-          "mobile": "8deg 82deg 118%"
+          "desktop": "0deg 75deg 115%",
+          "mobile": "0deg 75deg 115%"
         },
         "fieldOfView": {
-          "desktop": "auto",
-          "mobile": "auto"
+          "desktop": "30deg",
+          "mobile": "30deg"
         },
         "cameraTarget": {
           "desktop": "auto auto auto",
@@ -665,7 +665,7 @@
           "it": "Vista 3D interattiva del set di poster d'archivio POVKH LAB su carta bone.",
           "ru": "Интерактивный 3D-вид архивного комплекта постеров POVKH LAB на светлой бумаге."
         },
-        "budget": { "bytes": 760000, "triangles": 4200, "drawCalls": 4 }
+        "budget": { "bytes": 650000, "triangles": 1500, "drawCalls": 4 }
       },
       "releaseGate": {
         "state": "requiredBeforeProduction",
