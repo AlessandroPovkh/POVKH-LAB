@@ -9,7 +9,7 @@
       "view": "desktop-default",
       "surface": "isolated-model-viewer",
       "path": "tools/merch-3d/reports/screenshots/hoodie-001-desktop-default.png",
-      "sha256": "745d865e87e900789ce251aaec5dd1a37bdfb7149caf0da3af906e129ac564c9",
+      "sha256": "7b17a8424b96ff541b9bb0c035ee2ab383a35129748ecaf075b6c83225e290ab",
       "viewportPx": [
         900,
         900
@@ -23,40 +23,40 @@
       "loaded": true,
       "modelIsVisible": true,
       "dimensionsM": [
-        1.1789380311965942,
+        1.179165244102478,
         1.065000057220459,
-        0.2662498280405998
+        0.27124982327222824
       ],
       "centreM": [
         0,
         0.5325000286102295,
-        -0.03687508776783943
+        -0.03937508538365364
       ],
       "cameraOrbit": {
         "theta": 2.705260340591211,
         "phi": 1.361356816555577,
-        "radius": 3.4837397268374906
+        "radius": 3.487467707180774
       },
       "fieldOfViewDeg": 24.000000000000004,
-      "foregroundPixels": 323681,
+      "foregroundPixels": 323991,
       "foregroundBoundsPx": [
-        100,
+        101,
         155,
-        740,
-        814
+        738,
+        813
       ],
       "visualMarginsPx": [
-        100,
+        101,
         155,
-        159,
-        85
+        161,
+        86
       ]
     },
     {
       "view": "mobile-default",
       "surface": "isolated-model-viewer",
       "path": "tools/merch-3d/reports/screenshots/hoodie-001-mobile-default.png",
-      "sha256": "1032cf5b3f0cb7313dc84b2aaca8f132d7426d60fe4ebe350499b9a41c819328",
+      "sha256": "26953e600896a4c9dc7105558158e5c637a9ac8922fc9841335be26cdcd6b4d6",
       "viewportPx": [
         390,
         600
@@ -70,40 +70,40 @@
       "loaded": true,
       "modelIsVisible": true,
       "dimensionsM": [
-        1.1789380311965942,
+        1.179165244102478,
         1.065000057220459,
-        0.2662498280405998
+        0.27124982327222824
       ],
       "centreM": [
         0,
         0.5325000286102295,
-        -0.03687508776783943
+        -0.03937508538365364
       ],
       "cameraOrbit": {
         "theta": 2.827433388230814,
         "phi": 1.3962634015954636,
-        "radius": 4.301085669847406
+        "radius": 4.305744979268594
       },
-      "fieldOfViewDeg": 27.596233371854414,
-      "foregroundPixels": 73701,
+      "fieldOfViewDeg": 27.5837361447047,
+      "foregroundPixels": 73916,
       "foregroundBoundsPx": [
         29,
-        175,
-        342,
-        479
+        174,
+        341,
+        478
       ],
       "visualMarginsPx": [
         29,
-        175,
-        47,
-        120
+        174,
+        48,
+        121
       ]
     },
     {
       "view": "desktop-elevated-cavity",
       "surface": "isolated-model-viewer",
       "path": "tools/merch-3d/reports/screenshots/hoodie-001-desktop-elevated-cavity.png",
-      "sha256": "e4fee4f45d6c5c015955cfe772cd4d4ad06891d3aeaa0e5e96e03b27036da1c5",
+      "sha256": "4fac35529e54c79be8d7238c90268f5e90a0fb96cd3685c2362358280cb5ef43",
       "viewportPx": [
         900,
         900
@@ -117,31 +117,31 @@
       "loaded": true,
       "modelIsVisible": true,
       "dimensionsM": [
-        1.1789380311965942,
+        1.179165244102478,
         1.065000057220459,
-        0.2662498280405998
+        0.27124982327222824
       ],
       "centreM": [
         0,
         0.5325000286102295,
-        -0.03687508776783943
+        -0.03937508538365364
       ],
       "cameraOrbit": {
         "theta": 0,
         "phi": 0.7330382858376184,
-        "radius": 2.6452110737875247
+        "radius": 2.6454584808599773
       },
       "fieldOfViewDeg": 21.999999999999993,
-      "foregroundPixels": 402390,
+      "foregroundPixels": 408008,
       "foregroundBoundsPx": [
         0,
-        335,
+        326,
         899,
         899
       ],
       "visualMarginsPx": [
         0,
-        335,
+        326,
         0,
         0
       ]
@@ -168,7 +168,7 @@
       "surface": "built-product-page",
       "activated": true,
       "path": "tools/merch-3d/reports/screenshots/hoodie-001-mobile-product-stage.png",
-      "sha256": "bd9ea160d74ececcfe24ed3ce58aec36ae718ef058dee67cf15bb0d81595299e",
+      "sha256": "23c4f46ed3d5c2176ef232722d0686b8331a995d859957daafcf3d412ec54488",
       "browserViewportPx": [
         390,
         844
@@ -192,37 +192,37 @@
       "loaded": true,
       "modelIsVisible": true,
       "dimensionsM": [
-        1.1789380311965942,
+        1.179165244102478,
         1.065000057220459,
-        0.2662498280405998
+        0.27124982327222824
       ],
       "centreM": [
         0,
         0.5325000286102295,
-        -0.03687508776783943
+        -0.03937508538365364
       ],
       "cameraOrbit": {
         "theta": 2.827433388230814,
         "phi": 1.3962634015954636,
-        "radius": 4.301085669847406
+        "radius": 4.305744979268594
       },
-      "fieldOfViewDeg": 26.152947693543254,
+      "fieldOfViewDeg": 26.1410566645921,
       "canvasPx": [
         356,
         518
       ],
-      "foregroundPixels": 65625,
-      "artworkContrastPixels": 9927,
+      "foregroundPixels": 65740,
+      "artworkContrastPixels": 7051,
       "foregroundBoundsPx": [
-        13,
+        17,
         144,
-        325,
+        318,
         436
       ],
       "visualMarginsPx": [
-        13,
+        17,
         144,
-        30,
+        37,
         81
       ]
     }

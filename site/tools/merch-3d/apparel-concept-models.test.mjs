@@ -218,6 +218,16 @@ const maximumGlobalUvDeviation = (node) => {
   return maximum;
 };
 
+const maximumRearNecklineY = (node) => {
+  const positions = node.getMesh().listPrimitives()[0].getAttribute("POSITION").getArray();
+  let maximum = -Infinity;
+  for (let offset = 0; offset < positions.length; offset += 3) {
+    const [x, y, z] = positions.slice(offset, offset + 3);
+    if (Math.abs(x) <= 0.15 && z <= -0.045 && y >= 0.90) maximum = Math.max(maximum, y);
+  }
+  return maximum;
+};
+
 const crownTrianglesInRearAperture = (nodes) => {
   let intrusions = 0;
   for (const name of ["Cap_Panel_01", "Cap_Panel_02", "Cap_Panel_03", "Cap_Panel_04", "Cap_Panel_05", "Cap_Panel_06"]) {
@@ -455,6 +465,11 @@ for (const record of records) {
       assert.equal(shell.getExtras().sleeveRootCaps, 0);
       assert.equal(shell.getExtras().armholeRingVertexCount, 28);
       assert.equal(shell.getExtras().stitchFacesPerSide, 28);
+      assert.ok(shell.getExtras().armholeTransitionRows >= 8, "hoodie armholes must distribute the body-to-sleeve transition across the upper-arm frame span");
+      assert.ok(shell.getExtras().transitionFrameSpan >= 8, "hoodie armhole transition positions must advance through sleeve frames instead of stacking concentric root rings");
+      assert.ok(shell.getExtras().maximumTransitionOffsetM <= 0.004, "hoodie armhole transition bias must remain too subtle to form a visible ridge band");
+      assert.equal(shell.getExtras().transitionInterpolation, "smoothstep-body-to-progressive-sleeve-frames");
+      assert.equal(shell.getExtras().normalRelaxation, "area-weighted-shared-indexed-surface", "shared armhole normals must be relaxed from actual triangle area instead of preserving a circular lighting rail");
       assert.equal(indexedTriangleComponents(shell), 1, "hoodie shell must share real indices across torso, stitch bands and sleeves");
       assert.equal(boundaryEdgesInArmholes(shell), 0, "hoodie armhole loops must be fully stitched without open repair gaps");
       assert.ok(minimumShoulderNormalDot(shell) >= 0.68, "hoodie shoulder normals must transition smoothly across the armhole seam");
@@ -467,14 +482,31 @@ for (const record of records) {
       assert.equal(hood.getExtras().panelCount, 2);
       assert.equal(hood.getExtras().orientation, "down-resting-on-upper-back");
       assert.equal(hood.getExtras().openingPlane, "upward-forward-neckline");
+      assert.ok(hood.getExtras().openingForwardPitchDegrees >= 18, "rear product cameras must see the solid hood exterior rather than looking into the face opening");
+      assert.equal(hood.getExtras().rearViewOcclusion, "solid-exterior-shell-behind-cavity");
       assert.equal(hood.getExtras().rearExterior, "solid-two-lobe-panel");
+      assert.equal(hood.getExtras().openingLipClosed, false, "hood opening edge must remain an irregular partial fold rather than a complete annulus");
+      assert.ok(hood.getExtras().openingLipArcDegrees < 240, "hood opening fold must leave the rear silhouette integrated into the lobes");
+      assert.deepEqual(hood.getExtras().openingLipThicknessRangeM, [0.006, 0.021], "hood fold thickness must vary like soft cloth rather than a uniform tube");
+      assert.ok(hood.getExtras().openingLipVerticalVariationM >= 0.030, "hood face edge must rise and fall like a folded cloth edge instead of reading as a flat bright rail");
+      assert.equal(hood.getExtras().openingLipMaterial, "shared-shell-fabric");
+      assert.equal(hood.getExtras().openingLipNormalMode, "area-weighted-fold-surface");
+      assert.equal(hood.getExtras().torsoNecklineOcclusion, "rear-neckline-tucked-below-hood-lobes");
+      assert.equal(hood.getExtras().foldPanelSurface, "filled-between-rear-lobes-and-partial-face-edge", "rear arch and face edge must bound a filled hood pouch surface");
+      assert.ok(hood.getExtras().foldPanelRearDropM >= 0.090, "filled hood panel must drape down the upper back instead of presenting as a horizontal rear band");
+      assert.ok(hood.getExtras().foldPanelRearwardDrapeM >= 0.025, "filled hood panel must deepen rearward into broad fabric lobes");
+      assert.equal(hood.getExtras().foldPanelProjection, "rear-exterior-outside-aperture");
+      assert.equal(hood.getExtras().detachedPerimeterBand, false, "hood exterior must not preserve an unsupported arch or strap");
+      assert.equal(hood.getExtras().archEndpoints, "rounded-below-opening-lip", "rear fold endpoints must remain buried below the face opening silhouette");
+      assert.ok(maximumRearNecklineY(shell) <= 1.005, "rear torso neckline must be tucked below the hood overlap instead of forming a second visible oval");
       assert.ok(hood.getExtras().necklineOverlapM >= 0.08, "hood must visibly drape into the neckline and shoulders");
       assert.ok(hood.getExtras().shoulderDrapeWidthM >= 0.50, "down hood must spread as two fabric lobes across the upper back");
       assert.equal(connectedTriangleComponents(hood), 1, "hood back, side walls and opening rim must remain attached");
       assert.equal(hoodInterior.getMesh().listPrimitives()[0].getMaterial().getName(), "MAT_HOODIE_HOOD_INTERIOR", "hood interior material must be assigned to actual cavity geometry");
       assert.equal(indexedTriangleComponents(hoodInterior), 1, "hood inner throat must be one connected surface");
       assert.equal(boundaryEdgeCount(hoodInterior), 80, "uncapped hood interior must preserve open entrance and throat boundary loops");
-      assert.ok(sharedPositionCount(hood, hoodInterior) >= 40, "hood interior entrance must join the upward hood opening positionally");
+      assert.equal(hoodInterior.getExtras().entranceJoinPositions, 26, "partial fold and cavity must document their exact positional join");
+      assert.ok(sharedPositionCount(hood, hoodInterior) >= 26, "hood interior entrance must join the partial folded opening edge positionally");
       const interiorBounds = getBounds(hoodInterior);
       assert.ok(interiorBounds.max[1] - interiorBounds.min[1] >= 0.10, "hood cavity must have visible vertical depth");
       assert.ok(interiorBounds.max[2] - interiorBounds.min[2] >= 0.06, "hood cavity must deepen rearward instead of collapsing to a slit");
@@ -485,6 +517,7 @@ for (const record of records) {
       assert.ok(hoodAspect >= 1.45 && hoodAspect <= 1.95, "down hood must read as a broad folded garment lobe rather than an upright halo or sphere");
       assert.ok(hoodBounds.min[1] <= 0.80, "down hood must rest low enough on the upper back to read as attached drape");
       assert.equal(nodes.has("Hoodie_Hood_Throat_Overlap"), false, "hood must not stack a second rigid neckline ring beneath its opening lip");
+      assert.ok(getBounds(nodes.get("Hoodie_Hood_Centre_Seam")).max[1] <= 0.94, "rear centre seam must stop below the face aperture instead of crossing the open void");
       assert.equal(nodes.get("Hoodie_Shaped_Cuffs").getExtras().opening, "unfilled-cuff-rims");
       assert.equal(nodes.get("Hoodie_Waistband").getExtras().integration, "conforming-body-overlap");
       for (const name of ["Hoodie_Draped_Shell", "Hoodie_Open_Hood_Shell"]) assert.equal(faceNormalAgreement(nodes.get(name)), 0, `${name} winding must agree with its vertex normals`);

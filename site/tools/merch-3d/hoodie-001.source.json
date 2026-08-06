@@ -20,7 +20,7 @@
     "scene": "Hoodie_001_Concept_Visualization",
     "pivot": "Hoodie_001_Centred_Grounded_Pivot",
     "requiredNodes": ["Hoodie_Draped_Shell", "Hoodie_Shaped_Cuffs", "Hoodie_Waistband", "Hoodie_Open_Hood_Shell", "Hoodie_Hood_Interior_Cavity", "Hoodie_Hood_Centre_Seam", "Hoodie_Back_Artwork"],
-    "features": ["tailored tubular torso with cut armholes stitched to matching shared long-sleeve root rings", "single indexed garment shell with blended armhole normals and coherent global garment-space UVs", "conforming open rib cuffs and waistband", "attached two-panel hood down with two upper-back fabric lobes", "one thin asymmetric opening lip joined to a material-backed uncapped interior descending rearward into a deep throat", "rear centre seam", "readable front and back", "exact back artwork surface"]
+    "features": ["tailored tubular torso with cut armholes and eight progressive upper-arm transition rings stitched to matching shared long-sleeve roots", "single indexed garment shell with area-weighted relaxed armhole normals and coherent global garment-space UVs", "conforming open rib cuffs and waistband", "attached two-panel hood down with two upper-back fabric lobes and a solid rearmost exterior", "filled back-draped pouch surface outside the aperture merging into one partial irregular front-and-side face edge with area-weighted cloth normals", "forward-pitched material-backed uncapped interior descending into a deep throat", "rear torso neckline and rounded arch endpoints tucked below the hood overlap", "rear centre seam terminating below the opening", "readable front and back", "exact back artwork surface"]
   },
   "artwork": {
     "path": "sources/hoodie-001/PVKH_ASCII_REVERSE_EXACT_1600x600_v01.png",

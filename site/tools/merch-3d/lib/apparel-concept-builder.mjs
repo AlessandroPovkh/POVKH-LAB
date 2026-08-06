@@ -117,7 +117,38 @@ const smoothIndexedQuad = (geometry, indices) => {
   for (const triangle of best.triangles) geometry.indexedTriangle(triangle);
 };
 
-const finaliseSmoothIndexedShell = (geometry) => {
+const applyAreaWeightedVertexNormals = (geometry, { biasNormal = null, biasWeight = 0 } = {}) => {
+  const vertexCount = geometry.positions.length / 3;
+  const accumulated = Array.from({ length: vertexCount }, () => [0, 0, 0]);
+  for (let offset = 0; offset < geometry.indices.length; offset += 3) {
+    const triangle = geometry.indices.slice(offset, offset + 3);
+    const points = triangle.map((index) => geometry.position(index));
+    const ab = points[1].map((value, axis) => value - points[0][axis]);
+    const ac = points[2].map((value, axis) => value - points[0][axis]);
+    const face = [
+      ab[1] * ac[2] - ab[2] * ac[1],
+      ab[2] * ac[0] - ab[0] * ac[2],
+      ab[0] * ac[1] - ab[1] * ac[0]
+    ];
+    for (const vertex of triangle) {
+      for (let axis = 0; axis < 3; axis += 1) accumulated[vertex][axis] += face[axis];
+    }
+  }
+  for (let vertex = 0; vertex < vertexCount; vertex += 1) {
+    const weighted = [...accumulated[vertex]];
+    const position = geometry.position(vertex);
+    const localBiasWeight = typeof biasWeight === "function" ? biasWeight(position) : biasWeight;
+    if (biasNormal && localBiasWeight > 0) {
+      const bias = biasNormal(position);
+      const scale = Math.hypot(...weighted) * localBiasWeight;
+      for (let axis = 0; axis < 3; axis += 1) weighted[axis] += bias[axis] * scale;
+    }
+    if (Math.hypot(...weighted) > 1e-12) geometry.setNormal(vertex, normalise(weighted));
+  }
+  return geometry;
+};
+
+const finaliseSmoothIndexedShell = (geometry, { areaWeightedNormals = false } = {}) => {
   const vertexCount = geometry.positions.length / 3;
   const adjacency = Array.from({ length: vertexCount }, () => new Set());
   for (let offset = 0; offset < geometry.indices.length; offset += 3) {
@@ -156,6 +187,39 @@ const finaliseSmoothIndexedShell = (geometry) => {
       [geometry.indices[offset + 1], geometry.indices[offset + 2]] = [geometry.indices[offset + 2], geometry.indices[offset + 1]];
     }
   }
+  if (areaWeightedNormals) {
+    applyAreaWeightedVertexNormals(geometry);
+    for (let pass = 0; pass < 12; pass += 1) {
+      const previous = Array.from({ length: vertexCount }, (_, vertex) => geometry.normal(vertex));
+      for (let vertex = 0; vertex < vertexCount; vertex += 1) {
+        const position = geometry.position(vertex);
+        if (Math.abs(position[0]) < 0.18 || position[1] < 0.55 || position[1] > 1.07) continue;
+        const summed = previous[vertex].map((value) => value * 2);
+        for (const neighbour of adjacency[vertex]) {
+          for (let axis = 0; axis < 3; axis += 1) summed[axis] += previous[neighbour][axis];
+        }
+        if (Math.hypot(...summed) > 1e-12) geometry.setNormal(vertex, normalise(summed));
+      }
+    }
+    for (let offset = 0; offset < geometry.indices.length; offset += 3) {
+      const triangle = geometry.indices.slice(offset, offset + 3);
+      const points = triangle.map((index) => geometry.position(index));
+      const ab = points[1].map((value, axis) => value - points[0][axis]);
+      const ac = points[2].map((value, axis) => value - points[0][axis]);
+      const face = [
+        ab[1] * ac[2] - ab[2] * ac[1],
+        ab[2] * ac[0] - ab[0] * ac[2],
+        ab[0] * ac[1] - ab[1] * ac[0]
+      ];
+      const averageNormal = triangle.reduce((result, index) => {
+        const normal = geometry.normal(index);
+        return result.map((value, axis) => value + normal[axis]);
+      }, [0, 0, 0]);
+      if (face[0] * averageNormal[0] + face[1] * averageNormal[1] + face[2] * averageNormal[2] < 0) {
+        [geometry.indices[offset + 1], geometry.indices[offset + 2]] = [geometry.indices[offset + 2], geometry.indices[offset + 1]];
+      }
+    }
+  }
   return geometry;
 };
 
@@ -167,7 +231,9 @@ const tailoredTorsoPoint = (rings, ringIndex, angle) => {
   const fold = (ring.fold || 0) * Math.sin(xRatio * Math.PI * 3) * Math.sin(heightRatio * Math.PI) * Math.abs(side);
   return [
     ring.centreX + xRatio * ring.halfWidth,
-    ring.y + (ring.hemCurve || 0) * xRatio ** 2 - (ring.frontDrop || 0) * Math.max(0, side),
+    ring.y + (ring.hemCurve || 0) * xRatio ** 2
+      - (ring.frontDrop || 0) * Math.max(0, side)
+      - (ring.rearDrop || 0) * Math.max(0, -side),
     ring.centreZ + side * (ring.halfDepth + fold)
   ];
 };
@@ -355,34 +421,55 @@ const curvedHemSeam = ({ width, y, curve, halfDepth, thickness = 0.008, segments
   return geometry;
 };
 
+const hoodFoldStart = -0.16;
+const hoodFoldEnd = Math.PI + 0.12;
+const hoodFoldSegments = 25;
+const hoodEntranceAngles = [
+  ...Array.from({ length: hoodFoldSegments + 1 }, (_, index) => hoodFoldStart + index / hoodFoldSegments * (hoodFoldEnd - hoodFoldStart)),
+  ...Array.from({ length: 14 }, (_, index) => hoodFoldEnd + (index + 1) / 15 * (hoodFoldStart + Math.PI * 2 - hoodFoldEnd))
+];
+
 const hoodOpeningPoint = (angle, edge = "inner") => {
-  const isOuter = edge === "outer";
-  const halfWidth = isOuter ? 0.158 : 0.138;
   const sine = Math.sin(angle);
-  const frontDepth = isOuter ? 0.065 : 0.049;
-  const backDepth = isOuter ? 0.045 : 0.034;
+  const frontDepth = 0.064;
+  const backDepth = 0.043;
   const zOffset = sine >= 0 ? sine * frontDepth : sine * backDepth;
   const widthTaper = 0.88 + 0.12 * ((zOffset + backDepth) / (frontDepth + backDepth));
+  const outer = [
+    Math.cos(angle) * 0.158 * widthTaper * (1 + Math.sin(angle * 3) * 0.025),
+    1.018 - 0.036 * Math.max(0, sine) + Math.sin(angle * 2) * 0.0045 + Math.sin(angle * 3) * 0.0025,
+    -0.115 + zOffset + Math.cos(angle * 3) * 0.0015
+  ];
+  if (edge === "outer") return outer;
+  const thickness = 0.006 + 0.015 * Math.max(0, sine);
   return [
-    Math.cos(angle) * halfWidth * widthTaper,
-    (isOuter ? 1.018 : 1.012) + Math.cos(angle * 2) * 0.002,
-    -0.115 + zOffset
+    outer[0] - Math.cos(angle) * thickness * 0.72,
+    outer[1] - 0.006 - thickness * 0.65,
+    outer[2] - Math.sin(angle) * thickness
   ];
 };
 
-const hoodOpeningLip = () => {
+const hoodOpeningFoldEdge = () => {
   const geometry = new Geometry();
-  const segments = 40;
-  for (let index = 0; index < segments; index += 1) {
-    const angle = index / segments * Math.PI * 2;
-    const next = (index + 1) / segments * Math.PI * 2;
-    orientedQuad(geometry, [
-      hoodOpeningPoint(angle, "outer"),
-      hoodOpeningPoint(next, "outer"),
-      hoodOpeningPoint(next, "inner"),
-      hoodOpeningPoint(angle, "inner")
-    ], [0, 1, 0]);
+  const provisionalNormal = normalise([0, 0.55, -0.84]);
+  const outerVertices = [];
+  const innerVertices = [];
+  for (let index = 0; index <= hoodFoldSegments; index += 1) {
+    const t = index / hoodFoldSegments;
+    const angle = hoodFoldStart + t * (hoodFoldEnd - hoodFoldStart);
+    outerVertices.push(geometry.vertex(hoodOpeningPoint(angle, "outer"), provisionalNormal, [t, 0]));
+    innerVertices.push(geometry.vertex(hoodOpeningPoint(angle, "inner"), provisionalNormal, [t, 1]));
   }
+  for (let index = 0; index < hoodFoldSegments; index += 1) {
+    geometry.indices.push(
+      outerVertices[index], innerVertices[index + 1], outerVertices[index + 1],
+      outerVertices[index], innerVertices[index], innerVertices[index + 1]
+    );
+  }
+  applyAreaWeightedVertexNormals(geometry, {
+    biasNormal: ([x]) => normalise([x * 1.8, 0.25, -1]),
+    biasWeight: 0.35
+  });
   return geometry;
 };
 
@@ -390,39 +477,78 @@ const openHoodShell = () => {
   const geometry = new Geometry();
   const outer = chaikinClosed([
     [-0.19, 0.755], [0, 0.730], [0.19, 0.755], [0.28, 0.855], [0.25, 0.975],
-    [0.14, 1.050], [0, 1.010], [-0.14, 1.050], [-0.25, 0.975], [-0.28, 0.855]
+    [0.14, 1.035], [0, 0.995], [-0.14, 1.035], [-0.25, 0.975], [-0.28, 0.855]
   ], 2);
   const outerFront = ([x, y]) => [x, y, -0.096 - 0.003 * (1 - y / 1.050)];
-  const outerBack = ([x, y]) => [x, y, -0.118 - 0.010 * (1 - Math.abs(x) / 0.28)];
-  const backCentre = [0, 0.875, -0.132];
+  const outerBack = ([x, y]) => [x, y, -0.166 - 0.008 * (1 - Math.abs(x) / 0.28)];
+  const backCentre = [0, 0.875, -0.175];
   for (let index = 0; index < outer.length; index += 1) {
     const next = (index + 1) % outer.length;
     const outerNormal = [outer[next][1] - outer[index][1], outer[index][0] - outer[next][0], 0];
-    orientedQuad(geometry, [outerFront(outer[index]), outerFront(outer[next]), outerBack(outer[next]), outerBack(outer[index])], outerNormal);
+    if (Math.max(outer[index][1], outer[next][1]) < 0.995) {
+      orientedQuad(geometry, [outerFront(outer[index]), outerFront(outer[next]), outerBack(outer[next]), outerBack(outer[index])], outerNormal);
+    }
     geometry.triangle([backCentre, outerBack(outer[next]), outerBack(outer[index])], [0, 0, -1]);
   }
-  appendGeometry(geometry, hoodOpeningLip());
-  const topLeft = outer.reduce((selected, point) => Math.hypot(point[0] + 0.14, point[1] - 1.05) < Math.hypot(selected[0] + 0.14, selected[1] - 1.05) ? point : selected, outer[0]);
-  const topRight = outer.reduce((selected, point) => Math.hypot(point[0] - 0.14, point[1] - 1.05) < Math.hypot(selected[0] - 0.14, selected[1] - 1.05) ? point : selected, outer[0]);
-  const connector = new Geometry();
-  orientedQuad(connector, [
-    outerBack(topLeft), outerBack(topRight),
-    hoodOpeningPoint(0, "outer"), hoodOpeningPoint(Math.PI, "outer")
-  ], [0, 1, 0]);
-  appendGeometry(geometry, connector);
+  appendGeometry(geometry, hoodOpeningFoldEdge());
+  const topLeft = outer.reduce((selected, point) => Math.hypot(point[0] + 0.21, point[1] - 0.965) < Math.hypot(selected[0] + 0.21, selected[1] - 0.965) ? point : selected, outer[0]);
+  const topRight = outer.reduce((selected, point) => Math.hypot(point[0] - 0.21, point[1] - 0.965) < Math.hypot(selected[0] - 0.21, selected[1] - 0.965) ? point : selected, outer[0]);
+  const foldPanel = new Geometry();
+  const rearRight = outerBack(topRight);
+  const rearLeft = outerBack(topLeft);
+  const rearCentre = [0, 0.875, -0.175];
+  const rearPoint = (t) => {
+    const inverse = 1 - t;
+    return rearRight.map((value, axis) => inverse * inverse * value + 2 * inverse * t * rearCentre[axis] + t * t * rearLeft[axis]);
+  };
+  const foldNormal = normalise([0, 1, 0.18]);
+  const rearVertices = [];
+  const faceVertices = [];
+  for (let index = 0; index <= hoodFoldSegments; index += 1) {
+    const t = index / hoodFoldSegments;
+    const angle = hoodFoldStart + t * (hoodFoldEnd - hoodFoldStart);
+    rearVertices.push(foldPanel.vertex(rearPoint(t), foldNormal, [t, 0]));
+    faceVertices.push(foldPanel.vertex(hoodOpeningPoint(angle, "outer"), foldNormal, [t, 1]));
+  }
+  for (let index = 0; index < hoodFoldSegments; index += 1) {
+    foldPanel.indices.push(
+      rearVertices[index], rearVertices[index + 1], faceVertices[index + 1],
+      rearVertices[index], faceVertices[index + 1], faceVertices[index]
+    );
+  }
+  applyAreaWeightedVertexNormals(foldPanel);
+  for (let offset = 0; offset < foldPanel.indices.length; offset += 3) {
+    const triangle = foldPanel.indices.slice(offset, offset + 3);
+    const points = triangle.map((vertex) => foldPanel.position(vertex));
+    const ab = points[1].map((value, axis) => value - points[0][axis]);
+    const ac = points[2].map((value, axis) => value - points[0][axis]);
+    const face = [
+      ab[1] * ac[2] - ab[2] * ac[1],
+      ab[2] * ac[0] - ab[0] * ac[2],
+      ab[0] * ac[1] - ab[1] * ac[0]
+    ];
+    const averageNormal = triangle.reduce((result, vertex) => {
+      const normal = foldPanel.normal(vertex);
+      return result.map((value, axis) => value + normal[axis]);
+    }, [0, 0, 0]);
+    if (face[0] * averageNormal[0] + face[1] * averageNormal[1] + face[2] * averageNormal[2] < 0) {
+      [foldPanel.indices[offset + 1], foldPanel.indices[offset + 2]] = [foldPanel.indices[offset + 2], foldPanel.indices[offset + 1]];
+    }
+  }
+  appendGeometry(geometry, foldPanel);
   return geometry;
 };
 
 const hoodInteriorCavity = () => {
   const geometry = new Geometry();
-  const segments = 40;
+  const segments = hoodEntranceAngles.length;
   const rings = [
     { centre: [0, 1.012, -0.115], radii: [0.138, 0.049], openingEdge: true },
-    { centre: [0, 0.955, -0.126], radii: [0.105, 0.040] },
-    { centre: [0, 0.895, -0.150], radii: [0.055, 0.020] }
+    { centre: [0, 0.950, -0.110], radii: [0.105, 0.035] },
+    { centre: [0, 0.890, -0.132], radii: [0.055, 0.015] }
   ];
   const vertices = rings.map((ring, row) => Array.from({ length: segments }, (_, column) => {
-    const angle = column / segments * Math.PI * 2;
+    const angle = hoodEntranceAngles[column];
     const position = ring.openingEdge
       ? hoodOpeningPoint(angle, "inner")
       : [
@@ -445,9 +571,9 @@ const hoodInteriorCavity = () => {
   return geometry;
 };
 
-const hoodCentreSeam = ({ startY = 0.750, endY = 1.015, segments = 18 } = {}) => {
+const hoodCentreSeam = ({ startY = 0.750, endY = 0.930, segments = 18 } = {}) => {
   const geometry = new Geometry();
-  const point = (y, x) => [x, y, -0.143 + 0.008 * ((y - startY) / (endY - startY))];
+  const point = (y, x) => [x, y, -0.175 + 0.006 * ((y - startY) / (endY - startY))];
   for (let index = 0; index < segments; index += 1) {
     const y0 = startY + index / segments * (endY - startY);
     const y1 = startY + (index + 1) / segments * (endY - startY);
@@ -605,7 +731,9 @@ const stitchedGarmentShell = ({
   armholeStartRow = 3,
   armholeEndRow = 7,
   armholeHalfColumns = 5,
-  rootOffset = 0.030
+  transitionRows = 1,
+  maximumTransitionOffsetM = 0.030,
+  areaWeightedNormals = false
 }) => {
   const geometry = new Geometry();
   const [minX, minY, maxX, maxY] = uvBounds;
@@ -669,29 +797,57 @@ const stitchedGarmentShell = ({
       while (sleeveAngles[index] - sleeveAngles[index - 1] < -Math.PI) sleeveAngles[index] += Math.PI * 2;
     }
     const seamNormals = [];
-    const rootRing = bodyLoop.map((bodyVertex, index) => {
+    const bodyPositions = bodyLoop.map((bodyVertex) => geometry.position(bodyVertex));
+    bodyLoop.forEach((bodyVertex, index) => {
       const angle = sleeveAngles[index];
       const bodyNormal = geometry.normal(bodyVertex);
       const radialNormal = sleeveNormal(frames[0], angle);
       const seamNormal = normalise(bodyNormal.map((value, axis) => value * 0.72 + radialNormal[axis] * 0.28));
       seamNormals.push(seamNormal);
       geometry.setNormal(bodyVertex, seamNormal);
-      const bodyPosition = geometry.position(bodyVertex);
-      const position = bodyPosition.map((value, axis) => value + frames[0].tangent[axis] * rootOffset);
-      return geometry.vertex(position, seamNormal, garmentUv(position));
     });
-    for (let index = 0; index < bodyLoop.length; index += 1) {
-      const next = (index + 1) % bodyLoop.length;
-      smoothIndexedQuad(geometry, [bodyLoop[index], bodyLoop[next], rootRing[next], rootRing[index]]);
+
+    let previousRing = bodyLoop;
+    let sleeveFramesToLoft = frames;
+    if (transitionRows === 1) {
+      const rootRing = bodyLoop.map((bodyVertex, index) => {
+        const position = bodyPositions[index].map((value, axis) => value + frames[0].tangent[axis] * maximumTransitionOffsetM);
+        return geometry.vertex(position, seamNormals[index], garmentUv(position));
+      });
+      for (let index = 0; index < bodyLoop.length; index += 1) {
+        const next = (index + 1) % bodyLoop.length;
+        smoothIndexedQuad(geometry, [bodyLoop[index], bodyLoop[next], rootRing[next], rootRing[index]]);
+      }
+      previousRing = rootRing;
+    } else {
+      for (let transitionRow = 1; transitionRow <= transitionRows; transitionRow += 1) {
+        const t = transitionRow / transitionRows;
+        const eased = t * t * (3 - 2 * t);
+        const bias = maximumTransitionOffsetM * Math.sin(Math.PI * t);
+        const transitionFrame = frames[Math.min(transitionRow - 1, frames.length - 1)];
+        const ring = bodyLoop.map((_, index) => {
+          const angle = sleeveAngles[index];
+          const target = sleevePoint(transitionFrame, angle);
+          const position = bodyPositions[index].map((value, axis) => value * (1 - eased) + target[axis] * eased + transitionFrame.tangent[axis] * bias);
+          const radialNormal = sleeveNormal(transitionFrame, angle);
+          const normal = normalise(seamNormals[index].map((value, axis) => value * (1 - eased) + radialNormal[axis] * eased));
+          return geometry.vertex(position, normal, garmentUv(position));
+        });
+        for (let index = 0; index < ring.length; index += 1) {
+          const next = (index + 1) % ring.length;
+          smoothIndexedQuad(geometry, [previousRing[index], previousRing[next], ring[next], ring[index]]);
+        }
+        previousRing = ring;
+      }
+      sleeveFramesToLoft = frames.slice(Math.min(transitionRows, frames.length));
     }
 
-    let previousRing = rootRing;
-    for (const [row, frame] of frames.entries()) {
+    for (const [row, frame] of sleeveFramesToLoft.entries()) {
       const ring = Array.from({ length: bodyLoop.length }, (_, index) => {
         const angle = sleeveAngles[index];
         const position = sleevePoint(frame, angle);
         const radialNormal = sleeveNormal(frame, angle);
-        const radialBlend = Math.min(1, row / 4);
+        const radialBlend = transitionRows === 1 ? Math.min(1, row / 4) : 1;
         const normal = normalise(seamNormals[index].map((value, axis) => value * (1 - radialBlend) + radialNormal[axis] * radialBlend));
         return geometry.vertex(position, normal, garmentUv(position));
       });
@@ -706,12 +862,17 @@ const stitchedGarmentShell = ({
   addSleeve({ side: 1, sleeveRings: rightSleeveRings, bodyLoop: armholeLoop(0) });
   const leftSleeveRings = rightSleeveRings.map((ring) => ({ ...ring, centre: [-ring.centre[0], ring.centre[1], ring.centre[2] || 0] }));
   addSleeve({ side: -1, sleeveRings: leftSleeveRings, bodyLoop: armholeLoop(torsoSegments / 2) });
-  finaliseSmoothIndexedShell(geometry);
+  finaliseSmoothIndexedShell(geometry, { areaWeightedNormals });
   return {
     geometry,
     leftSleeveRings,
     armholeRingVertexCount: 2 * ((armholeHalfColumns * 2) + (armholeEndRow - armholeStartRow)),
-    garmentUvMapping: { type: "global-xy-projection", boundsM: uvBounds }
+    garmentUvMapping: { type: "global-xy-projection", boundsM: uvBounds },
+    armholeTransitionRows: transitionRows,
+    transitionFrameSpan: transitionRows > 1 ? Math.min(transitionRows, rightSleeveRings.length) : 1,
+    maximumTransitionOffsetM,
+    transitionInterpolation: transitionRows > 1 ? "smoothstep-body-to-progressive-sleeve-frames" : "single-offset-legacy-tee",
+    normalRelaxation: areaWeightedNormals ? "area-weighted-shared-indexed-surface" : "iterative-shared-ring-blend"
   };
 };
 
@@ -1161,15 +1322,22 @@ const buildHoodie = (doc, assembly, buffer, source, materials) => {
     { y: 0.83, halfWidth: 0.382, halfDepth: 0.093, centreX: 0, centreZ: 0, fold: 0.003 },
     { y: 0.90, halfWidth: 0.375, halfDepth: 0.094, centreX: 0, centreZ: 0, fold: 0.002 },
     { y: 0.96, halfWidth: 0.350, halfDepth: 0.092, centreX: 0, centreZ: 0 },
-    { y: 1.025, halfWidth: 0.250, halfDepth: 0.080, centreX: 0, centreZ: 0 },
-    { y: 1.065, halfWidth: 0.150, halfDepth: 0.068, centreX: 0, centreZ: 0, frontDrop: 0.025 }
+    { y: 1.025, halfWidth: 0.250, halfDepth: 0.080, centreX: 0, centreZ: 0, rearDrop: 0.035 },
+    { y: 1.065, halfWidth: 0.150, halfDepth: 0.068, centreX: 0, centreZ: 0, frontDrop: 0.025, rearDrop: 0.092 }
   ];
   const rightSleeve = smoothSleeveRings({
-    start: [0.355, 0.885], control: [0.465, 0.690], end: [0.520, 0.225],
+    start: [0.370, 0.875], control: [0.455, 0.840], end: [0.520, 0.225],
     startRadius: 0.115, endRadius: 0.070, radiusBulge: 0.016,
     startDepth: 0.080, endDepth: 0.052, samples: 18
   });
-  const stitched = stitchedGarmentShell({ torsoRings, rightSleeveRings: rightSleeve, uvBounds: [-0.69, 0, 0.69, 1.10] });
+  const stitched = stitchedGarmentShell({
+    torsoRings,
+    rightSleeveRings: rightSleeve,
+    uvBounds: [-0.69, 0, 0.69, 1.10],
+    transitionRows: 8,
+    maximumTransitionOffsetM: 0.004,
+    areaWeightedNormals: true
+  });
   const leftSleeve = stitched.leftSleeveRings;
   addNode(doc, assembly, buffer, "Hoodie_Draped_Shell", stitched.geometry, materials.fabric, {
     role: "continuous-garment-shell",
@@ -1181,6 +1349,11 @@ const buildHoodie = (doc, assembly, buffer, source, materials) => {
     stitchFacesPerSide: stitched.armholeRingVertexCount,
     garmentUvMapping: stitched.garmentUvMapping,
     normalContinuity: "blended-shared-ring-normals",
+    armholeTransitionRows: stitched.armholeTransitionRows,
+    transitionFrameSpan: stitched.transitionFrameSpan,
+    maximumTransitionOffsetM: stitched.maximumTransitionOffsetM,
+    transitionInterpolation: stitched.transitionInterpolation,
+    normalRelaxation: stitched.normalRelaxation,
     sleeveCrossSection: "relaxed-tapered-long-sleeve-open-cuff",
     shoulderSleeveContinuity: true,
     frontBackReadable: true,
@@ -1203,7 +1376,24 @@ const buildHoodie = (doc, assembly, buffer, source, materials) => {
     panelCount: 2,
     orientation: "down-resting-on-upper-back",
     openingPlane: "upward-forward-neckline",
+    openingForwardPitchDegrees: 22,
+    rearViewOcclusion: "solid-exterior-shell-behind-cavity",
     rearExterior: "solid-two-lobe-panel",
+    openingLip: "partial-irregular-front-and-side-fold",
+    openingLipClosed: false,
+    openingLipArcDegrees: 196,
+    openingLipSections: hoodFoldSegments,
+    openingLipThicknessRangeM: [0.006, 0.021],
+    openingLipVerticalVariationM: 0.040,
+    openingLipMaterial: "shared-shell-fabric",
+    openingLipNormalMode: "area-weighted-fold-surface",
+    torsoNecklineOcclusion: "rear-neckline-tucked-below-hood-lobes",
+    foldPanelSurface: "filled-between-rear-lobes-and-partial-face-edge",
+    foldPanelRearDropM: 0.125,
+    foldPanelRearwardDrapeM: 0.035,
+    foldPanelProjection: "rear-exterior-outside-aperture",
+    detachedPerimeterBand: false,
+    archEndpoints: "rounded-below-opening-lip",
     necklineOverlapM: 0.285,
     shoulderDrapeWidthM: 0.53,
     attachedAtNecklineY: 1.035,
@@ -1214,6 +1404,7 @@ const buildHoodie = (doc, assembly, buffer, source, materials) => {
     role: "material-backed-hood-interior",
     opening: "uncapped-entrance-and-throat",
     depthM: 0.117,
+    entranceJoinPositions: hoodFoldSegments + 1,
     joinedTo: "Hoodie_Open_Hood_Shell"
   });
   addNode(doc, assembly, buffer, "Hoodie_Hood_Centre_Seam", hoodCentreSeam(), materials.rib, { role: "hood-rear-centre-seam", constructionAccuracyClaim: false });

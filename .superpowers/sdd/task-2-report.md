@@ -198,3 +198,50 @@ The isolated default/mobile and built-product-page views retain at least 8 px br
 ### Remaining concern
 
 No remaining concern exists for these review findings. The prior cap budget note still applies, and all apparel artifacts remain explicit concept visualizations rather than manufacturing references.
+
+---
+
+## Task 6 second review-fix wave — folded hood and relaxed hoodie armholes — 2026-08-07
+
+Status: DONE
+
+### Outcome
+
+- The hoodie opening is no longer a closed concentric annulus. One 196-degree, 25-section asymmetric cloth edge varies from 6 to 21 mm thick, rises/falls by 40 mm, shares 26 exact entrance positions with the uncapped cavity and merges into a filled exterior pouch surface.
+- The solid rear hood shell now sits behind the cavity, the opening pitches 22 degrees upward/forward, and the filled panel drops 125 mm and 35 mm rearward outside the aperture. Default/mobile cameras therefore see broad exterior lobes instead of the black interior; the elevated auxiliary shows one uninterrupted open void with no connector or centre-seam geometry crossing it.
+- The torso rear neckline is tucked below the hood overlap. The hood rear centre seam ends at Y 0.930 m, below the opening.
+- Both 28-vertex armholes remain real shared indexed stitches with zero root caps or repair patches. The former root rail is replaced by eight progressive upper-arm frame transitions, a maximum 4 mm positional bias, and area-weighted normals relaxed across the shared indexed surface. Original-size desktop and mobile review accepted the softened shoulder silhouette.
+- Tee, cap, artwork, product-viewer implementation, governed camera metadata and `.superpowers/sdd/progress.md` remain untouched.
+
+### Final artifact
+
+| Model | GLB SHA-256 | Bytes | Triangles | Draw calls | Reopened bounds mm | Validator |
+| --- | --- | ---: | ---: | ---: | --- | --- |
+| hoodie | `1a49ffaa3a8429f4f51c9d01e9bd409d265ced46ab30e820666721ececfb563c` | 369,700 | 3,458 | 7 | 1179.165 x 1065.000 x 271.250 | 0 errors / 0 warnings |
+
+The artifact is grounded at Y 0, remains inside the original 1180 x 1076 x 272 mm viewer envelope and stays below the 4,000,000-byte, 80,000-triangle and 20-draw-call ceilings.
+
+### Final browser evidence
+
+| View | Size | SHA-256 |
+| --- | ---: | --- |
+| hoodie desktop default/rear | 900 x 900 | `7b17a8424b96ff541b9bb0c035ee2ab383a35129748ecaf075b6c83225e290ab` |
+| hoodie mobile default/rear | 390 x 600 | `26953e600896a4c9dc7105558158e5c637a9ac8922fc9841335be26cdcd6b4d6` |
+| hoodie elevated cavity detail | 900 x 900 | `4fac35529e54c79be8d7238c90268f5e90a0fb96cd3685c2362358280cb5ef43` |
+| hoodie built mobile stage | 358 x 521 | `23c4f46ed3d5c2176ef232722d0686b8331a995d859957daafcf3d412ec54488` |
+
+All stored browser checks are true: required views, zero browser errors, zero third-party requests, model load, nonblank frames, breathing room, built-page before/after evidence, expanded mobile stage, pointer/reset behavior and zero layout overflow. All three governed hoodie views were inspected at original resolution; the obsolete `hoodie-001-desktop-front-cavity.png` was deleted and is recoverable from the prior Git commit.
+
+### Exact final verification
+
+- Two consecutive `node site/tools/merch-3d/build-hoodie-001.mjs --verify` runs reproduced the exact SHA above; each in turn performs two in-memory deterministic builds and validator checks.
+- `node --test site/tools/merch-3d/apparel-concept-models.test.mjs site/tools/merch-3d/apparel-concept-browser-qa.test.mjs` — 4/4 passed.
+- `node --test site/tests/merch-model-assets.test.mjs` — 5/5 passed.
+- `node site/tools/merch-3d/capture-apparel-concepts.mjs` — all three apparel evidence sets regenerated successfully; final hoodie images passed native-size visual review.
+- `git diff --check` — passed.
+- Product-viewer implementation and camera metadata have no diff, so the conditional viewer/camera suites were not rerun.
+- `git status --short -- .superpowers/sdd/progress.md` — empty; the progress file is untouched.
+
+### Remaining concern
+
+No remaining concern exists for this review wave. The hoodie remains an explicit concept visualization, not a fit, construction or manufacturing reference.

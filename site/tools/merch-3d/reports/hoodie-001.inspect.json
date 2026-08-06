@@ -8,18 +8,18 @@
           "name": "Hoodie_001_Concept_Visualization",
           "rootName": "Hoodie_001_Centred_Grounded_Pivot",
           "bboxMin": [
-            -0.58947,
+            -0.58958,
             0,
-            -0.17
+            -0.175
           ],
           "bboxMax": [
-            0.58947,
+            0.58958,
             1.065,
             0.09625
           ],
-          "renderVertexCount": 10746,
-          "uploadVertexCount": 3212,
-          "uploadNaiveVertexCount": 3212
+          "renderVertexCount": 10374,
+          "uploadVertexCount": 3036,
+          "uploadNaiveVertexCount": 3036
         }
       ]
     },
@@ -31,8 +31,8 @@
             "TRIANGLES"
           ],
           "meshPrimitives": 1,
-          "glPrimitives": 2608,
-          "vertices": 1424,
+          "glPrimitives": 2496,
+          "vertices": 1368,
           "indices": [
             "u32"
           ],
@@ -43,7 +43,7 @@
             "TEXCOORD_0:f32"
           ],
           "instances": 1,
-          "size": 99648
+          "size": 95616
         },
         {
           "name": "Hoodie_Shaped_Cuffs_Mesh",
@@ -91,8 +91,8 @@
             "TRIANGLES"
           ],
           "meshPrimitives": 1,
-          "glPrimitives": 202,
-          "vertices": 444,
+          "glPrimitives": 190,
+          "vertices": 324,
           "indices": [
             "u32"
           ],
@@ -103,7 +103,7 @@
             "TEXCOORD_0:f32"
           ],
           "instances": 1,
-          "size": 23736
+          "size": 17832
         },
         {
           "name": "Hoodie_Hood_Interior_Cavity_Mesh",

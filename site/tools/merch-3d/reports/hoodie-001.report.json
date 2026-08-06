@@ -52,12 +52,14 @@
         "Hoodie_Back_Artwork"
       ],
       "features": [
-        "tailored tubular torso with cut armholes stitched to matching shared long-sleeve root rings",
-        "single indexed garment shell with blended armhole normals and coherent global garment-space UVs",
+        "tailored tubular torso with cut armholes and eight progressive upper-arm transition rings stitched to matching shared long-sleeve roots",
+        "single indexed garment shell with area-weighted relaxed armhole normals and coherent global garment-space UVs",
         "conforming open rib cuffs and waistband",
-        "attached two-panel hood down with two upper-back fabric lobes",
-        "one thin asymmetric opening lip joined to a material-backed uncapped interior descending rearward into a deep throat",
-        "rear centre seam",
+        "attached two-panel hood down with two upper-back fabric lobes and a solid rearmost exterior",
+        "filled back-draped pouch surface outside the aperture merging into one partial irregular front-and-side face edge with area-weighted cloth normals",
+        "forward-pitched material-backed uncapped interior descending into a deep throat",
+        "rear torso neckline and rounded arch endpoints tucked below the hood overlap",
+        "rear centre seam terminating below the opening",
         "readable front and back",
         "exact back artwork surface"
       ]
@@ -214,19 +216,19 @@
     "method": "reopened-glb-bounds-node-and-texture-metadata",
     "boundsMm": {
       "min": [
-        -589.4690155982971,
+        -589.582622051239,
         0,
-        -170.00000178813934
+        -174.99999701976776
       ],
       "max": [
-        589.4690155982971,
+        589.582622051239,
         1065.000057220459,
         96.24982625246048
       ],
       "size": [
-        1178.9380311965942,
+        1179.165244102478,
         1065.000057220459,
-        266.2498280405998
+        271.24982327222824
       ]
     },
     "geometryPurpose": "volumetric placement and front/back readability",
@@ -276,9 +278,9 @@
     "hints": 0
   },
   "budget": {
-    "triangles": 3582,
+    "triangles": 3458,
     "drawCalls": 7,
-    "bytes": 378684,
+    "bytes": 369700,
     "ceilings": {
       "maxBytes": 4000000,
       "maxTriangles": 80000,
@@ -287,7 +289,7 @@
   },
   "output": {
     "path": "assets/merch-3d/hoodie-001.glb",
-    "sha256": "cfcc495f63a65fa4934aa65c6b01273b01a770b62148374118e1f2213b296482"
+    "sha256": "1a49ffaa3a8429f4f51c9d01e9bd409d265ced46ab30e820666721ececfb563c"
   },
   "deterministic": {
     "verifiedBySecondInMemoryBuild": true
