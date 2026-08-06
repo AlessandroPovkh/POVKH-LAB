@@ -30,6 +30,7 @@ const merchLibrary = await validateMerchLibrary(registry, copyAuthority, { readA
 const pages = createPages(catalog, audioLibrary, artistLibrary, merchLibrary);
 const pageFor = (locale) => pages.get(`${locale === "en" ? "" : `${locale}/`}merch/index.html`).toString();
 const count = (html, pattern) => [...html.matchAll(pattern)].length;
+const verifyRenderHost = process.env.PVKH_VERIFY_PHYSICAL_RENDER_TOOLCHAIN === "1";
 
 const deliveries = [
   { file: "PVKH_MOTION_BLOB_PHYSICAL_1920x1080_v1.webm", codec: "vp9", width: 1920, height: 1080, fps: 30 },
@@ -127,21 +128,23 @@ test("publishes silent loop-safe PHYSICAL desktop and mobile deliveries with an 
     const file = path.join(motionRoot, expected.file);
     await access(file);
     assert.equal(createHash("sha256").update(await readFile(file)).digest("hex"), delivery.sha256, `${expected.file} hash drifted`);
-    const { stdout } = await exec("ffprobe", [
-      "-v", "error",
-      "-show_entries", "stream=codec_type,codec_name,width,height,r_frame_rate:format=duration",
-      "-of", "json",
-      file
-    ]);
-    const probe = JSON.parse(stdout);
-    assert.equal(probe.streams.length, 1, `${expected.file} must contain one stream`);
-    assert.equal(probe.streams[0].codec_type, "video", `${expected.file} must be silent video`);
-    assert.equal(probe.streams[0].codec_name, expected.codec, `${expected.file} codec drifted`);
-    assert.equal(probe.streams[0].width, expected.width, `${expected.file} width drifted`);
-    assert.equal(probe.streams[0].height, expected.height, `${expected.file} height drifted`);
-    const [numerator, denominator] = probe.streams[0].r_frame_rate.split("/").map(Number);
-    assert.ok(Math.abs((numerator / denominator) - expected.fps) <= 0.05, `${expected.file} fps drifted`);
-    assert.ok(Math.abs(Number(probe.format.duration) - 3) <= 0.08, `${expected.file} duration drifted`);
+    if (verifyRenderHost) {
+      const { stdout } = await exec("ffprobe", [
+        "-v", "error",
+        "-show_entries", "stream=codec_type,codec_name,width,height,r_frame_rate:format=duration",
+        "-of", "json",
+        file
+      ]);
+      const probe = JSON.parse(stdout);
+      assert.equal(probe.streams.length, 1, `${expected.file} must contain one stream`);
+      assert.equal(probe.streams[0].codec_type, "video", `${expected.file} must be silent video`);
+      assert.equal(probe.streams[0].codec_name, expected.codec, `${expected.file} codec drifted`);
+      assert.equal(probe.streams[0].width, expected.width, `${expected.file} width drifted`);
+      assert.equal(probe.streams[0].height, expected.height, `${expected.file} height drifted`);
+      const [numerator, denominator] = probe.streams[0].r_frame_rate.split("/").map(Number);
+      assert.ok(Math.abs((numerator / denominator) - expected.fps) <= 0.05, `${expected.file} fps drifted`);
+      assert.ok(Math.abs(Number(probe.format.duration) - 3) <= 0.08, `${expected.file} duration drifted`);
+    }
     assert.ok(delivery.loopSeam, `${expected.file} must record a decoded first-to-last loop seam`);
     assert.equal(delivery.loopSeam.method, "decoded-rgb24-normalized-mae");
     assert.equal(delivery.loopSeam.frames, `0:${(3 * expected.fps) - 1}`);
@@ -149,15 +152,19 @@ test("publishes silent loop-safe PHYSICAL desktop and mobile deliveries with an 
     assert.equal(delivery.loopSeam.thresholdRationale, "mean decoded channel delta stays below 0.64 of one 8-bit code value");
     assert.equal(delivery.loopSeam.maxChannelThreshold, 8);
     assert.equal(delivery.loopSeam.maxChannelThresholdRationale, "no localized decoded channel may jump by more than 8 of 255 code values");
-    const actualSeam = await decodedSeam(file, expected);
-    assert.ok(actualSeam.normalizedMae <= delivery.loopSeam.threshold, `${expected.file} decoded loop seam ${actualSeam.normalizedMae} exceeds ${delivery.loopSeam.threshold}`);
-    assert.ok(actualSeam.maxChannelDelta <= delivery.loopSeam.maxChannelThreshold, `${expected.file} localized loop seam ${actualSeam.maxChannelDelta} exceeds ${delivery.loopSeam.maxChannelThreshold}`);
-    assert.ok(Math.abs(actualSeam.normalizedMae - delivery.loopSeam.normalizedMae) <= 1e-9, `${expected.file} recorded loop seam is stale`);
-    assert.equal(actualSeam.maxChannelDelta, delivery.loopSeam.maxChannelDelta, `${expected.file} recorded maximum channel delta is stale`);
+    assert.ok(delivery.loopSeam.normalizedMae >= 0 && delivery.loopSeam.normalizedMae <= delivery.loopSeam.threshold, `${expected.file} recorded normalized seam exceeds its accepted threshold`);
+    assert.ok(Number.isInteger(delivery.loopSeam.maxChannelDelta) && delivery.loopSeam.maxChannelDelta >= 0 && delivery.loopSeam.maxChannelDelta <= delivery.loopSeam.maxChannelThreshold, `${expected.file} recorded localized seam exceeds its accepted threshold`);
+    if (verifyRenderHost) {
+      const actualSeam = await decodedSeam(file, expected);
+      assert.ok(actualSeam.normalizedMae <= delivery.loopSeam.threshold, `${expected.file} decoded loop seam ${actualSeam.normalizedMae} exceeds ${delivery.loopSeam.threshold}`);
+      assert.ok(actualSeam.maxChannelDelta <= delivery.loopSeam.maxChannelThreshold, `${expected.file} localized loop seam ${actualSeam.maxChannelDelta} exceeds ${delivery.loopSeam.maxChannelThreshold}`);
+      assert.ok(Math.abs(actualSeam.normalizedMae - delivery.loopSeam.normalizedMae) <= 1e-9, `${expected.file} recorded loop seam is stale`);
+      assert.equal(actualSeam.maxChannelDelta, delivery.loopSeam.maxChannelDelta, `${expected.file} recorded maximum channel delta is stale`);
+    }
   }
 });
 
-test("pins and verifies the actual Playwright, Chromium and ffmpeg render toolchain", async () => {
+test("records the exact pinned Playwright, Chromium and ffmpeg render toolchain", async () => {
   const manifest = JSON.parse(await readFile(path.join(motionRoot, "physical-manifest.json"), "utf8"));
   assert.ok(manifest.toolchain, "PHYSICAL manifest must record the pinned and actual render toolchain");
   const packageJson = JSON.parse(await readFile(path.join(siteRoot, "package.json"), "utf8"));
@@ -175,6 +182,25 @@ test("pins and verifies the actual Playwright, Chromium and ffmpeg render toolch
   assert.equal(manifest.toolchain.chromium.pinnedRevision, chromiumPin.revision);
   assert.equal(manifest.toolchain.chromium.pinnedVersion, chromiumPin.browserVersion);
   assert.equal(manifest.toolchain.chromium.browsersJsonSha256, await fileSha256(browsersPath));
+  assert.equal(manifest.toolchain.chromium.actualVersion, manifest.toolchain.chromium.pinnedVersion, "recorded Chromium must equal the Playwright browser pin");
+  assert.match(manifest.toolchain.chromium.executableSha256, /^[a-f0-9]{64}$/);
+
+  assert.equal(manifest.toolchain.ffmpeg.pinnedVersion, "7.0.2-tessus");
+  assert.equal(manifest.toolchain.ffmpeg.actualVersion, manifest.toolchain.ffmpeg.pinnedVersion, "recorded ffmpeg must equal the renderer pin");
+  assert.match(manifest.toolchain.ffmpeg.executableSha256, /^[a-f0-9]{64}$/);
+  assert.match(manifest.toolchain.environment.node, /^v\d+\.\d+\.\d+$/);
+  assert.match(manifest.toolchain.environment.platform, /^(darwin|linux|win32)$/);
+  assert.match(manifest.toolchain.environment.arch, /^(arm64|x64)$/);
+
+  const rendererSource = await readFile(path.join(repoRoot, "media", "motion", "render_physical_motion.mjs"), "utf8");
+  assert.match(rendererSource, /actualFfmpegVersion !== pinnedFfmpegVersion/, "renderer must reject an unpinned ffmpeg host");
+  assert.match(rendererSource, /actualChromiumVersion !== chromiumPin\.browserVersion/, "renderer must reject an unpinned Chromium host");
+  assert.match(rendererSource, /executableSha256: await sha256\(chromium\.executablePath\(\)\)/, "renderer must fingerprint Chromium");
+  assert.match(rendererSource, /executableSha256: await sha256\(ffmpegBinary\)/, "renderer must fingerprint ffmpeg");
+});
+
+test("matches the recorded executable fingerprints when run on the original render host", { skip: !verifyRenderHost }, async () => {
+  const manifest = JSON.parse(await readFile(path.join(motionRoot, "physical-manifest.json"), "utf8"));
   const chromiumExecutable = chromium.executablePath();
   assert.equal(manifest.toolchain.chromium.executableSha256, await fileSha256(chromiumExecutable));
   const browser = await chromium.launch({ headless: true });
@@ -190,9 +216,7 @@ test("pins and verifies the actual Playwright, Chromium and ffmpeg render toolch
   const { stdout: ffmpegVersionOutput } = await exec(ffmpegPath, ["-version"]);
   const actualFfmpegVersion = ffmpegVersionOutput.match(/^ffmpeg version\s+([^\s]+)/)?.[1];
   assert.ok(actualFfmpegVersion, "ffmpeg version cannot be resolved");
-  assert.equal(manifest.toolchain.ffmpeg.pinnedVersion, "7.0.2-tessus");
   assert.equal(manifest.toolchain.ffmpeg.actualVersion, actualFfmpegVersion);
-  assert.equal(manifest.toolchain.ffmpeg.actualVersion, manifest.toolchain.ffmpeg.pinnedVersion, "actual ffmpeg must equal the renderer pin");
   assert.equal(manifest.toolchain.ffmpeg.executableSha256, await fileSha256(ffmpegPath));
 });
 

@@ -605,7 +605,7 @@ const productViewerMarkup = ({ object, locale, route, copy }) => {
       <p class="product-viewer-status" data-product-viewer-status role="status" aria-live="polite" aria-atomic="true">${sourceBlocked ? escapeHtml(blockedCopy) : ""}</p>
     </div>
     <p class="product-viewer-instructions" id="${escapeHtml(instructionsId)}" data-product-viewer-instructions hidden>${escapeHtml(copy.viewerInstructions)}</p>
-    <figcaption>${escapeHtml(hero.caption[locale])}</figcaption>
+    <p class="product-viewer-caption">${escapeHtml(hero.caption[locale])}</p>
   </section>`;
 };
 
@@ -616,7 +616,7 @@ const merchDetailMarkup = ({ object, previous, next, locale, route, overview, co
     next ? `<a rel="next" href="${hrefFor(locale, route, locale, `merch/${next.slug}`)}"><span>${escapeHtml(copy.nextObject)}</span><strong>${escapeHtml(next.content[locale].name)}</strong></a>` : ""
   ].filter(Boolean).join("");
   return `<div class="container merch-detail" data-merch-detail-id="${escapeHtml(object.id)}" data-merch-stage="concept">
-    <nav class="merch-breadcrumb" data-merch-breadcrumb aria-label="Breadcrumb"><ol>
+    <nav class="merch-breadcrumb" data-merch-breadcrumb aria-label="${escapeHtml(COPY[locale].common.breadcrumb)}"><ol>
       <li><a href="${hrefFor(locale, route, locale, "")}">${escapeHtml(COPY[locale].common.nav.home)}</a></li>
       <li><a href="${hrefFor(locale, route, locale, "merch")}">${escapeHtml(overview.title)}</a></li>
       <li aria-current="page">${escapeHtml(content.name)}</li>

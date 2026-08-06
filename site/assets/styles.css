@@ -4021,10 +4021,11 @@ html[lang="ru"] .merch-detail-copy .page-title {
 }
 
 .merch-detail-visual figcaption,
-.product-viewer figcaption,
+.product-viewer-caption,
 .merch-gallery-caption,
 .merch-gallery-dialog figcaption {
   display: block;
+  margin: 0;
   padding-top: 0.65rem;
   color: var(--muted);
   font-family: "IBM Plex Mono", monospace;
