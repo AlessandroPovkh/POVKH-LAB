@@ -80,6 +80,7 @@ test("binds released rigid and flat viewers to their governed build records", as
     const mobile = cameraShape === "nested" ? source.camera.mobile.default : source.camera;
 
     assert.equal(object.viewer.src, `assets/merch-3d/${assetKey}.glb`);
+    if (cameraShape === "nested") assert.equal(source.camera.poster, object.viewer.poster);
     assert.deepEqual(object.viewer.cameraOrbit, { desktop: desktop.orbit, mobile: mobile.orbit });
     assert.deepEqual(object.viewer.fieldOfView, { desktop: desktop.fieldOfView, mobile: mobile.fieldOfView });
     assert.deepEqual(object.viewer.cameraTarget, { desktop: desktop.target, mobile: mobile.target });

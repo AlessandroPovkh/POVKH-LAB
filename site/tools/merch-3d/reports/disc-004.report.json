@@ -62,7 +62,7 @@
     "printedMark": false
   },
   "cameraRecommendations": {
-    "poster": "assets/merch/disc-hero.webp",
+    "poster": "assets/merch/cd-case.webp",
     "desktop": {
       "default": {
         "orbit": "25deg 70deg 110%",

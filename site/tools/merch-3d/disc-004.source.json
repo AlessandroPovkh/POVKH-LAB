@@ -48,7 +48,7 @@
     "silver": {"baseColor": [0.82, 0.84, 0.87, 1], "metallic": 0.9, "roughness": 0.13}
   },
   "camera": {
-    "poster": "assets/merch/disc-hero.webp",
+    "poster": "assets/merch/cd-case.webp",
     "desktop": {
       "default": {"orbit": "25deg 70deg 110%", "target": "auto 0.063m auto", "fieldOfView": "24deg"},
       "front": {"orbit": "0deg 70deg 106%", "target": "auto 0.063m auto", "fieldOfView": "23deg"},
