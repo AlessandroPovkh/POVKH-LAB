@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "assetKey": "zine-001",
+  "sourceIntegrity": {
+    "cover": {
+      "canonicalPath": "production/physical-merch/concepts/drop-001/renders/archive-objects/collector-box-001/source/artwork/PVKH_COLLECTOR_BOX_001_ZINE_FLAT_COVER_MASTER_v04.svg",
+      "fixturePath": "sources/zine-001/PVKH_COLLECTOR_BOX_001_ZINE_FLAT_COVER_MASTER_v04.svg",
+      "sha256": "ffbc37ed621dd18006c89d8c05cd356f4377a0fa66643fe38fe6c07e5df33485",
+      "bytes": 583075
+    },
+    "authority": {
+      "canonicalPath": "production/physical-merch/concepts/drop-001/renders/archive-objects/collector-box-001/source/artwork/zine-flat-cover-authority-v04.json",
+      "fixturePath": "sources/zine-001/authority/zine-flat-cover-authority-v04.json",
+      "sha256": "c9781d0b7fbee456409fd8bf159572a0bec17206942e7ed33dd489a303dccf0c",
+      "bytes": 1718
+    }
+  },
+  "derivedRaster": {
+    "sha256": "64704f1b2a7ccb68da4b5866fc843bbfb5d7f99d570da218758de1de5a3f5260",
+    "bytes": 42171,
+    "dimensionsPx": [
+      800,
+      1135
+    ],
+    "canonicalCoverSha256": "ffbc37ed621dd18006c89d8c05cd356f4377a0fa66643fe38fe6c07e5df33485",
+    "authoritySha256": "c9781d0b7fbee456409fd8bf159572a0bec17206942e7ed33dd489a303dccf0c"
+  },
+  "physicalEvidence": {
+    "method": "reopened-glb-bounds-and-node-registration",
+    "closed": true,
+    "dimensionsMm": [
+      148,
+      210,
+      2.4
+    ],
+    "pageCount": 32,
+    "blackCover": true,
+    "shallowSpine": true,
+    "visibleStaples": 2,
+    "interiors": 0,
+    "pageTurnAnimations": 0
+  },
+  "galleryPolicy": "never-crop-gallery-renders",
+  "cameraRecommendations": {
+    "orbit": "20deg 70deg 110%",
+    "fieldOfView": "30deg",
+    "target": "auto auto auto"
+  },
+  "validation": {
+    "errors": 0,
+    "warnings": 0,
+    "infos": 1,
+    "hints": 0
+  },
+  "budget": {
+    "triangles": 74,
+    "drawCalls": 4,
+    "bytes": 50876,
+    "ceilings": {
+      "maxBytes": 780000,
+      "maxTriangles": 4500,
+      "maxDrawCalls": 4
+    }
+  },
+  "output": {
+    "path": "assets/merch-3d/zine-001.glb",
+    "sha256": "0d23f05cd6c80fcf5e4d45f9ad5701f989c8e9eec5a49a084bfbad4d8c3ceea0"
+  },
+  "deterministic": {
+    "verifiedBySecondInMemoryBuild": true
+  }
+}
