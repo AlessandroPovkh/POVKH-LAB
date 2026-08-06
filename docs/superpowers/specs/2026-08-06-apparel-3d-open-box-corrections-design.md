@@ -12,7 +12,7 @@ Complete the merch catalog without changing the approved POVKH LAB visual langua
 ## Global constraints
 
 - Use only governed exact logo masters. Do not generate, retype, redraw, or approximate logo text.
-- Preserve every approved photograph outside its print layer.
+- Blank garment pixels remain source-identical outside the applied artwork by default. The only permitted blank-base retouch is the governed hoodie print-macro v1→v2 repair: its exact changed pixels must stay confined to the declared repair bounds, and the repaired v2 base—not the pre-retouch v1 source—is the byte-preservation authority for final compositing.
 - Apparel print artwork remains 300 x 112.5 mm in the design record; perspective views may warp the plane but may not change its aspect or internal layout.
 - Secondary photo registration must be reviewed visually against the approved hero, not only by file hashes.
 - Garment and cap meshes communicate volume and placement, but do not claim vendor fit, fabric simulation, construction accuracy, or production dimensions.

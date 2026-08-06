@@ -11,7 +11,7 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 const siteRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const execFile = promisify(execFileCallback);
 const registrationPath = path.join(siteRoot, "data", "apparel-print-registration-v02.json");
-const designSpecPath = path.join(siteRoot, "..", "docs", "superpowers", "specs", "2026-08-06-povkh-merch-3d-optimization-design.md");
+const designSpecPath = path.join(siteRoot, "..", "docs", "superpowers", "specs", "2026-08-06-apparel-3d-open-box-corrections-design.md");
 const safeProjectPath = /^(?!\/)(?!.*(?:^|\/)\.\.(?:\/|$))[A-Za-z0-9._/-]+$/;
 const sha256Pattern = /^[a-f0-9]{64}$/;
 
