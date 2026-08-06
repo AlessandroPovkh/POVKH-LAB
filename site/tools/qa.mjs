@@ -575,7 +575,13 @@ try {
           roadmapOpen: document.querySelector("details[data-merch-roadmap]")?.open,
           statuses: document.querySelectorAll("[data-merch-visible-status]").length,
           anchor: document.querySelector('.merch-hero a[href="#merch-objects"]')?.getAttribute("href"),
-          navCurrent: document.querySelectorAll('.nav-link[aria-current="page"]').length,
+          navCurrent: {
+            total: document.querySelectorAll('.nav-link[aria-current="page"]').length,
+            desktop: document.querySelectorAll('.desktop-nav .nav-link[aria-current="page"]').length,
+            mobileIndex: document.querySelectorAll('.site-index-primary .nav-link[aria-current="page"]').length,
+            uniqueTargets: new Set([...document.querySelectorAll('.nav-link[aria-current="page"]')]
+              .map((link) => new URL(link.href).pathname)).size
+          },
           firstGridColumns: new Set([...document.querySelector(".merch-object-grid").querySelectorAll(".merch-object")]
             .map((node) => Math.round(node.getBoundingClientRect().left))).size
         }));
@@ -586,7 +592,10 @@ try {
           || merchContract.roadmapOpen !== false
           || merchContract.statuses !== 1
           || merchContract.anchor != null
-          || merchContract.navCurrent !== 1
+          || merchContract.navCurrent.total !== 2
+          || merchContract.navCurrent.desktop !== 1
+          || merchContract.navCurrent.mobileIndex !== 1
+          || merchContract.navCurrent.uniqueTargets !== 1
           || (viewport.width === 320 && merchContract.firstGridColumns !== 1)) {
           fail(`${label}: invalid merch browser contract ${JSON.stringify(merchContract)}`);
         }

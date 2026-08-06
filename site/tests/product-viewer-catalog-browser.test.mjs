@@ -15,6 +15,10 @@ const profiles = [
   { name: "mobile", viewport: { width: 390, height: 844 } }
 ];
 const heavyRequest = /(?:assets\/product-viewer\.js|assets\/vendor\/model-viewer\.min\.js|assets\/merch-3d\/)/;
+const deg = (value) => value * Math.PI / 180;
+const closeTo = (actual, expected, tolerance, label) => {
+  assert.ok(Math.abs(actual - expected) <= tolerance, `${label}: expected ${expected}, received ${actual}`);
+};
 
 let app;
 let baseUrl;
@@ -31,24 +35,27 @@ after(async () => {
   await app?.close();
 });
 
-const modelEvidence = (page) => page.locator("model-viewer").evaluate(async (model) => {
+const modelEvidence = (page, { pixels = false } = {}) => page.locator("model-viewer").evaluate(async (model, includePixels) => {
   const dimensions = model.getDimensions();
   const center = model.getBoundingBoxCenter();
   const orbit = model.getCameraOrbit();
   const target = model.getCameraTarget();
-  const blob = await model.toBlob();
-  const bitmap = await createImageBitmap(blob);
-  const canvas = document.createElement("canvas");
-  canvas.width = bitmap.width;
-  canvas.height = bitmap.height;
-  const context = canvas.getContext("2d", { willReadFrequently: true });
-  context.drawImage(bitmap, 0, 0);
-  const rgba = context.getImageData(0, 0, canvas.width, canvas.height).data;
-  let visiblePixels = 0;
-  for (let index = 3; index < rgba.length; index += 4) {
-    if (rgba[index] > 0) visiblePixels += 1;
+  let visiblePixels = null;
+  if (includePixels) {
+    const blob = await model.toBlob();
+    const bitmap = await createImageBitmap(blob);
+    const canvas = document.createElement("canvas");
+    canvas.width = bitmap.width;
+    canvas.height = bitmap.height;
+    const context = canvas.getContext("2d", { willReadFrequently: true });
+    context.drawImage(bitmap, 0, 0);
+    const rgba = context.getImageData(0, 0, canvas.width, canvas.height).data;
+    visiblePixels = 0;
+    for (let index = 3; index < rgba.length; index += 4) {
+      if (rgba[index] > 0) visiblePixels += 1;
+    }
+    bitmap.close();
   }
-  bitmap.close();
   return {
     attributes: {
       orbit: model.getAttribute("camera-orbit"),
@@ -62,7 +69,26 @@ const modelEvidence = (page) => page.locator("model-viewer").evaluate(async (mod
     fieldOfView: model.getFieldOfView(),
     visiblePixels
   };
-});
+}, pixels);
+
+const assertGovernedCamera = (evidence, object, profileName, { pixels = false } = {}) => {
+  const orbit = object.viewer.cameraOrbit[profileName];
+  const fieldOfView = object.viewer.fieldOfView[profileName];
+  const target = object.viewer.cameraTarget[profileName];
+  assert.deepEqual(evidence.attributes, { orbit, fieldOfView, target });
+  const [theta, phi] = orbit.split(" ").slice(0, 2).map((token) => deg(Number.parseFloat(token)));
+  closeTo(evidence.orbit[0], theta, 0.003, `${profileName}/${object.slug} theta`);
+  closeTo(evidence.orbit[1], phi, 0.003, `${profileName}/${object.slug} phi`);
+  closeTo(evidence.fieldOfView, Number.parseFloat(fieldOfView), 0.03, `${profileName}/${object.slug} field of view`);
+  const expectedTarget = target.split(" ").map((token, axis) => token === "auto" ? evidence.center[axis] : Number.parseFloat(token));
+  expectedTarget.forEach((value, axis) => closeTo(evidence.target[axis], value, 0.002, `${profileName}/${object.slug} target axis ${axis}`));
+  assert.ok(evidence.dimensions.every((value) => Number.isFinite(value) && value > 0), `${profileName}/${object.slug} has invalid dimensions`);
+  assert.ok(evidence.center.every(Number.isFinite), `${profileName}/${object.slug} has an invalid center`);
+  assert.ok(evidence.orbit.every(Number.isFinite), `${profileName}/${object.slug} has an invalid camera orbit`);
+  assert.ok(evidence.target.every(Number.isFinite), `${profileName}/${object.slug} has an invalid camera target`);
+  assert.ok(Number.isFinite(evidence.orbit[2]) && evidence.orbit[2] > 0, `${profileName}/${object.slug} has an invalid camera radius`);
+  if (pixels) assert.ok(evidence.visiblePixels > 0, `${profileName}/${object.slug} rendered no visible geometry`);
+};
 
 test("activates every released GLB poster-first with exact governed cameras and visible geometry", { timeout: 180_000 }, async () => {
   assert.equal(interactive.length, 8, "DROP 001 must expose eight governed GLB viewers");
@@ -76,11 +102,16 @@ test("activates every released GLB poster-first with exact governed cameras and 
       page.on("request", (request) => requests.push(request.url()));
       page.on("pageerror", (error) => errors.push(error.message));
       await page.setViewportSize(profile.viewport);
-      await page.goto(`${baseUrl}/merch/${object.slug}/`, { waitUntil: "load" });
+      await page.goto(`${baseUrl}/merch/${object.slug}/`, { waitUntil: "networkidle" });
       assert.deepEqual(
         requests.filter((url) => heavyRequest.test(url)),
         [],
         `${profile.name}/${object.slug} eagerly fetched the 3D runtime or model`
+      );
+      assert.equal(
+        requests.some((url) => new URL(url).origin !== baseUrl),
+        false,
+        `${profile.name}/${object.slug} made a third-party request before activation`
       );
 
       const activationStart = requests.length;
@@ -96,23 +127,13 @@ test("activates every released GLB poster-first with exact governed cameras and 
         `${profile.name}/${object.slug} did not request ${object.viewer.src}`
       );
       assert.equal(
-        activationRequests.some((url) => new URL(url).origin !== baseUrl),
+        requests.some((url) => new URL(url).origin !== baseUrl),
         false,
         `${profile.name}/${object.slug} made a third-party request`
       );
 
-      const evidence = await modelEvidence(page);
-      assert.deepEqual(evidence.attributes, {
-        orbit: object.viewer.cameraOrbit[profile.name],
-        fieldOfView: object.viewer.fieldOfView[profile.name],
-        target: object.viewer.cameraTarget[profile.name]
-      });
-      assert.ok(evidence.dimensions.every((value) => Number.isFinite(value) && value > 0), `${profile.name}/${object.slug} has invalid dimensions`);
-      assert.ok(evidence.center.every(Number.isFinite), `${profile.name}/${object.slug} has an invalid center`);
-      assert.ok(evidence.orbit.every(Number.isFinite), `${profile.name}/${object.slug} has an invalid camera orbit`);
-      assert.ok(evidence.target.every(Number.isFinite), `${profile.name}/${object.slug} has an invalid camera target`);
-      assert.ok(Number.isFinite(evidence.fieldOfView) && evidence.fieldOfView > 0, `${profile.name}/${object.slug} has an invalid field of view`);
-      assert.ok(evidence.visiblePixels > 0, `${profile.name}/${object.slug} rendered no visible geometry`);
+      const evidence = await modelEvidence(page, { pixels: true });
+      assertGovernedCamera(evidence, object, profile.name, { pixels: true });
       assert.deepEqual(errors, [], `${profile.name}/${object.slug} emitted a page error`);
 
       await page.locator("[data-product-viewer-reset]").click();
@@ -129,6 +150,7 @@ test("activates every released GLB poster-first with exact governed cameras and 
           target: object.viewer.cameraTarget[profile.name]
         }
       );
+      assertGovernedCamera(await modelEvidence(page), object, profile.name);
       await context.close();
     }
   }
@@ -136,17 +158,20 @@ test("activates every released GLB poster-first with exact governed cameras and 
 
 test("keeps source-blocked apparel honest and network-inert", { timeout: 30_000 }, async () => {
   assert.deepEqual(blocked.map(({ slug }) => slug).sort(), ["cap", "hoodie", "t-shirt"]);
-  const context = await browser.newContext();
-  for (const object of blocked) {
-    const page = await context.newPage();
-    const requests = [];
-    page.on("request", (request) => requests.push(request.url()));
-    await page.setViewportSize({ width: 390, height: 844 });
-    await page.goto(`${baseUrl}/merch/${object.slug}/`, { waitUntil: "load" });
-    const activation = page.locator("[data-product-viewer-activate]");
-    assert.equal(await activation.isDisabled(), true, `${object.slug} must not expose a synthetic garment spin`);
-    assert.deepEqual(requests.filter((url) => heavyRequest.test(url)), [], `${object.slug} fetched blocked viewer assets`);
-    await page.close();
+  for (const profile of profiles) {
+    const context = await browser.newContext();
+    for (const object of blocked) {
+      const page = await context.newPage();
+      const requests = [];
+      page.on("request", (request) => requests.push(request.url()));
+      await page.setViewportSize(profile.viewport);
+      await page.goto(`${baseUrl}/merch/${object.slug}/`, { waitUntil: "networkidle" });
+      const activation = page.locator("[data-product-viewer-activate]");
+      assert.equal(await activation.isDisabled(), true, `${profile.name}/${object.slug} must not expose a synthetic garment spin`);
+      assert.deepEqual(requests.filter((url) => heavyRequest.test(url)), [], `${profile.name}/${object.slug} fetched blocked viewer assets`);
+      assert.equal(requests.some((url) => new URL(url).origin !== baseUrl), false, `${profile.name}/${object.slug} made a third-party request`);
+      await page.close();
+    }
+    await context.close();
   }
-  await context.close();
 });
