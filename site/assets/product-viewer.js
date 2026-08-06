@@ -85,6 +85,19 @@ const showReady = (root, { poster, activate, reset, status, instructions }) => {
   status.textContent = stateCopy(root, "viewerReady", "Interactive view ready");
 };
 
+const hasRenderableBounds = (model) => {
+  try {
+    const dimensions = model.getDimensions();
+    const center = model.getBoundingBoxCenter();
+    const dimensionValues = [dimensions.x, dimensions.y, dimensions.z];
+    const centerValues = [center.x, center.y, center.z];
+    return dimensionValues.every((value) => Number.isFinite(value) && value > 0)
+      && centerValues.every(Number.isFinite);
+  } catch {
+    return false;
+  }
+};
+
 const waitForImage = (image) => new Promise((resolve, reject) => {
   if (image.complete && image.naturalWidth) return resolve();
   image.addEventListener("load", resolve, { once: true });
@@ -219,6 +232,10 @@ const activateModel = async (root, elements, routeSignal) => {
   }, { signal });
   model.addEventListener("load", () => {
     if (signal.aborted) return;
+    if (!hasRenderableBounds(model)) {
+      fail();
+      return;
+    }
     showReady(root, elements);
     const input = model.shadowRoot?.querySelector(".userInput");
     input?.setAttribute("aria-describedby", elements.instructions.id);

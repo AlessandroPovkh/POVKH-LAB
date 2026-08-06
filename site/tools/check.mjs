@@ -428,9 +428,9 @@ for (const pageCase of pageCases) {
     }[pageCase.locale.id];
     const visibleStatuses = [...html.matchAll(/<p class="meta(?: muted)?" data-merch-visible-status>([^<]*)<\/p>/g)]
       .map(([, text]) => text);
-    if (visibleStatuses.length !== merchLibrary.objects.length + 1
+    if (visibleStatuses.length !== 1
       || visibleStatuses.some((status) => status !== expectedStatus)) {
-      fail(`${label}: merch hero and object statuses must visibly be exactly ${expectedStatus}`);
+      fail(`${label}: merch collection status must visibly appear exactly once as ${expectedStatus}`);
     }
     const objectTags = tagsFor(html, "a")
       .filter((tag) => attribute(tag, "data-merch-object") !== null);
@@ -454,8 +454,9 @@ for (const pageCase of pageCases) {
       });
       if (matches.length !== 1) fail(`${label}: ${object.id} must link exactly once to ${expectedPath}`);
     }
-    if ((html.match(/\sdata-merch-roadmap(?:\s|>)/g) || []).length !== 1) {
-      fail(`${label}: merch roadmap must render exactly once`);
+    const roadmapTags = tagsFor(html, "details").filter((tag) => attribute(tag, "data-merch-roadmap") !== null);
+    if (roadmapTags.length !== 1 || attribute(roadmapTags[0], "open") !== null) {
+      fail(`${label}: merch roadmap must render exactly once as a closed disclosure`);
     }
     const merchMain = html.match(/<main\b(?=[^>]*\bdata-route-main(?:\s|=|>))[^>]*>([\s\S]*?)<\/main>/i)?.[1] || "";
     const commercialAttributes = [
@@ -493,8 +494,9 @@ for (const pageCase of pageCases) {
       fail(`${label}: merch detail must remain a non-commercial concept route`);
     }
     const galleryItems = (merchMain.match(/\sdata-merch-gallery-item(?:\s|>)/g) || []).length;
-    if (object && galleryItems !== object.gallery.length) {
-      fail(`${label}: merch gallery contains ${galleryItems} views, expected ${object.gallery.length}`);
+    const expectedGalleryItems = object?.gallery.filter((image) => image.path !== object.viewer.poster).length;
+    if (object && galleryItems !== expectedGalleryItems) {
+      fail(`${label}: merch gallery contains ${galleryItems} views, expected ${expectedGalleryItems} after omitting the viewer poster`);
     }
     const detailJsonLd = [...html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)]
       .find((match) => attribute(`<script${match[1]}>`, "type") === "application/ld+json")?.[2];
@@ -554,8 +556,13 @@ for (const pageCase of pageCases) {
   }
 
   if (!/<meta name="viewport" content="width=device-width, initial-scale=1">/.test(html)) fail(`${label}: invalid viewport meta`);
-  if (!/<main id="main-content" tabindex="-1" data-route-main>/.test(html)) fail(`${label}: missing focusable route main landmark`);
-  if (!/class="skip-link" href="#main-content"/.test(html)) fail(`${label}: missing skip link`);
+  if (pageCase.route === "404") {
+    if (!/<main id="main-content" tabindex="-1">/.test(html)) fail(`${label}: missing lightweight main landmark`);
+    if (/class="skip-link" href="#main-content"/.test(html)) fail(`${label}: lightweight 404 must omit the skip-link shell`);
+  } else {
+    if (!/<main id="main-content" tabindex="-1" data-route-main>/.test(html)) fail(`${label}: missing focusable route main landmark`);
+    if (!/class="skip-link" href="#main-content"/.test(html)) fail(`${label}: missing skip link`);
+  }
   const expectedRobotsMeta = pageCase.route === "404" ? "noindex, follow" : ROBOTS_CONTENT;
   if (!html.includes(`<meta name="robots" content="${expectedRobotsMeta}" data-route-head>`)) fail(`${label}: robots meta does not match route and site mode`);
   if ((html.match(/<h1\b/g) || []).length !== 1) fail(`${label}: expected exactly one h1`);
@@ -570,6 +577,12 @@ for (const pageCase of pageCases) {
   const magneticLinkCount = (html.match(/\sdata-signal-panel-link(?:\s|>)/g) || []).length;
   const targetBracketCount = (html.match(/\sdata-signal-target-brackets(?:\s|>)/g) || []).length;
   const legacySignalCount = (html.match(/data-signal-(?:shell|part|facet|scan|node|link|readout|ticker)/g) || []).length;
+  if (pageCase.route === "404") {
+    if (signalLayerCount !== 0 || signalFieldCount !== 0 || magneticLinkCount !== 0 || targetBracketCount !== 0 || legacySignalCount !== 0) {
+      fail(`${label}: lightweight 404 must omit the signal shell`);
+    }
+    if ((html.match(/\sdata-audio-player(?:\s|>)/g) || []).length !== 0) fail(`${label}: lightweight 404 must omit the audio player`);
+  } else {
   if (signalLayerCount !== 1 || signalFieldCount !== 1 || magneticLinkCount !== 1 || targetBracketCount !== 1 || legacySignalCount !== 0) {
     fail(`${label}: expected one legacy-free magnetic signal field, got layer/field/link/brackets/legacy ${signalLayerCount}/${signalFieldCount}/${magneticLinkCount}/${targetBracketCount}/${legacySignalCount}`);
   }
@@ -590,16 +603,19 @@ for (const pageCase of pageCases) {
   const audioPlayerTags = tagsFor(html, "aside").filter((tag) => attribute(tag, "data-audio-player") !== null);
   const playerTracks = tagsFor(html, "li").filter((tag) => attribute(tag, "data-player-track") !== null);
   const playerSelects = tagsFor(html, "button").filter((tag) => attribute(tag, "data-player-select") !== null);
-  const playlistDialogs = tagsFor(html, "dialog").filter((tag) => attribute(tag, "data-player-playlist-dialog") !== null);
+  const playerTrays = tagsFor(html, "section").filter((tag) => attribute(tag, "data-player-tray") !== null);
   const playlistToggles = tagsFor(html, "button").filter((tag) => attribute(tag, "data-player-playlist-toggle") !== null);
   const defaultTrack = audioLibrary.tracks.find((track) => track.catalogId === audioLibrary.defaultCatalogId);
   if (audioPlayerTags.length !== 1
     || attribute(audioPlayerTags[0], "data-track-count") !== String(audioLibrary.tracks.length)
     || playerTracks.length !== audioLibrary.tracks.length
     || playerSelects.length !== audioLibrary.tracks.length
-    || playlistDialogs.length !== 1
+    || playerTrays.length !== 1
     || playlistToggles.length !== 1
-    || attribute(playlistToggles[0], "aria-haspopup") !== "dialog"
+    || attribute(playerTrays[0], "id") !== "povkh-player-tray"
+    || attribute(playerTrays[0], "hidden") === null
+    || attribute(playlistToggles[0], "aria-controls") !== "povkh-player-tray"
+    || attribute(playlistToggles[0], "aria-expanded") !== "false"
     || !defaultTrack
     || /<audio[^>]+\ssrc=/.test(html)) {
     fail(`${label}: global audio player metadata or deferred-source contract is invalid`);
@@ -710,6 +726,7 @@ for (const pageCase of pageCases) {
       || /^<output\b/i.test(tag))) {
       fail(`${label}: player volume feedback must not create a live region`);
     }
+  }
   }
 
   const metaDescription = singleMetaContent(html, "name", "description", label);
@@ -1061,7 +1078,7 @@ for (const pageCase of pageCases) {
   if (/<source\b[^>]*\ssrc=["'][^"']*\/assets\/motion\//i.test(html)) {
     fail(`${label}: decorative motion source must stay inert until client preferences are known`);
   }
-  if (!/<source\b[^>]*\bdata-src=["'][^"']*\/assets\/motion\//i.test(html)) {
+  if (pageCase.route !== "404" && !/<source\b[^>]*\bdata-src=["'][^"']*\/assets\/motion\//i.test(html)) {
     fail(`${label}: deferred decorative motion source is missing`);
   }
 

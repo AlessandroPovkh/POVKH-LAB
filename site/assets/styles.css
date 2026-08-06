@@ -372,10 +372,6 @@ a:hover {
   backdrop-filter: blur(5px);
 }
 
-body.playlist-open {
-  overflow: hidden;
-}
-
 .hud-playlist-head {
   display: flex;
   align-items: center;
@@ -2880,6 +2876,328 @@ html[lang="ru"] .social-access-title {
   }
 }
 
+/* Task 7 — simplified route hierarchy and measured compact player */
+.header-inner {
+  grid-template-columns: minmax(0, 1fr) auto;
+  min-height: 0;
+  padding-block: 0.5rem;
+}
+
+.site-index {
+  position: relative;
+  grid-column: 2;
+  grid-row: 1;
+  justify-self: end;
+}
+
+.site-index-panel {
+  position: absolute;
+  z-index: 100;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  width: min(20rem, calc(100vw - 2rem));
+  padding: 0.75rem;
+  border: 1px solid var(--line-strong);
+  background: var(--void);
+  box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.45);
+}
+
+.site-index-panel .nav-list {
+  display: grid;
+}
+
+.site-index-panel .nav-link {
+  justify-content: flex-start;
+}
+
+.site-index-panel .language-nav {
+  display: block;
+  margin-top: 0.75rem;
+  padding: 0.75rem 0 0;
+  border-top: 1px solid var(--line);
+  border-left: 0;
+}
+
+.site-index[open] .menu-summary::after {
+  content: "−";
+}
+
+.lightweight-header-inner {
+  display: flex;
+  min-height: 4rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.lightweight-header .language-nav {
+  display: block;
+  padding: 0;
+  border: 0;
+}
+
+body[data-lightweight-shell] main {
+  min-height: calc(100dvh - 4rem);
+}
+
+main#main-content:focus {
+  outline: none;
+}
+
+main#main-content:target,
+main#main-content:focus-visible {
+  outline: 3px solid var(--signal);
+  outline-offset: -3px;
+}
+
+.merch-roadmap-disclosure {
+  padding-inline: 0;
+}
+
+.merch-roadmap-summary {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr) auto;
+  align-items: end;
+  gap: var(--space-3);
+  padding-block: var(--space-4);
+  border-block: 1px solid var(--line-strong);
+  cursor: pointer;
+  list-style: none;
+}
+
+.merch-roadmap-summary::-webkit-details-marker {
+  display: none;
+}
+
+.merch-roadmap-summary::after {
+  content: "+";
+  color: var(--signal);
+  font: 800 2rem/1 "Barlow Condensed", "Arial Narrow", sans-serif;
+}
+
+.merch-roadmap-disclosure[open] .merch-roadmap-summary::after {
+  content: "−";
+}
+
+.merch-roadmap-summary > span:first-child {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.merch-roadmap-summary .eyebrow,
+.merch-roadmap-summary .body-copy {
+  margin: 0;
+}
+
+.merch-roadmap-content {
+  padding-block: var(--space-2) var(--space-5);
+}
+
+body.audio-player-ready {
+  padding-bottom: var(--player-height, 0px);
+}
+
+.hud-audio.is-ready,
+.hud-audio.is-ready.is-scrolled {
+  top: auto;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: block;
+  width: 100%;
+  padding: 0.5rem var(--gutter) calc(0.5rem + env(safe-area-inset-bottom));
+  border-width: 1px 0 0;
+  background: rgba(8, 8, 8, 0.97);
+  box-shadow: 0 -4px 0 rgba(0, 0, 0, 0.34);
+}
+
+.hud-audio-bar {
+  display: flex;
+  min-height: 2.75rem;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.hud-audio-bar .hud-audio-track {
+  display: block;
+  min-width: 0;
+  flex: 1 1 auto;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.hud-audio-primary-controls {
+  display: flex;
+  flex: 0 0 auto;
+  gap: 0.35rem;
+}
+
+.hud-audio-primary-controls button {
+  min-height: 2.75rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid rgba(242, 239, 231, 0.28);
+  border-radius: 0;
+  background: transparent;
+  color: var(--steel);
+  font: 600 0.7rem/1 "IBM Plex Mono", monospace;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+}
+
+.hud-audio-primary-controls .hud-audio-queue {
+  padding-inline: 0.65rem;
+}
+
+.hud-audio-primary-controls [data-player-index] {
+  display: none;
+}
+
+.hud-player-tray {
+  position: absolute;
+  right: 0;
+  bottom: 100%;
+  width: min(42rem, 100vw);
+  max-height: calc(100dvh - var(--player-height, 0px) - 0.75rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  border: 1px solid var(--signal);
+  border-right: 0;
+  background:
+    linear-gradient(135deg, rgba(243, 34, 34, 0.12), transparent 38%),
+    var(--void);
+  box-shadow: -8px -8px 0 rgba(0, 0, 0, 0.5);
+}
+
+.hud-player-tray[hidden] {
+  display: none;
+}
+
+.hud-player-tray-body {
+  padding: 0 var(--space-2) var(--space-2);
+}
+
+.hud-player-tray .hud-waveform-shell {
+  display: block;
+  height: 4rem;
+  margin-top: 0.75rem;
+}
+
+.hud-player-tray .hud-audio-controls {
+  grid-template-columns: auto auto auto minmax(4.6rem, 1fr);
+}
+
+.hud-player-tray .hud-volume-popup {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 0.5rem);
+}
+
+.hud-player-tray .hud-audio-playlist {
+  max-height: none;
+}
+
+.merch-detail {
+  padding-bottom: calc(var(--space-6) + var(--player-height, 0px));
+}
+
+html:has(body.audio-player-ready.page-merch-detail) {
+  scroll-padding-bottom: calc(var(--player-height, 0px) + 1rem);
+}
+
+body.audio-player-ready.page-merch-detail .product-viewer {
+  padding-bottom: 0;
+}
+
+body.audio-player-ready.page-merch-detail .product-viewer-controls {
+  bottom: calc(var(--player-height, 0px) + 0.5rem);
+  scroll-margin-block: 5rem calc(var(--player-height, 0px) + 1rem);
+}
+
+body.audio-player-ready.page-merch .merch-hero {
+  padding-bottom: var(--space-3);
+}
+
+.language-link:focus {
+  outline: 3px solid var(--signal);
+  outline-offset: 2px;
+}
+
+.merch-roadmap-summary > span:first-child {
+  min-width: 0;
+}
+
+@media (max-width: 64rem) {
+  .merch-roadmap-summary {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .merch-roadmap-summary .body-copy {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (min-width: 48rem) {
+  body.audio-player-ready.page-merch .merch-hero > :first-child {
+    margin-top: 0;
+  }
+}
+
+/* The compact bar stays physically compact when users enlarge document text. */
+.hud-audio.is-ready,
+.hud-audio.is-ready.is-scrolled {
+  padding-top: 4px;
+  padding-bottom: calc(4px + env(safe-area-inset-bottom));
+}
+
+.hud-audio-bar {
+  min-height: 44px;
+  gap: 12px;
+}
+
+.hud-audio-bar .hud-audio-track strong {
+  font-size: 12.5px;
+  line-height: 1;
+}
+
+.hud-audio-primary-controls {
+  gap: 6px;
+}
+
+.hud-audio-primary-controls button,
+.hud-audio-primary-controls .hud-audio-queue {
+  min-height: 44px;
+  padding: 8px 12px;
+  font-size: 11px;
+}
+
+@media (max-width: 48rem) {
+  .merch-roadmap-summary {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .merch-roadmap-summary .body-copy {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (min-width: 80rem) {
+  .header-inner {
+    display: flex;
+    min-height: 6rem;
+    padding-block: 0;
+  }
+
+  .desktop-nav {
+    display: block;
+    margin-left: auto;
+  }
+
+  .site-index {
+    flex: 0 0 auto;
+  }
+}
+
 @media (min-width: 40rem) {
   .header-inner {
     grid-template-columns: minmax(0, 1fr) auto auto;
@@ -4235,4 +4553,91 @@ html[lang="ru"] .merch-detail-story .section-title {
     scroll-behavior: auto;
     transition: none;
   }
+}
+
+/* Keep the compact player and product clearance authoritative over legacy breakpoints. */
+body.audio-player-ready {
+  padding-bottom: var(--player-height, 0px);
+}
+
+.hud-audio.is-ready,
+.hud-audio.is-ready.is-scrolled {
+  top: auto;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: block;
+  width: 100%;
+  max-width: none;
+  padding: 0.5rem var(--gutter) calc(0.5rem + env(safe-area-inset-bottom));
+  border-width: 1px 0 0;
+}
+
+.hud-audio-bar {
+  display: flex;
+  min-height: 2.75rem;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.hud-audio-bar .hud-audio-track {
+  display: block;
+  min-width: 0;
+  flex: 1 1 auto;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.hud-audio-primary-controls {
+  display: flex;
+  flex: 0 0 auto;
+  gap: 0.35rem;
+}
+
+.hud-player-tray {
+  position: absolute;
+  right: 0;
+  bottom: 100%;
+  width: min(42rem, 100vw);
+  max-height: calc(100dvh - var(--player-height, 0px) - 0.75rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.hud-player-tray[hidden] {
+  display: none;
+}
+
+.hud-player-tray .hud-waveform-shell {
+  display: block;
+  height: 4rem;
+  margin-top: 0.75rem;
+}
+
+.hud-player-tray .hud-volume-popup {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 0.5rem);
+}
+
+.merch-detail {
+  padding-bottom: calc(var(--space-6) + var(--player-height, 0px));
+}
+
+html:has(body.audio-player-ready.page-merch-detail) {
+  scroll-padding-bottom: calc(var(--player-height, 0px) + 1rem);
+}
+
+body.audio-player-ready.page-merch-detail .product-viewer {
+  padding-bottom: 0;
+}
+
+body.audio-player-ready.page-merch-detail .product-viewer-controls {
+  bottom: calc(var(--player-height, 0px) + 0.5rem);
+  scroll-margin-block: 5rem calc(var(--player-height, 0px) + 1rem);
+}
+
+body.audio-player-ready.page-merch .merch-hero {
+  padding-bottom: var(--space-3);
 }

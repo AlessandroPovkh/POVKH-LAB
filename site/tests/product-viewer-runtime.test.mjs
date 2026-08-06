@@ -64,6 +64,7 @@ test("renders every localized product as an inert poster-first viewer shell", ()
       if (object.viewer.availability === "sourceBlocked") {
         assert.match(viewer, /data-viewer-availability="sourceBlocked"/);
         assert.match(viewer, /data-product-viewer-activate[^>]*disabled[^>]*aria-disabled="true"/);
+        assert.doesNotMatch(viewer, /aria-label="(?:Interactive object|Oggetto interattivo|Интерактивный объект)"/);
         assert.doesNotMatch(viewer, /data-product-viewer-spin/);
       }
     }
@@ -93,6 +94,9 @@ test("keeps the viewer launcher local, explicit, recoverable and route-disposabl
   assert.doesNotMatch(viewerSource, /model\.setAttribute\(["']tabindex["']/, "model host must not add a dead keyboard stop");
   assert.match(viewerSource, /aria-describedby/);
   assert.match(viewerSource, /\.userInput/);
+  assert.match(viewerSource, /getDimensions\(\)/, "model readiness must inspect geometry dimensions");
+  assert.match(viewerSource, /getBoundingBoxCenter\(\)/, "model readiness must inspect its bounding center");
+  assert.match(viewerSource, /Number\.isFinite/, "non-finite model bounds must be rejected");
   assert.doesNotMatch(viewerSource, /https?:\/\//i, "runtime must not call a cloud converter, CDN or remote decoder");
 });
 

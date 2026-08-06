@@ -59,6 +59,13 @@ test("keeps exactly Home / Catalog / Merch / Artists in the primary desktop navi
       assert.equal(resolvedPath(output, hrefMatch[1]), `${publicLocalePrefix(locale)}${key}/`, `${output} Menu / Index destination drifted for ${key}`);
     }
     assert.equal(count(index, /data-language-switcher(?:[ >])/g), 1, `${output} Menu / Index must contain the language switcher`);
+    assert.equal(count(html, /class="mobile-nav"/g), 0, `${output} must not duplicate the navigation tree for mobile`);
+
+    const player = fragment(html, /<aside class="hud-audio"[\s\S]*?<\/aside>/, `${output} compact player`);
+    assert.match(player, /data-player-tray[^>]*hidden/, `${output} player tray must start closed`);
+    assert.match(player, /data-player-tray-toggle[^>]*aria-controls="povkh-player-tray"/, `${output} Tracks must control the tray`);
+    assert.match(player, /data-player-tray-toggle[^>]*aria-expanded="false"/, `${output} Tracks must expose its closed state`);
+    assert.equal(count(player, /data-player-playlist-dialog(?:[ >])/g), 0, `${output} player queue must be an upward tray, not a modal dialog`);
   }
 });
 
@@ -80,12 +87,25 @@ test("shows collection status once and never repeats it on merch object cards or
   for (const locale of locales) {
     const overview = pageFor(locale, "merch");
     assert.equal(count(overview, /data-merch-visible-status(?:[ >])/g), 1, `${locale} merch overview must show one collection status`);
-    const cards = fragment(overview, /<section class="section" id="merch-objects"[\s\S]*?<\/section>\s*<section class="section" data-merch-roadmap>/, `${locale} merch index`);
+    assert.doesNotMatch(overview, /href="#merch-objects"/, `${locale} merch overview must not repeat the Explore jump`);
+    const cards = fragment(overview, /<section class="section" id="merch-objects"[\s\S]*?<\/section>\s*<details[^>]+data-merch-roadmap/, `${locale} merch index`);
     assert.equal(count(cards, /data-merch-visible-status(?:[ >])/g), 0, `${locale} object cards must not repeat collection status`);
+    const roadmap = fragment(overview, /<details[^>]+data-merch-roadmap[\s\S]*?<\/details>/, `${locale} merch roadmap`);
+    assert.doesNotMatch(roadmap.match(/^<details[^>]*>/)?.[0] || "", /\sopen(?:[ >])/, `${locale} merch roadmap must start closed`);
 
     for (const object of merchLibrary.objects) {
       const detail = pageFor(locale, `merch/${object.slug}`);
       assert.equal(count(detail, /data-merch-visible-status(?:[ >])/g), 1, `${locale}/${object.slug} must show concept status once`);
+      const hero = fragment(detail, /<section class="merch-detail-hero"[\s\S]*?<\/section>/, `${locale}/${object.slug} detail hero`);
+      assert.equal(count(hero, /data-product-viewer-activate(?:[ >])/g), 1, `${locale}/${object.slug} needs one leading viewer action`);
+      assert.doesNotMatch(hero, /href="#merch-concept-gallery"/, `${locale}/${object.slug} must remove the redundant View Gallery action`);
+      if (object.viewer.availability === "sourceBlocked") {
+        assert.match(hero, /data-product-viewer-activate[^>]*disabled[^>]*aria-disabled="true"/, `${locale}/${object.slug} source block must stay honest`);
+      }
+      const gallery = fragment(detail, /<div class="merch-gallery"[\s\S]*?<\/div>\s*<\/section>/, `${locale}/${object.slug} gallery`);
+      const triggerSources = [...gallery.matchAll(/data-merch-gallery-trigger[^>]+href="([^"]+)"/g)].map(([, href]) => href);
+      assert.equal(triggerSources.length, object.gallery.length - 1, `${locale}/${object.slug} gallery must omit the viewer poster`);
+      assert.ok(triggerSources.every((href) => !href.endsWith(object.viewer.poster)), `${locale}/${object.slug} gallery repeats its viewer poster`);
     }
   }
 });

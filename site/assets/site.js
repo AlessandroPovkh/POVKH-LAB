@@ -42,7 +42,7 @@
     const volumePercent = audioPlayer.querySelector("[data-player-volume-percent]");
     const volumeLabel = audioPlayer.querySelector("[data-player-volume-label]");
     const playlistToggle = audioPlayer.querySelector("[data-player-playlist-toggle]");
-    const playlistDialog = audioPlayer.querySelector("[data-player-playlist-dialog]");
+    const playlistDialog = audioPlayer.querySelector("[data-player-tray]");
     const playlistClose = audioPlayer.querySelector("[data-player-playlist-close]");
     const announcer = audioPlayer.querySelector("[data-player-announcer]");
     const trackElements = [...audioPlayer.querySelectorAll("[data-player-track]")];
@@ -75,7 +75,6 @@
     let waveformAttempt = 0;
     let mediaAttempt = 0;
     let pendingRestoreTime = 0;
-    let restoreFocusAfterDialog = true;
     let seekPointerId = null;
     let seekTooltipTimer = 0;
 
@@ -352,14 +351,12 @@
 
     const closePlaylist = ({ restoreFocus = true } = {}) => {
       if (!playlistDialog) return;
-      restoreFocusAfterDialog = restoreFocus;
-      if (playlistDialog.open && typeof playlistDialog.close === "function") playlistDialog.close();
-      else {
-        playlistDialog.removeAttribute("open");
-        document.body.classList.remove("playlist-open");
-        playlistToggle?.setAttribute("aria-expanded", "false");
-        if (restoreFocus) playlistToggle?.focus({ preventScroll: true });
-      }
+      const wasOpen = !playlistDialog.hidden;
+      playlistDialog.hidden = true;
+      document.body.classList.remove("playlist-open");
+      playlistToggle?.setAttribute("aria-expanded", "false");
+      closeVolume();
+      if (wasOpen && restoreFocus) playlistToggle?.focus({ preventScroll: true });
     };
 
     const closeVolume = ({ restoreFocus = false } = {}) => {
@@ -375,10 +372,8 @@
     };
 
     const openPlaylist = () => {
-      if (!playlistDialog || playlistDialog.open) return;
-      restoreFocusAfterDialog = true;
-      if (typeof playlistDialog.showModal === "function") playlistDialog.showModal();
-      else playlistDialog.setAttribute("open", "");
+      if (!playlistDialog || !playlistDialog.hidden) return;
+      playlistDialog.hidden = false;
       document.body.classList.add("playlist-open");
       playlistToggle?.setAttribute("aria-expanded", "true");
       const currentControl = tracks[trackIndex].select || tracks[trackIndex].element;
@@ -453,20 +448,15 @@
       showCurrentSeekTooltip();
     });
 
-    playlistToggle?.addEventListener("click", openPlaylist);
-    playlistClose?.addEventListener("click", () => closePlaylist());
-    playlistDialog?.addEventListener("close", () => {
-      document.body.classList.remove("playlist-open");
-      playlistToggle?.setAttribute("aria-expanded", "false");
-      if (restoreFocusAfterDialog) playlistToggle?.focus({ preventScroll: true });
-      restoreFocusAfterDialog = true;
+    playlistToggle?.addEventListener("click", () => {
+      if (playlistDialog?.hidden) openPlaylist();
+      else closePlaylist();
     });
-    playlistDialog?.addEventListener("click", (event) => {
-      if (event.target !== playlistDialog) return;
-      const rect = playlistDialog.getBoundingClientRect();
-      const inside = event.clientX >= rect.left && event.clientX <= rect.right
-        && event.clientY >= rect.top && event.clientY <= rect.bottom;
-      if (!inside) closePlaylist();
+    playlistClose?.addEventListener("click", () => closePlaylist());
+    audioPlayer.addEventListener("keydown", (event) => {
+      if (event.defaultPrevented || event.key !== "Escape" || playlistDialog?.hidden) return;
+      event.preventDefault();
+      closePlaylist();
     });
     for (const [index, track] of tracks.entries()) {
       track.select?.addEventListener("click", () => {
@@ -486,8 +476,14 @@
     });
     document.addEventListener("pointerdown", (event) => {
       if (!volumePopup.hidden && !volumeShell.contains(event.target)) closeVolume();
+      if (playlistDialog && !playlistDialog.hidden
+        && !playlistDialog.contains(event.target)
+        && !playlistToggle?.contains(event.target)) closePlaylist();
     });
-    document.addEventListener("povkh:routebeforechange", () => closeVolume());
+    document.addEventListener("povkh:routebeforechange", () => {
+      closeVolume();
+      closePlaylist({ restoreFocus: false });
+    });
 
     audio.addEventListener("timeupdate", syncPlaybackUi);
     audio.addEventListener("play", () => {
@@ -516,6 +512,13 @@
 
     const resizeObserver = typeof ResizeObserver === "function" ? new ResizeObserver(drawWaveform) : null;
     resizeObserver?.observe(canvas);
+    const syncPlayerHeight = () => {
+      const height = Math.ceil(audioPlayer.getBoundingClientRect().height);
+      document.documentElement.style.setProperty("--player-height", `${height}px`);
+    };
+    const playerResizeObserver = typeof ResizeObserver === "function" ? new ResizeObserver(syncPlayerHeight) : null;
+    playerResizeObserver?.observe(audioPlayer);
+    syncPlayerHeight();
 
     if ("mediaSession" in navigator) {
       const mediaActions = {
@@ -549,7 +552,7 @@
         [next, "[data-player-next]", ["aria-label"], true],
         [canvas, "[data-player-waveform]", ["aria-label"], false],
         [playlistToggle, "[data-player-playlist-toggle]", ["aria-label"], false],
-        [playlistDialog, "[data-player-playlist-dialog]", ["aria-label", "aria-labelledby"], false],
+        [playlistDialog, "[data-player-tray]", ["aria-label", "aria-labelledby"], false],
         [playlistClose, "[data-player-playlist-close]", ["aria-label"], true]
       ];
       for (const [current, selector, attributes, copyText] of copyPairs) {
@@ -622,8 +625,9 @@
     if (savedTrackIndex >= 0) trackIndex = savedTrackIndex;
     audioPlayer.dataset.userPaused = String(Boolean(saved?.userPaused));
     audioPlayer.classList.add("is-ready");
+    syncPlayerHeight();
     document.body.classList.add("audio-player-ready");
-    playlistToggle?.setAttribute("aria-expanded", String(Boolean(playlistDialog?.open)));
+    playlistToggle?.setAttribute("aria-expanded", String(Boolean(playlistDialog && !playlistDialog.hidden)));
     const syncPlayerScrollMode = () => audioPlayer.classList.toggle("is-scrolled", scrollY > 180);
     window.addEventListener("scroll", syncPlayerScrollMode, { passive: true });
     syncPlayerScrollMode();
@@ -1023,8 +1027,22 @@
     return () => {};
   };
 
+  const initSkipLink = () => {
+    const skip = document.querySelector('.skip-link[href="#main-content"]');
+    const main = document.querySelector("main#main-content");
+    if (!skip || !main) return () => {};
+    const controller = new AbortController();
+    skip.addEventListener("click", (event) => {
+      event.preventDefault();
+      if (window.location.hash !== "#main-content") history.pushState(null, "", "#main-content");
+      main.focus({ preventScroll: true });
+      main.scrollIntoView({ block: "start" });
+    }, { signal: controller.signal });
+    return () => controller.abort();
+  };
+
   const initMobileMenu = () => {
-    const mobileMenu = document.querySelector(".mobile-nav");
+    const mobileMenu = document.querySelector("[data-site-index]");
     if (!mobileMenu) return () => {};
     const abortController = new AbortController();
     mobileMenu.addEventListener("keydown", (event) => {
@@ -1323,6 +1341,7 @@
       initMotion(),
       initSignalField(),
       initLocalized404(),
+      initSkipLink(),
       initMobileMenu(),
       initCatalogFilters(),
       initArtistGalleries(),

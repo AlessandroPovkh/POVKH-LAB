@@ -16,7 +16,7 @@ const audioLibrary = JSON.parse(await readFile(path.join(siteRoot, "data", "audi
 const artistLibrary = JSON.parse(await readFile(path.join(siteRoot, "data", "artists.json"), "utf8"));
 const merchLibrary = JSON.parse(await readFile(path.join(siteRoot, "data", "merch.json"), "utf8"));
 const defaultAudioTrack = audioLibrary.tracks.find((track) => track.catalogId === audioLibrary.defaultCatalogId);
-const tinyTexturedGlb = () => {
+const tinyTexturedGlb = ({ invalidBounds = false } = {}) => {
   const png = Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAYAAABytg0kAAAACXBIWXMAAAPoAAAD6AG1e1JrAAAAEUlEQVQImWP4oKHxH4QZYAwAUJQI/QlXOVQAAAAASUVORK5CYII=", "base64");
   const imageOffset = 60;
   const binaryLength = imageOffset + png.length + ((4 - (png.length % 4)) % 4);
@@ -29,7 +29,7 @@ const tinyTexturedGlb = () => {
       { buffer: 0, byteOffset: imageOffset, byteLength: png.length }
     ],
     accessors: [
-      { bufferView: 0, componentType: 5126, count: 3, type: "VEC3", min: [-0.5, -0.5, 0], max: [0.5, 0.5, 0] },
+      { bufferView: 0, componentType: 5126, count: 3, type: "VEC3", min: invalidBounds ? [0, 0, 0] : [-0.5, -0.5, 0], max: invalidBounds ? [0, 0, 0] : [0.5, 0.5, 0.5] },
       { bufferView: 1, componentType: 5126, count: 3, type: "VEC2", min: [0, 0], max: [1, 1] }
     ],
     images: [{ bufferView: 2, mimeType: "image/png" }],
@@ -43,7 +43,10 @@ const tinyTexturedGlb = () => {
   let json = Buffer.from(JSON.stringify(document));
   json = Buffer.concat([json, Buffer.alloc((4 - (json.length % 4)) % 4, 0x20)]);
   const binary = Buffer.alloc(binaryLength);
-  [-0.5, -0.5, 0, 0.5, -0.5, 0, 0, 0.5, 0].forEach((value, index) => binary.writeFloatLE(value, index * 4));
+  const positions = invalidBounds
+    ? [0, 0, 0, 0, 0, 0, 0, 0, 0]
+    : [-0.5, -0.5, 0, 0.5, -0.5, 0, 0, 0.5, 0.5];
+  positions.forEach((value, index) => binary.writeFloatLE(value, index * 4));
   [0, 0, 1, 0, 0.5, 1].forEach((value, index) => binary.writeFloatLE(value, 36 + index * 4));
   png.copy(binary, imageOffset);
   const glb = Buffer.alloc(12 + 8 + json.length + 8 + binary.length);
@@ -356,6 +359,20 @@ const viewerControlHitTest = async (page, selector) => {
   });
 };
 
+const ensurePlayerTrayOpen = async (page) => {
+  const tray = page.locator("[data-player-tray]");
+  if (await tray.evaluate((element) => element.hidden)) {
+    await page.locator("[data-player-tray-toggle]").click();
+    await page.waitForFunction(() => document.querySelector("[data-player-tray]")?.hidden === false);
+  }
+  return tray;
+};
+
+const advancedControl = async (page, selector) => {
+  await ensurePlayerTrayOpen(page);
+  return page.locator(selector);
+};
+
 const verifyDisplayFontGrowth = (label, before, after) => {
   if (before.length !== after.length) {
     fail(`${label}: display node count changed from ${before.length} to ${after.length}`);
@@ -535,7 +552,7 @@ try {
 
       if (viewport.width <= 768) {
         const mobilePlayerHeight = await page.locator("[data-audio-player]").evaluate((player) => player.getBoundingClientRect().height);
-        if (mobilePlayerHeight > 150) fail(`${label}: mobile audio player is too tall (${mobilePlayerHeight.toFixed(1)}px)`);
+        if (mobilePlayerHeight > 72) fail(`${label}: compact mobile audio player is too tall (${mobilePlayerHeight.toFixed(1)}px)`);
       }
 
       const typographyIssues = await page.evaluate(inspectDisplayTypography);
@@ -555,6 +572,8 @@ try {
             .map((node) => node.dataset.merchCategory),
           detailLinks: document.querySelectorAll("[data-merch-detail]").length,
           roadmap: document.querySelectorAll("[data-merch-roadmap]").length,
+          roadmapOpen: document.querySelector("details[data-merch-roadmap]")?.open,
+          statuses: document.querySelectorAll("[data-merch-visible-status]").length,
           anchor: document.querySelector('.merch-hero a[href="#merch-objects"]')?.getAttribute("href"),
           navCurrent: document.querySelectorAll('.nav-link[aria-current="page"]').length,
           firstGridColumns: new Set([...document.querySelector(".merch-object-grid").querySelectorAll(".merch-object")]
@@ -564,8 +583,10 @@ try {
           || JSON.stringify(merchContract.categories) !== JSON.stringify(["media", "wear", "printObjects"])
           || merchContract.detailLinks !== merchLibrary.objects.length
           || merchContract.roadmap !== 1
-          || merchContract.anchor !== "#merch-objects"
-          || merchContract.navCurrent !== 2
+          || merchContract.roadmapOpen !== false
+          || merchContract.statuses !== 1
+          || merchContract.anchor != null
+          || merchContract.navCurrent !== 1
           || (viewport.width === 320 && merchContract.firstGridColumns !== 1)) {
           fail(`${label}: invalid merch browser contract ${JSON.stringify(merchContract)}`);
         }
@@ -577,8 +598,7 @@ try {
             const player = document.querySelector("[data-audio-player]").getBoundingClientRect();
             const copyAndAction = [
               ["lede", document.querySelector(".merch-hero .lede")],
-              ["status", document.querySelector(".merch-hero .meta")],
-              ["action", document.querySelector('.merch-hero a[href="#merch-objects"]')]
+              ["status", document.querySelector(".merch-hero .meta")]
             ].flatMap(([name, node]) => {
               if (!node || getComputedStyle(node).display === "none") return [];
               const rect = node.getBoundingClientRect();
@@ -590,46 +610,15 @@ try {
             };
           });
           if (playerSafety.intersections.length) {
-            fail(`${label}: ready player intersects merch hero copy/action ${JSON.stringify(playerSafety)}`);
+            fail(`${label}: ready player intersects merch hero copy ${JSON.stringify(playerSafety)}`);
           }
-        }
-
-        if (viewport.width === 375) {
-          await page.evaluate(() => { document.documentElement.style.scrollBehavior = "auto"; });
-          await page.locator('.merch-hero a[href="#merch-objects"]').click();
-          await page.waitForFunction(() => location.hash === "#merch-objects");
-          await page.waitForFunction(() => {
-            const rect = document.querySelector("#merch-objects")?.getBoundingClientRect();
-            return Boolean(rect && rect.top < innerHeight && rect.bottom > 0);
-          });
-          const ctaNavigation = await page.evaluate(() => {
-            const target = document.querySelector("#merch-objects");
-            const rect = target?.getBoundingClientRect();
-            return {
-              hash: location.hash,
-              targetVisible: Boolean(rect && rect.top < innerHeight && rect.bottom > 0),
-              targetTop: rect?.top ?? null
-            };
-          });
-          if (ctaNavigation.hash !== "#merch-objects" || !ctaNavigation.targetVisible) {
-            fail(`${label}: merch hero CTA did not visibly reach the object index ${JSON.stringify(ctaNavigation)}`);
-          }
-          await page.evaluate(() => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))));
-          await page.evaluate(() => {
-            history.replaceState(history.state, "", `${location.pathname}${location.search}`);
-            window.scrollTo(0, 0);
-            document.documentElement.scrollTop = 0;
-            document.body.scrollTop = 0;
-          });
-          await page.evaluate(() => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))));
-          const resetScrollY = await page.evaluate(() => scrollY);
-          if (Math.abs(resetScrollY) > 1) fail(`${label}: merch CTA audit did not reset scroll (${resetScrollY}px)`);
         }
       }
 
       const merchSlug = baseRoute.match(/^\/merch\/([a-z0-9-]+)\/$/)?.[1] || null;
       if (merchSlug) {
         const expectedObject = merchLibrary.objects.find((object) => object.slug === merchSlug);
+        const expectedGalleryCount = expectedObject?.gallery.filter((image) => image.path !== expectedObject.viewer.poster).length || 0;
         const detailContract = await page.evaluate(() => {
           const gallery = document.querySelector("[data-merch-gallery]");
           const triggers = [...document.querySelectorAll("[data-merch-gallery-trigger]")];
@@ -651,6 +640,12 @@ try {
             gateCount: releaseGate ? 1 : 0,
             heroLoading: hero?.getAttribute("loading") || null,
             heroPriority: hero?.getAttribute("fetchpriority") || null,
+            leadingActions: [...document.querySelectorAll(".merch-detail-hero [data-product-viewer-activate]")]
+              .filter((button) => !button.hidden).length,
+            galleryJump: document.querySelectorAll('.merch-detail-hero a[href="#merch-concept-gallery"]').length,
+            visibleStatuses: document.querySelectorAll("[data-merch-visible-status]").length,
+            posterRepeated: [...document.querySelectorAll("[data-merch-gallery-trigger] img")]
+              .some((image) => image.src === hero?.src),
             breadcrumbCurrent: document.querySelector("[data-merch-breadcrumb] [aria-current=page]")?.textContent.trim() || null,
             horizontalOverflow: document.documentElement.scrollWidth - document.documentElement.clientWidth
           };
@@ -659,24 +654,28 @@ try {
           || detailContract.rootCount !== 1
           || detailContract.objectId !== expectedObject.id
           || detailContract.stage !== "concept"
-          || detailContract.galleryCount !== expectedObject.gallery.length
+          || detailContract.galleryCount !== expectedGalleryCount
           || detailContract.controller !== "active"
-          || detailContract.triggers !== expectedObject.gallery.length
-          || detailContract.uniqueTriggerHrefs !== expectedObject.gallery.length
-          || detailContract.figures !== expectedObject.gallery.length
-          || detailContract.hiddenFigures !== expectedObject.gallery.length - 1
+          || detailContract.triggers !== expectedGalleryCount
+          || detailContract.uniqueTriggerHrefs !== expectedGalleryCount
+          || detailContract.figures !== expectedGalleryCount
+          || detailContract.hiddenFigures !== expectedGalleryCount - 1
           || detailContract.dialogCount !== 1
           || detailContract.dialogOpen
           || detailContract.gateCount !== 1
           || detailContract.heroLoading !== "eager"
           || detailContract.heroPriority !== "high"
+          || detailContract.leadingActions !== 1
+          || detailContract.galleryJump !== 0
+          || detailContract.visibleStatuses !== 1
+          || detailContract.posterRepeated
           || !detailContract.breadcrumbCurrent
           || detailContract.horizontalOverflow > 1) {
           fail(`${label}: invalid merch detail contract ${JSON.stringify(detailContract)}`);
         }
 
         if (viewport.width === 375) {
-          const triggerIndex = Math.min(1, expectedObject.gallery.length - 1);
+          const triggerIndex = Math.min(1, expectedGalleryCount - 1);
           const trigger = page.locator("[data-merch-gallery-trigger]").nth(triggerIndex);
           await trigger.focus();
           await trigger.click();
@@ -696,7 +695,7 @@ try {
           }
           await page.keyboard.press("End");
           const finalIndex = await page.locator("[data-merch-gallery-figure]").evaluateAll((figures) => figures.findIndex((figure) => !figure.hidden));
-          if (finalIndex !== expectedObject.gallery.length - 1) fail(`${label}: End did not reach final merch gallery view`);
+          if (finalIndex !== expectedGalleryCount - 1) fail(`${label}: End did not reach final merch gallery view`);
           await page.keyboard.press("Home");
           const homeIndex = await page.locator("[data-merch-gallery-figure]").evaluateAll((figures) => figures.findIndex((figure) => !figure.hidden));
           if (homeIndex !== 0) fail(`${label}: Home did not reach first merch gallery view`);
@@ -1103,21 +1102,33 @@ try {
         if (smartContract.gaps.some((gap) => gap < 8)) fail(`${label}: smart-link target gap is below 8px ${JSON.stringify(smartContract.gaps)}`);
       }
 
-      const expectedMobile = viewport.width < 1280;
       const navVisibility = await page.evaluate(() => {
         const desktop = document.querySelector(".desktop-nav");
-        const mobile = document.querySelector(".mobile-nav");
+        const index = document.querySelector("details[data-site-index]");
+        const header = document.querySelector(".site-header");
         return {
           desktop: desktop ? getComputedStyle(desktop).display : null,
-          mobile: mobile ? getComputedStyle(mobile).display : null
+          desktopLinks: desktop?.querySelectorAll(":scope .nav-link").length || 0,
+          index: index ? getComputedStyle(index).display : null,
+          indexCount: document.querySelectorAll("details[data-site-index]").length,
+          indexOpen: index?.open,
+          mobileNavCount: document.querySelectorAll(".mobile-nav").length,
+          headerHeight: header?.getBoundingClientRect().height || 0
         };
       });
-      if (expectedMobile && navVisibility.mobile === "none") fail(`${label}: mobile navigation hidden below 1280px`);
-      if (expectedMobile && navVisibility.desktop !== "none") fail(`${label}: desktop navigation visible below 1280px`);
-      if (!expectedMobile && navVisibility.desktop === "none") fail(`${label}: desktop navigation hidden at or above 1280px`);
-      if (!expectedMobile && navVisibility.mobile !== "none") fail(`${label}: mobile navigation visible at or above 1280px`);
-      if (navVisibility.desktop === null || navVisibility.mobile === null) fail(`${label}: responsive navigation element missing`);
+      if (viewport.width < 1280 && navVisibility.desktop !== "none") fail(`${label}: primary desktop navigation visible below 1280px`);
+      if (viewport.width >= 1280 && navVisibility.desktop === "none") fail(`${label}: primary desktop navigation hidden at or above 1280px`);
+      if (navVisibility.desktop === null || navVisibility.desktopLinks !== 4
+        || navVisibility.index === null || navVisibility.index === "none"
+        || navVisibility.indexCount !== 1 || navVisibility.indexOpen !== false
+        || navVisibility.mobileNavCount !== 0) {
+        fail(`${label}: simplified navigation contract failed ${JSON.stringify(navVisibility)}`);
+      }
+      if (viewport.width <= 375 && navVisibility.headerHeight > 80) {
+        fail(`${label}: closed mobile header is ${navVisibility.headerHeight.toFixed(1)}px tall`);
+      }
 
+      await page.locator("details[data-site-index] > summary").click();
       await page.evaluate(() => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))));
       const languageTargetMetrics = await page.locator("nav[data-language-switcher] .language-link").evaluateAll((links) => {
         const targets = links.map((link) => {
@@ -1153,6 +1164,7 @@ try {
       if (languageTargetMetrics.gaps.some((gap) => gap < 8)) {
         fail(`${label}: language target gaps are ${languageTargetMetrics.gaps.map((gap) => gap.toFixed(2)).join(", ")}, minimum is 8px`);
       }
+      await page.locator("details[data-site-index] > summary").click();
 
       if (viewport.width === 375 || viewport.width === 1440) {
         const results = await new AxeBuilder({ page })
@@ -1250,14 +1262,22 @@ try {
   }
   await interactionPage.keyboard.press("Enter");
   await interactionPage.waitForTimeout(50);
-  if (!await interactionPage.locator("main").evaluate((element) => element === document.activeElement)) {
-    fail("Keyboard: skip link does not move focus to main");
+  const skippedMain = await interactionPage.locator("main").evaluate((element) => {
+    const style = getComputedStyle(element);
+    return {
+      focused: element === document.activeElement,
+      outlineStyle: style.outlineStyle,
+      outlineColor: style.outlineColor
+    };
+  });
+  if (!skippedMain.focused || skippedMain.outlineStyle !== "solid" || skippedMain.outlineColor !== "rgb(243, 34, 34)") {
+    fail(`Keyboard: skip link main focus is not visibly signal-red ${JSON.stringify(skippedMain)}`);
   }
   await interactionPage.locator(".menu-summary").focus();
   await interactionPage.keyboard.press("Enter");
-  if (!await interactionPage.locator(".mobile-nav").evaluate((element) => element.open)) fail("Keyboard: mobile menu did not open");
+  if (!await interactionPage.locator("[data-site-index]").evaluate((element) => element.open)) fail("Keyboard: site index did not open");
   await interactionPage.keyboard.press("Escape");
-  if (await interactionPage.locator(".mobile-nav").evaluate((element) => element.open)) fail("Keyboard: Escape did not close mobile menu");
+  if (await interactionPage.locator("[data-site-index]").evaluate((element) => element.open)) fail("Keyboard: Escape did not close site index");
   const focusStyle = await interactionPage.locator(".menu-summary").evaluate((element) => getComputedStyle(element).outlineStyle);
   if (focusStyle === "none") fail("Keyboard: focused menu control has no visible outline");
 
@@ -1285,10 +1305,9 @@ try {
     fail(`Social access: language targets do not preserve route identity ${JSON.stringify(socialLanguageTargets)}`);
   }
 
-  await interactionPage.locator(".menu-summary").click();
   await Promise.all([
     interactionPage.waitForURL(`${baseUrl}/`),
-    interactionPage.locator(".mobile-nav").getByRole("link", { name: COPY.en.common.nav.home, exact: true }).click()
+    interactionPage.locator(".brand-link").click()
   ]);
   const socialHomeIdentity = await interactionPage.evaluate(() => ({
     path: location.pathname,
@@ -1306,6 +1325,7 @@ try {
   }
 
   await interactionPage.goto(`${baseUrl}/links/`, { waitUntil: "load" });
+  await interactionPage.locator("[data-site-index] > summary").click();
   await Promise.all([
     interactionPage.waitForURL(`${baseUrl}/ru/links/`),
     interactionPage.locator('nav[data-language-switcher] .language-link[hreflang="ru"]').click()
@@ -1344,6 +1364,7 @@ try {
   }
 
   await interactionPage.goto(`${baseUrl}/catalog/pvkh-001/`, { waitUntil: "load" });
+  await interactionPage.locator("[data-site-index] > summary").click();
   const italianLanguageLink = interactionPage.locator('nav[data-language-switcher] .language-link[hreflang="it"]');
   await italianLanguageLink.focus();
   const languageFocusStyle = await italianLanguageLink.evaluate((element) => getComputedStyle(element).outlineStyle);
@@ -1353,6 +1374,7 @@ try {
     interactionPage.keyboard.press("Enter")
   ]);
   if (await interactionPage.locator("html").getAttribute("lang") !== "it") fail("Language routing: EN → IT deep route has wrong html lang");
+  await interactionPage.locator("[data-site-index] > summary").click();
   const russianLanguageLink = interactionPage.locator('nav[data-language-switcher] .language-link[hreflang="ru"]');
   await russianLanguageLink.focus();
   await Promise.all([
@@ -1379,6 +1401,7 @@ try {
   if (await interactionPage.locator('[data-release-cta="streaming"]').count() !== 3) {
     fail("Smart link: service chooser must expose exactly three direct destinations");
   }
+  await interactionPage.locator("[data-site-index] > summary").click();
   await Promise.all([
     interactionPage.waitForURL(`${baseUrl}/listen/pvkh-001/`),
     interactionPage.locator('nav[data-language-switcher] .language-link[hreflang="en"]').click()
@@ -1421,7 +1444,7 @@ try {
   if (!await audioPage.locator("[data-audio-engine]").evaluate((audio) => audio.paused)) {
     fail("Audio player: a random page click started playback");
   }
-  const volumeToggle = audioPage.locator("[data-player-volume-toggle]");
+  const volumeToggle = await advancedControl(audioPage, "[data-player-volume-toggle]");
   const volumeRange = audioPage.locator("[data-player-volume]");
   await volumeToggle.click();
   const volumeOpen = await audioPage.evaluate(() => ({
@@ -1459,12 +1482,14 @@ try {
     hidden: document.querySelector("[data-player-volume-popup]")?.hidden,
     focusReturned: document.activeElement?.hasAttribute("data-player-volume-toggle")
   }));
+  await ensurePlayerTrayOpen(audioPage);
   await volumeToggle.click();
   await audioPage.mouse.click(700, 760);
   const volumeOutsideClosed = await audioPage.evaluate(() => ({
     expanded: document.querySelector("[data-player-volume-toggle]")?.getAttribute("aria-expanded"),
     hidden: document.querySelector("[data-player-volume-popup]")?.hidden
   }));
+  await ensurePlayerTrayOpen(audioPage);
   await volumeToggle.focus();
   await audioPage.keyboard.press("Space");
   const keyboardVolumeOpen = await audioPage.evaluate(() => ({
@@ -1498,7 +1523,7 @@ try {
     paused: document.querySelector("[data-audio-engine]")?.paused,
     userPaused: document.querySelector("[data-audio-player]")?.dataset.userPaused
   }));
-  const waveform = audioPage.locator("[data-player-waveform]");
+  const waveform = await advancedControl(audioPage, "[data-player-waveform]");
   await waveform.focus();
   await audioPage.keyboard.press("End");
   const endTime = await audioPage.locator("[data-audio-engine]").evaluate((audio) => audio.currentTime);
@@ -1524,7 +1549,7 @@ try {
       fail(`Audio timeline: pointer contract failed ${JSON.stringify({ hoverTooltip, dragTime })}`);
     }
   }
-  await audioPage.locator("[data-player-next]").click();
+  await (await advancedControl(audioPage, "[data-player-next]")).click();
   await audioPage.waitForFunction(() => document.querySelector("[data-player-title]")?.textContent === "ROBERT"
     && document.querySelector("[data-audio-player]")?.dataset.waveformState === "ready"
     && document.querySelector("[data-audio-engine]")?.currentSrc.endsWith("/assets/tracks/pvkh-008-robert.mp3"));
@@ -1539,7 +1564,7 @@ try {
   if (await audioPage.locator("[data-audio-player]").getAttribute("data-playing") === "true") {
     await audioPage.locator("[data-player-toggle]").click();
   }
-  await audioPage.locator("[data-player-prev]").click();
+  await (await advancedControl(audioPage, "[data-player-prev]")).click();
   await audioPage.waitForFunction(() => document.querySelector("[data-player-title]")?.textContent === "OPPORTUNIST"
     && document.querySelector("[data-audio-player]")?.dataset.waveformState === "ready"
     && document.querySelector("[data-audio-engine]")?.currentSrc.endsWith("/assets/tracks/pvkh-007-opportunist.mp3"));
@@ -1548,20 +1573,20 @@ try {
     index: document.querySelector("[data-player-index]")?.textContent,
     currentSrc: document.querySelector("[data-audio-engine]")?.currentSrc
   }));
-  await audioPage.locator("[data-player-playlist-toggle]").click();
-  await audioPage.waitForFunction(() => document.querySelector("[data-player-playlist-dialog]")?.open === true);
+  await ensurePlayerTrayOpen(audioPage);
   const playlistOpen = await audioPage.evaluate(() => ({
     trackButtons: document.querySelectorAll("[data-player-select]").length,
     current: document.querySelectorAll('[data-player-select][aria-current="true"]').length,
-    activeCatalogId: document.querySelector('[data-player-select][aria-current="true"]')?.closest("[data-player-track]")?.dataset.catalogId
+    activeCatalogId: document.querySelector('[data-player-select][aria-current="true"]')?.closest("[data-player-track]")?.dataset.catalogId,
+    hidden: document.querySelector("[data-player-tray]")?.hidden,
+    expanded: document.querySelector("[data-player-tray-toggle]")?.getAttribute("aria-expanded")
   }));
   await audioPage.keyboard.press("Escape");
-  const playlistFocusReturned = await audioPage.evaluate(() => document.activeElement?.hasAttribute("data-player-playlist-toggle"));
-  await audioPage.locator("[data-player-playlist-toggle]").click();
-  await audioPage.locator('[data-player-track][data-catalog-id="PVKH-012"] [data-player-select]').click();
+  const playlistFocusReturned = await audioPage.evaluate(() => document.activeElement?.hasAttribute("data-player-tray-toggle"));
+  await (await advancedControl(audioPage, '[data-player-track][data-catalog-id="PVKH-012"] [data-player-select]')).click();
   await audioPage.waitForFunction(() => document.querySelector("[data-player-title]")?.textContent === "RUNWAY"
     && document.querySelector("[data-audio-engine]")?.currentSrc.endsWith("/assets/tracks/pvkh-012-runway.mp3")
-    && !document.querySelector("[data-player-playlist-dialog]")?.open);
+    && document.querySelector("[data-player-tray]")?.hidden === true);
   const directAudio = await audioPage.evaluate(() => ({
     title: document.querySelector("[data-player-title]")?.textContent,
     index: document.querySelector("[data-player-index]")?.textContent,
@@ -1608,6 +1633,7 @@ try {
     expanded: document.querySelector("[data-player-volume-toggle]")?.getAttribute("aria-expanded")
   }));
   await audioPage.evaluate(() => { window.__qaRussianAudio = document.querySelector("[data-audio-engine]"); });
+  await audioPage.locator("[data-site-index] > summary").click();
   await Promise.all([
     audioPage.waitForURL(`${baseUrl}/ru/`),
     audioPage.locator('nav[data-language-switcher] .language-link[hreflang="ru"]').click()
@@ -1651,7 +1677,8 @@ try {
     || !nextAudio.currentSrc?.endsWith("/assets/tracks/pvkh-008-robert.mp3") || nextAudio.mediaTitle !== "ROBERT"
     || previousAudio.title !== "OPPORTUNIST" || previousAudio.index !== "07 / 13"
     || !previousAudio.currentSrc?.endsWith("/assets/tracks/pvkh-007-opportunist.mp3")
-    || playlistOpen.trackButtons !== 13 || playlistOpen.current !== 1 || playlistOpen.activeCatalogId !== "PVKH-007" || !playlistFocusReturned
+    || playlistOpen.trackButtons !== 13 || playlistOpen.current !== 1 || playlistOpen.activeCatalogId !== "PVKH-007"
+    || playlistOpen.hidden || playlistOpen.expanded !== "true" || !playlistFocusReturned
     || directAudio.title !== "RUNWAY" || directAudio.index !== "12 / 13" || directAudio.currentCatalogId !== "PVKH-012"
     || !directAudio.currentSrc?.endsWith("/assets/tracks/pvkh-012-runway.mp3")
     || !persistentAfter.sameNode || persistentAfter.currentTime < persistentBefore || persistentAfter.playing !== "true"
@@ -1676,7 +1703,7 @@ try {
   await fallbackWaveformPage.waitForFunction(
     () => document.querySelector("[data-audio-player]")?.dataset.waveformState === "error"
   );
-  const fallbackWaveform = fallbackWaveformPage.locator("[data-player-waveform]");
+  const fallbackWaveform = await advancedControl(fallbackWaveformPage, "[data-player-waveform]");
   const fallbackBox = await fallbackWaveform.boundingBox();
   if (!fallbackBox) {
     fail("Fallback waveform: seek canvas has no pointer box");
@@ -1766,7 +1793,7 @@ try {
     const mobileVolumeContext = await browser.newContext({ viewport: { width, height: 812 } });
     const mobileVolumePage = await mobileVolumeContext.newPage();
     await mobileVolumePage.goto(baseUrl, { waitUntil: "load" });
-    await mobileVolumePage.locator("[data-player-volume-toggle]").click();
+    await (await advancedControl(mobileVolumePage, "[data-player-volume-toggle]")).click();
     const mobileVolume = await mobileVolumePage.evaluate(() => {
       const rect = (selector) => {
         const rect = document.querySelector(selector)?.getBoundingClientRect();
@@ -1799,7 +1826,7 @@ try {
       || mobileVolume.button.height < 44 || mobileVolume.range.height < 44 || mobileVolume.waveform.height < 44
       || mobileVolume.waveformTouchAction !== "pan-y"
       || mobileVolume.popup.left < 0 || mobileVolume.popup.right > mobileVolume.viewport
-      || mobileVolume.overlapsTitle || mobileVolume.player.height > 150) {
+      || mobileVolume.overlapsTitle || mobileVolume.player.height > 72) {
       fail(`Mobile audio volume ${width}px: invalid popup geometry ${JSON.stringify(mobileVolume)}`);
     }
     if (width === 375) {
@@ -1808,16 +1835,17 @@ try {
     await mobileVolumePage.goto(`${baseUrl}/merch/`, { waitUntil: "load" });
     const mobileMerchPlayer = await mobileVolumePage.evaluate(() => {
       const player = document.querySelector("[data-audio-player]")?.getBoundingClientRect();
-      const action = document.querySelector('.merch-hero a[href="#merch-objects"]')?.getBoundingClientRect();
+      const hero = document.querySelector(".merch-hero")?.getBoundingClientRect();
       return {
         player,
-        action,
-        overlapsAction: Boolean(player && action && player.left < action.right && player.right > action.left
-          && player.top < action.bottom && player.bottom > action.top)
+        hero,
+        bodyPadding: Number.parseFloat(getComputedStyle(document.body).paddingBottom),
+        heroBottom: hero?.bottom ?? null
       };
     });
-    if (!mobileMerchPlayer.player || !mobileMerchPlayer.action || mobileMerchPlayer.player.height > 150 || mobileMerchPlayer.overlapsAction) {
-      fail(`Mobile audio player ${width}px: overlaps merch action ${JSON.stringify(mobileMerchPlayer)}`);
+    if (!mobileMerchPlayer.player || !mobileMerchPlayer.hero || mobileMerchPlayer.player.height > 72
+      || mobileMerchPlayer.bodyPadding < mobileMerchPlayer.player.height - 1) {
+      fail(`Mobile audio player ${width}px: measured clearance failed ${JSON.stringify(mobileMerchPlayer)}`);
     }
     await mobileVolumeContext.close();
   }
@@ -2016,6 +2044,7 @@ try {
   if (touchSignal.mode !== "static" || touchSignal.path || touchSignal.legacy !== 0 || touchSignal.documentWidth > touchSignal.viewportWidth + 1) {
     fail(`Touch: signal field must use the static compact fallback ${JSON.stringify(touchSignal)}`);
   }
+  await touchPage.locator("[data-site-index] > summary").tap();
   await Promise.all([
     touchPage.waitForURL(`${baseUrl}/ru/catalog/pvkh-001/`),
     touchPage.locator('nav[data-language-switcher] .language-link[hreflang="ru"]').tap()
@@ -2034,6 +2063,7 @@ try {
   });
   const noScriptPage = await noScriptContext.newPage();
   await noScriptPage.goto(`${baseUrl}/ru/process/`, { waitUntil: "load" });
+  await noScriptPage.locator("[data-site-index] > summary").click();
   await Promise.all([
     noScriptPage.waitForURL(`${baseUrl}/process/`),
     noScriptPage.locator('nav[data-language-switcher] .language-link[hreflang="en"]').click()
@@ -2102,7 +2132,7 @@ try {
   }));
   if (noScriptMerch.objects !== merchLibrary.objects.length
     || noScriptMerch.detailLinks !== merchLibrary.objects.length
-    || noScriptMerch.anchor !== "#merch-objects"
+    || noScriptMerch.anchor != null
     || noScriptMerch.overflow > 1) {
     fail(`No JavaScript merch: invalid contract ${JSON.stringify(noScriptMerch)}`);
   }
@@ -2125,7 +2155,7 @@ try {
     overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth
   }));
   if (noScriptMerchDetail.objectId !== "MRCH-001"
-    || noScriptMerchDetail.links.length !== merchLibrary.objects[0].gallery.length
+    || noScriptMerchDetail.links.length !== merchLibrary.objects[0].gallery.length - 1
     || noScriptMerchDetail.links.some(({ href, alt }) => !href?.endsWith(".webp") || !alt)
     || noScriptMerchDetail.dialogOpen
     || noScriptMerchDetail.controller
@@ -2318,13 +2348,13 @@ try {
     await applyTextZoom(headerZoomPage);
     const headerMetrics = await headerZoomPage.evaluate(() => {
       const desktop = document.querySelector(".desktop-nav").getBoundingClientRect();
-      const languages = document.querySelector(".language-nav").getBoundingClientRect();
+      const index = document.querySelector("[data-site-index] > summary").getBoundingClientRect();
       const navList = document.querySelector(".desktop-nav .nav-list");
       return {
         viewport: document.documentElement.clientWidth,
-        documentWidth: document.documentElement.scrollWidth,
-        desktopRight: desktop.right,
-        languageLeft: languages.left,
+          documentWidth: document.documentElement.scrollWidth,
+          desktopRight: desktop.right,
+          indexLeft: index.left,
         navClientWidth: navList.clientWidth,
         navScrollWidth: navList.scrollWidth,
         volumeLabel: document.querySelector("[data-player-volume-toggle]")?.getAttribute("aria-label")
@@ -2332,7 +2362,7 @@ try {
     });
     const expectedVolumePrefix = route === "/ru/" ? "Громкость:" : "Volume:";
     if (headerMetrics.documentWidth > headerMetrics.viewport + 1
-      || headerMetrics.desktopRight > headerMetrics.languageLeft + 1
+      || headerMetrics.desktopRight > headerMetrics.indexLeft + 1
       || headerMetrics.navScrollWidth > headerMetrics.navClientWidth + 1
       || !headerMetrics.volumeLabel?.startsWith(expectedVolumePrefix)) {
       fail(`200% text zoom: ${route} desktop header collision ${JSON.stringify(headerMetrics)}`);
@@ -2515,7 +2545,7 @@ try {
     || saveDataSocialAccess.links !== SOCIAL_LINKS.length) {
     fail(`Save-Data: social access is not static and complete ${JSON.stringify({ saveDataRequests, saveDataSocialAccess })}`);
   }
-  const deferredWaveform = saveDataPage.locator("[data-player-waveform]");
+  const deferredWaveform = await advancedControl(saveDataPage, "[data-player-waveform]");
   const deferredBox = await deferredWaveform.boundingBox();
   if (!deferredBox) throw new Error("Save-Data timeline has no pointer box");
   await saveDataPage.mouse.click(
@@ -2640,6 +2670,28 @@ try {
   }
   await readyViewerContext.close();
 
+  const invalidBoundsContext = await browser.newContext({ viewport: { width: 375, height: 812 } });
+  const invalidBoundsPage = await invalidBoundsContext.newPage();
+  await invalidBoundsPage.route("**/assets/merch-3d/cassette-002.glb", (route) => route.fulfill({
+    status: 200,
+    contentType: "model/gltf-binary",
+    body: tinyTexturedGlb({ invalidBounds: true })
+  }));
+  await invalidBoundsPage.goto(`${baseUrl}/merch/cassette/`, { waitUntil: "load" });
+  await invalidBoundsPage.locator("[data-product-viewer-activate]").click();
+  await invalidBoundsPage.waitForFunction(() => document.querySelector("[data-product-viewer]")?.dataset.viewerState === "error");
+  const invalidBoundsFallback = await invalidBoundsPage.evaluate(() => ({
+    state: document.querySelector("[data-product-viewer]")?.dataset.viewerState,
+    posterVisible: !document.querySelector("[data-product-viewer-poster]")?.hidden,
+    activateVisible: !document.querySelector("[data-product-viewer-activate]")?.hidden,
+    modelCount: document.querySelectorAll("model-viewer").length
+  }));
+  if (invalidBoundsFallback.state !== "error" || !invalidBoundsFallback.posterVisible
+    || !invalidBoundsFallback.activateVisible || invalidBoundsFallback.modelCount !== 0) {
+    fail(`Product viewer: invalid bounds did not recover to the honest poster fallback ${JSON.stringify(invalidBoundsFallback)}`);
+  }
+  await invalidBoundsContext.close();
+
   const cassetteContext = await browser.newContext({ viewport: { width: 1024, height: 900 } });
   const cassettePage = await cassetteContext.newPage();
   const cassetteRequests = [];
@@ -2650,12 +2702,45 @@ try {
   await cassettePage.waitForFunction(() => ["ready", "error"].includes(
     document.querySelector("[data-product-viewer]")?.dataset.viewerState
   ));
-  const cassetteState = await cassettePage.locator("[data-product-viewer]").getAttribute("data-viewer-state");
+  const cassetteGeometry = await cassettePage.evaluate(async () => {
+    const root = document.querySelector("[data-product-viewer]");
+    const model = root?.querySelector("model-viewer");
+    const dimensions = model?.getDimensions();
+    const center = model?.getBoundingBoxCenter();
+    let renderedPixels = 0;
+    try {
+      const blob = await model?.toBlob();
+      if (blob) {
+        const bitmap = await createImageBitmap(blob);
+        const canvas = document.createElement("canvas");
+        canvas.width = bitmap.width;
+        canvas.height = bitmap.height;
+        const context = canvas.getContext("2d", { willReadFrequently: true });
+        context.drawImage(bitmap, 0, 0);
+        const pixels = context.getImageData(0, 0, canvas.width, canvas.height).data;
+        for (let index = 3; index < pixels.length; index += 4) {
+          if (pixels[index] > 0) renderedPixels += 1;
+        }
+        bitmap.close();
+      }
+    } catch {
+      renderedPixels = 0;
+    }
+    return {
+      state: root?.dataset.viewerState,
+      dimensions: dimensions ? [dimensions.x, dimensions.y, dimensions.z] : null,
+      center: center ? [center.x, center.y, center.z] : null,
+      renderedPixels
+    };
+  });
   const cassetteActivationRequests = cassetteRequests.slice(cassetteRequestStart);
-  if (cassetteState !== "ready"
+  if (cassetteGeometry.state !== "ready"
+    || !cassetteGeometry.dimensions?.every((value) => Number.isFinite(value) && value > 0)
+    || !cassetteGeometry.center?.every(Number.isFinite)
+    || cassetteGeometry.renderedPixels < 1
     || cassetteActivationRequests.some((url) => /model-viewer-support/.test(url))
     || cassetteActivationRequests.some((url) => new URL(url).origin !== baseUrl)) {
-    fail(`Product viewer: actual cassette activation failed ${JSON.stringify({ cassetteState, cassetteActivationRequests })}`);
+    fail(`Product viewer: actual cassette geometry/render activation failed ${JSON.stringify({ cassetteGeometry, cassetteActivationRequests })}`);
   }
   await cassetteContext.close();
 
@@ -2805,7 +2890,7 @@ try {
   await touchSeekPage.waitForFunction(
     () => document.querySelector("[data-audio-engine]")?.readyState >= 1
   );
-  const touchWaveform = touchSeekPage.locator("[data-player-waveform]");
+  const touchWaveform = await advancedControl(touchSeekPage, "[data-player-waveform]");
   const touchBox = await touchWaveform.boundingBox();
   if (!touchBox) {
     fail("Touch timeline: waveform has no pointer box");
@@ -3100,6 +3185,14 @@ try {
     }
     const missingCurrent = await missingPage.locator('nav[data-language-switcher] [aria-current="page"]').getAttribute("hreflang");
     if (missingCurrent !== missing.locale.lang) fail(`Routing: ${missing.request} 404 current language is ${missingCurrent}`);
+    const lightweight404 = await missingPage.evaluate(() => ({
+      actions: document.querySelectorAll("a, button, summary").length,
+      marked: document.body.hasAttribute("data-lightweight-shell"),
+      forbidden: document.querySelectorAll("[data-audio-player], [data-hud-frame], [data-motion-video], [data-route-footer], .desktop-nav, .mobile-nav, .site-signal-layer").length
+    }));
+    if (lightweight404.actions !== 5 || !lightweight404.marked || lightweight404.forbidden !== 0) {
+      fail(`Routing: ${missing.request} is not the exact lightweight five-action 404 ${JSON.stringify(lightweight404)}`);
+    }
     const missingImages = await missingPage.locator("img").evaluateAll((images) => images.filter((image) => !image.complete || image.naturalWidth === 0).length);
     if (missingImages) fail(`Routing: ${missing.request} 404 has ${missingImages} broken images`);
     const missingBackground = await missingPage.evaluate(() => getComputedStyle(document.body).backgroundColor);
@@ -3114,25 +3207,25 @@ try {
   const root404Html = await readFile(path.join(siteRoot, "dist", "404.html"), "utf8");
   const pagesFallbackContext = await browser.newContext({ viewport: { width: 375, height: 812 } });
   const pagesFallbackPage = await pagesFallbackContext.newPage();
-  for (const { prefix, lang } of [{ prefix: "it", lang: "it" }, { prefix: "ru", lang: "ru" }]) {
+  for (const prefix of ["it", "ru"]) {
     const missingPath = `/${prefix}/github-pages-fallback-check/`;
-    const localized404Path = `${SITE_BASE_PATH}/${prefix}/404.html`.replace(/\/+/g, "/");
-    const localized404Html = await readFile(path.join(siteRoot, "dist", prefix, "404.html"), "utf8");
     await pagesFallbackPage.route((url) => url.pathname === missingPath, (route) => route.fulfill({
       status: 404,
       contentType: "text/html; charset=utf-8",
       body: root404Html
     }));
-    await pagesFallbackPage.route((url) => url.pathname === localized404Path, (route) => route.fulfill({
-      status: 200,
-      contentType: "text/html; charset=utf-8",
-      body: localized404Html
+    const fallbackResponse = await pagesFallbackPage.goto(`${baseUrl}${missingPath}`, { waitUntil: "load" });
+    const fallbackContract = await pagesFallbackPage.evaluate(() => ({
+      lang: document.documentElement.lang,
+      lightweight: document.body.hasAttribute("data-lightweight-shell"),
+      page404: document.body.classList.contains("page-404"),
+      actions: document.querySelectorAll("a, button, summary").length,
+      externalScripts: document.querySelectorAll("script[src]").length
     }));
-    await pagesFallbackPage.goto(`${baseUrl}${missingPath}`, { waitUntil: "load" });
-    await pagesFallbackPage.waitForURL(`${baseUrl}${localized404Path}`);
-    if (await pagesFallbackPage.locator("html").getAttribute("lang") !== lang
-      || !await pagesFallbackPage.locator("body").evaluate((body) => body.classList.contains("page-404"))) {
-      fail(`GitHub Pages fallback: ${prefix} did not reach its localized 404`);
+    if (fallbackResponse?.status() !== 404 || fallbackContract.lang !== "en"
+      || !fallbackContract.lightweight || !fallbackContract.page404
+      || fallbackContract.actions !== 5 || fallbackContract.externalScripts !== 0) {
+      fail(`GitHub Pages fallback: ${prefix} did not retain the lightweight no-script root 404 ${JSON.stringify(fallbackContract)}`);
     }
     await pagesFallbackPage.unroute((url) => url.pathname === missingPath);
   }
@@ -3149,28 +3242,24 @@ try {
     webkitPage.on("pageerror", (error) => webkitErrors.push(error.message));
     await webkitPage.goto(baseUrl, { waitUntil: "load" });
     await webkitPage.waitForFunction(() => document.querySelector("[data-audio-player]")?.classList.contains("is-ready"));
-    await webkitPage.locator("[data-player-volume-toggle]").click();
-    await webkitPage.locator("[data-player-volume]").fill("60");
+    await (await advancedControl(webkitPage, "[data-player-volume-toggle]")).click();
+    await webkitPage.locator("[data-player-volume]").evaluate((range) => {
+      range.value = "60";
+      range.dispatchEvent(new Event("input", { bubbles: true }));
+    });
     const webkitVolumeOpen = await webkitPage.evaluate(() => ({
       volume: document.querySelector("[data-audio-engine]")?.volume,
       popupHidden: document.querySelector("[data-player-volume-popup]")?.hidden
     }));
-    const webkitWaveform = webkitPage.locator("[data-player-waveform]");
+    const webkitWaveform = await advancedControl(webkitPage, "[data-player-waveform]");
     const webkitWaveformBox = await webkitWaveform.boundingBox();
     if (!webkitWaveformBox) {
       fail("WebKit audio: waveform has no pointer box");
     } else {
-      await webkitPage.mouse.move(
-        webkitWaveformBox.x + webkitWaveformBox.width * 0.2,
+      await webkitPage.mouse.click(
+        webkitWaveformBox.x + webkitWaveformBox.width * 0.4,
         webkitWaveformBox.y + webkitWaveformBox.height * 0.5
       );
-      await webkitPage.mouse.down();
-      await webkitPage.mouse.move(
-        webkitWaveformBox.x + webkitWaveformBox.width * 0.4,
-        webkitWaveformBox.y + webkitWaveformBox.height * 0.5,
-        { steps: 4 }
-      );
-      await webkitPage.mouse.up();
     }
     await webkitPage.locator("[data-player-toggle]").click();
     await webkitPage.waitForFunction(() => document.querySelector("[data-audio-player]")?.dataset.playing === "true");

@@ -103,13 +103,21 @@ const validAuthorities = () => {
         height: 1024
       })),
       specifications: [],
-      viewer: {
+      viewer: ["t-shirt", "hoodie", "cap"].includes(slug) ? {
+        kind: "spin",
+        availability: "sourceBlocked",
+        poster: `assets/merch/${slug}-${ROLE_CONTRACT[slug][0]}.webp`,
+        src: `assets/merch-360/${slug}/manifest.json`,
+        alt: Object.fromEntries(LOCALES.map((locale) => [locale, `Interactive spin concept view of the ${slug} archive object.`])),
+        budget: { mobileBytes: 2300000, desktopBytes: 3800000, mobileFrames: 24, desktopFrames: 36 }
+      } : {
         kind: "glb",
         poster: `assets/merch/${slug}-${ROLE_CONTRACT[slug][0]}.webp`,
         src: `assets/merch-3d/${slug}-${String(index + 1).padStart(3, "0")}.glb`,
         cameraOrbit: "20deg 70deg 110%",
         alt: Object.fromEntries(LOCALES.map((locale) => [locale, `Interactive 3D concept view of the ${slug} archive object.`])),
-        budget: { bytes: 700000, triangles: 4000, drawCalls: 4 }
+        budget: { bytes: 700000, triangles: 4000, drawCalls: 4 },
+        decoderPolicy: "uncompressed-only"
       },
       releaseGate: { state: "requiredBeforeProduction", copyKey: `${id}.releaseGate` }
     }))
