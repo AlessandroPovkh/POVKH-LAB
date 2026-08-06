@@ -39,7 +39,6 @@ const coverage = [
   { slug: "cassette", assetKey: "cassette-002", route: "/merch/cassette/", modelPath: "assets/merch-3d/cassette-002.glb" },
   { slug: "zine-booklet", assetKey: "zine-001", route: "/merch/zine-booklet/", modelPath: "assets/merch-3d/zine-001.glb" }
 ];
-const sampled = [coverage[1], coverage[3]];
 const recommendedCiGates = {
   calibration: "broad regression ceilings derived from two independent calibration runs of three cold samples per asset; not release acceptance",
   executionPolicy: "opt-in diagnostic on a calibrated, isolated and serial runner; excluded from default CI",
@@ -55,6 +54,18 @@ const recommendedCiGates = {
     physicalAndroidRequired: true
   },
   labRegressionCeilings: {
+    vinyl: {
+      maxColdClickToReadyMs: 8_000,
+      maxFirstPartyTransferredBytes: 2_500_000,
+      minVisiblePixels: 50_000,
+      maxActivationLongTaskCount: 5,
+      maxActivationLongTaskTotalMs: 2_500,
+      minDragFramesPerSecond: 24,
+      maxDragP95FrameIntervalMs: 90,
+      maxDragLongTaskCount: 12,
+      maxDragLongTaskTotalMs: 700,
+      minOrbitDeltaRad: 0.1
+    },
     cd: {
       maxColdClickToReadyMs: 8_000,
       maxFirstPartyTransferredBytes: 2_500_000,
@@ -560,6 +571,10 @@ const runBenchmark = async () => {
     ...asset,
     modelBytes: (await stat(path.join(siteRoot, asset.modelPath))).size
   })));
+  const largestReviewedAsset = assetCoverage.reduce((largest, asset) => asset.modelBytes > largest.modelBytes ? asset : largest);
+  const smallestReviewedFlatAsset = assetCoverage.find(({ slug }) => slug === "zine-booklet");
+  assert.ok(smallestReviewedFlatAsset, "zine performance sentinel is missing");
+  const sampled = [largestReviewedAsset, smallestReviewedFlatAsset];
   const preactivationChecks = [];
   for (const asset of coverage) preactivationChecks.push(await posterOnlyCheck(asset));
   const policyChecks = {
@@ -576,7 +591,7 @@ const runBenchmark = async () => {
       assetKey: asset.assetKey,
       modelPath: asset.modelPath,
       modelBytes,
-      sampleRole: asset.slug === "cd" ? "largest-reviewed-model" : "smallest-reviewed-flat-model",
+      sampleRole: asset.slug === largestReviewedAsset.slug ? "largest-reviewed-model" : "smallest-reviewed-flat-model",
       samples,
       summary: summarize(samples)
     });
@@ -636,7 +651,8 @@ const assertReportShape = (report) => {
   assert.equal(report.assets.length, 2);
 
   for (const asset of report.assets) {
-    assert.ok(["cd", "zine-booklet"].includes(asset.slug));
+    const largest = report.assetCoverage.reduce((current, candidate) => candidate.modelBytes > current.modelBytes ? candidate : current);
+    assert.ok([largest.slug, "zine-booklet"].includes(asset.slug));
     assert.equal(asset.samples.length >= 3, true);
     assert.ok(finite(asset.modelBytes) && asset.modelBytes > 0);
     for (const sample of asset.samples) {
