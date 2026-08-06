@@ -97,6 +97,24 @@ const assertCamera = (state, profile, { pixels = false } = {}) => {
   if (pixels) assert.ok(state.visiblePixels > 0, "real cassette must render a visible pixel signal");
 };
 
+const waitForCameraIdle = (page) => page.locator("model-viewer").evaluate((model) => new Promise((resolve) => {
+  let quietTimer;
+  let maxTimer;
+  const finish = () => {
+    clearTimeout(quietTimer);
+    clearTimeout(maxTimer);
+    model.removeEventListener("camera-change", onCameraChange);
+    resolve();
+  };
+  const onCameraChange = () => {
+    clearTimeout(quietTimer);
+    quietTimer = setTimeout(finish, 250);
+  };
+  model.addEventListener("camera-change", onCameraChange);
+  quietTimer = setTimeout(finish, 250);
+  maxTimer = setTimeout(finish, 5_000);
+}));
+
 const activateCassette = async (context, viewport) => {
   const page = await context.newPage();
   const requests = [];
@@ -123,7 +141,20 @@ test("applies governed desktop metadata, preserves pointer orbit on mobile switc
 
   const box = await page.locator("model-viewer").boundingBox();
   assert.ok(box, "model viewer has no pointer target");
-  await page.mouse.move(box.x + box.width * 0.5, box.y + box.height * 0.5);
+  const pointerStart = {
+    x: box.x + box.width * 0.4,
+    y: box.y + box.height * 0.45
+  };
+  const pointerHit = await page.locator("model-viewer").evaluate((model, point) => {
+    const hit = model.shadowRoot?.elementFromPoint(point.x, point.y);
+    return {
+      id: hit?.id || "",
+      reachesUserInput: Boolean(model.shadowRoot?.querySelector(".userInput")?.contains(hit))
+    };
+  }, pointerStart);
+  assert.notEqual(pointerHit.id, "default-pan-target", "drag must not start on model-viewer's pan target");
+  assert.equal(pointerHit.reachesUserInput, true, "drag must start on the orbit input surface");
+  await page.mouse.move(pointerStart.x, pointerStart.y);
   await page.mouse.down();
   await page.mouse.move(box.x + box.width * 0.72, box.y + box.height * 0.58, { steps: 12 });
   await page.mouse.up();
@@ -131,6 +162,7 @@ test("applies governed desktop metadata, preserves pointer orbit on mobile switc
     const theta = document.querySelector("model-viewer")?.getCameraOrbit().theta;
     return Number.isFinite(theta) && Math.abs(theta - initialTheta) > 0.03;
   }, governed.desktop.theta);
+  await waitForCameraIdle(page);
   const interacted = await cameraState(page);
 
   await page.setViewportSize({ width: 375, height: 812 });
