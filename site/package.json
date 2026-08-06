@@ -27,8 +27,9 @@
     "test:merch-registration": "node --test tests/merch-registration.test.mjs",
     "test:merch-motion": "node --test tests/merch-motion.test.mjs",
     "test:merch-viewer-contract": "node --test tests/merch-viewer-contract.test.mjs",
+    "test:product-viewer-runtime": "node --test tests/product-viewer-runtime.test.mjs",
     "test:interface-hierarchy": "node --test tests/interface-hierarchy.test.mjs",
-    "test": "npm run test:merch && npm run test:merch-assets && npm run test:merch-pages && npm run test:social-links && npm run test:merch-registration && npm run test:merch-motion && npm run test:merch-viewer-contract && npm run test:interface-hierarchy && npm run build && npm run check && npm run qa"
+    "test": "npm run test:merch && npm run test:merch-assets && npm run test:merch-pages && npm run test:social-links && npm run test:merch-registration && npm run test:merch-motion && npm run test:merch-viewer-contract && npm run test:product-viewer-runtime && npm run test:interface-hierarchy && npm run build && npm run check && npm run qa"
   },
   "devDependencies": {
     "@axe-core/playwright": "4.10.2",
