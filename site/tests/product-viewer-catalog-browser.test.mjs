@@ -1,6 +1,8 @@
 import assert from "node:assert/strict";
+import { execFile as execFileCallback } from "node:child_process";
 import { after, before, test } from "node:test";
 import { setTimeout as delay } from "node:timers/promises";
+import { promisify } from "node:util";
 import path from "node:path";
 import { readFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
@@ -8,6 +10,7 @@ import { chromium } from "playwright";
 import { createStaticServer } from "../tools/server.mjs";
 
 const siteRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const execFile = promisify(execFileCallback);
 const merch = JSON.parse(await readFile(path.join(siteRoot, "data/merch.json"), "utf8"));
 const interactive = merch.objects.filter(({ viewer }) => viewer.kind === "glb");
 const blocked = merch.objects.filter(({ viewer }) => viewer.availability === "sourceBlocked");
@@ -35,6 +38,7 @@ let baseUrl;
 let browser;
 
 before(async () => {
+  await execFile(process.execPath, [path.join(siteRoot, "tools/build.mjs")], { cwd: siteRoot });
   app = createStaticServer({ root: path.join(siteRoot, "dist") });
   baseUrl = await app.listen();
   browser = await chromium.launch({ headless: true });

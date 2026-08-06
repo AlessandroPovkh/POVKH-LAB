@@ -1,11 +1,14 @@
 import assert from "node:assert/strict";
+import { execFile as execFileCallback } from "node:child_process";
 import { after, before, test } from "node:test";
 import path from "node:path";
+import { promisify } from "node:util";
 import { fileURLToPath } from "node:url";
 import { chromium } from "playwright";
 import { createStaticServer } from "../tools/server.mjs";
 
 const siteRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const execFile = promisify(execFileCallback);
 const deg = (value) => value * Math.PI / 180;
 const closeTo = (actual, expected, tolerance, label) => {
   assert.ok(Math.abs(actual - expected) <= tolerance, `${label}: expected ${expected}, received ${actual}`);
@@ -34,6 +37,7 @@ let baseUrl;
 let browser;
 
 before(async () => {
+  await execFile(process.execPath, [path.join(siteRoot, "tools/build.mjs")], { cwd: siteRoot });
   app = createStaticServer({ root: path.join(siteRoot, "dist") });
   baseUrl = await app.listen();
   browser = await chromium.launch({ headless: true });
