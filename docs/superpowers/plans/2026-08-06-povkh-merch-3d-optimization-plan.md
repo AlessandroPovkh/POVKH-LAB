@@ -133,4 +133,3 @@
 3. Integrate with the repository’s Pages release workflow.
 4. Verify deployed `/`, `/merch/`, two product viewers, reduced-motion fallback, language routes and 404.
 5. Report the deployed URL, test evidence, viewer modes and any explicitly deferred high-fidelity source requirements.
-
