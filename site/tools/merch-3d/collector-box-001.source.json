@@ -40,23 +40,54 @@
     }
   },
   "identity": {
-    "lid": {
+    "artwork": {
       "path": "sources/collector-box-001/PVKH_ASCII_REVERSE_EXACT_1600x600_v01.png",
       "sha256": "284e69cfb0e6e7fef2a993f44289577efabd1fae576c9280bab4d4e2f59b398f",
-      "application": "exact-horizontal-lower-lid",
-      "uvRecord": {
-        "sourcePx": [1600, 600],
-        "sourceRegistrationPx": {"canvas": [1536, 1024], "origin": [490, 395], "size": [620, 233]},
-        "surfaceMm": {"width": 202, "height": 75.75, "centreX": 4, "centreY": 152},
-        "uvBounds": [0, 0, 1, 1],
-        "rotationDeg": 0,
-        "warped": false
-      }
+      "application": "exact-raster-reused-with-placement-specific-full-image-uvs",
+      "authority": "canonical-governed-exact-raster",
+      "sourcePx": [1600, 600],
+      "sourceRegistrationPx": {"canvas": [1536, 1024], "origin": [490, 395], "size": [620, 233]},
+      "uvBounds": [0, 0, 1, 1]
     },
     "geometryAuthority": {
       "path": "sources/collector-box-001/povkh-lab-ascii-dark-outlined.svg",
       "sha256": "aa95b301a5c41798cbd8335d33ff48ec42699f79c1960c323117126ea877be3c",
       "application": "audit-only-reverse-raster-is-embedded"
+    }
+  },
+  "identityPlacements": {
+    "lidPanel": {
+      "node": "Collector_Box_Lid_Identity",
+      "coordinateSpace": "provisional-lid-local-mm",
+      "centreMm": [-12, 8.2, -103],
+      "surfaceMm": [120, 45],
+      "uvBounds": [0, 0, 1, 1],
+      "rotationDeg": 0,
+      "canonicalArtworkSha256": "284e69cfb0e6e7fef2a993f44289577efabd1fae576c9280bab4d4e2f59b398f",
+      "placementAuthority": "concept-derived-viewer-placement-not-production-registration",
+      "sourceUse": "full-image-no-crop-no-redraw"
+    },
+    "zineCover": {
+      "node": "Collector_Box_Zine_Identity_Exact",
+      "coordinateSpace": "open-scene-world-mm",
+      "centreMm": [-50, 57.8, -15],
+      "surfaceMm": [78, 29.25],
+      "uvBounds": [0, 0, 1, 1],
+      "rotationDeg": 0,
+      "canonicalArtworkSha256": "284e69cfb0e6e7fef2a993f44289577efabd1fae576c9280bab4d4e2f59b398f",
+      "placementAuthority": "concept-derived-viewer-placement-not-production-registration",
+      "sourceUse": "full-image-no-crop-no-redraw"
+    },
+    "stickerInsert": {
+      "node": "Collector_Box_Sticker_Identity_Insert",
+      "coordinateSpace": "provisional-lid-local-mm",
+      "centreMm": [65, 8.2, -56],
+      "surfaceMm": [75, 28.125],
+      "uvBounds": [0, 0, 1, 1],
+      "rotationDeg": 0,
+      "canonicalArtworkSha256": "284e69cfb0e6e7fef2a993f44289577efabd1fae576c9280bab4d4e2f59b398f",
+      "placementAuthority": "concept-derived-viewer-placement-not-production-registration",
+      "sourceUse": "full-image-no-crop-no-redraw"
     }
   },
   "derivedMaterials": {
@@ -73,8 +104,9 @@
     "authoritySourceSha256": "39fb9506f9274ba1aaceb0848b24de33fbb18898d2732440097e4d2f83862294"
   },
   "dimensions": {
-    "viewerEnvelopeMm": [250, 315, 55],
-    "authority": "provisional-viewer-envelope-not-machinable",
+    "provisionalClosedEnvelopeMm": [250, 315, 55],
+    "authority": "provisional-closed-envelope-not-open-scene-not-machinable",
+    "actualOpenScenePolicy": "measured-from-reopened-glb-not-production-dimensions",
     "replacementGate": "selected vendor dieline plus packed physical proof"
   },
   "materials": {

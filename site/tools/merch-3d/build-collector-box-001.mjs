@@ -5,7 +5,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { Document, NodeIO } from "@gltf-transform/core";
-import { dedup, inspect, prune } from "@gltf-transform/functions";
+import { dedup, getBounds, inspect, prune } from "@gltf-transform/functions";
 import { validateBytes } from "gltf-validator";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
@@ -50,8 +50,8 @@ const addCylinderY=(g,[cx,cy,cz],radius,height,segments=40)=>{const y0=cy-height
 const createMaterial=(doc,name,preset)=>doc.createMaterial(name).setBaseColorFactor(preset.baseColor).setMetallicFactor(preset.metallic).setRoughnessFactor(preset.roughness).setDoubleSided(true);
 const primitiveFor=(doc,buffer,name,g,material)=>doc.createPrimitive().setAttribute("POSITION",doc.createAccessor(`${name}_POSITION`).setType("VEC3").setArray(new Float32Array(g.positions)).setBuffer(buffer)).setAttribute("NORMAL",doc.createAccessor(`${name}_NORMAL`).setType("VEC3").setArray(new Float32Array(g.normals)).setBuffer(buffer)).setAttribute("TANGENT",doc.createAccessor(`${name}_TANGENT`).setType("VEC4").setArray(new Float32Array(g.tangents)).setBuffer(buffer)).setAttribute("TEXCOORD_0",doc.createAccessor(`${name}_TEXCOORD_0`).setType("VEC2").setArray(new Float32Array(g.uvs)).setBuffer(buffer)).setIndices(doc.createAccessor(`${name}_INDICES`).setType("SCALAR").setArray(new Uint32Array(g.indices)).setBuffer(buffer)).setMaterial(material);
 const addMeshNode=(doc,parent,buffer,name,g,material,translation=[0,0,0],extras={})=>{const node=doc.createNode(name).setTranslation(translation).setExtras(extras).setMesh(doc.createMesh(`${name}_Mesh`).addPrimitive(primitiveFor(doc,buffer,name,g,material)));parent.addChild(node);return node;};
-const meshFor=(doc,buffer,name,g,material)=>doc.createMesh(`${name}_Mesh`).addPrimitive(primitiveFor(doc,buffer,name,g,material));
-const addInstance=(doc,parent,name,mesh,{translation=[0,0,0],scale=[1,1,1],rotation=[0,0,0,1],extras={}}={})=>{const node=doc.createNode(name).setTranslation(translation).setScale(scale).setRotation(rotation).setExtras(extras).setMesh(mesh);parent.addChild(node);return node;};
+const addSemanticNode=(doc,parent,name,extras)=>{const node=doc.createNode(name).setExtras(extras);parent.addChild(node);return node;};
+const appendTransformed=(target,source,{scale=[1,1,1],translation=[0,0,0],rotationX=0,worldTranslation=[0,0,0]}={})=>{const base=target.positions.length/3,c=Math.cos(rotationX),s=Math.sin(rotationX);for(let index=0;index<source.positions.length/3;index+=1){const x=source.positions[index*3]*scale[0]+translation[0],y=source.positions[index*3+1]*scale[1]+translation[1],z=source.positions[index*3+2]*scale[2]+translation[2],nx=source.normals[index*3]/scale[0],ny=source.normals[index*3+1]/scale[1],nz=source.normals[index*3+2]/scale[2],normalLength=Math.hypot(nx,ny,nz)||1;target.vertex([x+worldTranslation[0],y*c-z*s+worldTranslation[1],y*s+z*c+worldTranslation[2]],[nx/normalLength,(ny*c-nz*s)/normalLength,(ny*s+nz*c)/normalLength],[source.uvs[index*2],source.uvs[index*2+1]]);}for(const index of source.indices)target.indices.push(base+index);};
 
 const createBookclothNormal=async(source)=>{
   const reference=source.derivedMaterials.bookclothNormal,bytes=await readFile(path.join(here,reference.path));
@@ -71,56 +71,83 @@ const buildDocument=async(source)=>{
   const clothBytes=await createBookclothNormal(source),clothTexture=doc.createTexture("Collector_Box_001_Bookcloth_Normal").setImage(clothBytes).setMimeType("image/png").setExtras({proceduralRecipe:"pvkh-bookcloth-normal-v1",containsIdentity:false,derivedRasterSha256:sha256(clothBytes)});
   const board=createMaterial(doc,"MAT_VOID_PAPER_WRAPPED_BOARD",source.materials.board).setNormalTexture(clothTexture);
   const bone=createMaterial(doc,"MAT_BONE_LINING_AND_PAPER",source.materials.bone),tray=createMaterial(doc,"MAT_DARK_MODULAR_TRAY",source.materials.tray),zine=createMaterial(doc,"MAT_VOID_ZINE",source.materials.zine),cassette=createMaterial(doc,"MAT_SMOKE_CASSETTE",source.materials.cassette).setAlphaMode("BLEND"),disc=createMaterial(doc,"MAT_OPTICAL_DISC",source.materials.disc),dataKey=createMaterial(doc,"MAT_DATA_KEY",source.materials.dataKey),signal=createMaterial(doc,"MAT_SIGNAL_RED_PULL_TAB",source.materials.signal);
-  const identityBytes=await readFile(path.join(here,source.identity.lid.path)),identityTexture=doc.createTexture("Collector_Box_001_Lid_Identity_Exact").setImage(identityBytes).setMimeType("image/png").setExtras({canonicalSourceSha256:source.identity.lid.sha256,application:source.identity.lid.application});
+  const identityBytes=await readFile(path.join(here,source.identity.artwork.path)),identityTexture=doc.createTexture("Collector_Box_001_Identity_Exact").setImage(identityBytes).setMimeType("image/png").setExtras({canonicalSourceSha256:source.identity.artwork.sha256,authority:source.identity.artwork.authority,application:source.identity.artwork.application});
   const identityMaterial=createMaterial(doc,"MAT_EXACT_REVERSE_LID_IDENTITY",{baseColor:[1,1,1,1],metallic:0,roughness:0.68}).setBaseColorTexture(identityTexture).setEmissiveFactor([0.85,0.85,0.85]).setEmissiveTexture(identityTexture).setAlphaMode("BLEND");
 
-  const unitBoxGeometry=new Geometry();addBox(unitBoxGeometry,[0,0,0],[1,1,1]);
-  const boardBox=meshFor(doc,buffer,"Collector_Box_Board_Unit",unitBoxGeometry,board),boneBox=meshFor(doc,buffer,"Collector_Box_Bone_Unit",unitBoxGeometry,bone),trayBox=meshFor(doc,buffer,"Collector_Box_Tray_Unit",unitBoxGeometry,tray),zineBox=meshFor(doc,buffer,"Collector_Box_Zine_Unit",unitBoxGeometry,zine),dataKeyBox=meshFor(doc,buffer,"Collector_Box_Data_Key_Unit",unitBoxGeometry,dataKey),signalBox=meshFor(doc,buffer,"Collector_Box_Signal_Unit",unitBoxGeometry,signal);
-  const identityGeometry=new Geometry();addTopQuad(identityGeometry);const identityMesh=meshFor(doc,buffer,"Collector_Box_Exact_Identity_Plane",identityGeometry,identityMaterial);
-  const cassetteGeometry=new Geometry();addBox(cassetteGeometry,[0,0,0],[mm(62),mm(9),mm(38)]);addCylinderY(cassetteGeometry,[mm(-16),mm(5.2),0],mm(7),mm(1.4),28);addCylinderY(cassetteGeometry,[mm(16),mm(5.2),0],mm(7),mm(1.4),28);const cassetteMesh=meshFor(doc,buffer,"Collector_Box_Cassette_Concept",cassetteGeometry,cassette);
-  const discCaseGeometry=new Geometry();addBox(discCaseGeometry,[0,0,0],[mm(70),mm(5),mm(68)]);const discCaseMesh=meshFor(doc,buffer,"Collector_Box_CD_Case_Concept",discCaseGeometry,cassette);
-  const discGeometry=new Geometry();addCylinderY(discGeometry,[0,0,0],mm(29),mm(1.4),48);addCylinderY(discGeometry,[0,mm(0.9),0],mm(6),mm(1.8),28);const discMesh=meshFor(doc,buffer,"Collector_Box_CD_Disc_Concept",discGeometry,disc);
+  const unitBox=new Geometry();addBox(unitBox,[0,0,0],[1,1,1]);const unitIdentity=new Geometry();addTopQuad(unitIdentity);
+  const batches={Board:new Geometry(),Bone:new Geometry(),Tray:new Geometry(),Zine:new Geometry(),Cassette:new Geometry(),Disc:new Geometry(),Data_Key:new Geometry(),Signal:new Geometry(),Identity:new Geometry()};
+  const lidAngleFromHorizontalDeg=180-source.openAssembly.lidAngleDeg,rotationRad=lidAngleFromHorizontalDeg*Math.PI/180,hinge=[0,mm(36),mm(-65)],lidTransform=(target,shape,translation,scale)=>appendTransformed(target,shape,{translation,scale,rotationX:rotationRad,worldTranslation:hinge});
 
-  addInstance(doc,assembly,"Collector_Box_Open_Base",boardBox,{translation:[0,mm(18),mm(30)],scale:[mm(250),mm(36),mm(190)],extras:{state:"default-open-archive-set",nominalClosedEnvelopeMm:source.dimensions.viewerEnvelopeMm,dimensionAuthority:source.dimensions.authority,machinable:false,selectedForm:source.selectedForm}});
-  addInstance(doc,assembly,"Collector_Box_Modular_Tray",trayBox,{translation:[0,mm(40),mm(30)],scale:[mm(232),mm(9),mm(172)],extras:{part:"dark-modular-tray",conceptOnly:true,manufacturingInternals:false}});
-  for(const [name,translation,scale,contentType] of [
+  appendTransformed(batches.Board,unitBox,{translation:[0,mm(18),mm(30)],scale:[mm(250),mm(36),mm(190)]});
+  lidTransform(batches.Board,unitBox,[0,0,mm(-95)],[mm(250),mm(12),mm(190)]);
+  appendTransformed(batches.Tray,unitBox,{translation:[0,mm(40),mm(30)],scale:[mm(232),mm(9),mm(172)]});
+  const recesses=[
     ["Collector_Box_Zine_Recess",[mm(-50),mm(46),mm(-15)],[mm(119),mm(5),mm(83)],"zine"],
     ["Collector_Box_Vinyl_Recess",[mm(57),mm(46),mm(-15)],[mm(83),mm(5),mm(83)],"vinyl-archive-sleeve"],
     ["Collector_Box_Cassette_Recess",[mm(-74),mm(46),mm(76)],[mm(72),mm(5),mm(49)],"cassette"],
     ["Collector_Box_CD_Recess",[mm(4),mm(46),mm(76)],[mm(77),mm(5),mm(77)],"cd"],
     ["Collector_Box_Data_Key_Recess",[mm(91),mm(46),mm(76)],[mm(30),mm(5),mm(75)],"data-key"]
-  ])addInstance(doc,assembly,name,trayBox,{translation,scale,extras:{part:"individual-recess",contentType,conceptOnly:true,clearanceClaim:false}});
+  ];
+  for(const [,translation,scale] of recesses)appendTransformed(batches.Tray,unitBox,{translation,scale});
+  lidTransform(batches.Tray,unitBox,[mm(-12),mm(7.6),mm(-103)],[mm(128),mm(1),mm(50)]);
+  lidTransform(batches.Tray,unitBox,[mm(65),mm(7.6),mm(-56)],[mm(82),mm(1),mm(34)]);
 
-  addInstance(doc,assembly,"Collector_Box_Vinyl_Archive_Sleeve",boneBox,{translation:[mm(57),mm(50),mm(-15)],scale:[mm(73),mm(4),mm(73)],extras:{contentType:"vinyl-archive-sleeve",conceptOnly:true,sourceAuthority:source.openAssembly.contentsAuthority}});
-  addInstance(doc,assembly,"Collector_Box_Upper_Zine",zineBox,{translation:[mm(-50),mm(54),mm(-15)],scale:[mm(109),mm(6),mm(67)],extras:{contentType:"zine",compartment:"upper",conceptOnly:true,sourceAuthority:source.openAssembly.contentsAuthority}});
-  addInstance(doc,assembly,"Collector_Box_Zine_Page_Block",boneBox,{translation:[mm(-50),mm(57.2),mm(17)],scale:[mm(103),mm(1.2),mm(3)],extras:{part:"zine-page-block",conceptOnly:true}});
-  addInstance(doc,assembly,"Collector_Box_Zine_Identity_Exact",identityMesh,{translation:[mm(-50),mm(57.8),mm(-15)],scale:[mm(78),1,mm(29.25)],extras:{part:"governed-zine-cover-mark",contentType:"zine",conceptOnly:true,canonicalSourceSha256:source.identity.lid.sha256,warped:false,generatedByImageModel:false}});
-  addInstance(doc,assembly,"Collector_Box_Cassette",cassetteMesh,{translation:[mm(-74),mm(54),mm(76)],extras:{contentType:"cassette",conceptOnly:true,sourceAuthority:source.openAssembly.contentsAuthority}});
-  addInstance(doc,assembly,"Collector_Box_Cassette_Signal",signalBox,{translation:[mm(-74),mm(59),mm(76)],scale:[mm(28),mm(0.8),mm(2)],extras:{part:"cassette-signal-line",conceptOnly:true}});
-  addInstance(doc,assembly,"Collector_Box_CD",discCaseMesh,{translation:[mm(4),mm(53),mm(76)],extras:{contentType:"cd",part:"smoke-jewel-case",conceptOnly:true,sourceAuthority:source.openAssembly.contentsAuthority}});
-  addInstance(doc,assembly,"Collector_Box_CD_Disc",discMesh,{translation:[mm(4),mm(56.2),mm(76)],extras:{contentType:"cd",part:"silver-optical-disc",conceptOnly:true,sourceAuthority:source.openAssembly.contentsAuthority}});
-  addInstance(doc,assembly,"Collector_Box_Data_Key",dataKeyBox,{translation:[mm(91),mm(56),mm(76)],scale:[mm(20),mm(10),mm(60)],extras:{contentType:"data-key",conceptOnly:true,connectorGeometry:"omitted",sourceAuthority:source.openAssembly.contentsAuthority}});
-  addInstance(doc,assembly,"Collector_Box_Data_Key_Connector",boneBox,{translation:[mm(91),mm(61.5),mm(49)],scale:[mm(14),mm(1.2),mm(10)],extras:{contentType:"data-key",part:"connector-cue-not-dimensional",conceptOnly:true}});
-  addInstance(doc,assembly,"Collector_Box_Vinyl_Archive_Signal",signalBox,{translation:[mm(57),mm(52.5),mm(-15)],scale:[mm(3),mm(1),mm(48)],extras:{contentType:"vinyl-archive-sleeve",part:"signal-red-registration-stripe",conceptOnly:true}});
-  addInstance(doc,assembly,"Collector_Box_Signal_Red_Pull_Tab",signalBox,{translation:[0,mm(58),mm(31)],scale:[mm(18),mm(8),mm(22)],extras:{part:"exposed-pull-tab",conceptOnly:true,materialAuthority:"Signal Red textile or paper provisional"}});
+  appendTransformed(batches.Signal,unitBox,{translation:[mm(57),mm(51),mm(-15)],scale:[mm(73),mm(4),mm(73)]});
+  addCylinderY(batches.Tray,[mm(57),mm(54.9),mm(-15)],mm(22),mm(1.5),40);
+  appendTransformed(batches.Zine,unitBox,{translation:[mm(-50),mm(54),mm(-15)],scale:[mm(109),mm(6),mm(67)]});
+  appendTransformed(batches.Bone,unitBox,{translation:[mm(-50),mm(57.2),mm(17)],scale:[mm(103),mm(1.2),mm(3)]});
+  const zinePlacement=source.identityPlacements.zineCover;appendTransformed(batches.Identity,unitIdentity,{translation:zinePlacement.centreMm.map(mm),scale:[mm(zinePlacement.surfaceMm[0]),1,mm(zinePlacement.surfaceMm[1])]});
 
-  const lidAngleFromHorizontalDeg=180-source.openAssembly.lidAngleDeg,rotationRad=lidAngleFromHorizontalDeg*Math.PI/180,lidPivot=doc.createNode("Collector_Box_Lid_Pivot_Provisional").setTranslation([0,mm(36),mm(-65)]).setRotation([Math.sin(rotationRad/2),0,0,Math.cos(rotationRad/2)]).setExtras({openAngleDeg:source.openAssembly.lidAngleDeg,workingHinge:false,hingeAuthority:source.openAssembly.hingeAuthority,mechanicalMotion:false});assembly.addChild(lidPivot);
-  addInstance(doc,lidPivot,"Collector_Box_Open_Lid",boardBox,{translation:[0,0,mm(-95)],scale:[mm(250),mm(12),mm(190)],extras:{part:"open-clamshell-lid",state:"default-open",openAngleDeg:source.openAssembly.lidAngleDeg,workingHinge:false,machinable:false}});
-  addInstance(doc,lidPivot,"Collector_Box_Lid_Interior",boneBox,{translation:[0,mm(6.5),mm(-95)],scale:[mm(232),mm(2),mm(172)],extras:{part:"bone-lid-lining",conceptOnly:true,manufacturingInternals:false}});
-  addInstance(doc,lidPivot,"Collector_Box_Lid_Identity_Backplate",trayBox,{translation:[mm(-12),mm(7.6),mm(-103)],scale:[mm(128),mm(1),mm(50)],extras:{part:"dark-identity-panel-backplate",conceptOnly:true,clearanceClaim:false}});
-  addInstance(doc,lidPivot,"Collector_Box_Lid_Identity",identityMesh,{translation:[mm(-12),mm(8.2),mm(-103)],scale:[mm(120),1,mm(45)],extras:{canonicalSourceSha256:source.identity.lid.sha256,uvRecord:source.identity.lid.uvRecord,part:"exact-governed-identity-panel",horizontal:true,warped:false,generatedByImageModel:false}});
-  addInstance(doc,lidPivot,"Collector_Box_Sticker_Identity_Insert",identityMesh,{translation:[mm(65),mm(7.7),mm(-57)],scale:[mm(60),1,mm(22.5)],extras:{contentType:"sticker-identity",conceptOnly:true,canonicalSourceSha256:source.identity.lid.sha256,warped:false,generatedByImageModel:false}});
+  const cassetteShape=new Geometry();addBox(cassetteShape,[0,0,0],[mm(62),mm(9),mm(38)]);addCylinderY(cassetteShape,[mm(-16),mm(5.2),0],mm(7),mm(1.4),28);addCylinderY(cassetteShape,[mm(16),mm(5.2),0],mm(7),mm(1.4),28);appendTransformed(batches.Cassette,cassetteShape,{translation:[mm(-74),mm(54),mm(76)]});
+  appendTransformed(batches.Signal,unitBox,{translation:[mm(-74),mm(59),mm(76)],scale:[mm(28),mm(0.8),mm(2)]});
+  const discCaseShape=new Geometry();addBox(discCaseShape,[0,0,0],[mm(70),mm(5),mm(68)]);appendTransformed(batches.Cassette,discCaseShape,{translation:[mm(4),mm(53),mm(76)]});
+  addCylinderY(batches.Disc,[mm(4),mm(56.2),mm(76)],mm(29),mm(1.4),48);addCylinderY(batches.Disc,[mm(4),mm(57.1),mm(76)],mm(6),mm(1.8),28);
+  appendTransformed(batches.Data_Key,unitBox,{translation:[mm(91),mm(56),mm(76)],scale:[mm(20),mm(10),mm(60)]});
+  appendTransformed(batches.Bone,unitBox,{translation:[mm(91),mm(61.5),mm(49)],scale:[mm(14),mm(1.2),mm(10)]});
+  appendTransformed(batches.Signal,unitBox,{translation:[0,mm(58),mm(31)],scale:[mm(18),mm(8),mm(22)]});
+
+  lidTransform(batches.Bone,unitBox,[0,mm(6.5),mm(-95)],[mm(232),mm(2),mm(172)]);
+  const lidPlacement=source.identityPlacements.lidPanel,stickerPlacement=source.identityPlacements.stickerInsert;
+  lidTransform(batches.Identity,unitIdentity,lidPlacement.centreMm.map(mm),[mm(lidPlacement.surfaceMm[0]),1,mm(lidPlacement.surfaceMm[1])]);
+  lidTransform(batches.Identity,unitIdentity,stickerPlacement.centreMm.map(mm),[mm(stickerPlacement.surfaceMm[0]),1,mm(stickerPlacement.surfaceMm[1])]);
+
+  const materials={Board:board,Bone:bone,Tray:tray,Zine:zine,Cassette:cassette,Disc:disc,Data_Key:dataKey,Signal:signal,Identity:identityMaterial};
+  for(const [key,geometry] of Object.entries(batches))addMeshNode(doc,assembly,buffer,`Collector_Box_Visual_Batch_${key}`,geometry,materials[key],[0,0,0],{runtimeDrawBatch:true,materialBatch:key,staticBakedTransforms:true});
+
+  const semantic=(name,visualBatch,extras={})=>addSemanticNode(doc,assembly,name,{visualBatch:`Collector_Box_Visual_Batch_${visualBatch}`,...extras});
+  semantic("Collector_Box_Open_Base","Board",{state:"default-open-archive-set",placement:{coordinateSpace:"open-scene-world-mm",centreMm:[0,18,30],sizeMm:[250,36,190]},provisionalClosedEnvelopeMm:source.dimensions.provisionalClosedEnvelopeMm,dimensionAuthority:source.dimensions.authority,machinable:false,selectedForm:source.selectedForm});
+  semantic("Collector_Box_Modular_Tray","Tray",{part:"dark-modular-tray",conceptOnly:true,manufacturingInternals:false});
+  for(const [name,translation,scale,contentType] of recesses)semantic(name,"Tray",{part:"individual-recess",contentType,conceptOnly:true,clearanceClaim:false,placement:{coordinateSpace:"open-scene-world-mm",centreMm:translation.map(value=>value*1000),sizeMm:scale.map(value=>value*1000)}});
+  semantic("Collector_Box_Vinyl_Archive_Sleeve","Signal",{contentType:"vinyl-archive-sleeve",appearance:"signal-red-sleeve-with-dark-vinyl-disc",conceptOnly:true,sourceAuthority:source.openAssembly.contentsAuthority});
+  semantic("Collector_Box_Vinyl_Archive_Signal","Signal",{contentType:"vinyl-archive-sleeve",part:"signal-red-archive-sleeve",conceptOnly:true});
+  semantic("Collector_Box_Upper_Zine","Zine",{contentType:"zine",compartment:"upper",conceptOnly:true,sourceAuthority:source.openAssembly.contentsAuthority});
+  semantic("Collector_Box_Zine_Page_Block","Bone",{part:"zine-page-block",conceptOnly:true});
+  semantic("Collector_Box_Zine_Identity_Exact","Identity",{part:"governed-zine-cover-mark",contentType:"zine",conceptOnly:true,canonicalSourceSha256:source.identity.artwork.sha256,placementRecord:source.identityPlacements.zineCover,warped:false,generatedByImageModel:false});
+  semantic("Collector_Box_Cassette","Cassette",{contentType:"cassette",conceptOnly:true,sourceAuthority:source.openAssembly.contentsAuthority});
+  semantic("Collector_Box_Cassette_Signal","Signal",{part:"cassette-signal-line",conceptOnly:true});
+  semantic("Collector_Box_CD","Cassette",{contentType:"cd",part:"smoke-jewel-case",conceptOnly:true,sourceAuthority:source.openAssembly.contentsAuthority});
+  semantic("Collector_Box_CD_Disc","Disc",{contentType:"cd",part:"silver-optical-disc",conceptOnly:true,sourceAuthority:source.openAssembly.contentsAuthority});
+  semantic("Collector_Box_Data_Key","Data_Key",{contentType:"data-key",conceptOnly:true,connectorGeometry:"visual-cue-only",sourceAuthority:source.openAssembly.contentsAuthority});
+  semantic("Collector_Box_Data_Key_Connector","Bone",{contentType:"data-key",part:"connector-cue-not-dimensional",conceptOnly:true});
+  semantic("Collector_Box_Signal_Red_Pull_Tab","Signal",{part:"exposed-pull-tab",conceptOnly:true,materialAuthority:"Signal Red textile or paper provisional"});
+  const lidPivot=doc.createNode("Collector_Box_Lid_Pivot_Provisional").setExtras({openAngleDeg:source.openAssembly.lidAngleDeg,workingHinge:false,hingeAuthority:source.openAssembly.hingeAuthority,mechanicalMotion:false});assembly.addChild(lidPivot);
+  semantic("Collector_Box_Open_Lid","Board",{part:"open-clamshell-lid",state:"default-open",openAngleDeg:source.openAssembly.lidAngleDeg,workingHinge:false,machinable:false});
+  semantic("Collector_Box_Lid_Interior","Bone",{part:"bone-lid-lining",conceptOnly:true,manufacturingInternals:false});
+  semantic("Collector_Box_Lid_Identity_Backplate","Tray",{part:"dark-identity-panel-backplate",conceptOnly:true,clearanceClaim:false});
+  semantic("Collector_Box_Lid_Identity","Identity",{canonicalSourceSha256:source.identity.artwork.sha256,placementRecord:source.identityPlacements.lidPanel,part:"exact-governed-identity-panel",horizontal:true,warped:false,generatedByImageModel:false});
+  semantic("Collector_Box_Sticker_Identity_Insert","Identity",{contentType:"sticker-identity",conceptOnly:true,canonicalSourceSha256:source.identity.artwork.sha256,placementRecord:source.identityPlacements.stickerInsert,backplate:"high-contrast-dark-card",warped:false,generatedByImageModel:false});
   await doc.transform(dedup(),prune({keepExtras:true}));return doc;
 };
 
-const metricsFor=(doc)=>doc.getRoot().listMeshes().reduce((totals,mesh)=>{for(const primitive of mesh.listPrimitives()){totals.triangles+=primitive.getIndices().getCount()/3;totals.drawCalls+=1;}return totals;},{triangles:0,drawCalls:0});
+const metricsFor=(doc)=>{const metrics={triangles:0,drawCalls:0,uniqueMeshPrimitives:0};for(const mesh of doc.getRoot().listMeshes())metrics.uniqueMeshPrimitives+=mesh.listPrimitives().length;for(const node of doc.getRoot().listNodes())for(const primitive of node.getMesh()?.listPrimitives()??[]){metrics.triangles+=primitive.getIndices().getCount()/3;metrics.drawCalls+=1;}return metrics;};
+const boundsMmFor=(scene)=>{const bounds=getBounds(scene);return {min:bounds.min.map(value=>Number((value*1000).toFixed(3))),max:bounds.max.map(value=>Number((value*1000).toFixed(3))),size:bounds.min.map((value,axis)=>Number(((bounds.max[axis]-value)*1000).toFixed(3)))};};
 const validationSummary=(validation)=>({errors:validation.issues.numErrors,warnings:validation.issues.numWarnings,infos:validation.issues.numInfos,hints:validation.issues.numHints});
 
 const buildArtifact=async()=>{
-  const source=await readJson(sourcePath),integrity=await verifySources(source),doc=await buildDocument(source),io=new NodeIO(),bytes=Buffer.from(await io.writeBinary(doc)),reopened=await io.readBinary(bytes),metrics=metricsFor(reopened);
+  const source=await readJson(sourcePath),integrity=await verifySources(source),doc=await buildDocument(source),io=new NodeIO(),bytes=Buffer.from(await io.writeBinary(doc)),reopened=await io.readBinary(bytes),metrics=metricsFor(reopened),actualOpenSceneBoundsMm=boundsMmFor(reopened.getRoot().getDefaultScene());
   const validation=await validateBytes(new Uint8Array(bytes),{uri:"collector-box-001.glb",format:"glb",writeTimestamp:false,maxIssues:100}),summary=validationSummary(validation);if(summary.errors||summary.warnings)process.stderr.write(`${JSON.stringify(validation.issues.messages,null,2)}\n`);assert.equal(summary.errors,0,"Khronos validator errors");assert.equal(summary.warnings,0,"Khronos validator warnings");assert.ok(bytes.byteLength<=source.budgets.maxBytes);assert.ok(metrics.triangles<=source.budgets.maxTriangles);assert.ok(metrics.drawCalls<=source.budgets.maxDrawCalls);
   const cloth=reopened.getRoot().listTextures().find(texture=>texture.getExtras().proceduralRecipe==="pvkh-bookcloth-normal-v1");
-  const report={schemaVersion:1,assetKey:source.assetKey,sourceIntegrity:integrity.identity,authorityIntegrity:integrity.authority,derivedMaterialIntegrity:integrity.derivedMaterials,derivedMaterialSha256:{bookclothNormal:sha256(cloth.getImage())},physicalEvidence:{method:"reopened-glb-accessor-bounds",nominalClosedEnvelopeMm:source.dimensions.viewerEnvelopeMm,dimensionAuthority:source.dimensions.authority,state:"default-open-archive-set",selectedForm:source.selectedForm,openAngleDeg:source.openAssembly.lidAngleDeg,lidUvRecord:source.identity.lid.uvRecord,modeled:["open base and lid","bone lid lining","modular tray and recesses",...source.openAssembly.namedContents],excluded:["working hinge","vendor dieline","manufacturing internals","machinability claim"]},cameraRecommendations:source.camera,validation:summary,budget:{...metrics,bytes:bytes.byteLength,ceilings:source.budgets},output:{path:"assets/merch-3d/collector-box-001.glb",sha256:sha256(bytes)},deterministic:{verifiedBySecondInMemoryBuild:false},visualComparison:{canonicalSelected:[source.visualReference.path],reviewStatus:"captured-six-views-readability-source-compare",browserQa:"tools/merch-3d/reports/collector-box-001.browser-qa.json"}};
+  const report={schemaVersion:1,assetKey:source.assetKey,sourceIntegrity:integrity.identity,authorityIntegrity:integrity.authority,derivedMaterialIntegrity:integrity.derivedMaterials,derivedMaterialSha256:{bookclothNormal:sha256(cloth.getImage())},identityEvidence:{canonicalArtwork:{path:source.identity.artwork.path,sha256:source.identity.artwork.sha256,authority:source.identity.artwork.authority},conceptDerivedPlacements:source.identityPlacements},physicalEvidence:{method:"reopened-glb-scene-bounds-and-node-instanced-primitive-count",provisionalClosedEnvelopeMm:source.dimensions.provisionalClosedEnvelopeMm,actualOpenSceneBoundsMm,dimensionAuthority:source.dimensions.authority,boundsRelationship:"measured open scene differs from provisional closed envelope; neither is machinable",state:"default-open-archive-set",selectedForm:source.selectedForm,openAngleDeg:source.openAssembly.lidAngleDeg,modeled:["open base and lid","bone lid lining","modular tray and recesses",...source.openAssembly.namedContents],excluded:["working hinge","vendor dieline","manufacturing internals","machinability claim"]},cameraRecommendations:source.camera,validation:summary,budget:{...metrics,bytes:bytes.byteLength,ceilings:source.budgets},output:{path:"assets/merch-3d/collector-box-001.glb",sha256:sha256(bytes)},deterministic:{verifiedBySecondInMemoryBuild:false},visualComparison:{canonicalSelected:[source.visualReference.path],reviewStatus:"captured-six-views-readability-source-compare",browserQa:"tools/merch-3d/reports/collector-box-001.browser-qa.json"}};
   return {source,bytes,report,validation,inspection:inspect(reopened)};
 };
 

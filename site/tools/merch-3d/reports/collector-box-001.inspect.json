@@ -14,22 +14,22 @@
           0.22108,
           0.125
         ],
-        "renderVertexCount": 2322,
-        "uploadVertexCount": 1140,
-        "uploadNaiveVertexCount": 1260
+        "renderVertexCount": 2802,
+        "uploadVertexCount": 1878,
+        "uploadNaiveVertexCount": 1878
       }
     ]
   },
   "meshes": {
     "properties": [
       {
-        "name": "Collector_Box_Board_Unit_Mesh",
+        "name": "Collector_Box_Visual_Batch_Board_Mesh",
         "mode": [
           "TRIANGLES"
         ],
         "meshPrimitives": 1,
-        "glPrimitives": 12,
-        "vertices": 24,
+        "glPrimitives": 24,
+        "vertices": 48,
         "indices": [
           "u32"
         ],
@@ -39,17 +39,17 @@
           "TANGENT:f32",
           "TEXCOORD_0:f32"
         ],
-        "instances": 2,
-        "size": 1296
+        "instances": 1,
+        "size": 2592
       },
       {
-        "name": "Collector_Box_Bone_Unit_Mesh",
+        "name": "Collector_Box_Visual_Batch_Bone_Mesh",
         "mode": [
           "TRIANGLES"
         ],
         "meshPrimitives": 1,
-        "glPrimitives": 12,
-        "vertices": 24,
+        "glPrimitives": 36,
+        "vertices": 72,
         "indices": [
           "u32"
         ],
@@ -57,17 +57,17 @@
           "NORMAL:f32",
           "POSITION:f32"
         ],
-        "instances": 4,
-        "size": 720
+        "instances": 1,
+        "size": 2160
       },
       {
-        "name": "Collector_Box_Tray_Unit_Mesh",
+        "name": "Collector_Box_Visual_Batch_Tray_Mesh",
         "mode": [
           "TRIANGLES"
         ],
         "meshPrimitives": 1,
-        "glPrimitives": 12,
-        "vertices": 24,
+        "glPrimitives": 256,
+        "vertices": 514,
         "indices": [
           "u32"
         ],
@@ -75,11 +75,11 @@
           "NORMAL:f32",
           "POSITION:f32"
         ],
-        "instances": 7,
-        "size": 720
+        "instances": 1,
+        "size": 15408
       },
       {
-        "name": "Collector_Box_Zine_Unit_Mesh",
+        "name": "Collector_Box_Visual_Batch_Zine_Mesh",
         "mode": [
           "TRIANGLES"
         ],
@@ -97,13 +97,13 @@
         "size": 720
       },
       {
-        "name": "Collector_Box_Data_Key_Unit_Mesh",
+        "name": "Collector_Box_Visual_Batch_Cassette_Mesh",
         "mode": [
           "TRIANGLES"
         ],
         "meshPrimitives": 1,
-        "glPrimitives": 12,
-        "vertices": 24,
+        "glPrimitives": 248,
+        "vertices": 500,
         "indices": [
           "u32"
         ],
@@ -112,83 +112,10 @@
           "POSITION:f32"
         ],
         "instances": 1,
-        "size": 720
+        "size": 14976
       },
       {
-        "name": "Collector_Box_Signal_Unit_Mesh",
-        "mode": [
-          "TRIANGLES"
-        ],
-        "meshPrimitives": 1,
-        "glPrimitives": 12,
-        "vertices": 24,
-        "indices": [
-          "u32"
-        ],
-        "attributes": [
-          "NORMAL:f32",
-          "POSITION:f32"
-        ],
-        "instances": 3,
-        "size": 720
-      },
-      {
-        "name": "Collector_Box_Exact_Identity_Plane_Mesh",
-        "mode": [
-          "TRIANGLES"
-        ],
-        "meshPrimitives": 1,
-        "glPrimitives": 2,
-        "vertices": 4,
-        "indices": [
-          "u32"
-        ],
-        "attributes": [
-          "NORMAL:f32",
-          "POSITION:f32",
-          "TEXCOORD_0:f32"
-        ],
-        "instances": 3,
-        "size": 152
-      },
-      {
-        "name": "Collector_Box_Cassette_Concept_Mesh",
-        "mode": [
-          "TRIANGLES"
-        ],
-        "meshPrimitives": 1,
-        "glPrimitives": 236,
-        "vertices": 476,
-        "indices": [
-          "u32"
-        ],
-        "attributes": [
-          "NORMAL:f32",
-          "POSITION:f32"
-        ],
-        "instances": 1,
-        "size": 14256
-      },
-      {
-        "name": "Collector_Box_CD_Case_Concept_Mesh",
-        "mode": [
-          "TRIANGLES"
-        ],
-        "meshPrimitives": 1,
-        "glPrimitives": 12,
-        "vertices": 24,
-        "indices": [
-          "u32"
-        ],
-        "attributes": [
-          "NORMAL:f32",
-          "POSITION:f32"
-        ],
-        "instances": 1,
-        "size": 720
-      },
-      {
-        "name": "Collector_Box_CD_Disc_Concept_Mesh",
+        "name": "Collector_Box_Visual_Batch_Disc_Mesh",
         "mode": [
           "TRIANGLES"
         ],
@@ -204,6 +131,61 @@
         ],
         "instances": 1,
         "size": 18336
+      },
+      {
+        "name": "Collector_Box_Visual_Batch_Data_Key_Mesh",
+        "mode": [
+          "TRIANGLES"
+        ],
+        "meshPrimitives": 1,
+        "glPrimitives": 12,
+        "vertices": 24,
+        "indices": [
+          "u32"
+        ],
+        "attributes": [
+          "NORMAL:f32",
+          "POSITION:f32"
+        ],
+        "instances": 1,
+        "size": 720
+      },
+      {
+        "name": "Collector_Box_Visual_Batch_Signal_Mesh",
+        "mode": [
+          "TRIANGLES"
+        ],
+        "meshPrimitives": 1,
+        "glPrimitives": 36,
+        "vertices": 72,
+        "indices": [
+          "u32"
+        ],
+        "attributes": [
+          "NORMAL:f32",
+          "POSITION:f32"
+        ],
+        "instances": 1,
+        "size": 2160
+      },
+      {
+        "name": "Collector_Box_Visual_Batch_Identity_Mesh",
+        "mode": [
+          "TRIANGLES"
+        ],
+        "meshPrimitives": 1,
+        "glPrimitives": 6,
+        "vertices": 12,
+        "indices": [
+          "u32"
+        ],
+        "attributes": [
+          "NORMAL:f32",
+          "POSITION:f32",
+          "TEXCOORD_0:f32"
+        ],
+        "instances": 1,
+        "size": 456
       }
     ]
   },
@@ -241,7 +223,7 @@
       },
       {
         "name": "MAT_SMOKE_CASSETTE",
-        "instances": 2,
+        "instances": 1,
         "textures": [],
         "alphaMode": "BLEND",
         "doubleSided": true
@@ -295,7 +277,7 @@
         "gpuSize": 349524
       },
       {
-        "name": "Collector_Box_001_Lid_Identity_Exact",
+        "name": "Collector_Box_001_Identity_Exact",
         "uri": "",
         "slots": [
           "baseColorTexture",

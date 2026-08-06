@@ -2,10 +2,10 @@
   "schemaVersion": 1,
   "assetKey": "collector-box-001",
   "sourceIntegrity": {
-    "lid": {
+    "artwork": {
       "path": "sources/collector-box-001/PVKH_ASCII_REVERSE_EXACT_1600x600_v01.png",
       "sha256": "284e69cfb0e6e7fef2a993f44289577efabd1fae576c9280bab4d4e2f59b398f",
-      "application": "exact-horizontal-lower-lid",
+      "application": "exact-raster-reused-with-placement-specific-full-image-uvs",
       "bytes": 159393
     },
     "geometryAuthority": {
@@ -53,51 +53,113 @@
   "derivedMaterialSha256": {
     "bookclothNormal": "8b04ece8038f37ecf6fe1379615e2e0a6deac983e3ad55baf1167aef74eec373"
   },
+  "identityEvidence": {
+    "canonicalArtwork": {
+      "path": "sources/collector-box-001/PVKH_ASCII_REVERSE_EXACT_1600x600_v01.png",
+      "sha256": "284e69cfb0e6e7fef2a993f44289577efabd1fae576c9280bab4d4e2f59b398f",
+      "authority": "canonical-governed-exact-raster"
+    },
+    "conceptDerivedPlacements": {
+      "lidPanel": {
+        "node": "Collector_Box_Lid_Identity",
+        "coordinateSpace": "provisional-lid-local-mm",
+        "centreMm": [
+          -12,
+          8.2,
+          -103
+        ],
+        "surfaceMm": [
+          120,
+          45
+        ],
+        "uvBounds": [
+          0,
+          0,
+          1,
+          1
+        ],
+        "rotationDeg": 0,
+        "canonicalArtworkSha256": "284e69cfb0e6e7fef2a993f44289577efabd1fae576c9280bab4d4e2f59b398f",
+        "placementAuthority": "concept-derived-viewer-placement-not-production-registration",
+        "sourceUse": "full-image-no-crop-no-redraw"
+      },
+      "zineCover": {
+        "node": "Collector_Box_Zine_Identity_Exact",
+        "coordinateSpace": "open-scene-world-mm",
+        "centreMm": [
+          -50,
+          57.8,
+          -15
+        ],
+        "surfaceMm": [
+          78,
+          29.25
+        ],
+        "uvBounds": [
+          0,
+          0,
+          1,
+          1
+        ],
+        "rotationDeg": 0,
+        "canonicalArtworkSha256": "284e69cfb0e6e7fef2a993f44289577efabd1fae576c9280bab4d4e2f59b398f",
+        "placementAuthority": "concept-derived-viewer-placement-not-production-registration",
+        "sourceUse": "full-image-no-crop-no-redraw"
+      },
+      "stickerInsert": {
+        "node": "Collector_Box_Sticker_Identity_Insert",
+        "coordinateSpace": "provisional-lid-local-mm",
+        "centreMm": [
+          65,
+          8.2,
+          -56
+        ],
+        "surfaceMm": [
+          75,
+          28.125
+        ],
+        "uvBounds": [
+          0,
+          0,
+          1,
+          1
+        ],
+        "rotationDeg": 0,
+        "canonicalArtworkSha256": "284e69cfb0e6e7fef2a993f44289577efabd1fae576c9280bab4d4e2f59b398f",
+        "placementAuthority": "concept-derived-viewer-placement-not-production-registration",
+        "sourceUse": "full-image-no-crop-no-redraw"
+      }
+    }
+  },
   "physicalEvidence": {
-    "method": "reopened-glb-accessor-bounds",
-    "nominalClosedEnvelopeMm": [
+    "method": "reopened-glb-scene-bounds-and-node-instanced-primitive-count",
+    "provisionalClosedEnvelopeMm": [
       250,
       315,
       55
     ],
-    "dimensionAuthority": "provisional-viewer-envelope-not-machinable",
+    "actualOpenSceneBoundsMm": {
+      "min": [
+        -125,
+        0,
+        -119.971
+      ],
+      "max": [
+        125,
+        221.079,
+        125
+      ],
+      "size": [
+        250,
+        221.079,
+        244.971
+      ]
+    },
+    "dimensionAuthority": "provisional-closed-envelope-not-open-scene-not-machinable",
+    "boundsRelationship": "measured open scene differs from provisional closed envelope; neither is machinable",
     "state": "default-open-archive-set",
     "selectedForm": "01 / ARCHIVE CLAMSHELL",
     "openAngleDeg": 105,
-    "lidUvRecord": {
-      "sourcePx": [
-        1600,
-        600
-      ],
-      "sourceRegistrationPx": {
-        "canvas": [
-          1536,
-          1024
-        ],
-        "origin": [
-          490,
-          395
-        ],
-        "size": [
-          620,
-          233
-        ]
-      },
-      "surfaceMm": {
-        "width": 202,
-        "height": 75.75,
-        "centreX": 4,
-        "centreY": 152
-      },
-      "uvBounds": [
-        0,
-        0,
-        1,
-        1
-      ],
-      "rotationDeg": 0,
-      "warped": false
-    },
     "modeled": [
       "open base and lid",
       "bone lid lining",
@@ -160,9 +222,10 @@
     "hints": 0
   },
   "budget": {
-    "triangles": 626,
-    "drawCalls": 10,
-    "bytes": 244040,
+    "triangles": 934,
+    "drawCalls": 9,
+    "uniqueMeshPrimitives": 9,
+    "bytes": 271352,
     "ceilings": {
       "maxBytes": 2100000,
       "maxTriangles": 40000,
@@ -174,7 +237,7 @@
   },
   "output": {
     "path": "assets/merch-3d/collector-box-001.glb",
-    "sha256": "2bf98876e57104cd434a6236b6c8ecc36b20fd7ad620832cdffda148e03d1249"
+    "sha256": "886f26820f6dcd5f6d4e2cc32d8a4840db2761d6d499191dae12b441c3b230e2"
   },
   "deterministic": {
     "verifiedBySecondInMemoryBuild": true
