@@ -165,7 +165,7 @@ const perturbCamera = async (page, initialTheta, label) => {
 };
 
 test("activates every released GLB poster-first with exact governed cameras and visible geometry", { timeout: 180_000 }, async () => {
-  assert.equal(interactive.length, 8, "DROP 001 must expose eight governed GLB viewers");
+  assert.equal(interactive.length, 11, "DROP 001 must expose eleven governed GLB viewers");
 
   for (const profile of profiles) {
     for (const object of interactive) {
@@ -236,19 +236,19 @@ test("activates every released GLB poster-first with exact governed cameras and 
   }
 });
 
-test("keeps source-blocked apparel honest and network-inert", { timeout: 30_000 }, async () => {
-  assert.deepEqual(blocked.map(({ slug }) => slug).sort(), ["cap", "hoodie", "t-shirt"]);
+test("releases all apparel concept GLBs without blocked controls or eager model requests", { timeout: 30_000 }, async () => {
+  assert.deepEqual(blocked, []);
   for (const profile of profiles) {
     const context = await browser.newContext();
-    for (const object of blocked) {
+    for (const object of merch.objects.filter(({ slug }) => ["cap", "hoodie", "t-shirt"].includes(slug))) {
       const page = await context.newPage();
       const requests = [];
       page.on("request", (request) => requests.push(request.url()));
       await page.setViewportSize(profile.viewport);
       await page.goto(`${baseUrl}/merch/${object.slug}/`, { waitUntil: "networkidle" });
       const activation = page.locator("[data-product-viewer-activate]");
-      assert.equal(await activation.isDisabled(), true, `${profile.name}/${object.slug} must not expose a synthetic garment spin`);
-      assert.deepEqual(requests.filter((url) => heavyRequest.test(url)), [], `${profile.name}/${object.slug} fetched blocked viewer assets`);
+      assert.equal(await activation.isDisabled(), false, `${profile.name}/${object.slug} concept GLB must be activatable`);
+      assert.deepEqual(requests.filter((url) => heavyRequest.test(url)), [], `${profile.name}/${object.slug} fetched viewer assets before activation`);
       assert.equal(requests.some((url) => new URL(url).origin !== baseUrl), false, `${profile.name}/${object.slug} made a third-party request`);
       await page.close();
     }

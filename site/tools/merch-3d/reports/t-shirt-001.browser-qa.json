@@ -1,0 +1,110 @@
+{
+  "schemaVersion": 1,
+  "assetKey": "t-shirt-001",
+  "renderer": "@google/model-viewer",
+  "capturePolicy": "local-static-server; await model load and visible dimensions before capture",
+  "hashPolicy": "snapshot integrity only; semantic gates and human visual review govern acceptance",
+  "views": [
+    {
+      "view": "desktop-default",
+      "path": "tools/merch-3d/reports/screenshots/t-shirt-001-desktop-default.png",
+      "sha256": "cee46098f86030aa7235982742829097af8b533e8ab048c6505f8b5240f258e0",
+      "viewportPx": [
+        900,
+        900
+      ],
+      "camera": {
+        "orbit": "25deg 78deg 115%",
+        "target": "auto 0.550m auto",
+        "fieldOfView": "24deg"
+      },
+      "errors": [],
+      "renderedFrameWaitMs": 1000,
+      "loaded": true,
+      "modelIsVisible": true,
+      "dimensionsM": [
+        1.0686486959457397,
+        1.0399999618530273,
+        0.11149999871850014
+      ],
+      "centreM": [
+        0,
+        0.5199999809265137,
+        0.0007499996572732925
+      ],
+      "cameraOrbit": {
+        "theta": 0.4363323129985824,
+        "phi": 1.361356816555577,
+        "radius": 3.1884480344153614
+      },
+      "fieldOfViewDeg": 24.000000000000004,
+      "foregroundPixels": 294995,
+      "foregroundBoundsPx": [
+        143,
+        119,
+        801,
+        827
+      ],
+      "visualMarginsPx": [
+        143,
+        119,
+        98,
+        72
+      ]
+    },
+    {
+      "view": "mobile-default",
+      "path": "tools/merch-3d/reports/screenshots/t-shirt-001-mobile-default.png",
+      "sha256": "7285c8eb21b6ce2f686316eff31da64991b8fc9ec0f104c6b3cf1476ecf186f4",
+      "viewportPx": [
+        390,
+        600
+      ],
+      "camera": {
+        "orbit": "20deg 80deg 122%",
+        "target": "auto 0.550m auto",
+        "fieldOfView": "20deg"
+      },
+      "errors": [],
+      "renderedFrameWaitMs": 1000,
+      "loaded": true,
+      "modelIsVisible": true,
+      "dimensionsM": [
+        1.0686486959457397,
+        1.0399999618530273,
+        0.11149999871850014
+      ],
+      "centreM": [
+        0,
+        0.5199999809265137,
+        0.0007499996572732925
+      ],
+      "cameraOrbit": {
+        "theta": 0.3490658503988659,
+        "phi": 1.3962634015954636,
+        "radius": 3.8175789163268896
+      },
+      "fieldOfViewDeg": 27.028978647470776,
+      "foregroundPixels": 74376,
+      "foregroundBoundsPx": [
+        36,
+        138,
+        369,
+        483
+      ],
+      "visualMarginsPx": [
+        36,
+        138,
+        20,
+        116
+      ]
+    }
+  ],
+  "checks": {
+    "requiredViews": true,
+    "noBrowserErrors": true,
+    "modelLoaded": true,
+    "nonBlankFrames": true,
+    "breathingRoom": true
+  }
+}

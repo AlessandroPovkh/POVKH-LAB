@@ -1,0 +1,169 @@
+{
+  "schemaVersion": 1,
+  "assetKey": "t-shirt-001",
+  "optimized": {
+    "scenes": {
+      "properties": [
+        {
+          "name": "T_Shirt_001_Concept_Visualization",
+          "rootName": "T_Shirt_001_Centred_Grounded_Pivot",
+          "bboxMin": [
+            -0.53432,
+            0,
+            -0.055
+          ],
+          "bboxMax": [
+            0.53432,
+            1.04,
+            0.0565
+          ],
+          "renderVertexCount": 5928,
+          "uploadVertexCount": 4056,
+          "uploadNaiveVertexCount": 4056
+        }
+      ]
+    },
+    "meshes": {
+      "properties": [
+        {
+          "name": "T_Shirt_Relaxed_Body_Mesh",
+          "mode": [
+            "TRIANGLES"
+          ],
+          "meshPrimitives": 1,
+          "glPrimitives": 336,
+          "vertices": 720,
+          "indices": [
+            "u32"
+          ],
+          "attributes": [
+            "NORMAL:f32",
+            "POSITION:f32"
+          ],
+          "instances": 1,
+          "size": 21312
+        },
+        {
+          "name": "T_Shirt_Sleeve_Left_Mesh",
+          "mode": [
+            "TRIANGLES"
+          ],
+          "meshPrimitives": 1,
+          "glPrimitives": 644,
+          "vertices": 1316,
+          "indices": [
+            "u32"
+          ],
+          "attributes": [
+            "NORMAL:f32",
+            "POSITION:f32"
+          ],
+          "instances": 1,
+          "size": 39312
+        },
+        {
+          "name": "T_Shirt_Sleeve_Right_Mesh",
+          "mode": [
+            "TRIANGLES"
+          ],
+          "meshPrimitives": 1,
+          "glPrimitives": 644,
+          "vertices": 1316,
+          "indices": [
+            "u32"
+          ],
+          "attributes": [
+            "NORMAL:f32",
+            "POSITION:f32"
+          ],
+          "instances": 1,
+          "size": 39312
+        },
+        {
+          "name": "T_Shirt_Collar_Mesh",
+          "mode": [
+            "TRIANGLES"
+          ],
+          "meshPrimitives": 1,
+          "glPrimitives": 256,
+          "vertices": 512,
+          "indices": [
+            "u32"
+          ],
+          "attributes": [
+            "NORMAL:f32",
+            "POSITION:f32"
+          ],
+          "instances": 1,
+          "size": 15360
+        },
+        {
+          "name": "T_Shirt_Front_Artwork_Mesh",
+          "mode": [
+            "TRIANGLES"
+          ],
+          "meshPrimitives": 1,
+          "glPrimitives": 96,
+          "vertices": 192,
+          "indices": [
+            "u32"
+          ],
+          "attributes": [
+            "NORMAL:f32",
+            "POSITION:f32",
+            "TEXCOORD_0:f32"
+          ],
+          "instances": 1,
+          "size": 7296
+        }
+      ]
+    },
+    "materials": {
+      "properties": [
+        {
+          "name": "MAT_T_SHIRT_ASCII_DARK_EXACT",
+          "instances": 1,
+          "textures": [
+            "baseColorTexture"
+          ],
+          "alphaMode": "BLEND",
+          "doubleSided": true
+        },
+        {
+          "name": "MAT_T_SHIRT_BONE_FABRIC",
+          "instances": 3,
+          "textures": [],
+          "alphaMode": "OPAQUE",
+          "doubleSided": false
+        },
+        {
+          "name": "MAT_T_SHIRT_BONE_RIB",
+          "instances": 1,
+          "textures": [],
+          "alphaMode": "OPAQUE",
+          "doubleSided": false
+        }
+      ]
+    },
+    "textures": {
+      "properties": [
+        {
+          "name": "t-shirt-001_Exact_Artwork_Texture",
+          "uri": "",
+          "slots": [
+            "baseColorTexture"
+          ],
+          "instances": 1,
+          "mimeType": "image/png",
+          "compression": "",
+          "resolution": "1600x600",
+          "size": 137134,
+          "gpuSize": 5119556
+        }
+      ]
+    },
+    "animations": {
+      "properties": []
+    }
+  }
+}

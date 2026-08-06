@@ -1,0 +1,266 @@
+{
+  "schemaVersion": 1,
+  "assetKey": "hoodie-001",
+  "optimized": {
+    "scenes": {
+      "properties": [
+        {
+          "name": "Hoodie_001_Concept_Visualization",
+          "rootName": "Hoodie_001_Centred_Grounded_Pivot",
+          "bboxMin": [
+            -0.59219,
+            0,
+            -0.1465
+          ],
+          "bboxMax": [
+            0.59219,
+            1.35,
+            0.116
+          ],
+          "renderVertexCount": 9822,
+          "uploadVertexCount": 6892,
+          "uploadNaiveVertexCount": 6892
+        }
+      ]
+    },
+    "meshes": {
+      "properties": [
+        {
+          "name": "Hoodie_Body_Mesh",
+          "mode": [
+            "TRIANGLES"
+          ],
+          "meshPrimitives": 1,
+          "glPrimitives": 336,
+          "vertices": 720,
+          "indices": [
+            "u32"
+          ],
+          "attributes": [
+            "NORMAL:f32",
+            "POSITION:f32"
+          ],
+          "instances": 1,
+          "size": 21312
+        },
+        {
+          "name": "Hoodie_Sleeve_Left_Mesh",
+          "mode": [
+            "TRIANGLES"
+          ],
+          "meshPrimitives": 1,
+          "glPrimitives": 868,
+          "vertices": 1764,
+          "indices": [
+            "u32"
+          ],
+          "attributes": [
+            "NORMAL:f32",
+            "POSITION:f32"
+          ],
+          "instances": 1,
+          "size": 52752
+        },
+        {
+          "name": "Hoodie_Sleeve_Right_Mesh",
+          "mode": [
+            "TRIANGLES"
+          ],
+          "meshPrimitives": 1,
+          "glPrimitives": 868,
+          "vertices": 1764,
+          "indices": [
+            "u32"
+          ],
+          "attributes": [
+            "NORMAL:f32",
+            "POSITION:f32"
+          ],
+          "instances": 1,
+          "size": 52752
+        },
+        {
+          "name": "Hoodie_Rib_Hem_Mesh",
+          "mode": [
+            "TRIANGLES"
+          ],
+          "meshPrimitives": 1,
+          "glPrimitives": 96,
+          "vertices": 240,
+          "indices": [
+            "u32"
+          ],
+          "attributes": [
+            "NORMAL:f32",
+            "POSITION:f32"
+          ],
+          "instances": 1,
+          "size": 6912
+        },
+        {
+          "name": "Hoodie_Cuff_Left_Mesh",
+          "mode": [
+            "TRIANGLES"
+          ],
+          "meshPrimitives": 1,
+          "glPrimitives": 80,
+          "vertices": 200,
+          "indices": [
+            "u32"
+          ],
+          "attributes": [
+            "NORMAL:f32",
+            "POSITION:f32"
+          ],
+          "instances": 1,
+          "size": 5760
+        },
+        {
+          "name": "Hoodie_Cuff_Right_Mesh",
+          "mode": [
+            "TRIANGLES"
+          ],
+          "meshPrimitives": 1,
+          "glPrimitives": 80,
+          "vertices": 200,
+          "indices": [
+            "u32"
+          ],
+          "attributes": [
+            "NORMAL:f32",
+            "POSITION:f32"
+          ],
+          "instances": 1,
+          "size": 5760
+        },
+        {
+          "name": "Hoodie_Dimensional_Hood_Mesh",
+          "mode": [
+            "TRIANGLES"
+          ],
+          "meshPrimitives": 1,
+          "glPrimitives": 800,
+          "vertices": 1680,
+          "indices": [
+            "u32"
+          ],
+          "attributes": [
+            "NORMAL:f32",
+            "POSITION:f32"
+          ],
+          "instances": 1,
+          "size": 49920
+        },
+        {
+          "name": "Hoodie_Hood_Centre_Seam_Mesh",
+          "mode": [
+            "TRIANGLES"
+          ],
+          "meshPrimitives": 1,
+          "glPrimitives": 18,
+          "vertices": 36,
+          "indices": [
+            "u32"
+          ],
+          "attributes": [
+            "NORMAL:f32",
+            "POSITION:f32"
+          ],
+          "instances": 1,
+          "size": 1080
+        },
+        {
+          "name": "Hoodie_Hood_Opening_Mesh",
+          "mode": [
+            "TRIANGLES"
+          ],
+          "meshPrimitives": 1,
+          "glPrimitives": 32,
+          "vertices": 96,
+          "indices": [
+            "u32"
+          ],
+          "attributes": [
+            "NORMAL:f32",
+            "POSITION:f32"
+          ],
+          "instances": 1,
+          "size": 2688
+        },
+        {
+          "name": "Hoodie_Back_Artwork_Mesh",
+          "mode": [
+            "TRIANGLES"
+          ],
+          "meshPrimitives": 1,
+          "glPrimitives": 96,
+          "vertices": 192,
+          "indices": [
+            "u32"
+          ],
+          "attributes": [
+            "NORMAL:f32",
+            "POSITION:f32",
+            "TEXCOORD_0:f32"
+          ],
+          "instances": 1,
+          "size": 7296
+        }
+      ]
+    },
+    "materials": {
+      "properties": [
+        {
+          "name": "MAT_HOODIE_ASCII_REVERSE_EXACT",
+          "instances": 1,
+          "textures": [
+            "baseColorTexture"
+          ],
+          "alphaMode": "BLEND",
+          "doubleSided": true
+        },
+        {
+          "name": "MAT_HOODIE_VOID_FABRIC",
+          "instances": 4,
+          "textures": [],
+          "alphaMode": "OPAQUE",
+          "doubleSided": false
+        },
+        {
+          "name": "MAT_HOODIE_VOID_RIB",
+          "instances": 4,
+          "textures": [],
+          "alphaMode": "OPAQUE",
+          "doubleSided": false
+        },
+        {
+          "name": "MAT_HOODIE_HOOD_INTERIOR",
+          "instances": 1,
+          "textures": [],
+          "alphaMode": "OPAQUE",
+          "doubleSided": false
+        }
+      ]
+    },
+    "textures": {
+      "properties": [
+        {
+          "name": "hoodie-001_Exact_Artwork_Texture",
+          "uri": "",
+          "slots": [
+            "baseColorTexture"
+          ],
+          "instances": 1,
+          "mimeType": "image/png",
+          "compression": "",
+          "resolution": "1600x600",
+          "size": 159393,
+          "gpuSize": 5119556
+        }
+      ]
+    },
+    "animations": {
+      "properties": []
+    }
+  }
+}

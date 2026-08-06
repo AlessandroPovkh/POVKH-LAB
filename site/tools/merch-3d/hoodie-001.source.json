@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "assetKey": "hoodie-001",
+  "productId": "MRCH-006",
+  "coordinateSystem": { "unit": "metre", "up": "+Y", "front": "+Z", "pivot": "centred-garment", "groundY": 0 },
+  "truthBoundary": {
+    "status": "concept-visualization",
+    "manufacturingReference": false,
+    "vendorFitClaim": false,
+    "fabricSimulationClaim": false,
+    "constructionAccuracyClaim": false,
+    "productionDimensionsClaim": false
+  },
+  "dimensions": {
+    "authority": "provisional-viewer-envelope-not-production-dimensions",
+    "viewerEnvelopeMm": [1185, 1351, 263],
+    "replacementGate": "selected vendor blank, measured approved sample and size-specific tech pack"
+  },
+  "geometry": {
+    "scene": "Hoodie_001_Concept_Visualization",
+    "pivot": "Hoodie_001_Centred_Grounded_Pivot",
+    "requiredNodes": ["Hoodie_Body", "Hoodie_Sleeve_Left", "Hoodie_Sleeve_Right", "Hoodie_Rib_Hem", "Hoodie_Cuff_Left", "Hoodie_Cuff_Right", "Hoodie_Dimensional_Hood", "Hoodie_Hood_Centre_Seam", "Hoodie_Back_Artwork"],
+    "features": ["tapered body", "separate long sleeves", "rib hem", "rib cuffs", "dimensional hood, opening and rear centre seam", "readable front and back", "back artwork surface"]
+  },
+  "artwork": {
+    "path": "sources/hoodie-001/PVKH_ASCII_REVERSE_EXACT_1600x600_v01.png",
+    "canonicalPath": "production/physical-merch/concepts/drop-001/explorations/ascii-bullet/revised-capsule/source/PVKH_ASCII_REVERSE_EXACT_1600x600_v01.png",
+    "authorityPath": "data/apparel-print-registration-v02.json#/garments/hoodie/master",
+    "authoritySha256": "75a20bc9682937274d4fedc6c11a090b646561bd8961082fa9fdf843030ad935",
+    "sha256": "284e69cfb0e6e7fef2a993f44289577efabd1fae576c9280bab4d4e2f59b398f",
+    "resolutionPx": [1600, 600],
+    "registration": { "surfaceMm": [300, 112.5], "aspectRatio": "8:3", "side": "back", "sourceUse": "full-image-no-crop-no-redraw" }
+  },
+  "materials": {
+    "fabric": { "name": "MAT_HOODIE_VOID_FABRIC", "baseColor": [0.012, 0.013, 0.016, 1], "metallic": 0, "roughness": 0.94 },
+    "rib": { "name": "MAT_HOODIE_VOID_RIB", "baseColor": [0.006, 0.007, 0.009, 1], "metallic": 0, "roughness": 0.98 },
+    "hoodInterior": { "name": "MAT_HOODIE_HOOD_INTERIOR", "baseColor": [0.002, 0.002, 0.003, 1], "metallic": 0, "roughness": 1 },
+    "artwork": { "name": "MAT_HOODIE_ASCII_REVERSE_EXACT", "baseColor": [1, 1, 1, 1], "metallic": 0, "roughness": 0.9 }
+  },
+  "poster": { "path": "assets/merch/hoodie-rear.webp", "sha256": "d46462cbac738c17c4f4aaddb1ba1fc7c35f13ebe09cc70d967377927219aefa", "role": "approved-concept-poster-not-texture" },
+  "camera": {
+    "poster": "assets/merch/hoodie-rear.webp",
+    "desktop": {
+      "default": { "orbit": "155deg 78deg 118%", "target": "auto 0.590m auto", "fieldOfView": "24deg" },
+      "front": { "orbit": "0deg 82deg 116%", "target": "auto 0.590m auto", "fieldOfView": "23deg" },
+      "rear": { "orbit": "180deg 82deg 116%", "target": "auto 0.590m auto", "fieldOfView": "23deg" }
+    },
+    "mobile": {
+      "default": { "orbit": "160deg 80deg 126%", "target": "auto 0.590m auto", "fieldOfView": "20deg" },
+      "front": { "orbit": "0deg 83deg 124%", "target": "auto 0.590m auto", "fieldOfView": "20deg" },
+      "rear": { "orbit": "180deg 83deg 124%", "target": "auto 0.590m auto", "fieldOfView": "20deg" }
+    }
+  },
+  "budgets": { "maxBytes": 4000000, "maxTriangles": 80000, "maxDrawCalls": 20 },
+  "toolchain": { "gltfTransform": "4.4.2", "gltfValidator": "2.0.0-dev.3.10", "sharp": "0.35.3" }
+}
