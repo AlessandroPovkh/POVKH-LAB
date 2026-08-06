@@ -17,9 +17,12 @@ import { fileURLToPath } from "node:url";
 
 const execFile = promisify(execFileCallback);
 const require = createRequire(import.meta.url);
+const sharp = require("sharp");
 const siteRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const registrationPath = path.join(siteRoot, "data", "apparel-print-registration-v02.json");
 const output = Object.freeze({ width: 1536, height: 1024 });
+const contactSheetOutput = Object.freeze({ width: 1800, height: 800 });
+const contactSheetPath = "tools/fixtures/apparel-registration/apparel-registration-contact-sheet-v02.png";
 const sourceCorners = Object.freeze([
   Object.freeze({ x: 0, y: 0 }),
   Object.freeze({ x: 1600, y: 0 }),
@@ -39,10 +42,15 @@ const garments = Object.freeze({
         "c46bf6bd82ea2ec6928e9fe4ca9a314b56580af49c044be0395579c43c06dada"
       ),
       width: 1600,
-      height: 600
+      height: 600,
+      pixelSha256: "a7a1caaa8c0d3cc5ff5b04b303d42f962ba0161f0516fd01a8e0a7af0f84b6c0",
+      visibleBounds: Object.freeze({ left: 70, top: 60, right: 1510, bottom: 536, width: 1440, height: 476 })
     }),
     approvedHero: Object.freeze({
       path: "assets/merch/t-shirt-front.webp",
+      sha256: "89cac41d6abf06cccc1952823b5c2dcdf4a063a063a98dfebb998b19c428db4e",
+      pixelSha256: "2455ce7afdcc054e7b90eefda55dd3f4af6d3243c614b30826e4dabeec751cbf",
+      assetDimensions: Object.freeze({ width: 1536, height: 1024 }),
       canvas: Object.freeze({ width: 1600, height: 900 }),
       placement: Object.freeze({ x: 528, y: 350, width: 480, height: 180 })
     }),
@@ -57,10 +65,11 @@ const garments = Object.freeze({
         garmentMaskPath: "tools/fixtures/apparel-registration/masks/t-shirt-print-macro-garment-mask-v02.png",
         artworkMaskPath: "tools/fixtures/apparel-registration/masks/t-shirt-print-macro-applied-artwork-mask-v02.png",
         surfaceAnchors: [[150, 180], [1400, 190], [1390, 820], [160, 810]].map(point),
-        artworkQuad: [[250, 290], [1286, 300], [1280, 688], [256, 678]].map(point),
+        artworkQuad: [[380, 340], [1156, 347], [1152, 638], [384, 631]].map(point),
         artworkBlendMode: "multiply",
         artworkOpacity: 0.92,
-        textureReturnOpacity: 0
+        textureReturnOpacity: 0,
+        textureReturnClip: "artworkAlpha"
       }),
       "on-body": Object.freeze({
         publicPath: "assets/merch/t-shirt-on-body.webp",
@@ -72,10 +81,11 @@ const garments = Object.freeze({
         garmentMaskPath: "tools/fixtures/apparel-registration/masks/t-shirt-on-body-garment-mask-v02.png",
         artworkMaskPath: "tools/fixtures/apparel-registration/masks/t-shirt-on-body-applied-artwork-mask-v02.png",
         surfaceAnchors: [[480, 235], [1055, 235], [1025, 700], [510, 700]].map(point),
-        artworkQuad: [[606, 330], [930, 330], [922, 452], [612, 452]].map(point),
+        artworkQuad: [[598, 327], [938, 327], [930, 455], [604, 455]].map(point),
         artworkBlendMode: "multiply",
         artworkOpacity: 0.92,
-        textureReturnOpacity: 0
+        textureReturnOpacity: 0,
+        textureReturnClip: "artworkAlpha"
       })
     })
   }),
@@ -86,10 +96,15 @@ const garments = Object.freeze({
         "284e69cfb0e6e7fef2a993f44289577efabd1fae576c9280bab4d4e2f59b398f"
       ),
       width: 1600,
-      height: 600
+      height: 600,
+      pixelSha256: "d09d549653f459c5b45e98646639698d4c2eb85ba6ef52451325be651ea12d36",
+      visibleBounds: Object.freeze({ left: 70, top: 60, right: 1510, bottom: 536, width: 1440, height: 476 })
     }),
     approvedHero: Object.freeze({
       path: "assets/merch/hoodie-rear.webp",
+      sha256: "d46462cbac738c17c4f4aaddb1ba1fc7c35f13ebe09cc70d967377927219aefa",
+      pixelSha256: "687c77e118bcad6c5bc7b6dbfd1292c75c6e93f52face89fa1bdcbfb4a6b1a9b",
+      assetDimensions: Object.freeze({ width: 1536, height: 1024 }),
       canvas: Object.freeze({ width: 1600, height: 900 }),
       placement: Object.freeze({ x: 552, y: 365, width: 432, height: 162 })
     }),
@@ -104,10 +119,11 @@ const garments = Object.freeze({
         garmentMaskPath: "tools/fixtures/apparel-registration/masks/hoodie-print-macro-garment-mask-v02.png",
         artworkMaskPath: "tools/fixtures/apparel-registration/masks/hoodie-print-macro-applied-artwork-mask-v02.png",
         surfaceAnchors: [[140, 170], [1400, 180], [1390, 820], [150, 810]].map(point),
-        artworkQuad: [[254, 300], [1280, 310], [1274, 692], [254, 682]].map(point),
+        artworkQuad: [[357, 339], [1177, 347], [1173, 653], [357, 645]].map(point),
         artworkBlendMode: "normal",
         artworkOpacity: 0.88,
-        textureReturnOpacity: 0.16
+        textureReturnOpacity: 0.16,
+        textureReturnClip: "artworkAlpha"
       }),
       "worn-rear": Object.freeze({
         publicPath: "assets/merch/hoodie-worn-rear.webp",
@@ -119,10 +135,11 @@ const garments = Object.freeze({
         garmentMaskPath: "tools/fixtures/apparel-registration/masks/hoodie-worn-rear-garment-mask-v02.png",
         artworkMaskPath: "tools/fixtures/apparel-registration/masks/hoodie-worn-rear-applied-artwork-mask-v02.png",
         surfaceAnchors: [[520, 300], [1005, 330], [980, 790], [550, 760]].map(point),
-        artworkQuad: [[621, 356], [895, 370], [889, 472], [621, 460]].map(point),
+        artworkQuad: [[593, 353], [923, 370], [916, 492], [593, 478]].map(point),
         artworkBlendMode: "normal",
         artworkOpacity: 0.88,
-        textureReturnOpacity: 0.16
+        textureReturnOpacity: 0.16,
+        textureReturnClip: "artworkAlpha"
       })
     })
   })
@@ -153,12 +170,64 @@ const assertAssetAtRoot = async (root, reference, expectedDimensions) => {
 
 const assertAsset = async (reference, expectedDimensions) => assertAssetAtRoot(siteRoot, reference, expectedDimensions);
 
-const decodedRgbaSha256 = async (file) => {
+const decodedRgba = async (file) => {
   const { stdout } = await execFile("ffmpeg", [
     "-hide_banner", "-loglevel", "error", "-i", file,
     "-frames:v", "1", "-f", "rawvideo", "-pix_fmt", "rgba", "pipe:1"
   ], { encoding: "buffer", maxBuffer: 16 * 1024 * 1024 });
-  return sha256(stdout);
+  return stdout;
+};
+
+const decodedRgbaSha256 = async (file) => sha256(await decodedRgba(file));
+
+const pixelBounds = (pixels, dimensions, stride = 4, channel = 3, threshold = 8) => {
+  let left = dimensions.width;
+  let top = dimensions.height;
+  let right = -1;
+  let bottom = -1;
+  for (let y = 0; y < dimensions.height; y += 1) {
+    for (let x = 0; x < dimensions.width; x += 1) {
+      if (pixels[(y * dimensions.width + x) * stride + channel] <= threshold) continue;
+      left = Math.min(left, x);
+      top = Math.min(top, y);
+      right = Math.max(right, x + 1);
+      bottom = Math.max(bottom, y + 1);
+    }
+  }
+  if (right <= left || bottom <= top) throw new Error("governed artwork pixels are empty");
+  return { left, top, right, bottom, width: right - left, height: bottom - top };
+};
+
+const pointBounds = (points) => ({
+  left: Math.min(...points.map(({ x }) => x)),
+  right: Math.max(...points.map(({ x }) => x)),
+  top: Math.min(...points.map(({ y }) => y)),
+  bottom: Math.max(...points.map(({ y }) => y))
+});
+
+const round6 = (value) => Number(value.toFixed(6));
+
+const heroRelativeRegistration = (garment, view) => {
+  const artworkBounds = pointBounds(view.artworkQuad);
+  const hero = garment.approvedHero;
+  const heroCenter = {
+    x: (hero.placement.x + hero.placement.width / 2) / hero.canvas.width,
+    y: (hero.placement.y + hero.placement.height / 2) / hero.canvas.height
+  };
+  const viewCenter = {
+    x: (artworkBounds.left + artworkBounds.right) / 2 / output.width,
+    y: (artworkBounds.top + artworkBounds.bottom) / 2 / output.height
+  };
+  return {
+    centerOffset: {
+      x: round6(viewCenter.x - heroCenter.x),
+      y: round6(viewCenter.y - heroCenter.y)
+    },
+    scale: {
+      x: round6(((artworkBounds.right - artworkBounds.left) / output.width) / (hero.placement.width / hero.canvas.width)),
+      y: round6(((artworkBounds.bottom - artworkBounds.top) / output.height) / (hero.placement.height / hero.canvas.height))
+    }
+  };
 };
 
 const toolFingerprints = async (browser) => {
@@ -363,21 +432,47 @@ const renderPixels = async (page, { baseBytes, masterBytes, artworkToOutput, vie
         if (!pointInPolygon(x + 0.5, y + 0.5, input.artworkQuad)) continue;
         if (!pointInPolygon(x + 0.5, y + 0.5, input.surfaceAnchors)) continue;
         const offset = (y * input.output.width + x) * 4;
+        const textureReturnAlpha = input.textureReturnClip === "artworkAlpha"
+          ? input.textureReturnOpacity * artworkMask[offset] / 255
+          : input.textureReturnOpacity;
+        if (textureReturnAlpha <= 0) continue;
         for (let channel = 0; channel < 3; channel += 1) {
           const composed = render[offset + channel];
           const textureBlend = composed * base.data[offset + channel] / 255;
           render[offset + channel] = Math.round(
-            composed * (1 - input.textureReturnOpacity) + textureBlend * input.textureReturnOpacity
+            composed * (1 - textureReturnAlpha) + textureBlend * textureReturnAlpha
           );
         }
       }
     }
   }
 
+  const appliedArtworkBounds = {
+    left: input.output.width,
+    top: input.output.height,
+    right: -1,
+    bottom: -1
+  };
+  for (let y = 0; y < input.output.height; y += 1) {
+    for (let x = 0; x < input.output.width; x += 1) {
+      if (artworkMask[(y * input.output.width + x) * 4] <= 8) continue;
+      appliedArtworkBounds.left = Math.min(appliedArtworkBounds.left, x);
+      appliedArtworkBounds.top = Math.min(appliedArtworkBounds.top, y);
+      appliedArtworkBounds.right = Math.max(appliedArtworkBounds.right, x + 1);
+      appliedArtworkBounds.bottom = Math.max(appliedArtworkBounds.bottom, y + 1);
+    }
+  }
+  if (appliedArtworkBounds.right <= appliedArtworkBounds.left || appliedArtworkBounds.bottom <= appliedArtworkBounds.top) {
+    throw new Error("rendered artwork pixels are empty");
+  }
+  appliedArtworkBounds.width = appliedArtworkBounds.right - appliedArtworkBounds.left;
+  appliedArtworkBounds.height = appliedArtworkBounds.bottom - appliedArtworkBounds.top;
+
   return {
     render: await encodePng(render, input.output.width, input.output.height),
     garmentMask: await encodePng(garmentMask, input.output.width, input.output.height),
-    artworkMask: await encodePng(artworkMask, input.output.width, input.output.height)
+    artworkMask: await encodePng(artworkMask, input.output.width, input.output.height),
+    appliedArtworkBounds
   };
 }, {
   baseDataUrl: `data:image/png;base64,${baseBytes.toString("base64")}`,
@@ -389,7 +484,8 @@ const renderPixels = async (page, { baseBytes, masterBytes, artworkToOutput, vie
   surfaceAnchors: view.surfaceAnchors,
   artworkBlendMode: view.artworkBlendMode,
   artworkOpacity: view.artworkOpacity,
-  textureReturnOpacity: view.textureReturnOpacity
+  textureReturnOpacity: view.textureReturnOpacity,
+  textureReturnClip: view.textureReturnClip
 });
 
 const encodeWebp = async (sourceFile, outputFile) => {
@@ -408,9 +504,46 @@ const encodeWebp = async (sourceFile, outputFile) => {
   }
 };
 
+const renderContactSheet = async (stageRoot, outputFile) => {
+  const panelPaths = [
+    path.join(siteRoot, garments["t-shirt"].approvedHero.path),
+    path.join(stageRoot, garments["t-shirt"].views["print-macro"].publicPath),
+    path.join(stageRoot, garments["t-shirt"].views["on-body"].publicPath),
+    path.join(siteRoot, garments.hoodie.approvedHero.path),
+    path.join(stageRoot, garments.hoodie.views["print-macro"].publicPath),
+    path.join(stageRoot, garments.hoodie.views["worn-rear"].publicPath)
+  ];
+  const panels = await Promise.all(panelPaths.map((file) => sharp(file)
+    .resize(600, 400, { fit: "contain", background: "#111315" })
+    .png({ compressionLevel: 9, adaptiveFiltering: false })
+    .toBuffer()));
+  await mkdir(path.dirname(outputFile), { recursive: true });
+  await sharp({
+    create: {
+      width: contactSheetOutput.width,
+      height: contactSheetOutput.height,
+      channels: 4,
+      background: "#111315"
+    }
+  }).composite(panels.map((input, index) => ({
+    input,
+    left: (index % 3) * 600,
+    top: Math.floor(index / 3) * 400
+  }))).png({ compressionLevel: 9, adaptiveFiltering: false }).toFile(outputFile);
+};
+
 const validateGovernedInputs = async () => {
   for (const garment of Object.values(garments)) {
     await assertAsset(garment.master, { width: 1600, height: 600 });
+    const masterPixels = await decodedRgba(path.join(siteRoot, garment.master.path));
+    if (sha256(masterPixels) !== garment.master.pixelSha256) throw new Error(`master pixel hash mismatch: ${garment.master.path}`);
+    const visibleBounds = pixelBounds(masterPixels, { width: 1600, height: 600 });
+    if (JSON.stringify(visibleBounds) !== JSON.stringify(garment.master.visibleBounds)) {
+      throw new Error(`master visible bounds mismatch: ${garment.master.path}`);
+    }
+    await assertAsset(garment.approvedHero, garment.approvedHero.assetDimensions);
+    const heroPixelSha = await decodedRgbaSha256(path.join(siteRoot, garment.approvedHero.path));
+    if (heroPixelSha !== garment.approvedHero.pixelSha256) throw new Error(`approved hero pixel hash mismatch: ${garment.approvedHero.path}`);
     for (const view of Object.values(garment.views)) await assertAsset(view.base, output);
   }
 };
@@ -480,12 +613,14 @@ const buildStagedBundle = async (stageRoot) => {
             artworkBlendMode: view.artworkBlendMode,
             artworkOpacity: view.artworkOpacity,
             textureReturnOpacity: view.textureReturnOpacity,
-            textureReturnClip: "artworkQuad"
+            textureReturnClip: view.textureReturnClip
           },
           sourceCorners,
           surfaceAnchors: view.surfaceAnchors,
           artworkQuad: view.artworkQuad,
           artworkToOutput,
+          appliedArtworkBounds: rendered.appliedArtworkBounds,
+          heroRelative: heroRelativeRegistration(garment, view),
           outputSha256: await fileSha256(publicFile),
           outputPixelSha256: await decodedRgbaSha256(publicFile),
           encoder
@@ -495,6 +630,10 @@ const buildStagedBundle = async (stageRoot) => {
   } finally {
     await browser.close();
   }
+
+  const contactSheetFile = addArtifact(contactSheetPath);
+  await renderContactSheet(stageRoot, contactSheetFile);
+  const contactSheetBytes = await readFile(contactSheetFile);
 
   const registration = {
     schemaVersion: 2,
@@ -512,7 +651,16 @@ const buildStagedBundle = async (stageRoot) => {
       encodedBytesDeterministic: false,
       fingerprints
     },
-    garments: records
+    garments: records,
+    visualQa: {
+      reviewMethod: "hero / print macro / worn-or-on-body contact sheet",
+      layout: "t-shirt hero / print macro / on-body; hoodie hero / print macro / worn-rear",
+      contactSheet: {
+        ...asset(contactSheetPath, sha256(contactSheetBytes)),
+        pixelSha256: await decodedRgbaSha256(contactSheetFile),
+        ...contactSheetOutput
+      }
+    }
   };
   const stagedRegistrationFile = addArtifact(path.relative(siteRoot, registrationPath));
   await writeAtomic(stagedRegistrationFile, Buffer.from(`${JSON.stringify(registration, null, 2)}\n`, "utf8"));
@@ -533,6 +681,7 @@ const assertRegistrationContract = (registration) => {
     const record = registration.garments?.[slug];
     if (!record) throw new Error(`missing garment registration: ${slug}`);
     if (JSON.stringify(record.master) !== JSON.stringify(garment.master)) throw new Error(`master registration drift: ${slug}`);
+    if (JSON.stringify(record.approvedHero) !== JSON.stringify(garment.approvedHero)) throw new Error(`approved hero registration drift: ${slug}`);
     for (const [role, view] of Object.entries(garment.views)) {
       const registered = record.views?.[role];
       if (!registered) throw new Error(`missing view registration: ${slug}/${role}`);
@@ -546,13 +695,24 @@ const assertRegistrationContract = (registration) => {
       if (JSON.stringify(registered.artworkQuad) !== JSON.stringify(view.artworkQuad)) {
         throw new Error(`artwork quad drift: ${slug}/${role}`);
       }
+      if (JSON.stringify(registered.heroRelative) !== JSON.stringify(heroRelativeRegistration(garment, view))) {
+        throw new Error(`hero-relative registration drift: ${slug}/${role}`);
+      }
+      const visibleBounds = registered.appliedArtworkBounds;
+      if (!visibleBounds || visibleBounds.width <= 0 || visibleBounds.height <= 0) {
+        throw new Error(`applied artwork bounds are missing: ${slug}/${role}`);
+      }
     }
   }
+  if (registration.visualQa?.reviewMethod !== "hero / print macro / worn-or-on-body contact sheet") {
+    throw new Error("apparel visual QA review method drifted");
+  }
+  if (registration.visualQa?.contactSheet?.path !== contactSheetPath) throw new Error("apparel contact sheet path drifted");
 };
 
 const validateStagedBundle = async ({ artifacts, registration, stageRoot }) => {
   assertRegistrationContract(registration);
-  if (artifacts.length !== 17) throw new Error(`apparel registration bundle must stage 17 files; received ${artifacts.length}`);
+  if (artifacts.length !== 18) throw new Error(`apparel registration bundle must stage 18 files; received ${artifacts.length}`);
   const projectPaths = new Set();
   for (const artifact of artifacts) {
     if (projectPaths.has(artifact.projectPath)) throw new Error(`duplicate staged artifact: ${artifact.projectPath}`);
@@ -561,6 +721,11 @@ const validateStagedBundle = async ({ artifacts, registration, stageRoot }) => {
   }
   const stagedRegistration = JSON.parse(await readFile(path.join(stageRoot, path.relative(siteRoot, registrationPath)), "utf8"));
   if (JSON.stringify(stagedRegistration) !== JSON.stringify(registration)) throw new Error("staged registration JSON drifted");
+  await assertAssetAtRoot(stageRoot, registration.visualQa.contactSheet, contactSheetOutput);
+  const contactSheetPixelSha = await decodedRgbaSha256(path.join(stageRoot, registration.visualQa.contactSheet.path));
+  if (contactSheetPixelSha !== registration.visualQa.contactSheet.pixelSha256) {
+    throw new Error("staged contact sheet pixel hash mismatch");
+  }
 
   for (const [slug, garment] of Object.entries(registration.garments)) {
     for (const [role, view] of Object.entries(garment.views)) {
@@ -577,6 +742,11 @@ const validateStagedBundle = async ({ artifacts, registration, stageRoot }) => {
       for (const [projectPath, expectedPixelSha, label] of checks) {
         const actualPixelSha = await decodedRgbaSha256(path.join(stageRoot, projectPath));
         if (actualPixelSha !== expectedPixelSha) throw new Error(`staged ${label} pixel hash mismatch: ${slug}/${role}`);
+      }
+      const artworkMaskPixels = await decodedRgba(path.join(stageRoot, view.appliedArtworkMask.path));
+      const actualBounds = pixelBounds(artworkMaskPixels, output, 4, 0);
+      if (JSON.stringify(actualBounds) !== JSON.stringify(view.appliedArtworkBounds)) {
+        throw new Error(`staged artwork bounds mismatch: ${slug}/${role}`);
       }
     }
   }
@@ -666,6 +836,17 @@ export const verifyApparelRegistration = async ({ registrationFile = registratio
     const stagedBundle = await buildStagedBundle(stageRoot);
     await validateStagedBundle(stagedBundle);
     assertRegistrationContract(committedRegistration);
+    const committedContactSheet = committedRegistration.visualQa.contactSheet;
+    const stagedContactSheet = stagedBundle.registration.visualQa.contactSheet;
+    await assertAsset(committedContactSheet, contactSheetOutput);
+    await comparePixelArtifact({
+      committedFile: path.join(siteRoot, committedContactSheet.path),
+      committedPixelSha: committedContactSheet.pixelSha256,
+      stagedFile: path.join(stageRoot, stagedContactSheet.path),
+      stagedPixelSha: stagedContactSheet.pixelSha256,
+      label: "contact sheet",
+      identity: "apparel"
+    });
     let count = 0;
     for (const [slug, garment] of Object.entries(garments)) {
       const committedGarment = committedRegistration.garments[slug];
@@ -711,6 +892,12 @@ export const verifyApparelRegistration = async ({ registrationFile = registratio
         });
         if (JSON.stringify(committed.artworkToOutput) !== JSON.stringify(staged.artworkToOutput)) {
           throw new Error(`dry rerender homography mismatch: ${slug}/${role}`);
+        }
+        if (JSON.stringify(committed.appliedArtworkBounds) !== JSON.stringify(staged.appliedArtworkBounds)) {
+          throw new Error(`dry rerender artwork bounds mismatch: ${slug}/${role}`);
+        }
+        if (JSON.stringify(committed.heroRelative) !== JSON.stringify(staged.heroRelative)) {
+          throw new Error(`dry rerender hero-relative registration mismatch: ${slug}/${role}`);
         }
         count += 1;
       }

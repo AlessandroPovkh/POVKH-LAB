@@ -18,46 +18,72 @@ const expectedGarments = Object.freeze({
   "t-shirt": {
     master: {
       path: "tools/fixtures/apparel-registration/artwork/PVKH_ASCII_DARK_KNOCKOUT_EXACT_1600x600_v01.png",
-      sha256: "c46bf6bd82ea2ec6928e9fe4ca9a314b56580af49c044be0395579c43c06dada"
+      sha256: "c46bf6bd82ea2ec6928e9fe4ca9a314b56580af49c044be0395579c43c06dada",
+      pixelSha256: "a7a1caaa8c0d3cc5ff5b04b303d42f962ba0161f0516fd01a8e0a7af0f84b6c0",
+      visibleBounds: { left: 70, top: 60, right: 1510, bottom: 536, width: 1440, height: 476 }
     },
     approvedHero: {
       path: "assets/merch/t-shirt-front.webp",
+      sha256: "89cac41d6abf06cccc1952823b5c2dcdf4a063a063a98dfebb998b19c428db4e",
+      pixelSha256: "2455ce7afdcc054e7b90eefda55dd3f4af6d3243c614b30826e4dabeec751cbf",
+      assetDimensions: { width: 1536, height: 1024 },
       canvas: { width: 1600, height: 900 },
       placement: [528, 350, 480, 180]
     },
     views: {
       "print-macro": {
         publicPath: "assets/merch/t-shirt-print-macro.webp",
-        artworkQuad: [[250, 290], [1286, 300], [1280, 688], [256, 678]],
-        surfaceAnchors: [[150, 180], [1400, 190], [1390, 820], [160, 810]]
+        artworkQuad: [[380, 340], [1156, 347], [1152, 638], [384, 631]],
+        surfaceAnchors: [[150, 180], [1400, 190], [1390, 820], [160, 810]],
+        heroRelative: {
+          centerOffset: { x: 0.02, y: -0.01135 },
+          scale: { x: 1.684028, y: 1.455078 }
+        }
       },
       "on-body": {
         publicPath: "assets/merch/t-shirt-on-body.webp",
-        artworkQuad: [[606, 330], [930, 330], [922, 452], [612, 452]],
-        surfaceAnchors: [[480, 235], [1055, 235], [1025, 700], [510, 700]]
+        artworkQuad: [[598, 327], [938, 327], [930, 455], [604, 455]],
+        surfaceAnchors: [[480, 235], [1055, 235], [1025, 700], [510, 700]],
+        heroRelative: {
+          centerOffset: { x: 0.02, y: -0.107053 },
+          scale: { x: 0.737847, y: 0.625 }
+        }
       }
     }
   },
   hoodie: {
     master: {
       path: "tools/fixtures/apparel-registration/artwork/PVKH_ASCII_REVERSE_EXACT_1600x600_v01.png",
-      sha256: "284e69cfb0e6e7fef2a993f44289577efabd1fae576c9280bab4d4e2f59b398f"
+      sha256: "284e69cfb0e6e7fef2a993f44289577efabd1fae576c9280bab4d4e2f59b398f",
+      pixelSha256: "d09d549653f459c5b45e98646639698d4c2eb85ba6ef52451325be651ea12d36",
+      visibleBounds: { left: 70, top: 60, right: 1510, bottom: 536, width: 1440, height: 476 }
     },
     approvedHero: {
       path: "assets/merch/hoodie-rear.webp",
+      sha256: "d46462cbac738c17c4f4aaddb1ba1fc7c35f13ebe09cc70d967377927219aefa",
+      pixelSha256: "687c77e118bcad6c5bc7b6dbfd1292c75c6e93f52face89fa1bdcbfb4a6b1a9b",
+      assetDimensions: { width: 1536, height: 1024 },
       canvas: { width: 1600, height: 900 },
       placement: [552, 365, 432, 162]
     },
     views: {
       "print-macro": {
         publicPath: "assets/merch/hoodie-print-macro.webp",
-        artworkQuad: [[254, 300], [1280, 310], [1274, 692], [254, 682]],
-        surfaceAnchors: [[140, 170], [1400, 180], [1390, 820], [150, 810]]
+        artworkQuad: [[357, 339], [1177, 347], [1173, 653], [357, 645]],
+        surfaceAnchors: [[140, 170], [1400, 180], [1390, 820], [150, 810]],
+        heroRelative: {
+          centerOffset: { x: 0.019349, y: -0.011181 },
+          scale: { x: 1.977238, y: 1.703559 }
+        }
       },
       "worn-rear": {
         publicPath: "assets/merch/hoodie-worn-rear.webp",
-        artworkQuad: [[621, 356], [895, 370], [889, 472], [621, 460]],
-        surfaceAnchors: [[520, 300], [1005, 330], [980, 790], [550, 760]]
+        artworkQuad: [[593, 353], [923, 370], [916, 492], [593, 478]],
+        surfaceAnchors: [[520, 300], [1005, 330], [980, 790], [550, 760]],
+        heroRelative: {
+          centerOffset: { x: 0.01349, y: -0.082958 },
+          scale: { x: 0.795718, y: 0.754123 }
+        }
       }
     }
   }
@@ -116,6 +142,58 @@ const decodeRgb = async (reference, dimensions) => {
   ], { encoding: "buffer", maxBuffer: 20 * 1024 * 1024 });
   assert.equal(stdout.length, dimensions.width * dimensions.height * 3, `${reference.path} decoded RGB size drifted`);
   return stdout;
+};
+
+const decodeRgba = async (reference, dimensions) => {
+  const { stdout } = await execFile("ffmpeg", [
+    "-hide_banner", "-loglevel", "error", "-i", path.join(siteRoot, reference.path),
+    "-frames:v", "1", "-f", "rawvideo", "-pix_fmt", "rgba", "pipe:1"
+  ], { encoding: "buffer", maxBuffer: 20 * 1024 * 1024 });
+  assert.equal(stdout.length, dimensions.width * dimensions.height * 4, `${reference.path} decoded RGBA size drifted`);
+  return stdout;
+};
+
+const pixelBounds = (pixels, dimensions, stride = 1, channel = 0, threshold = 8) => {
+  let left = dimensions.width;
+  let top = dimensions.height;
+  let right = -1;
+  let bottom = -1;
+  for (let y = 0; y < dimensions.height; y += 1) {
+    for (let x = 0; x < dimensions.width; x += 1) {
+      if (pixels[(y * dimensions.width + x) * stride + channel] <= threshold) continue;
+      left = Math.min(left, x);
+      top = Math.min(top, y);
+      right = Math.max(right, x + 1);
+      bottom = Math.max(bottom, y + 1);
+    }
+  }
+  assert.ok(right > left && bottom > top, "governed artwork pixels must not be empty");
+  return { left, top, right, bottom, width: right - left, height: bottom - top };
+};
+
+const round6 = (value) => Number(value.toFixed(6));
+
+const heroRelativeRegistration = (garment, view) => {
+  const artworkBounds = bounds(view.artworkQuad);
+  const hero = garment.approvedHero;
+  const heroCenter = {
+    x: (hero.placement.x + hero.placement.width / 2) / hero.canvas.width,
+    y: (hero.placement.y + hero.placement.height / 2) / hero.canvas.height
+  };
+  const viewCenter = {
+    x: (artworkBounds.left + artworkBounds.right) / 2 / view.output.width,
+    y: (artworkBounds.top + artworkBounds.bottom) / 2 / view.output.height
+  };
+  return {
+    centerOffset: {
+      x: round6(viewCenter.x - heroCenter.x),
+      y: round6(viewCenter.y - heroCenter.y)
+    },
+    scale: {
+      x: round6(((artworkBounds.right - artworkBounds.left) / view.output.width) / (hero.placement.width / hero.canvas.width)),
+      y: round6(((artworkBounds.bottom - artworkBounds.top) / view.output.height) / (hero.placement.height / hero.canvas.height))
+    }
+  };
 };
 
 const determinant3 = ([a, b, c, d, e, f, g, h, i]) => (
@@ -189,6 +267,43 @@ test("locks the canonical 1600x600 / 300x112.5 mm plane and exact artwork master
   }
 });
 
+test("enforces visible master identity, artwork bounds and hero-relative registration", async () => {
+  const registration = await readRegistration();
+  const contactSheet = registration.visualQa?.contactSheet;
+  assert.equal(registration.visualQa?.reviewMethod, "hero / print macro / worn-or-on-body contact sheet");
+  assert.equal(registration.visualQa?.layout, "t-shirt hero / print macro / on-body; hoodie hero / print macro / worn-rear");
+  assert.equal(contactSheet?.path, "tools/fixtures/apparel-registration/apparel-registration-contact-sheet-v02.png");
+  await assertAssetReference(contactSheet, "visualQa.contactSheet", { width: 1800, height: 800 });
+  assert.match(contactSheet.pixelSha256 || "", sha256Pattern, "contact sheet needs a decoded RGBA hash");
+
+  for (const [slug, expected] of Object.entries(expectedGarments)) {
+    const garment = registration.garments[slug];
+    const masterPixels = await decodeRgba(garment.master, { width: 1600, height: 600 });
+    assert.equal(createHash("sha256").update(masterPixels).digest("hex"), expected.master.pixelSha256, `${slug} decoded master pixels drifted`);
+    assert.deepEqual(pixelBounds(masterPixels, { width: 1600, height: 600 }, 4, 3), expected.master.visibleBounds, `${slug} visible master bounds drifted`);
+
+    await assertAssetReference(garment.approvedHero, `${slug}.approvedHero`, expected.approvedHero.assetDimensions);
+    const heroPixels = await decodeRgba(garment.approvedHero, expected.approvedHero.assetDimensions);
+    assert.equal(createHash("sha256").update(heroPixels).digest("hex"), expected.approvedHero.pixelSha256, `${slug} approved hero pixels drifted`);
+
+    for (const [role, expectedView] of Object.entries(expected.views)) {
+      const view = garment.views[role];
+      const artworkMask = await decodeGray(view.appliedArtworkMask, view.output);
+      assert.deepEqual(
+        pixelBounds(artworkMask, view.output),
+        view.appliedArtworkBounds,
+        `${slug}.${role} registered visible bounds must come from the rendered artwork mask`
+      );
+      assert.deepEqual(view.heroRelative, expectedView.heroRelative, `${slug}.${role} hero-relative center/scale drifted`);
+      assert.deepEqual(
+        view.heroRelative,
+        heroRelativeRegistration(garment, view),
+        `${slug}.${role} hero-relative center/scale must be independently reproducible from the approved hero`
+      );
+    }
+  }
+});
+
 test("declares an auditable surface quad, homography, garment mask and fabric layer for every recomposed view", async () => {
   const registration = await readRegistration();
   for (const [slug, expected] of Object.entries(expectedGarments)) {
@@ -230,30 +345,33 @@ test("declares an auditable surface quad, homography, garment mask and fabric la
   }
 });
 
-test("re-layers hoodie fabric across transparent pixels inside the full artwork quad", async () => {
+test("keeps transparent hoodie master pixels free of rectangular texture-return matte", async () => {
   const registration = await readRegistration();
   for (const [role, view] of Object.entries(registration.garments.hoodie.views)) {
     assert.equal(view.fabricModulation.artworkBlendMode, "normal", `hoodie.${role} artwork blend drifted`);
     assert.equal(view.fabricModulation.artworkOpacity, 0.88, `hoodie.${role} artwork opacity drifted`);
     assert.equal(view.fabricModulation.textureReturnOpacity, 0.16, `hoodie.${role} texture return drifted`);
-    assert.equal(view.fabricModulation.textureReturnClip, "artworkQuad", `hoodie.${role} texture return clip drifted`);
+    assert.equal(view.fabricModulation.textureReturnClip, "artworkAlpha", `hoodie.${role} texture return must not affect transparent master pixels`);
     const [base, render, artworkMask] = await Promise.all([
       decodeRgb(view.base, view.output),
       decodeRgb(view.sourceRender, view.output),
       decodeGray(view.appliedArtworkMask, view.output)
     ]);
-    let transparentTexturePixels = 0;
+    let transparentPixels = 0;
+    let changedTransparentPixels = 0;
     for (let y = 0; y < view.output.height; y += 1) {
       for (let x = 0; x < view.output.width; x += 1) {
         const pixel = y * view.output.width + x;
         if (artworkMask[pixel] !== 0 || !pointInPolygon({ x: x + 0.5, y: y + 0.5 }, view.artworkQuad)) continue;
+        transparentPixels += 1;
         const offset = pixel * 3;
         if (base[offset] !== render[offset] || base[offset + 1] !== render[offset + 1] || base[offset + 2] !== render[offset + 2]) {
-          transparentTexturePixels += 1;
+          changedTransparentPixels += 1;
         }
       }
     }
-    assert.ok(transparentTexturePixels > 500, `hoodie.${role} must return base texture across transparent artwork pixels`);
+    assert.ok(transparentPixels > 500, `hoodie.${role} must exercise transparent master pixels inside the artwork quad`);
+    assert.equal(changedTransparentPixels, 0, `hoodie.${role} transparent master pixels must remain byte-identical to the base`);
   }
 });
 

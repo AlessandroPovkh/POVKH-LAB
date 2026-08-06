@@ -31,10 +31,25 @@
         "path": "tools/fixtures/apparel-registration/artwork/PVKH_ASCII_DARK_KNOCKOUT_EXACT_1600x600_v01.png",
         "sha256": "c46bf6bd82ea2ec6928e9fe4ca9a314b56580af49c044be0395579c43c06dada",
         "width": 1600,
-        "height": 600
+        "height": 600,
+        "pixelSha256": "a7a1caaa8c0d3cc5ff5b04b303d42f962ba0161f0516fd01a8e0a7af0f84b6c0",
+        "visibleBounds": {
+          "left": 70,
+          "top": 60,
+          "right": 1510,
+          "bottom": 536,
+          "width": 1440,
+          "height": 476
+        }
       },
       "approvedHero": {
         "path": "assets/merch/t-shirt-front.webp",
+        "sha256": "89cac41d6abf06cccc1952823b5c2dcdf4a063a063a98dfebb998b19c428db4e",
+        "pixelSha256": "2455ce7afdcc054e7b90eefda55dd3f4af6d3243c614b30826e4dabeec751cbf",
+        "assetDimensions": {
+          "width": 1536,
+          "height": 1024
+        },
         "canvas": {
           "width": 1600,
           "height": 900
@@ -59,8 +74,8 @@
           },
           "sourceRender": {
             "path": "tools/fixtures/apparel-registration/renders/t-shirt-print-macro-registration-v02.png",
-            "sha256": "284d69231f5fe99f6ba3f5accdc7007a20933709eee96ffd31851897c51d0331",
-            "pixelSha256": "561e879082fd36f55ea3ee3324a45645550ef3a0afe6e4db054e6f932be42df7"
+            "sha256": "edfc22ca08aa9d62b2c5f49790853c2679997c1d896720b9aadb7ce1f286ab6a",
+            "pixelSha256": "b0d5f95fd8a5cb6283cb4d1c32942481b1defde39fd600b55b0c360aeaaae3ea"
           },
           "garmentMask": {
             "path": "tools/fixtures/apparel-registration/masks/t-shirt-print-macro-garment-mask-v02.png",
@@ -69,8 +84,8 @@
           },
           "appliedArtworkMask": {
             "path": "tools/fixtures/apparel-registration/masks/t-shirt-print-macro-applied-artwork-mask-v02.png",
-            "sha256": "da66ae20d7c507b5a3a21f008015c0ee02da66f649db2533db8d03deeda3a626",
-            "pixelSha256": "b742ac40d635768b4565efcc838b59c018ef67be22f676ae25c9b1b77d2ad1a9"
+            "sha256": "1ec1eebd502970a2aa7a8586f1beb251b3bdd4b75dcd81c33a9853503e804ea8",
+            "pixelSha256": "69c254a37c762b4d747be69d83da6ae450cedfe7777a5650fc682353a9b2c4fe"
           },
           "fabricModulation": {
             "enabled": true,
@@ -79,7 +94,7 @@
             "artworkBlendMode": "multiply",
             "artworkOpacity": 0.92,
             "textureReturnOpacity": 0,
-            "textureReturnClip": "artworkQuad"
+            "textureReturnClip": "artworkAlpha"
           },
           "sourceCorners": [
             {
@@ -119,35 +134,53 @@
           ],
           "artworkQuad": [
             {
-              "x": 250,
-              "y": 290
+              "x": 380,
+              "y": 340
             },
             {
-              "x": 1286,
-              "y": 300
+              "x": 1156,
+              "y": 347
             },
             {
-              "x": 1280,
-              "y": 688
+              "x": 1152,
+              "y": 638
             },
             {
-              "x": 256,
-              "y": 678
+              "x": 384,
+              "y": 631
             }
           ],
           "artworkToOutput": [
-            0.6472572803317799,
-            0.01499924503991222,
-            250,
-            0.006193377993416781,
-            0.6599068547020592,
-            290,
-            -1.8874002194408165e-7,
-            0.00001952830093715712,
+            0.48481898387587463,
+            0.013332498195505766,
+            380,
+            0.004320663845093881,
+            0.49595348878827467,
+            340,
+            -1.565883426689812e-7,
+            0.000017358936273018488,
             1
           ],
-          "outputSha256": "0f7a78e92d72a2a874fe842efb6136f72bbb00ce5f04eb481edd9cef0e8d015f",
-          "outputPixelSha256": "25afe2a920d52e0f01065d622b8cae85b1304ab10bf97e08696fedf14878ce2c",
+          "appliedArtworkBounds": {
+            "left": 416,
+            "top": 370,
+            "right": 1110,
+            "bottom": 606,
+            "width": 694,
+            "height": 236
+          },
+          "heroRelative": {
+            "centerOffset": {
+              "x": 0.02,
+              "y": -0.01135
+            },
+            "scale": {
+              "x": 1.684028,
+              "y": 1.455078
+            }
+          },
+          "outputSha256": "51714a5874b253208404d5a4fe5efc2b9f48db998cb46c8a0fc664e16f672c49",
+          "outputPixelSha256": "de3f70651d5261f9f06aab6d9e18a284b486e433f6b893cc293b33241581f520",
           "encoder": "ffmpeg/libwebp q=88 yuv420p metadata-stripped"
         },
         "on-body": {
@@ -162,8 +195,8 @@
           },
           "sourceRender": {
             "path": "tools/fixtures/apparel-registration/renders/t-shirt-on-body-registration-v02.png",
-            "sha256": "c41f7436f6959e82852ba1f30ca6c271015c8631706900822d84a49ea519f5aa",
-            "pixelSha256": "9e6ad3dce9e13d5c6860ce62d5156188203dd866af054deb28a0b2f1479fd854"
+            "sha256": "5a21ad6ebb775ac3b16a3c1907eec2aca52d8779489bcffd819bca6fc41189f7",
+            "pixelSha256": "79cec1392c6bb4f073e1740480f0f83fbed3145dfffd45881eb396d62ff0d4e6"
           },
           "garmentMask": {
             "path": "tools/fixtures/apparel-registration/masks/t-shirt-on-body-garment-mask-v02.png",
@@ -172,8 +205,8 @@
           },
           "appliedArtworkMask": {
             "path": "tools/fixtures/apparel-registration/masks/t-shirt-on-body-applied-artwork-mask-v02.png",
-            "sha256": "e52fbd62b19efa603e566fd1935a4f8d3c390b2fbdfe592e9051a959467724f8",
-            "pixelSha256": "a815cbd26167da018c48961c501c534bab983503b284cdfd310fc088eeffc800"
+            "sha256": "ce1d54b40a4384f6d5567d8bba7079bc7475f788f5756656548b4fca6b9b5e39",
+            "pixelSha256": "4e032ef71f89b11732347a07ecfab2a17da372f705c4befa154f7e9786284a64"
           },
           "fabricModulation": {
             "enabled": true,
@@ -182,7 +215,7 @@
             "artworkBlendMode": "multiply",
             "artworkOpacity": 0.92,
             "textureReturnOpacity": 0,
-            "textureReturnClip": "artworkQuad"
+            "textureReturnClip": "artworkAlpha"
           },
           "sourceCorners": [
             {
@@ -222,35 +255,53 @@
           ],
           "artworkQuad": [
             {
-              "x": 606,
-              "y": 330
+              "x": 598,
+              "y": 327
+            },
+            {
+              "x": 938,
+              "y": 327
             },
             {
               "x": 930,
-              "y": 330
+              "y": 455
             },
             {
-              "x": 922,
-              "y": 452
-            },
-            {
-              "x": 612,
-              "y": 452
+              "x": 604,
+              "y": 455
             }
           ],
           "artworkToOutput": [
-            0.2025,
-            0.056064516129032634,
-            606,
+            0.21250000000000002,
+            0.05323108384458113,
+            598,
             0,
-            0.23735483870967772,
-            330,
+            0.24589979550102278,
+            327,
             0,
-            0.00007526881720430169,
+            0.00007157464212678995,
             1
           ],
-          "outputSha256": "02acf8b05cdb16b227c723235046fc7a0b22e819b3c85bad7181932975f854e8",
-          "outputPixelSha256": "e43e3a692d3242bc98c24492b37360261cebe80439616674a3467a0b1eb489bc",
+          "appliedArtworkBounds": {
+            "left": 617,
+            "top": 340,
+            "right": 914,
+            "bottom": 442,
+            "width": 297,
+            "height": 102
+          },
+          "heroRelative": {
+            "centerOffset": {
+              "x": 0.02,
+              "y": -0.107053
+            },
+            "scale": {
+              "x": 0.737847,
+              "y": 0.625
+            }
+          },
+          "outputSha256": "03be6aace4cc45c99f54d4e90f9f95d3afd60d8d1f9e9141b9e1e241cd0b4239",
+          "outputPixelSha256": "ba41982763d0916a3a2c0d4a81c612835fd9fa313831d9f7adbe12271482b05c",
           "encoder": "ffmpeg/libwebp q=88 yuv420p metadata-stripped"
         }
       }
@@ -260,10 +311,25 @@
         "path": "tools/fixtures/apparel-registration/artwork/PVKH_ASCII_REVERSE_EXACT_1600x600_v01.png",
         "sha256": "284e69cfb0e6e7fef2a993f44289577efabd1fae576c9280bab4d4e2f59b398f",
         "width": 1600,
-        "height": 600
+        "height": 600,
+        "pixelSha256": "d09d549653f459c5b45e98646639698d4c2eb85ba6ef52451325be651ea12d36",
+        "visibleBounds": {
+          "left": 70,
+          "top": 60,
+          "right": 1510,
+          "bottom": 536,
+          "width": 1440,
+          "height": 476
+        }
       },
       "approvedHero": {
         "path": "assets/merch/hoodie-rear.webp",
+        "sha256": "d46462cbac738c17c4f4aaddb1ba1fc7c35f13ebe09cc70d967377927219aefa",
+        "pixelSha256": "687c77e118bcad6c5bc7b6dbfd1292c75c6e93f52face89fa1bdcbfb4a6b1a9b",
+        "assetDimensions": {
+          "width": 1536,
+          "height": 1024
+        },
         "canvas": {
           "width": 1600,
           "height": 900
@@ -288,8 +354,8 @@
           },
           "sourceRender": {
             "path": "tools/fixtures/apparel-registration/renders/hoodie-print-macro-registration-v02.png",
-            "sha256": "887243fbbc7599773b718dc5d8144068db6741f9f2b502b24f53cabef519cbbd",
-            "pixelSha256": "b999d3e21a96d1aa2b197c47e351328e4dc5c47fea38158a962cd8da6c8c62ea"
+            "sha256": "fa59bfe3647119262d46b5ec9f4b8f6870ba827a6012cf88e7b777d7814a46b3",
+            "pixelSha256": "a25e0c23a04132110c2008e5b15e5c462e41d4099c893c86d902957e8d5b48fe"
           },
           "garmentMask": {
             "path": "tools/fixtures/apparel-registration/masks/hoodie-print-macro-garment-mask-v02.png",
@@ -298,8 +364,8 @@
           },
           "appliedArtworkMask": {
             "path": "tools/fixtures/apparel-registration/masks/hoodie-print-macro-applied-artwork-mask-v02.png",
-            "sha256": "9d2fef489311b6d29b3ddb2ac8e5919c8c83250b33ad7a5618be99a56fffea34",
-            "pixelSha256": "76940b8a901840b8db0b09c03271467869c77594f23135e756a8790ab8b62b7e"
+            "sha256": "62e5524301f21c0e6a4164b2f04ef224b0df2973fa8e54d04079d588767b4f69",
+            "pixelSha256": "3d6073a73ad3f899b4eaaaeb3389319fce06efcc971a0cbc601776ab6feee0cc"
           },
           "fabricModulation": {
             "enabled": true,
@@ -308,7 +374,7 @@
             "artworkBlendMode": "normal",
             "artworkOpacity": 0.88,
             "textureReturnOpacity": 0.16,
-            "textureReturnClip": "artworkQuad"
+            "textureReturnClip": "artworkAlpha"
           },
           "sourceCorners": [
             {
@@ -348,35 +414,53 @@
           ],
           "artworkQuad": [
             {
-              "x": 254,
-              "y": 300
+              "x": 357,
+              "y": 339
             },
             {
-              "x": 1280,
-              "y": 310
+              "x": 1177,
+              "y": 347
             },
             {
-              "x": 1274,
-              "y": 692
+              "x": 1173,
+              "y": 653
             },
             {
-              "x": 254,
-              "y": 682
+              "x": 357,
+              "y": 645
             }
           ],
           "artworkToOutput": [
-            0.6411268283294843,
-            0.002489812676417756,
-            254,
-            0.006220169361046965,
-            0.6433519117269695,
-            300,
-            -9.622786759045419e-8,
-            0.000009802412111880934,
+            0.5124057374423372,
+            0.002916292926704255,
+            357,
+            0.00497220976422348,
+            0.5152689325986674,
+            339,
+            -8.008713480266531e-8,
+            0.000008168887749871861,
             1
           ],
-          "outputSha256": "6c211bb6ccbcee5e11eb5e6e4bfa5c549b6d2c386d3fea7e85995b733e5b0f9c",
-          "outputPixelSha256": "783bb57f757eb9ba298e6019d8035eed51de4b7ab245ebe130cab033918bc9fd",
+          "appliedArtworkBounds": {
+            "left": 393,
+            "top": 371,
+            "right": 1128,
+            "bottom": 619,
+            "width": 735,
+            "height": 248
+          },
+          "heroRelative": {
+            "centerOffset": {
+              "x": 0.019349,
+              "y": -0.011181
+            },
+            "scale": {
+              "x": 1.977238,
+              "y": 1.703559
+            }
+          },
+          "outputSha256": "baa7e813825638e74cc3581faa4768a42f81116dfc065b0faaa96678f2a80fc7",
+          "outputPixelSha256": "f135efc4a008f93de4e512dc277e10d4e84b5be0fc08e28a84e7d13ec41f0831",
           "encoder": "ffmpeg/libwebp q=88 yuv420p metadata-stripped"
         },
         "worn-rear": {
@@ -391,8 +475,8 @@
           },
           "sourceRender": {
             "path": "tools/fixtures/apparel-registration/renders/hoodie-worn-rear-registration-v02.png",
-            "sha256": "a3c08bd380fd18a1e124174b2dbaf7896efb79b3d14309080d046d9291cb0f93",
-            "pixelSha256": "f58bcfa7ece21ae2544ff9738fb86fae3f21250404478ea203b4dbcf48b0459c"
+            "sha256": "7ba52a0c0233114bc66429bb443145633eff116078ffa543daf1b8570c7e19f2",
+            "pixelSha256": "76c3cd21dc45d6018f2a6c77ac71ce79dad408ea207c5ab7546f29ce0f66167d"
           },
           "garmentMask": {
             "path": "tools/fixtures/apparel-registration/masks/hoodie-worn-rear-garment-mask-v02.png",
@@ -401,8 +485,8 @@
           },
           "appliedArtworkMask": {
             "path": "tools/fixtures/apparel-registration/masks/hoodie-worn-rear-applied-artwork-mask-v02.png",
-            "sha256": "38cd91e754fa62b8793149e12d60a2ce3276597be1907d017b1084db3084cb95",
-            "pixelSha256": "f44b210ff25fed450fc1c6602076529ec3ebc890ea9e60751d51601a45657bf3"
+            "sha256": "ea4ff58cc2569cfbfe35d6b3ff1aa3d12afbaa3910981ee0d79973c5d1ee2626",
+            "pixelSha256": "2052937f8cd723867e5cfa8a0fbac8516c57380a93acd757fd59b87060b60df8"
           },
           "fabricModulation": {
             "enabled": true,
@@ -411,7 +495,7 @@
             "artworkBlendMode": "normal",
             "artworkOpacity": 0.88,
             "textureReturnOpacity": 0.16,
-            "textureReturnClip": "artworkQuad"
+            "textureReturnClip": "artworkAlpha"
           },
           "sourceCorners": [
             {
@@ -451,38 +535,67 @@
           ],
           "artworkQuad": [
             {
-              "x": 621,
-              "y": 356
+              "x": 593,
+              "y": 353
             },
             {
-              "x": 895,
+              "x": 923,
               "y": 370
             },
             {
-              "x": 889,
-              "y": 472
+              "x": 916,
+              "y": 492
             },
             {
-              "x": 621,
-              "y": 460
+              "x": 593,
+              "y": 478
             }
           ],
           "artworkToOutput": [
-            0.18071986281377697,
-            0.023563922942206224,
-            621,
-            0.012664915353181571,
-            0.1907880910683009,
-            356,
-            0.00001058085230589612,
-            0.000037945125510799064,
+            0.21896917084345893,
+            0.021891243080869448,
+            593,
+            0.015723692537464556,
+            0.2259792257324153,
+            353,
+            0.00001378025010125557,
+            0.00003691609288510868,
             1
           ],
-          "outputSha256": "9a4bf9c4b080657a1cd23ab5abd54874c04b95a1f97bb8d42092e2bf068776c1",
-          "outputPixelSha256": "daa97bdb28adbac36dce052bf85bca87d40d5d1f6ac797da34fb057d735c6430",
+          "appliedArtworkBounds": {
+            "left": 607,
+            "top": 368,
+            "right": 900,
+            "bottom": 476,
+            "width": 293,
+            "height": 108
+          },
+          "heroRelative": {
+            "centerOffset": {
+              "x": 0.01349,
+              "y": -0.082958
+            },
+            "scale": {
+              "x": 0.795718,
+              "y": 0.754123
+            }
+          },
+          "outputSha256": "27b04d86ea1071a8ec252a337245de861aca9b2806a04287cc74e4a721059248",
+          "outputPixelSha256": "44351799f5188538fd484d19a7265daea5e9b05ab72ebbe155415ef39a50bfb9",
           "encoder": "ffmpeg/libwebp q=88 yuv420p metadata-stripped"
         }
       }
+    }
+  },
+  "visualQa": {
+    "reviewMethod": "hero / print macro / worn-or-on-body contact sheet",
+    "layout": "t-shirt hero / print macro / on-body; hoodie hero / print macro / worn-rear",
+    "contactSheet": {
+      "path": "tools/fixtures/apparel-registration/apparel-registration-contact-sheet-v02.png",
+      "sha256": "72b419422832991e62085cdde5709d0e6da2cf914e64c3d1344e1d4e2b8c8fe6",
+      "pixelSha256": "f26047c69b0cd955452faefe2e91a65083603e92c7afc5d99ed5bcb3715570c2",
+      "width": 1800,
+      "height": 800
     }
   }
 }
