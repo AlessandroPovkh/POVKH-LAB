@@ -2,7 +2,13 @@
   "schemaVersion": 1,
   "assetKey": "data-key-003",
   "baseUrl": "http://127.0.0.1:4173/merch/usb-edition/",
-  "capturedAtPolicy": "timestamp-omitted-for-determinism",
+  "capturedAtPolicy": "timestamp-omitted; checked-in hashes prove snapshot integrity, while rerenders use semantic and perceptual gates",
+  "rerenderPolicy": {
+    "pixelHashes": "snapshot-integrity-only",
+    "maxChannelDelta": 8,
+    "maxMeanAbsoluteChannelDelta": 0.001,
+    "semanticGatesRemainAuthoritative": true
+  },
   "views": [
     {
       "view": "desktop-default",

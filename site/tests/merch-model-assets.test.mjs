@@ -102,6 +102,17 @@ test("binds released rigid and flat viewers to their governed build records", as
   }
 });
 
+test("makes data-key and collector captures reject production default-camera drift", async () => {
+  for (const assetKey of ["data-key-003", "collector-box-001"]) {
+    const source = await readFile(path.join(siteRoot, `tools/merch-3d/capture-${assetKey}.mjs`), "utf8");
+    assert.match(source, /profile\.name\.endsWith\(["']-default["']\)/);
+    assert.match(source, /production camera drift/);
+    assert.match(source, /getAttribute\(["']camera-orbit["']\)/);
+    assert.match(source, /getAttribute\(["']camera-target["']\)/);
+    assert.match(source, /getAttribute\(["']field-of-view["']\)/);
+  }
+});
+
 test("records an evidence-based hoodie GLB or honest physical-sample fallback", async () => {
   const decision = await readJson("tools/merch-3d/hoodie-001.decision.json");
   assert.equal(decision.assetKey, "hoodie-001");
