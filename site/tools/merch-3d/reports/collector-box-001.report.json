@@ -1,0 +1,171 @@
+{
+  "schemaVersion": 1,
+  "assetKey": "collector-box-001",
+  "sourceIntegrity": {
+    "lid": {
+      "path": "sources/collector-box-001/PVKH_ASCII_REVERSE_EXACT_1600x600_v01.png",
+      "sha256": "284e69cfb0e6e7fef2a993f44289577efabd1fae576c9280bab4d4e2f59b398f",
+      "application": "exact-horizontal-lower-lid",
+      "bytes": 159393
+    },
+    "geometryAuthority": {
+      "path": "sources/collector-box-001/povkh-lab-ascii-dark-outlined.svg",
+      "sha256": "aa95b301a5c41798cbd8335d33ff48ec42699f79c1960c323117126ea877be3c",
+      "application": "audit-only-reverse-raster-is-embedded",
+      "bytes": 136811
+    }
+  },
+  "authorityIntegrity": {
+    "provenanceV04": {
+      "fixturePath": "sources/collector-box-001/authority/provenance-v04.authority.json",
+      "fixtureSha256": "3a87594942da155c0ae89e676d1d73c9ef80323e6c08627859bc97fb1a366d7e",
+      "canonicalPath": "production/physical-merch/concepts/drop-001/renders/archive-objects/collector-box-001/provenance-v04.json",
+      "canonicalSha256": "55070315d383fa3dfea8ecbf1fbfe4ab3e9c2f6a0e1ef3bed480fada50731ee2"
+    },
+    "parentProvenance": {
+      "fixturePath": "sources/collector-box-001/authority/parent-provenance.authority.json",
+      "fixtureSha256": "8dbf9c5758fffe068fb9ef89cd5711d15598410894c88c2f17177d595e75d9eb",
+      "canonicalPath": "production/physical-merch/concepts/drop-001/renders/archive-objects/collector-box-001/provenance.json",
+      "canonicalSha256": "12639f1f8201464ec1a320a6f56f040e47280852cb1e764bbad0d39cb8527bc6"
+    },
+    "selection": {
+      "fixturePath": "sources/collector-box-001/authority/selection.authority.json",
+      "fixtureSha256": "3bbfbf0487c6f0e7ef931f8323bfed61007bfab3b3b584cb3ea5b2e63a04d6a6",
+      "canonicalPath": "production/physical-merch/concepts/drop-001/renders/archive-objects/collector-box-001/candidate-selection.json",
+      "canonicalSha256": "bfdbe40c0322e64d0d8291b1c9602692337a3a14c6c959c2dd34fffaa8f37493"
+    },
+    "compositionOnly": {
+      "fixturePath": "sources/collector-box-001/authority/composition-only.authority.json",
+      "fixtureSha256": "c9d7819b003560e5d09f4dbdcc71fe83cbf23c6c6ce9a0882971b89fb7f6f0f0",
+      "canonicalPath": "production/physical-merch/concepts/drop-001/renders/archive-objects/collector-box-001/source/final-contents-geometry-v04.json",
+      "canonicalSha256": "7ba671184f982ba03f24f6281f6d3685c78cd4cd0f4c6cfd7fc03fd01b32313a",
+      "application": "uncertainty-record-only-not-modeled"
+    }
+  },
+  "derivedMaterialSha256": {
+    "bookclothNormal": "8b04ece8038f37ecf6fe1379615e2e0a6deac983e3ad55baf1167aef74eec373"
+  },
+  "physicalEvidence": {
+    "method": "reopened-glb-accessor-bounds",
+    "viewerEnvelopeMm": [
+      250,
+      315,
+      55
+    ],
+    "dimensionAuthority": "provisional-viewer-envelope-not-machinable",
+    "state": "closed-only",
+    "selectedForm": "01 / ARCHIVE CLAMSHELL",
+    "lidUvRecord": {
+      "sourcePx": [
+        1600,
+        600
+      ],
+      "sourceRegistrationPx": {
+        "canvas": [
+          1536,
+          1024
+        ],
+        "origin": [
+          490,
+          395
+        ],
+        "size": [
+          620,
+          233
+        ]
+      },
+      "surfaceMm": {
+        "width": 202,
+        "height": 75.75,
+        "centreX": 4,
+        "centreY": 152
+      },
+      "uvBounds": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "rotationDeg": 0,
+      "warped": false
+    },
+    "excluded": [
+      "drawer",
+      "open state",
+      "interior",
+      "contents",
+      "working hinge",
+      "machinability claim"
+    ]
+  },
+  "cameraRecommendations": {
+    "poster": "assets/merch/collector-box-set-closed.webp",
+    "desktop": {
+      "default": {
+        "orbit": "30deg 65deg 115%",
+        "target": "auto 0.1575m auto",
+        "fieldOfView": "24deg"
+      },
+      "front": {
+        "orbit": "0deg 65deg 110%",
+        "target": "auto 0.1575m auto",
+        "fieldOfView": "23deg"
+      },
+      "rear": {
+        "orbit": "180deg 65deg 112%",
+        "target": "auto 0.1575m auto",
+        "fieldOfView": "23deg"
+      }
+    },
+    "mobile": {
+      "default": {
+        "orbit": "30deg 68deg 133%",
+        "target": "auto 0.1575m auto",
+        "fieldOfView": "30deg"
+      },
+      "front": {
+        "orbit": "0deg 68deg 132%",
+        "target": "auto 0.1575m auto",
+        "fieldOfView": "30deg"
+      },
+      "rear": {
+        "orbit": "180deg 68deg 132%",
+        "target": "auto 0.1575m auto",
+        "fieldOfView": "30deg"
+      }
+    }
+  },
+  "validation": {
+    "errors": 0,
+    "warnings": 0,
+    "infos": 1,
+    "hints": 0
+  },
+  "budget": {
+    "triangles": 686,
+    "drawCalls": 5,
+    "bytes": 253200,
+    "ceilings": {
+      "maxBytes": 2100000,
+      "maxTriangles": 40000,
+      "maxDrawCalls": 10,
+      "hardMaxBytes": 2500000,
+      "hardMaxTriangles": 50000,
+      "hardMaxDrawCalls": 12
+    }
+  },
+  "output": {
+    "path": "assets/merch-3d/collector-box-001.glb",
+    "sha256": "081126a858787d8b5717a10f5b6e2f0cf7d3083adac3d128ed9e928c2dc273e7"
+  },
+  "deterministic": {
+    "verifiedBySecondInMemoryBuild": true
+  },
+  "visualComparison": {
+    "canonicalSelected": [
+      "production/physical-merch/concepts/drop-001/renders/archive-objects/collector-box-001/renders/selected/PVKH_DROP001_COLLECTOR_BOX_001_CLOSED_HERO_CONCEPT_v02.png"
+    ],
+    "reviewStatus": "captured-six-views-readability-source-compare",
+    "browserQa": "tools/merch-3d/reports/collector-box-001.browser-qa.json"
+  }
+}

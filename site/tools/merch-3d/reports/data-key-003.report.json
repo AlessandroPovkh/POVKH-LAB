@@ -1,0 +1,126 @@
+{
+  "schemaVersion": 1,
+  "assetKey": "data-key-003",
+  "sourceIntegrity": {
+    "compactReverse": {
+      "path": "sources/data-key-003/PVKH_COMPACT_REVERSE_EXACT_1000x1000_v01.png",
+      "sha256": "9d273a3fe83d93a321342d0e7da86d8fd4654f85efedc228ae6b41f53d98bd9b",
+      "application": "single-recessed-device-mark",
+      "bytes": 53859
+    },
+    "asciiDark": {
+      "path": "sources/data-key-003/PVKH_ASCII_DARK_EXACT_1600x600_v01.png",
+      "sha256": "c46bf6bd82ea2ec6928e9fe4ca9a314b56580af49c044be0395579c43c06dada",
+      "application": "audit-only-packaging-excluded",
+      "bytes": 137134
+    }
+  },
+  "authorityIntegrity": {
+    "placements": {
+      "fixturePath": "sources/data-key-003/authority/placements.authority.json",
+      "fixtureSha256": "079a7901d1d7e878639bc790a464c753e3df4cebfdc36f062ec4cc955902578f",
+      "canonicalPath": "production/physical-merch/concepts/drop-001/renders/archive-objects/data-key-003/placements.json",
+      "canonicalSha256": "ee2b6576ecff0c1f2b0d7d6960c5e2c451f660ff44110fa65d5fdec00fd80188"
+    },
+    "provenance": {
+      "fixturePath": "sources/data-key-003/authority/provenance.authority.json",
+      "fixtureSha256": "3cc0630757f9d074f38e01e400a97cb5b2d37cf9013e2da2a3360709d46ae076",
+      "canonicalPath": "production/physical-merch/concepts/drop-001/renders/archive-objects/data-key-003/provenance.json",
+      "canonicalSha256": "5ed3d6b5a3732979634626668f36aff3b3f450b8a5bbe7b429e72f14a9f4fcaa"
+    },
+    "selection": {
+      "fixturePath": "sources/data-key-003/authority/selection.authority.json",
+      "fixtureSha256": "2c1d9aaad908c1affa9e74aaa23ff47c1fce1a1ff4eafae6348ad45b7d595383",
+      "canonicalPath": "production/physical-merch/concepts/drop-001/renders/archive-objects/data-key-003/candidate-selection.json",
+      "canonicalSha256": "77cdc1f0cdf2bb880ca11a427dc7ff80d382b5862842d5448184cab55a357ae7"
+    }
+  },
+  "physicalEvidence": {
+    "method": "reopened-glb-accessor-bounds",
+    "viewerEnvelopeMm": [
+      86,
+      20,
+      9
+    ],
+    "dimensionAuthority": "provisional-viewer-envelope-not-machinable",
+    "state": "closed-both-retracted",
+    "interfaces": [
+      "USB-A",
+      "USB-C"
+    ],
+    "packagingModeled": false,
+    "machinabilityClaim": false
+  },
+  "cameraRecommendations": {
+    "poster": "assets/merch/usb-edition-packaging.webp",
+    "desktop": {
+      "default": {
+        "orbit": "35deg 75deg 120%",
+        "target": "auto 0.010m auto",
+        "fieldOfView": "24deg"
+      },
+      "front": {
+        "orbit": "0deg 75deg 116%",
+        "target": "auto 0.010m auto",
+        "fieldOfView": "23deg"
+      },
+      "rear": {
+        "orbit": "180deg 75deg 118%",
+        "target": "auto 0.010m auto",
+        "fieldOfView": "23deg"
+      }
+    },
+    "mobile": {
+      "default": {
+        "orbit": "35deg 78deg 126%",
+        "target": "auto 0.010m auto",
+        "fieldOfView": "20deg"
+      },
+      "front": {
+        "orbit": "0deg 78deg 122%",
+        "target": "auto 0.010m auto",
+        "fieldOfView": "20deg"
+      },
+      "rear": {
+        "orbit": "180deg 78deg 124%",
+        "target": "auto 0.010m auto",
+        "fieldOfView": "20deg"
+      }
+    }
+  },
+  "validation": {
+    "errors": 0,
+    "warnings": 0,
+    "infos": 1,
+    "hints": 0
+  },
+  "budget": {
+    "triangles": 478,
+    "drawCalls": 5,
+    "bytes": 86236,
+    "ceilings": {
+      "maxBytes": 1200000,
+      "maxTriangles": 18000,
+      "maxDrawCalls": 7,
+      "hardMaxBytes": 2500000,
+      "hardMaxTriangles": 50000,
+      "hardMaxDrawCalls": 12
+    }
+  },
+  "output": {
+    "path": "assets/merch-3d/data-key-003.glb",
+    "sha256": "cd79999bdc44c0f84bd8d4e54de46fb24eb96fcd3377a97e9aebee6e31ae317d"
+  },
+  "deterministic": {
+    "verifiedBySecondInMemoryBuild": true
+  },
+  "visualComparison": {
+    "canonicalSelected": [
+      "production/physical-merch/concepts/drop-001/renders/archive-objects/data-key-003/renders/PVKH_DROP001_DATA_KEY_003_CLOSED_HERO_CONCEPT_v01.png",
+      "production/physical-merch/concepts/drop-001/renders/archive-objects/data-key-003/renders/PVKH_DROP001_DATA_KEY_003_USB_A_EXTENDED_CONCEPT_v01.png",
+      "production/physical-merch/concepts/drop-001/renders/archive-objects/data-key-003/renders/PVKH_DROP001_DATA_KEY_003_USB_C_EXTENDED_CONCEPT_v01.png"
+    ],
+    "reviewStatus": "captured-six-views-readability-source-compare",
+    "browserQa": "tools/merch-3d/reports/data-key-003.browser-qa.json"
+  }
+}

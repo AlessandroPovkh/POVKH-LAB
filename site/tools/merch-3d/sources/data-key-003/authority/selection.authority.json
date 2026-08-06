@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "authorityType": "governed-minimal-copy",
+  "canonicalPath": "production/physical-merch/concepts/drop-001/renders/archive-objects/data-key-003/candidate-selection.json",
+  "canonicalSha256": "77cdc1f0cdf2bb880ca11a427dc7ff80d382b5862842d5448184cab55a357ae7",
+  "userSelection": "03 / TECHNICAL RAIL",
+  "state": "CLOSED",
+  "siteGalleryEligible": false,
+  "productionArt": false,
+  "realProductPhoto": false
+}

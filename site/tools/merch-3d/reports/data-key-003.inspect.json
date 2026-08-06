@@ -1,0 +1,172 @@
+{
+  "scenes": {
+    "properties": [
+      {
+        "name": "Data_Key_003_Closed_Neutral_Display",
+        "rootName": "Data_Key_003_Centred_Grounded_Pivot",
+        "bboxMin": [
+          -0.043,
+          0,
+          -0.0045
+        ],
+        "bboxMax": [
+          0.043,
+          0.02001,
+          0.005
+        ],
+        "renderVertexCount": 1434,
+        "uploadVertexCount": 848,
+        "uploadNaiveVertexCount": 848
+      }
+    ]
+  },
+  "meshes": {
+    "properties": [
+      {
+        "name": "Data_Key_Device_Mesh",
+        "mode": [
+          "TRIANGLES"
+        ],
+        "meshPrimitives": 1,
+        "glPrimitives": 224,
+        "vertices": 394,
+        "indices": [
+          "u32"
+        ],
+        "attributes": [
+          "NORMAL:f32",
+          "POSITION:f32"
+        ],
+        "instances": 1,
+        "size": 12144
+      },
+      {
+        "name": "Data_Key_Polymer_Slider_Mesh",
+        "mode": [
+          "TRIANGLES"
+        ],
+        "meshPrimitives": 1,
+        "glPrimitives": 236,
+        "vertices": 418,
+        "indices": [
+          "u32"
+        ],
+        "attributes": [
+          "NORMAL:f32",
+          "POSITION:f32"
+        ],
+        "instances": 1,
+        "size": 12864
+      },
+      {
+        "name": "Data_Key_USB_A_Interface_Envelope_Mesh",
+        "mode": [
+          "TRIANGLES"
+        ],
+        "meshPrimitives": 1,
+        "glPrimitives": 8,
+        "vertices": 16,
+        "indices": [
+          "u32"
+        ],
+        "attributes": [
+          "NORMAL:f32",
+          "POSITION:f32"
+        ],
+        "instances": 1,
+        "size": 480
+      },
+      {
+        "name": "Data_Key_USB_C_Interface_Envelope_Mesh",
+        "mode": [
+          "TRIANGLES"
+        ],
+        "meshPrimitives": 1,
+        "glPrimitives": 8,
+        "vertices": 16,
+        "indices": [
+          "u32"
+        ],
+        "attributes": [
+          "NORMAL:f32",
+          "POSITION:f32"
+        ],
+        "instances": 1,
+        "size": 480
+      },
+      {
+        "name": "Data_Key_Compact_Identity_Mesh",
+        "mode": [
+          "TRIANGLES"
+        ],
+        "meshPrimitives": 1,
+        "glPrimitives": 2,
+        "vertices": 4,
+        "indices": [
+          "u32"
+        ],
+        "attributes": [
+          "NORMAL:f32",
+          "POSITION:f32",
+          "TEXCOORD_0:f32"
+        ],
+        "instances": 1,
+        "size": 152
+      }
+    ]
+  },
+  "materials": {
+    "properties": [
+      {
+        "name": "MAT_BLACK_ANODIZED_ALUMINIUM",
+        "instances": 1,
+        "textures": [],
+        "alphaMode": "OPAQUE",
+        "doubleSided": true
+      },
+      {
+        "name": "MAT_BLACK_POLYMER_SLIDER",
+        "instances": 1,
+        "textures": [],
+        "alphaMode": "OPAQUE",
+        "doubleSided": true
+      },
+      {
+        "name": "MAT_BRUSHED_CONNECTOR_ENVELOPE",
+        "instances": 2,
+        "textures": [],
+        "alphaMode": "OPAQUE",
+        "doubleSided": true
+      },
+      {
+        "name": "MAT_RECESSED_COMPACT_EXACT",
+        "instances": 1,
+        "textures": [
+          "baseColorTexture"
+        ],
+        "alphaMode": "BLEND",
+        "doubleSided": true
+      }
+    ]
+  },
+  "textures": {
+    "properties": [
+      {
+        "name": "Data_Key_003_Compact_Exact_Texture",
+        "uri": "",
+        "slots": [
+          "baseColorTexture"
+        ],
+        "instances": 1,
+        "mimeType": "image/png",
+        "compression": "",
+        "resolution": "1000x1000",
+        "size": 53859,
+        "gpuSize": 5332856
+      }
+    ]
+  },
+  "animations": {
+    "properties": []
+  }
+}

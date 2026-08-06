@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "authorityType": "governed-minimal-copy",
+  "canonicalPath": "production/physical-merch/concepts/drop-001/renders/archive-objects/collector-box-001/provenance.json",
+  "canonicalSha256": "12639f1f8201464ec1a320a6f56f040e47280852cb1e764bbad0d39cb8527bc6",
+  "selectedForm": "01 / ARCHIVE CLAMSHELL",
+  "identityApplication": "horizontal exact raster across lower lid",
+  "generationScope": "unbranded geometry, materials, studio lighting and shadows",
+  "identityGenerated": false,
+  "productionArt": false,
+  "realProductPhoto": false
+}

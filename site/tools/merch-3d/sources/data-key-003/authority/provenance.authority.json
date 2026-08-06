@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "authorityType": "governed-minimal-copy",
+  "canonicalPath": "production/physical-merch/concepts/drop-001/renders/archive-objects/data-key-003/provenance.json",
+  "canonicalSha256": "5ed3d6b5a3732979634626668f36aff3b3f450b8a5bbe7b429e72f14a9f4fcaa",
+  "status": "USER_APPROVED_SELECTED_PACKET",
+  "selectedCandidate": "03 / TECHNICAL RAIL",
+  "architecture": "DUAL_MONOLITH",
+  "releaseState": "CLOSED / BOTH RETRACTED",
+  "materials": ["black anodized aluminum", "black polymer", "brushed connector metal"],
+  "uncertainty": ["capacity", "speed", "electronics", "supplier", "machinable enclosure dimensions"]
+}

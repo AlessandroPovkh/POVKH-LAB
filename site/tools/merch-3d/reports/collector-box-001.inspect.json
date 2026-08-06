@@ -1,0 +1,200 @@
+{
+  "scenes": {
+    "properties": [
+      {
+        "name": "Collector_Box_001_Closed_Archive_Clamshell",
+        "rootName": "Collector_Box_001_Centred_Grounded_Pivot",
+        "bboxMin": [
+          -0.125,
+          0,
+          -0.0275
+        ],
+        "bboxMax": [
+          0.125,
+          0.315,
+          0.02753
+        ],
+        "renderVertexCount": 2058,
+        "uploadVertexCount": 1232,
+        "uploadNaiveVertexCount": 1232
+      }
+    ]
+  },
+  "meshes": {
+    "properties": [
+      {
+        "name": "Collector_Box_Closed_Envelope_Mesh",
+        "mode": [
+          "TRIANGLES"
+        ],
+        "meshPrimitives": 1,
+        "glPrimitives": 60,
+        "vertices": 120,
+        "indices": [
+          "u32"
+        ],
+        "attributes": [
+          "NORMAL:f32",
+          "POSITION:f32",
+          "TANGENT:f32",
+          "TEXCOORD_0:f32"
+        ],
+        "instances": 1,
+        "size": 6480
+      },
+      {
+        "name": "Collector_Box_Closed_Lid_Mesh",
+        "mode": [
+          "TRIANGLES"
+        ],
+        "meshPrimitives": 1,
+        "glPrimitives": 288,
+        "vertices": 506,
+        "indices": [
+          "u32"
+        ],
+        "attributes": [
+          "NORMAL:f32",
+          "POSITION:f32",
+          "TANGENT:f32",
+          "TEXCOORD_0:f32"
+        ],
+        "instances": 1,
+        "size": 27744
+      },
+      {
+        "name": "Collector_Box_Lid_Seam_Mesh",
+        "mode": [
+          "TRIANGLES"
+        ],
+        "meshPrimitives": 1,
+        "glPrimitives": 48,
+        "vertices": 96,
+        "indices": [
+          "u32"
+        ],
+        "attributes": [
+          "NORMAL:f32",
+          "POSITION:f32"
+        ],
+        "instances": 1,
+        "size": 2880
+      },
+      {
+        "name": "Collector_Box_Signal_Red_Tab_Mesh",
+        "mode": [
+          "TRIANGLES"
+        ],
+        "meshPrimitives": 1,
+        "glPrimitives": 288,
+        "vertices": 506,
+        "indices": [
+          "u32"
+        ],
+        "attributes": [
+          "NORMAL:f32",
+          "POSITION:f32"
+        ],
+        "instances": 1,
+        "size": 15600
+      },
+      {
+        "name": "Collector_Box_Lid_Identity_Mesh",
+        "mode": [
+          "TRIANGLES"
+        ],
+        "meshPrimitives": 1,
+        "glPrimitives": 2,
+        "vertices": 4,
+        "indices": [
+          "u32"
+        ],
+        "attributes": [
+          "NORMAL:f32",
+          "POSITION:f32",
+          "TEXCOORD_0:f32"
+        ],
+        "instances": 1,
+        "size": 152
+      }
+    ]
+  },
+  "materials": {
+    "properties": [
+      {
+        "name": "MAT_VOID_PAPER_WRAPPED_BOARD",
+        "instances": 1,
+        "textures": [
+          "normalTexture"
+        ],
+        "alphaMode": "OPAQUE",
+        "doubleSided": true
+      },
+      {
+        "name": "MAT_VOID_BOOKCLOTH_LID",
+        "instances": 1,
+        "textures": [
+          "normalTexture"
+        ],
+        "alphaMode": "OPAQUE",
+        "doubleSided": true
+      },
+      {
+        "name": "MAT_VOID_LID_SEAM",
+        "instances": 1,
+        "textures": [],
+        "alphaMode": "OPAQUE",
+        "doubleSided": true
+      },
+      {
+        "name": "MAT_SIGNAL_RED_PULL_TAB",
+        "instances": 1,
+        "textures": [],
+        "alphaMode": "OPAQUE",
+        "doubleSided": true
+      },
+      {
+        "name": "MAT_EXACT_REVERSE_LID_IDENTITY",
+        "instances": 1,
+        "textures": [
+          "baseColorTexture"
+        ],
+        "alphaMode": "BLEND",
+        "doubleSided": true
+      }
+    ]
+  },
+  "textures": {
+    "properties": [
+      {
+        "name": "Collector_Box_001_Bookcloth_Normal",
+        "uri": "",
+        "slots": [
+          "normalTexture"
+        ],
+        "instances": 2,
+        "mimeType": "image/png",
+        "compression": "",
+        "resolution": "256x256",
+        "size": 36958,
+        "gpuSize": 349524
+      },
+      {
+        "name": "Collector_Box_001_Lid_Identity_Exact",
+        "uri": "",
+        "slots": [
+          "baseColorTexture"
+        ],
+        "instances": 1,
+        "mimeType": "image/png",
+        "compression": "",
+        "resolution": "1600x600",
+        "size": 159393,
+        "gpuSize": 5119556
+      }
+    ]
+  },
+  "animations": {
+    "properties": []
+  }
+}

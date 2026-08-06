@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "authorityType": "governed-minimal-copy",
+  "canonicalPath": "production/physical-merch/concepts/drop-001/renders/archive-objects/collector-box-001/source/final-contents-geometry-v04.json",
+  "canonicalSha256": "7ba671184f982ba03f24f6281f6d3685c78cd4cd0f4c6cfd7fc03fd01b32313a",
+  "application": "uncertainty-record-only-not-modeled",
+  "manufacturingAuthority": false,
+  "reason": "composition evidence is not a machinable dieline"
+}
