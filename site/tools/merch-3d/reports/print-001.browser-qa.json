@@ -1,0 +1,206 @@
+{
+  "schemaVersion": 1,
+  "assetKey": "print-001",
+  "baseUrlPolicy": "ephemeral-local-static-server",
+  "screenshots": {
+    "desktop-default": {
+      "path": "reports/screenshots/print-001-desktop-default.png",
+      "sha256": "fce34ade690cffe3f6b53538323e30177abda25b6d3ad06e2e358f7239d4283b",
+      "viewportPx": [
+        1440,
+        1000
+      ],
+      "entropy": 2.5114
+    },
+    "desktop-front": {
+      "path": "reports/screenshots/print-001-desktop-front.png",
+      "sha256": "be25e8af954c52cf8337f3bbd37a78f03298fb89b59293472fd1daa04f431af4",
+      "viewportPx": [
+        1440,
+        1000
+      ],
+      "entropy": 2.5267
+    },
+    "desktop-rear": {
+      "path": "reports/screenshots/print-001-desktop-rear.png",
+      "sha256": "05d2745e51e2450557b101f2bb9d354c9589af4cf07715801b7d61e0e3718c0b",
+      "viewportPx": [
+        1440,
+        1000
+      ],
+      "entropy": 1.9934
+    },
+    "mobile-default": {
+      "path": "reports/screenshots/print-001-mobile-default.png",
+      "sha256": "7dfe77d763410526f0dd925406096e86f8e7e232596003ddc1e42e1fe50f9413",
+      "viewportPx": [
+        390,
+        844
+      ],
+      "entropy": 2.6744
+    },
+    "mobile-front": {
+      "path": "reports/screenshots/print-001-mobile-front.png",
+      "sha256": "c85aaed72f221fa2a7795536399a50263555637ce728a85e2b83e9d3b2b0aa09",
+      "viewportPx": [
+        390,
+        844
+      ],
+      "entropy": 2.5814
+    },
+    "mobile-rear": {
+      "path": "reports/screenshots/print-001-mobile-rear.png",
+      "sha256": "b9e761cc22669141fd279e51620e30a3c93c366528850773bf6b7f39b90582fd",
+      "viewportPx": [
+        390,
+        844
+      ],
+      "entropy": 1.9999
+    },
+    "desktop-readability-crop": {
+      "path": "reports/screenshots/print-001-desktop-readability-crop.png",
+      "sha256": "e58d69cd3bd886a9055bc87ce0d13fd6b0f402e2932858d52dbdbdd3e71280a5",
+      "expected": "Bone master left / Void reverse master right"
+    }
+  },
+  "metrics": {
+    "desktop-default": {
+      "loaded": true,
+      "dimensionsM": [
+        0.8699999868869781,
+        0.593999981880188,
+        0.0019000000174855813
+      ],
+      "centreM": [
+        0,
+        0.296999990940094,
+        1.3795215620879264e-11
+      ],
+      "cameraOrbit": {
+        "theta": 0,
+        "phi": 1.3089969389957472,
+        "radius": 2.136847888252058
+      },
+      "fieldOfViewDeg": 30.000000000000004
+    },
+    "desktop-front": {
+      "loaded": true,
+      "dimensionsM": [
+        0.8699999868869781,
+        0.593999981880188,
+        0.0019000000174855813
+      ],
+      "centreM": [
+        0,
+        0.296999990940094,
+        1.3795215620879264e-11
+      ],
+      "cameraOrbit": {
+        "theta": 0,
+        "phi": 1.5707963267948966,
+        "radius": 2.136847888252058
+      },
+      "fieldOfViewDeg": 30.000000000000004
+    },
+    "desktop-rear": {
+      "loaded": true,
+      "dimensionsM": [
+        0.8699999868869781,
+        0.593999981880188,
+        0.0019000000174855813
+      ],
+      "centreM": [
+        0,
+        0.296999990940094,
+        1.3795215620879264e-11
+      ],
+      "cameraOrbit": {
+        "theta": 3.141592653589793,
+        "phi": 1.5707963267948966,
+        "radius": 2.136847888252058
+      },
+      "fieldOfViewDeg": 30.000000000000004
+    },
+    "mobile-default": {
+      "loaded": true,
+      "dimensionsM": [
+        0.8699999868869781,
+        0.593999981880188,
+        0.0019000000174855813
+      ],
+      "centreM": [
+        0,
+        0.296999990940094,
+        1.3795215620879264e-11
+      ],
+      "cameraOrbit": {
+        "theta": 0,
+        "phi": 1.3089969389957472,
+        "radius": 2.136847888252058
+      },
+      "fieldOfViewDeg": 30.000000000000004
+    },
+    "mobile-front": {
+      "loaded": true,
+      "dimensionsM": [
+        0.8699999868869781,
+        0.593999981880188,
+        0.0019000000174855813
+      ],
+      "centreM": [
+        0,
+        0.296999990940094,
+        1.3795215620879264e-11
+      ],
+      "cameraOrbit": {
+        "theta": 0,
+        "phi": 1.5707963267948966,
+        "radius": 2.136847888252058
+      },
+      "fieldOfViewDeg": 30.000000000000004
+    },
+    "mobile-rear": {
+      "loaded": true,
+      "dimensionsM": [
+        0.8699999868869781,
+        0.593999981880188,
+        0.0019000000174855813
+      ],
+      "centreM": [
+        0,
+        0.296999990940094,
+        1.3795215620879264e-11
+      ],
+      "cameraOrbit": {
+        "theta": 3.141592653589793,
+        "phi": 1.5707963267948966,
+        "radius": 2.136847888252058
+      },
+      "fieldOfViewDeg": 30.000000000000004
+    }
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "cameraRecommendation": {
+    "orbit": "0deg 75deg 115%",
+    "fieldOfView": "30deg",
+    "target": "auto auto auto"
+  },
+  "visualComparison": {
+    "status": "pass",
+    "method": "exact-source-pair-left / live-browser-front-right",
+    "artifactPath": "reports/screenshots/print-001-source-compare.png",
+    "artifactSha256": "791bdb340dcad50a644efbfc67fc23925e241c5ca63f9ef3966334a62d21a2f9",
+    "checks": [
+      "Bone artwork remains left",
+      "Void artwork remains right",
+      "30 mm gap remains open",
+      "no frame, tape or cast-shadow geometry"
+    ]
+  },
+  "visualRisks": [
+    "Fine typography is reduced at mobile default distance",
+    "Rear view intentionally shows unprinted paper backs",
+    "Subtle 1.5 mm bow is most legible under slight orbit"
+  ]
+}

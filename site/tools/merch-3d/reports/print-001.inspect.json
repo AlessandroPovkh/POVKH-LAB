@@ -1,0 +1,134 @@
+{
+  "scenes": {
+    "properties": [
+      {
+        "name": "Print_001_Upright_A2_Pair",
+        "rootName": "Print_001_Centred_Grounded_Pivot",
+        "bboxMin": [
+          -0.435,
+          0,
+          -0.00095
+        ],
+        "bboxMax": [
+          0.435,
+          0.594,
+          0.00095
+        ],
+        "renderVertexCount": 600,
+        "uploadVertexCount": 200,
+        "uploadNaiveVertexCount": 400
+      }
+    ]
+  },
+  "meshes": {
+    "properties": [
+      {
+        "name": "Print_001_Bone_Left_Mesh",
+        "mode": [
+          "TRIANGLES"
+        ],
+        "meshPrimitives": 2,
+        "glPrimitives": 100,
+        "vertices": 200,
+        "indices": [
+          "u16"
+        ],
+        "attributes": [
+          "NORMAL:f32",
+          "POSITION:f32",
+          "TEXCOORD_0:f32"
+        ],
+        "instances": 1,
+        "size": 5784
+      },
+      {
+        "name": "Print_001_Void_Right_Mesh",
+        "mode": [
+          "TRIANGLES"
+        ],
+        "meshPrimitives": 2,
+        "glPrimitives": 100,
+        "vertices": 200,
+        "indices": [
+          "u16"
+        ],
+        "attributes": [
+          "NORMAL:f32",
+          "POSITION:f32",
+          "TEXCOORD_0:f32"
+        ],
+        "instances": 1,
+        "size": 5784
+      }
+    ]
+  },
+  "materials": {
+    "properties": [
+      {
+        "name": "MAT_BONE_PAPER",
+        "instances": 1,
+        "textures": [],
+        "alphaMode": "OPAQUE",
+        "doubleSided": false
+      },
+      {
+        "name": "MAT_VOID_PAPER",
+        "instances": 1,
+        "textures": [],
+        "alphaMode": "OPAQUE",
+        "doubleSided": false
+      },
+      {
+        "name": "MAT_PRINT_BONELEFT",
+        "instances": 1,
+        "textures": [
+          "baseColorTexture"
+        ],
+        "alphaMode": "OPAQUE",
+        "doubleSided": false
+      },
+      {
+        "name": "MAT_PRINT_VOIDRIGHT",
+        "instances": 1,
+        "textures": [
+          "baseColorTexture"
+        ],
+        "alphaMode": "OPAQUE",
+        "doubleSided": false
+      }
+    ]
+  },
+  "textures": {
+    "properties": [
+      {
+        "name": "MAT_PRINT_BONELEFT_Texture",
+        "uri": "",
+        "slots": [
+          "baseColorTexture"
+        ],
+        "instances": 1,
+        "mimeType": "image/png",
+        "compression": "",
+        "resolution": "700x990",
+        "size": 79128,
+        "gpuSize": 3694484
+      },
+      {
+        "name": "MAT_PRINT_VOIDRIGHT_Texture",
+        "uri": "",
+        "slots": [
+          "baseColorTexture"
+        ],
+        "instances": 1,
+        "mimeType": "image/png",
+        "compression": "",
+        "resolution": "700x990",
+        "size": 71582,
+        "gpuSize": 3694484
+      }
+    ]
+  },
+  "animations": {
+    "properties": []
+  }
+}

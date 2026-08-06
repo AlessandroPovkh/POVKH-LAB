@@ -1,0 +1,103 @@
+{
+  "schemaVersion": 1,
+  "assetKey": "print-001",
+  "sourceIntegrity": {
+    "boneLeft": {
+      "path": "sources/print-001/PVKH_PRINT_001_A_SIGNAL_BONE_FLAT_ARTWORK_v01.png",
+      "canonicalPath": "production/physical-merch/concepts/drop-001/renders/archive-objects/print-001/source/flat-art/PVKH_PRINT_001_A_SIGNAL_BONE_FLAT_ARTWORK_v01.png",
+      "sha256": "20f9a1113b7a861334496b736bb9bbe8f4e48e3853b65fb0f1731a04237e3ad5",
+      "bytes": 371823,
+      "derivedRasterSha256": "4ec903ae742d428bdc893b88910eb7347ccd8b5a75766ba8c11ea7290aabeafd"
+    },
+    "voidRight": {
+      "path": "sources/print-001/PVKH_PRINT_001_B_VOID_REVERSE_FLAT_ARTWORK_v01.png",
+      "canonicalPath": "production/physical-merch/concepts/drop-001/renders/archive-objects/print-001/source/flat-art/PVKH_PRINT_001_B_VOID_REVERSE_FLAT_ARTWORK_v01.png",
+      "sha256": "6a852a668ff424e66ac1fc82925610e35637a79071b5727d5b99013a200d651e",
+      "bytes": 296237,
+      "derivedRasterSha256": "5f93f5130c291d75ad5ae572f245e5a439174174fbb1eedfd58ab4c97757f1b3"
+    }
+  },
+  "physicalEvidence": {
+    "method": "reopened-glb-bounds-and-node-registration",
+    "boundsMm": {
+      "min": [
+        -434.9999934434891,
+        0,
+        -0.949999994947575
+      ],
+      "max": [
+        434.9999934434891,
+        593.999981880188,
+        0.9500000225380063
+      ]
+    },
+    "nodeBoundsMm": {
+      "Print_001_Bone_Left": {
+        "min": [
+          -434.9999934434891,
+          0,
+          -0.949999994947575
+        ],
+        "max": [
+          -15.00000655651093,
+          593.999981880188,
+          0.9500000225380063
+        ]
+      },
+      "Print_001_Void_Right": {
+        "min": [
+          15.00000655651093,
+          0,
+          -0.949999994947575
+        ],
+        "max": [
+          434.9999934434891,
+          593.999981880188,
+          0.9500000225380063
+        ]
+      }
+    },
+    "sheetMm": [
+      420,
+      594,
+      0.4
+    ],
+    "gapMm": 30,
+    "bowMm": 1.5,
+    "leftArtwork": "boneLeft",
+    "rightArtwork": "voidRight"
+  },
+  "excludedPresentation": [
+    "frames",
+    "tape",
+    "shadows"
+  ],
+  "cameraRecommendations": {
+    "orbit": "0deg 75deg 115%",
+    "fieldOfView": "30deg",
+    "target": "auto auto auto"
+  },
+  "validation": {
+    "errors": 0,
+    "warnings": 0,
+    "infos": 2,
+    "hints": 0
+  },
+  "budget": {
+    "triangles": 200,
+    "drawCalls": 4,
+    "bytes": 160244,
+    "ceilings": {
+      "maxBytes": 650000,
+      "maxTriangles": 1500,
+      "maxDrawCalls": 4
+    }
+  },
+  "output": {
+    "path": "assets/merch-3d/print-001.glb",
+    "sha256": "5d3fe72c4e24e2ba166a67d2176a68324b5efeec167db05b665bd3f689f09228"
+  },
+  "deterministic": {
+    "verifiedBySecondInMemoryBuild": true
+  }
+}
