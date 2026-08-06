@@ -13,14 +13,14 @@
   },
   "dimensions": {
     "authority": "provisional-viewer-envelope-not-production-dimensions",
-    "viewerEnvelopeMm": [270, 266, 377],
+    "viewerEnvelopeMm": [270, 266, 384],
     "replacementGate": "selected cap blank, woven-label vendor proof and measured approved sample"
   },
   "geometry": {
     "scene": "Cap_001_Concept_Visualization",
     "pivot": "Cap_001_Centred_Grounded_Pivot",
-    "requiredNodes": ["Cap_Panel_01", "Cap_Panel_02", "Cap_Panel_03", "Cap_Panel_04", "Cap_Panel_05", "Cap_Panel_06", "Cap_Curved_Brim", "Cap_Top_Button", "Cap_Rear_Opening", "Cap_Adjustment_Strap", "Cap_Front_Patch", "Cap_Patch_Mark"],
-    "features": ["six-panel crown", "curved dimensional brim", "top button", "rear opening", "adjustment strap", "bone front patch", "exact compact mark"]
+    "requiredNodes": ["Cap_Panel_01", "Cap_Panel_02", "Cap_Panel_03", "Cap_Panel_04", "Cap_Panel_05", "Cap_Panel_06", "Cap_Curved_Brim", "Cap_Top_Button", "Cap_Rear_Aperture_Rim", "Cap_Adjustment_Strap", "Cap_Adjustment_Keeper", "Cap_Front_Patch", "Cap_Patch_Mark"],
+    "features": ["six-panel crown with removed rear geometry", "curved dimensional brim", "top button", "unfilled rear through-aperture", "single bridging adjustment strap with keeper", "conformed bone front patch", "exact compact mark"]
   },
   "artwork": {
     "path": "sources/cap-001/PVKH_COMPACT_DARK_KNOCKOUT_EXACT_1000x1000_v01.png",
@@ -32,9 +32,9 @@
     "registration": { "surfaceMm": [20, 20], "patchMm": [55, 28], "aspectRatio": "1:1", "side": "front-patch", "sourceUse": "full-image-no-crop-no-redraw" }
   },
   "materials": {
-    "crown": { "name": "MAT_CAP_WASHED_VOID_TWILL", "baseColor": [0.018, 0.019, 0.021, 1], "metallic": 0, "roughness": 0.95 },
-    "seam": { "name": "MAT_CAP_TONAL_SEAM", "baseColor": [0.005, 0.006, 0.007, 1], "metallic": 0, "roughness": 0.98 },
-    "patch": { "name": "MAT_CAP_BONE_PATCH", "baseColor": [0.82, 0.79, 0.71, 1], "metallic": 0, "roughness": 0.98 },
+    "crown": { "name": "MAT_CAP_WASHED_VOID_TWILL", "baseColor": [0.018, 0.019, 0.021, 1], "metallic": 0, "roughness": 0.95, "surface": "washed-twill-void" },
+    "seam": { "name": "MAT_CAP_TONAL_SEAM", "baseColor": [0.005, 0.006, 0.007, 1], "metallic": 0, "roughness": 0.98, "surface": "woven-seam-void" },
+    "patch": { "name": "MAT_CAP_BONE_PATCH", "baseColor": [0.82, 0.79, 0.71, 1], "metallic": 0, "roughness": 0.98, "surface": "woven-patch-bone" },
     "opening": { "name": "MAT_CAP_REAR_OPENING", "baseColor": [0.001, 0.001, 0.002, 1], "metallic": 0, "roughness": 1 },
     "hardware": { "name": "MAT_CAP_MATTE_HARDWARE", "baseColor": [0.04, 0.045, 0.05, 1], "metallic": 0.72, "roughness": 0.42 },
     "artwork": { "name": "MAT_CAP_COMPACT_DARK_EXACT", "baseColor": [1, 1, 1, 1], "metallic": 0, "roughness": 0.9 }
@@ -45,12 +45,12 @@
     "desktop": {
       "default": { "orbit": "25deg 72deg 115%", "target": "auto 0.160m auto", "fieldOfView": "24deg" },
       "front": { "orbit": "0deg 76deg 112%", "target": "auto 0.160m auto", "fieldOfView": "23deg" },
-      "rear": { "orbit": "180deg 76deg 116%", "target": "auto 0.160m auto", "fieldOfView": "23deg" }
+      "rear": { "orbit": "180deg 88deg 108%", "target": "auto 0.140m auto", "fieldOfView": "23deg" }
     },
     "mobile": {
-      "default": { "orbit": "20deg 75deg 122%", "target": "auto 0.160m auto", "fieldOfView": "20deg" },
-      "front": { "orbit": "0deg 78deg 120%", "target": "auto 0.160m auto", "fieldOfView": "20deg" },
-      "rear": { "orbit": "180deg 78deg 124%", "target": "auto 0.160m auto", "fieldOfView": "20deg" }
+      "default": { "orbit": "18deg 75deg 108%", "target": "auto 0.150m auto", "fieldOfView": "20deg" },
+      "front": { "orbit": "0deg 78deg 106%", "target": "auto 0.150m auto", "fieldOfView": "20deg" },
+      "rear": { "orbit": "180deg 88deg 108%", "target": "auto 0.140m auto", "fieldOfView": "20deg" }
     }
   },
   "budgets": { "maxBytes": 4000000, "maxTriangles": 80000, "maxDrawCalls": 20 },

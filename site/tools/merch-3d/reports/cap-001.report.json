@@ -35,7 +35,7 @@
       "viewerEnvelopeMm": [
         270,
         266,
-        377
+        384
       ],
       "replacementGate": "selected cap blank, woven-label vendor proof and measured approved sample"
     },
@@ -51,18 +51,19 @@
         "Cap_Panel_06",
         "Cap_Curved_Brim",
         "Cap_Top_Button",
-        "Cap_Rear_Opening",
+        "Cap_Rear_Aperture_Rim",
         "Cap_Adjustment_Strap",
+        "Cap_Adjustment_Keeper",
         "Cap_Front_Patch",
         "Cap_Patch_Mark"
       ],
       "features": [
-        "six-panel crown",
+        "six-panel crown with removed rear geometry",
         "curved dimensional brim",
         "top button",
-        "rear opening",
-        "adjustment strap",
-        "bone front patch",
+        "unfilled rear through-aperture",
+        "single bridging adjustment strap with keeper",
+        "conformed bone front patch",
         "exact compact mark"
       ]
     },
@@ -100,7 +101,8 @@
           1
         ],
         "metallic": 0,
-        "roughness": 0.95
+        "roughness": 0.95,
+        "surface": "washed-twill-void"
       },
       "seam": {
         "name": "MAT_CAP_TONAL_SEAM",
@@ -111,7 +113,8 @@
           1
         ],
         "metallic": 0,
-        "roughness": 0.98
+        "roughness": 0.98,
+        "surface": "woven-seam-void"
       },
       "patch": {
         "name": "MAT_CAP_BONE_PATCH",
@@ -122,7 +125,8 @@
           1
         ],
         "metallic": 0,
-        "roughness": 0.98
+        "roughness": 0.98,
+        "surface": "woven-patch-bone"
       },
       "opening": {
         "name": "MAT_CAP_REAR_OPENING",
@@ -172,25 +176,25 @@
           "fieldOfView": "23deg"
         },
         "rear": {
-          "orbit": "180deg 76deg 116%",
-          "target": "auto 0.160m auto",
+          "orbit": "180deg 88deg 108%",
+          "target": "auto 0.140m auto",
           "fieldOfView": "23deg"
         }
       },
       "mobile": {
         "default": {
-          "orbit": "20deg 75deg 122%",
-          "target": "auto 0.160m auto",
+          "orbit": "18deg 75deg 108%",
+          "target": "auto 0.150m auto",
           "fieldOfView": "20deg"
         },
         "front": {
-          "orbit": "0deg 78deg 120%",
-          "target": "auto 0.160m auto",
+          "orbit": "0deg 78deg 106%",
+          "target": "auto 0.150m auto",
           "fieldOfView": "20deg"
         },
         "rear": {
-          "orbit": "180deg 78deg 124%",
-          "target": "auto 0.160m auto",
+          "orbit": "180deg 88deg 108%",
+          "target": "auto 0.140m auto",
           "fieldOfView": "20deg"
         }
       }
@@ -211,8 +215,9 @@
         "Cap_Panel_06",
         "Cap_Curved_Brim",
         "Cap_Top_Button",
-        "Cap_Rear_Opening",
+        "Cap_Rear_Aperture_Rim",
         "Cap_Adjustment_Strap",
+        "Cap_Adjustment_Keeper",
         "Cap_Front_Patch",
         "Cap_Patch_Mark"
       ],
@@ -225,8 +230,9 @@
         "Cap_Panel_06_Mesh",
         "Cap_Curved_Brim_Mesh",
         "Cap_Top_Button_Mesh",
-        "Cap_Rear_Opening_Mesh",
+        "Cap_Rear_Aperture_Rim_Mesh",
         "Cap_Adjustment_Strap_Mesh",
+        "Cap_Adjustment_Keeper_Mesh",
         "Cap_Front_Patch_Mesh",
         "Cap_Patch_Mark_Mesh"
       ],
@@ -235,11 +241,16 @@
         "MAT_CAP_WASHED_VOID_TWILL",
         "MAT_CAP_TONAL_SEAM",
         "MAT_CAP_BONE_PATCH",
-        "MAT_CAP_REAR_OPENING",
         "MAT_CAP_MATTE_HARDWARE"
       ],
       "textures": [
-        "cap-001_Exact_Artwork_Texture"
+        "cap-001_Exact_Artwork_Texture",
+        "MAT_CAP_WASHED_VOID_TWILL_Woven_Normal",
+        "MAT_CAP_WASHED_VOID_TWILL_Woven_Roughness",
+        "MAT_CAP_TONAL_SEAM_Woven_Normal",
+        "MAT_CAP_TONAL_SEAM_Woven_Roughness",
+        "MAT_CAP_BONE_PATCH_Woven_Normal",
+        "MAT_CAP_BONE_PATCH_Woven_Roughness"
       ],
       "animations": 0,
       "extensionsUsed": []
@@ -251,7 +262,7 @@
       "min": [
         -135.00000536441803,
         0,
-        -122.00000137090683
+        -128.9999932050705
       ],
       "max": [
         135.00000536441803,
@@ -261,7 +272,7 @@
       "size": [
         270.00001072883606,
         266.00000262260437,
-        376.99999660253525
+        383.9999884366989
       ]
     },
     "geometryPurpose": "volumetric placement and front/back readability",
@@ -281,25 +292,25 @@
         "fieldOfView": "23deg"
       },
       "rear": {
-        "orbit": "180deg 76deg 116%",
-        "target": "auto 0.160m auto",
+        "orbit": "180deg 88deg 108%",
+        "target": "auto 0.140m auto",
         "fieldOfView": "23deg"
       }
     },
     "mobile": {
       "default": {
-        "orbit": "20deg 75deg 122%",
-        "target": "auto 0.160m auto",
+        "orbit": "18deg 75deg 108%",
+        "target": "auto 0.150m auto",
         "fieldOfView": "20deg"
       },
       "front": {
-        "orbit": "0deg 78deg 120%",
-        "target": "auto 0.160m auto",
+        "orbit": "0deg 78deg 106%",
+        "target": "auto 0.150m auto",
         "fieldOfView": "20deg"
       },
       "rear": {
-        "orbit": "180deg 78deg 124%",
-        "target": "auto 0.160m auto",
+        "orbit": "180deg 88deg 108%",
+        "target": "auto 0.140m auto",
         "fieldOfView": "20deg"
       }
     }
@@ -311,9 +322,9 @@
     "hints": 0
   },
   "budget": {
-    "triangles": 2710,
-    "drawCalls": 12,
-    "bytes": 220596,
+    "triangles": 4332,
+    "drawCalls": 13,
+    "bytes": 517072,
     "ceilings": {
       "maxBytes": 4000000,
       "maxTriangles": 80000,
@@ -322,7 +333,7 @@
   },
   "output": {
     "path": "assets/merch-3d/cap-001.glb",
-    "sha256": "c2dbbf0fe7ddf1611f40004beb2ed4d4d002cf920e7f6eff44c9fc98fe58c4f4"
+    "sha256": "4d6adbeef3bd80a80586dfe463ebc203b9815228d6acd7a6573096902f64524e"
   },
   "deterministic": {
     "verifiedBySecondInMemoryBuild": true

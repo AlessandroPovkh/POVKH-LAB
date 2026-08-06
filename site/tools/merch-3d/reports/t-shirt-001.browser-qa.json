@@ -1,14 +1,15 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "assetKey": "t-shirt-001",
   "renderer": "@google/model-viewer",
-  "capturePolicy": "local-static-server; await model load and visible dimensions before capture",
+  "capturePolicy": "built-product-page before/after activation at 390x844 plus isolated desktop/mobile/rear views; await loaded visible dimensions and rendered pixels",
   "hashPolicy": "snapshot integrity only; semantic gates and human visual review govern acceptance",
   "views": [
     {
       "view": "desktop-default",
+      "surface": "isolated-model-viewer",
       "path": "tools/merch-3d/reports/screenshots/t-shirt-001-desktop-default.png",
-      "sha256": "cee46098f86030aa7235982742829097af8b533e8ab048c6505f8b5240f258e0",
+      "sha256": "63846ae66a02d83a3c3fd39c8bf38ef5b6a62f4672bde236efa3daaaba8f6ec4",
       "viewportPx": [
         900,
         900
@@ -19,92 +20,176 @@
         "fieldOfView": "24deg"
       },
       "errors": [],
-      "renderedFrameWaitMs": 1000,
       "loaded": true,
       "modelIsVisible": true,
       "dimensionsM": [
-        1.0686486959457397,
+        1.059999942779541,
         1.0399999618530273,
-        0.11149999871850014
+        0.10850000008940697
       ],
       "centreM": [
         0,
         0.5199999809265137,
-        0.0007499996572732925
+        0.0022499989718198776
       ],
       "cameraOrbit": {
         "theta": 0.4363323129985824,
         "phi": 1.361356816555577,
-        "radius": 3.1884480344153614
+        "radius": 2.9763703679725184
       },
       "fieldOfViewDeg": 24.000000000000004,
-      "foregroundPixels": 294995,
+      "foregroundPixels": 354542,
       "foregroundBoundsPx": [
-        143,
-        119,
-        801,
-        827
+        114,
+        95,
+        832,
+        847
       ],
       "visualMarginsPx": [
-        143,
-        119,
-        98,
-        72
+        114,
+        95,
+        67,
+        52
       ]
     },
     {
       "view": "mobile-default",
+      "surface": "isolated-model-viewer",
       "path": "tools/merch-3d/reports/screenshots/t-shirt-001-mobile-default.png",
-      "sha256": "7285c8eb21b6ce2f686316eff31da64991b8fc9ec0f104c6b3cf1476ecf186f4",
+      "sha256": "7fc643f3e15cd4dbe3f3ac43886a8265902dadb7cc8fa9d040793bb1b6c4c716",
       "viewportPx": [
         390,
         600
       ],
       "camera": {
-        "orbit": "20deg 80deg 122%",
-        "target": "auto 0.550m auto",
+        "orbit": "18deg 80deg 108%",
+        "target": "auto 0.530m auto",
         "fieldOfView": "20deg"
       },
       "errors": [],
-      "renderedFrameWaitMs": 1000,
       "loaded": true,
       "modelIsVisible": true,
       "dimensionsM": [
-        1.0686486959457397,
+        1.059999942779541,
         1.0399999618530273,
-        0.11149999871850014
+        0.10850000008940697
       ],
       "centreM": [
         0,
         0.5199999809265137,
-        0.0007499996572732925
+        0.0022499989718198776
       ],
       "cameraOrbit": {
-        "theta": 0.3490658503988659,
+        "theta": 0.3141592653589793,
         "phi": 1.3962634015954636,
-        "radius": 3.8175789163268896
+        "radius": 3.5370158811028722
       },
-      "fieldOfViewDeg": 27.028978647470776,
-      "foregroundPixels": 74376,
+      "fieldOfViewDeg": 29.245569702928126,
+      "foregroundPixels": 76956,
       "foregroundBoundsPx": [
-        36,
-        138,
-        369,
-        483
+        32,
+        132,
+        370,
+        473
       ],
       "visualMarginsPx": [
-        36,
-        138,
-        20,
-        116
+        32,
+        132,
+        19,
+        126
+      ]
+    },
+    {
+      "view": "mobile-product-poster",
+      "surface": "built-product-page",
+      "activated": false,
+      "path": "tools/merch-3d/reports/screenshots/t-shirt-001-mobile-product-poster.png",
+      "sha256": "cccade2bb15a5ed90d7ada816369a66cfa7fdd2b503c1ddf50ded32532603f26",
+      "browserViewportPx": [
+        390,
+        844
+      ],
+      "viewportPx": [
+        358,
+        240
+      ],
+      "errors": [],
+      "thirdPartyRequests": []
+    },
+    {
+      "view": "mobile-product-stage",
+      "surface": "built-product-page",
+      "activated": true,
+      "path": "tools/merch-3d/reports/screenshots/t-shirt-001-mobile-product-stage.png",
+      "sha256": "adee8e981efc39ed6a2c89b05664c264f3bd589497f18a29a55c80305109e2f0",
+      "browserViewportPx": [
+        390,
+        844
+      ],
+      "viewportPx": [
+        358,
+        521
+      ],
+      "camera": {
+        "orbit": "18deg 80deg 108%",
+        "target": "auto 0.530m auto",
+        "fieldOfView": "20deg"
+      },
+      "errors": [],
+      "thirdPartyRequests": [],
+      "overflowPx": 0,
+      "interaction": {
+        "pointerOrbitChanged": true,
+        "resetRestored": true
+      },
+      "loaded": true,
+      "modelIsVisible": true,
+      "dimensionsM": [
+        1.059999942779541,
+        1.0399999618530273,
+        0.10850000008940697
+      ],
+      "centreM": [
+        0,
+        0.5199999809265137,
+        0.0022499989718198776
+      ],
+      "cameraOrbit": {
+        "theta": 0.3141592653589793,
+        "phi": 1.3962634015954636,
+        "radius": 3.5370158811028722
+      },
+      "fieldOfViewDeg": 27.722850150762817,
+      "canvasPx": [
+        356,
+        518
+      ],
+      "foregroundPixels": 66998,
+      "artworkContrastPixels": 2834,
+      "foregroundBoundsPx": [
+        29,
+        105,
+        338,
+        431
+      ],
+      "visualMarginsPx": [
+        29,
+        105,
+        17,
+        86
       ]
     }
   ],
   "checks": {
     "requiredViews": true,
     "noBrowserErrors": true,
+    "noThirdPartyRequests": true,
     "modelLoaded": true,
     "nonBlankFrames": true,
-    "breathingRoom": true
+    "breathingRoom": true,
+    "builtPageBeforeAfter": true,
+    "expandedMobileInspectionStage": true,
+    "interactionAndReset": true,
+    "noLayoutOverflow": true
   }
 }

@@ -13,14 +13,14 @@
   },
   "dimensions": {
     "authority": "provisional-viewer-envelope-not-production-dimensions",
-    "viewerEnvelopeMm": [1185, 1351, 263],
+    "viewerEnvelopeMm": [1180, 1340, 198],
     "replacementGate": "selected vendor blank, measured approved sample and size-specific tech pack"
   },
   "geometry": {
     "scene": "Hoodie_001_Concept_Visualization",
     "pivot": "Hoodie_001_Centred_Grounded_Pivot",
-    "requiredNodes": ["Hoodie_Body", "Hoodie_Sleeve_Left", "Hoodie_Sleeve_Right", "Hoodie_Rib_Hem", "Hoodie_Cuff_Left", "Hoodie_Cuff_Right", "Hoodie_Dimensional_Hood", "Hoodie_Hood_Centre_Seam", "Hoodie_Back_Artwork"],
-    "features": ["tapered body", "separate long sleeves", "rib hem", "rib cuffs", "dimensional hood, opening and rear centre seam", "readable front and back", "back artwork surface"]
+    "requiredNodes": ["Hoodie_Draped_Shell", "Hoodie_Integrated_Rib_Trim", "Hoodie_Open_Hood_Shell", "Hoodie_Hood_Centre_Seam", "Hoodie_Back_Artwork"],
+    "features": ["unified draped front/back shell", "continuous shoulders and long sleeves", "gapless integrated rib hem and cuffs", "open draped hood with unfilled face cavity and body attachment", "rear centre seam", "readable front and back", "back artwork surface"]
   },
   "artwork": {
     "path": "sources/hoodie-001/PVKH_ASCII_REVERSE_EXACT_1600x600_v01.png",
@@ -32,9 +32,9 @@
     "registration": { "surfaceMm": [300, 112.5], "aspectRatio": "8:3", "side": "back", "sourceUse": "full-image-no-crop-no-redraw" }
   },
   "materials": {
-    "fabric": { "name": "MAT_HOODIE_VOID_FABRIC", "baseColor": [0.012, 0.013, 0.016, 1], "metallic": 0, "roughness": 0.94 },
-    "rib": { "name": "MAT_HOODIE_VOID_RIB", "baseColor": [0.006, 0.007, 0.009, 1], "metallic": 0, "roughness": 0.98 },
-    "hoodInterior": { "name": "MAT_HOODIE_HOOD_INTERIOR", "baseColor": [0.002, 0.002, 0.003, 1], "metallic": 0, "roughness": 1 },
+    "fabric": { "name": "MAT_HOODIE_VOID_FABRIC", "baseColor": [0.012, 0.013, 0.016, 1], "metallic": 0, "roughness": 0.94, "surface": "washed-fleece-void" },
+    "rib": { "name": "MAT_HOODIE_VOID_RIB", "baseColor": [0.006, 0.007, 0.009, 1], "metallic": 0, "roughness": 0.98, "surface": "rib-knit-void" },
+    "hoodInterior": { "name": "MAT_HOODIE_HOOD_INTERIOR", "baseColor": [0.002, 0.002, 0.003, 1], "metallic": 0, "roughness": 1, "surface": "washed-fleece-void" },
     "artwork": { "name": "MAT_HOODIE_ASCII_REVERSE_EXACT", "baseColor": [1, 1, 1, 1], "metallic": 0, "roughness": 0.9 }
   },
   "poster": { "path": "assets/merch/hoodie-rear.webp", "sha256": "d46462cbac738c17c4f4aaddb1ba1fc7c35f13ebe09cc70d967377927219aefa", "role": "approved-concept-poster-not-texture" },
@@ -46,9 +46,9 @@
       "rear": { "orbit": "180deg 82deg 116%", "target": "auto 0.590m auto", "fieldOfView": "23deg" }
     },
     "mobile": {
-      "default": { "orbit": "160deg 80deg 126%", "target": "auto 0.590m auto", "fieldOfView": "20deg" },
-      "front": { "orbit": "0deg 83deg 124%", "target": "auto 0.590m auto", "fieldOfView": "20deg" },
-      "rear": { "orbit": "180deg 83deg 124%", "target": "auto 0.590m auto", "fieldOfView": "20deg" }
+      "default": { "orbit": "162deg 80deg 110%", "target": "auto 0.630m auto", "fieldOfView": "20deg" },
+      "front": { "orbit": "0deg 83deg 108%", "target": "auto 0.630m auto", "fieldOfView": "20deg" },
+      "rear": { "orbit": "180deg 83deg 108%", "target": "auto 0.630m auto", "fieldOfView": "20deg" }
     }
   },
   "budgets": { "maxBytes": 4000000, "maxTriangles": 80000, "maxDrawCalls": 20 },

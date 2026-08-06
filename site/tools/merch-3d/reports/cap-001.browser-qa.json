@@ -1,14 +1,15 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "assetKey": "cap-001",
   "renderer": "@google/model-viewer",
-  "capturePolicy": "local-static-server; await model load and visible dimensions before capture",
+  "capturePolicy": "built-product-page before/after activation at 390x844 plus isolated desktop/mobile/rear views; await loaded visible dimensions and rendered pixels",
   "hashPolicy": "snapshot integrity only; semantic gates and human visual review govern acceptance",
   "views": [
     {
       "view": "desktop-default",
+      "surface": "isolated-model-viewer",
       "path": "tools/merch-3d/reports/screenshots/cap-001-desktop-default.png",
-      "sha256": "c11d09e65976cbd9988f7189d85f1a38800f80679dc67352271d68275fab23ac",
+      "sha256": "428319a5cd96a9d9f684dba5f8040f209ab7db18f0a5b96f81db3ae19ada777a",
       "viewportPx": [
         900,
         900
@@ -19,92 +20,223 @@
         "fieldOfView": "24deg"
       },
       "errors": [],
-      "renderedFrameWaitMs": 1000,
       "loaded": true,
       "modelIsVisible": true,
       "dimensionsM": [
         0.27000001072883606,
         0.26600000262260437,
-        0.37699999660253525
+        0.3839999884366989
       ],
       "centreM": [
         0,
         0.13300000131130219,
-        0.0664999969303608
+        0.06300000101327896
       ],
       "cameraOrbit": {
         "theta": 0.4363323129985824,
         "phi": 1.2566370614359172,
-        "radius": 1.3187748497419929
+        "radius": 1.3307857069488895
       },
       "fieldOfViewDeg": 24.000000000000004,
-      "foregroundPixels": 197298,
+      "foregroundPixels": 194919,
       "foregroundBoundsPx": [
         140,
-        259,
-        680,
-        829
+        261,
+        676,
+        826
       ],
       "visualMarginsPx": [
         140,
-        259,
-        219,
-        70
+        261,
+        223,
+        73
       ]
     },
     {
       "view": "mobile-default",
+      "surface": "isolated-model-viewer",
       "path": "tools/merch-3d/reports/screenshots/cap-001-mobile-default.png",
-      "sha256": "40d1ad88bd329d475546c3c1e8b02a76c022dfc3460079aa59498d9d9a1bf0bc",
+      "sha256": "5cf43a3e62f7db5da5f2cc1d67041871e07150b18375c0837e0d81e3e7ea3062",
       "viewportPx": [
         390,
         600
       ],
       "camera": {
-        "orbit": "20deg 75deg 122%",
-        "target": "auto 0.160m auto",
+        "orbit": "18deg 75deg 108%",
+        "target": "auto 0.150m auto",
         "fieldOfView": "20deg"
       },
       "errors": [],
-      "renderedFrameWaitMs": 1000,
       "loaded": true,
       "modelIsVisible": true,
       "dimensionsM": [
         0.27000001072883606,
         0.26600000262260437,
-        0.37699999660253525
+        0.3839999884366989
       ],
       "centreM": [
         0,
         0.13300000131130219,
-        0.0664999969303608
+        0.06300000101327896
       ],
       "cameraOrbit": {
-        "theta": 0.3490658503988659,
+        "theta": 0.3141592653589793,
         "phi": 1.3089969389957472,
-        "radius": 1.578989843151178
+        "radius": 1.55974298125837
       },
-      "fieldOfViewDeg": 27.306391410469836,
-      "foregroundPixels": 45489,
+      "fieldOfViewDeg": 27.827239072187652,
+      "foregroundPixels": 45117,
       "foregroundBoundsPx": [
-        51,
-        208,
-        304,
-        475
+        54,
+        201,
+        301,
+        464
       ],
       "visualMarginsPx": [
-        51,
-        208,
-        85,
-        124
+        54,
+        201,
+        88,
+        135
+      ]
+    },
+    {
+      "view": "desktop-rear-aperture",
+      "surface": "isolated-model-viewer",
+      "path": "tools/merch-3d/reports/screenshots/cap-001-desktop-rear-aperture.png",
+      "sha256": "67919ffe29fb43b0f6e7486c393d6ba189b2adb43cb26f075752d6c90548a712",
+      "viewportPx": [
+        900,
+        900
+      ],
+      "camera": {
+        "orbit": "180deg 88deg 108%",
+        "target": "auto 0.140m auto",
+        "fieldOfView": "23deg"
+      },
+      "errors": [],
+      "loaded": true,
+      "modelIsVisible": true,
+      "dimensionsM": [
+        0.27000001072883606,
+        0.26600000262260437,
+        0.3839999884366989
+      ],
+      "centreM": [
+        0,
+        0.13300000131130219,
+        0.06300000101327896
+      ],
+      "cameraOrbit": {
+        "theta": 3.141592653589793,
+        "phi": 1.53588974175501,
+        "radius": 1.330677113541174
+      },
+      "fieldOfViewDeg": 23,
+      "foregroundPixels": 107672,
+      "foregroundBoundsPx": [
+        231,
+        233,
+        668,
+        642
+      ],
+      "visualMarginsPx": [
+        231,
+        233,
+        231,
+        257
+      ]
+    },
+    {
+      "view": "mobile-product-poster",
+      "surface": "built-product-page",
+      "activated": false,
+      "path": "tools/merch-3d/reports/screenshots/cap-001-mobile-product-poster.png",
+      "sha256": "8b0957cb8102b74ce9bfcefa531ebafe7afa377b210f481ce3246e61bcb99c1c",
+      "browserViewportPx": [
+        390,
+        844
+      ],
+      "viewportPx": [
+        358,
+        240
+      ],
+      "errors": [],
+      "thirdPartyRequests": []
+    },
+    {
+      "view": "mobile-product-stage",
+      "surface": "built-product-page",
+      "activated": true,
+      "path": "tools/merch-3d/reports/screenshots/cap-001-mobile-product-stage.png",
+      "sha256": "1864521be69e8323526a8fee5aa25f4a3ff5a3d183b8fce7743d95046a9cded7",
+      "browserViewportPx": [
+        390,
+        844
+      ],
+      "viewportPx": [
+        358,
+        521
+      ],
+      "camera": {
+        "orbit": "18deg 75deg 108%",
+        "target": "auto 0.150m auto",
+        "fieldOfView": "20deg"
+      },
+      "errors": [],
+      "thirdPartyRequests": [],
+      "overflowPx": 0,
+      "interaction": {
+        "pointerOrbitChanged": true,
+        "resetRestored": true
+      },
+      "loaded": true,
+      "modelIsVisible": true,
+      "dimensionsM": [
+        0.27000001072883606,
+        0.26600000262260437,
+        0.3839999884366989
+      ],
+      "centreM": [
+        0,
+        0.13300000131130219,
+        0.06300000101327896
+      ],
+      "cameraOrbit": {
+        "theta": 0.3141592653589793,
+        "phi": 1.3089969389957472,
+        "radius": 1.55974298125837
+      },
+      "fieldOfViewDeg": 26.37275959848484,
+      "canvasPx": [
+        356,
+        518
+      ],
+      "foregroundPixels": 43065,
+      "artworkContrastPixels": 19114,
+      "foregroundBoundsPx": [
+        28,
+        169,
+        289,
+        424
+      ],
+      "visualMarginsPx": [
+        28,
+        169,
+        66,
+        93
       ]
     }
   ],
   "checks": {
     "requiredViews": true,
     "noBrowserErrors": true,
+    "noThirdPartyRequests": true,
     "modelLoaded": true,
     "nonBlankFrames": true,
-    "breathingRoom": true
+    "breathingRoom": true,
+    "builtPageBeforeAfter": true,
+    "expandedMobileInspectionStage": true,
+    "interactionAndReset": true,
+    "noLayoutOverflow": true
   }
 }

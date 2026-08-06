@@ -4479,6 +4479,12 @@ html[lang="ru"] .merch-detail-story .section-title {
 }
 
 @media (max-width: 48rem) {
+  .product-viewer.product-viewer--active .product-viewer-stage {
+    height: min(70svh, 32.5rem);
+    max-height: calc(100svh - 8rem);
+    aspect-ratio: auto;
+  }
+
   html:has(body.audio-player-ready.page-merch-detail) {
     scroll-padding-bottom: calc(10rem + env(safe-area-inset-bottom));
   }

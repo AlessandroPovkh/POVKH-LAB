@@ -19,8 +19,8 @@
   "geometry": {
     "scene": "T_Shirt_001_Concept_Visualization",
     "pivot": "T_Shirt_001_Centred_Grounded_Pivot",
-    "requiredNodes": ["T_Shirt_Relaxed_Body", "T_Shirt_Sleeve_Left", "T_Shirt_Sleeve_Right", "T_Shirt_Collar", "T_Shirt_Front_Artwork"],
-    "features": ["relaxed tapered body", "separate short sleeves", "dimensional collar", "readable front and back", "front artwork surface"]
+    "requiredNodes": ["T_Shirt_Draped_Shell", "T_Shirt_Collar", "T_Shirt_Seam_Cues", "T_Shirt_Front_Artwork"],
+    "features": ["unified draped front/back shell", "continuous shoulders and short sleeves", "curved side seams and hem", "dimensional collar", "readable front and back", "front artwork surface"]
   },
   "artwork": {
     "path": "sources/t-shirt-001/PVKH_ASCII_DARK_KNOCKOUT_EXACT_1600x600_v01.png",
@@ -32,8 +32,8 @@
     "registration": { "surfaceMm": [300, 112.5], "aspectRatio": "8:3", "side": "front", "sourceUse": "full-image-no-crop-no-redraw" }
   },
   "materials": {
-    "fabric": { "name": "MAT_T_SHIRT_BONE_FABRIC", "baseColor": [0.82, 0.79, 0.71, 1], "metallic": 0, "roughness": 0.96 },
-    "collar": { "name": "MAT_T_SHIRT_BONE_RIB", "baseColor": [0.75, 0.72, 0.65, 1], "metallic": 0, "roughness": 0.98 },
+    "fabric": { "name": "MAT_T_SHIRT_BONE_FABRIC", "baseColor": [0.82, 0.79, 0.71, 1], "metallic": 0, "roughness": 0.96, "surface": "woven-bone" },
+    "collar": { "name": "MAT_T_SHIRT_BONE_RIB", "baseColor": [0.75, 0.72, 0.65, 1], "metallic": 0, "roughness": 0.98, "surface": "rib-knit-bone" },
     "artwork": { "name": "MAT_T_SHIRT_ASCII_DARK_EXACT", "baseColor": [1, 1, 1, 1], "metallic": 0, "roughness": 0.9 }
   },
   "poster": { "path": "assets/merch/t-shirt-front.webp", "sha256": "89cac41d6abf06cccc1952823b5c2dcdf4a063a063a98dfebb998b19c428db4e", "role": "approved-concept-poster-not-texture" },
@@ -45,9 +45,9 @@
       "rear": { "orbit": "180deg 82deg 112%", "target": "auto 0.550m auto", "fieldOfView": "23deg" }
     },
     "mobile": {
-      "default": { "orbit": "20deg 80deg 122%", "target": "auto 0.550m auto", "fieldOfView": "20deg" },
-      "front": { "orbit": "0deg 83deg 120%", "target": "auto 0.550m auto", "fieldOfView": "20deg" },
-      "rear": { "orbit": "180deg 83deg 120%", "target": "auto 0.550m auto", "fieldOfView": "20deg" }
+      "default": { "orbit": "18deg 80deg 108%", "target": "auto 0.530m auto", "fieldOfView": "20deg" },
+      "front": { "orbit": "0deg 83deg 106%", "target": "auto 0.530m auto", "fieldOfView": "20deg" },
+      "rear": { "orbit": "180deg 83deg 106%", "target": "auto 0.530m auto", "fieldOfView": "20deg" }
     }
   },
   "budgets": { "maxBytes": 4000000, "maxTriangles": 80000, "maxDrawCalls": 20 },

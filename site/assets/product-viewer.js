@@ -66,6 +66,7 @@ const showFailure = (root, { poster, activate, reset, status, instructions }) =>
   root.dataset.viewerState = "error";
   root.setAttribute("aria-busy", "false");
   root.classList.remove("is-viewer-ready");
+  root.classList.remove("product-viewer--active");
   poster.hidden = false;
   activate.hidden = false;
   activate.disabled = root.dataset.viewerAvailability === "sourceBlocked";
@@ -225,9 +226,9 @@ const activateModel = async (root, elements, routeSignal) => {
   model.setAttribute("interaction-prompt", "none");
   model.setAttribute("loading", "eager");
   model.setAttribute("reveal", "auto");
-  model.setAttribute("shadow-intensity", "0.7");
-  model.setAttribute("shadow-softness", "0.85");
-  model.setAttribute("exposure", "0.9");
+  model.setAttribute("shadow-intensity", "0.55");
+  model.setAttribute("shadow-softness", "1");
+  model.setAttribute("exposure", "1.05");
   applyCameraProfile({ jump: false });
   model.setAttribute("alt", elements.poster.alt);
   model.setAttribute("aria-describedby", elements.instructions.id);
@@ -298,6 +299,7 @@ export const activateProductViewer = async (root, { signal: routeSignal } = {}) 
   }
 
   root.dataset.viewerState = "loading";
+  root.classList.add("product-viewer--active");
   root.setAttribute("aria-busy", "true");
   elements.status.textContent = stateCopy(root, "viewerLoading", "Loading object");
   if (root.dataset.viewerKind === "spin") return activateSpin(root, elements, routeSignal);

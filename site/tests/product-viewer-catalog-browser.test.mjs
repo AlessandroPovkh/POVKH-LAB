@@ -181,6 +181,12 @@ test("activates every released GLB poster-first with exact governed cameras and 
       page.on("pageerror", (error) => errors.push(error.message));
       await page.setViewportSize(profile.viewport);
       await page.goto(`${baseUrl}/merch/${object.slug}/`, { waitUntil: "networkidle" });
+      const apparelMobile = profile.name === "mobile" && ["t-shirt", "hoodie", "cap"].includes(object.slug);
+      const inactiveStage = apparelMobile ? await page.locator("[data-product-viewer-stage]").boundingBox() : null;
+      if (inactiveStage) {
+        closeTo(inactiveStage.width, 358, 1, `mobile/${object.slug} inactive stage width`);
+        closeTo(inactiveStage.height, 239, 1, `mobile/${object.slug} inactive poster height`);
+      }
       assert.deepEqual(
         requests.filter((url) => heavyRequest.test(url)),
         [],
@@ -199,6 +205,16 @@ test("activates every released GLB poster-first with exact governed cameras and 
         null,
         { timeout: 20_000 }
       );
+      if (apparelMobile) {
+        const activeStage = await page.locator("[data-product-viewer-stage]").boundingBox();
+        assert.ok(activeStage.height >= 500 && activeStage.height <= 521, `mobile/${object.slug} activated stage must provide an inspection-height canvas: ${activeStage.height}`);
+        closeTo(activeStage.width, inactiveStage.width, 1, `mobile/${object.slug} active stage width`);
+        const layout = await page.evaluate(() => ({
+          active: document.querySelector("[data-product-viewer]")?.classList.contains("product-viewer--active"),
+          overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth
+        }));
+        assert.deepEqual(layout, { active: true, overflow: 0 }, `mobile/${object.slug} activated layout must remain contained`);
+      }
       await waitForRequestQuiet(() => lastRequestAt);
       const activationRequests = requests.slice(activationStart);
       assert.ok(

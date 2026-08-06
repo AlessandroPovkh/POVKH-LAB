@@ -43,15 +43,15 @@
       "scene": "T_Shirt_001_Concept_Visualization",
       "pivot": "T_Shirt_001_Centred_Grounded_Pivot",
       "requiredNodes": [
-        "T_Shirt_Relaxed_Body",
-        "T_Shirt_Sleeve_Left",
-        "T_Shirt_Sleeve_Right",
+        "T_Shirt_Draped_Shell",
         "T_Shirt_Collar",
+        "T_Shirt_Seam_Cues",
         "T_Shirt_Front_Artwork"
       ],
       "features": [
-        "relaxed tapered body",
-        "separate short sleeves",
+        "unified draped front/back shell",
+        "continuous shoulders and short sleeves",
+        "curved side seams and hem",
         "dimensional collar",
         "readable front and back",
         "front artwork surface"
@@ -87,7 +87,8 @@
           1
         ],
         "metallic": 0,
-        "roughness": 0.96
+        "roughness": 0.96,
+        "surface": "woven-bone"
       },
       "collar": {
         "name": "MAT_T_SHIRT_BONE_RIB",
@@ -98,7 +99,8 @@
           1
         ],
         "metallic": 0,
-        "roughness": 0.98
+        "roughness": 0.98,
+        "surface": "rib-knit-bone"
       },
       "artwork": {
         "name": "MAT_T_SHIRT_ASCII_DARK_EXACT",
@@ -133,18 +135,18 @@
       },
       "mobile": {
         "default": {
-          "orbit": "20deg 80deg 122%",
-          "target": "auto 0.550m auto",
+          "orbit": "18deg 80deg 108%",
+          "target": "auto 0.530m auto",
           "fieldOfView": "20deg"
         },
         "front": {
-          "orbit": "0deg 83deg 120%",
-          "target": "auto 0.550m auto",
+          "orbit": "0deg 83deg 106%",
+          "target": "auto 0.530m auto",
           "fieldOfView": "20deg"
         },
         "rear": {
-          "orbit": "180deg 83deg 120%",
-          "target": "auto 0.550m auto",
+          "orbit": "180deg 83deg 106%",
+          "target": "auto 0.530m auto",
           "fieldOfView": "20deg"
         }
       }
@@ -157,17 +159,15 @@
     "inventory": {
       "nodes": [
         "T_Shirt_001_Centred_Grounded_Pivot",
-        "T_Shirt_Relaxed_Body",
-        "T_Shirt_Sleeve_Left",
-        "T_Shirt_Sleeve_Right",
+        "T_Shirt_Draped_Shell",
         "T_Shirt_Collar",
+        "T_Shirt_Seam_Cues",
         "T_Shirt_Front_Artwork"
       ],
       "meshes": [
-        "T_Shirt_Relaxed_Body_Mesh",
-        "T_Shirt_Sleeve_Left_Mesh",
-        "T_Shirt_Sleeve_Right_Mesh",
+        "T_Shirt_Draped_Shell_Mesh",
         "T_Shirt_Collar_Mesh",
+        "T_Shirt_Seam_Cues_Mesh",
         "T_Shirt_Front_Artwork_Mesh"
       ],
       "materials": [
@@ -176,7 +176,11 @@
         "MAT_T_SHIRT_BONE_RIB"
       ],
       "textures": [
-        "t-shirt-001_Exact_Artwork_Texture"
+        "t-shirt-001_Exact_Artwork_Texture",
+        "MAT_T_SHIRT_BONE_FABRIC_Woven_Normal",
+        "MAT_T_SHIRT_BONE_FABRIC_Woven_Roughness",
+        "MAT_T_SHIRT_BONE_RIB_Woven_Normal",
+        "MAT_T_SHIRT_BONE_RIB_Woven_Roughness"
       ],
       "animations": 0,
       "extensionsUsed": []
@@ -186,19 +190,19 @@
     "method": "reopened-glb-bounds-node-and-texture-metadata",
     "boundsMm": {
       "min": [
-        -534.3243479728699,
+        -529.9999713897705,
         0,
-        -54.999999701976776
+        -52.000001072883606
       ],
       "max": [
-        534.3243479728699,
+        529.9999713897705,
         1039.9999618530273,
         56.49999901652336
       ],
       "size": [
-        1068.6486959457397,
+        1059.999942779541,
         1039.9999618530273,
-        111.49999871850014
+        108.50000008940697
       ]
     },
     "geometryPurpose": "volumetric placement and front/back readability",
@@ -225,18 +229,18 @@
     },
     "mobile": {
       "default": {
-        "orbit": "20deg 80deg 122%",
-        "target": "auto 0.550m auto",
+        "orbit": "18deg 80deg 108%",
+        "target": "auto 0.530m auto",
         "fieldOfView": "20deg"
       },
       "front": {
-        "orbit": "0deg 83deg 120%",
-        "target": "auto 0.550m auto",
+        "orbit": "0deg 83deg 106%",
+        "target": "auto 0.530m auto",
         "fieldOfView": "20deg"
       },
       "rear": {
-        "orbit": "180deg 83deg 120%",
-        "target": "auto 0.550m auto",
+        "orbit": "180deg 83deg 106%",
+        "target": "auto 0.530m auto",
         "fieldOfView": "20deg"
       }
     }
@@ -248,9 +252,9 @@
     "hints": 0
   },
   "budget": {
-    "triangles": 1976,
-    "drawCalls": 5,
-    "bytes": 258272,
+    "triangles": 740,
+    "drawCalls": 4,
+    "bytes": 242036,
     "ceilings": {
       "maxBytes": 4000000,
       "maxTriangles": 80000,
@@ -259,7 +263,7 @@
   },
   "output": {
     "path": "assets/merch-3d/t-shirt-001.glb",
-    "sha256": "3b63d05f4ac17e4fbff244b0f4a2a4e4103f60461ada77414089e1b1e497ba82"
+    "sha256": "aa9c828264cba8f3319857a81b2b6dae33165ea7f1d55c55c4a3fd5505dc7608"
   },
   "deterministic": {
     "verifiedBySecondInMemoryBuild": true

@@ -33,9 +33,9 @@
     "dimensions": {
       "authority": "provisional-viewer-envelope-not-production-dimensions",
       "viewerEnvelopeMm": [
-        1185,
-        1351,
-        263
+        1180,
+        1340,
+        198
       ],
       "replacementGate": "selected vendor blank, measured approved sample and size-specific tech pack"
     },
@@ -43,22 +43,18 @@
       "scene": "Hoodie_001_Concept_Visualization",
       "pivot": "Hoodie_001_Centred_Grounded_Pivot",
       "requiredNodes": [
-        "Hoodie_Body",
-        "Hoodie_Sleeve_Left",
-        "Hoodie_Sleeve_Right",
-        "Hoodie_Rib_Hem",
-        "Hoodie_Cuff_Left",
-        "Hoodie_Cuff_Right",
-        "Hoodie_Dimensional_Hood",
+        "Hoodie_Draped_Shell",
+        "Hoodie_Integrated_Rib_Trim",
+        "Hoodie_Open_Hood_Shell",
         "Hoodie_Hood_Centre_Seam",
         "Hoodie_Back_Artwork"
       ],
       "features": [
-        "tapered body",
-        "separate long sleeves",
-        "rib hem",
-        "rib cuffs",
-        "dimensional hood, opening and rear centre seam",
+        "unified draped front/back shell",
+        "continuous shoulders and long sleeves",
+        "gapless integrated rib hem and cuffs",
+        "open draped hood with unfilled face cavity and body attachment",
+        "rear centre seam",
         "readable front and back",
         "back artwork surface"
       ]
@@ -93,7 +89,8 @@
           1
         ],
         "metallic": 0,
-        "roughness": 0.94
+        "roughness": 0.94,
+        "surface": "washed-fleece-void"
       },
       "rib": {
         "name": "MAT_HOODIE_VOID_RIB",
@@ -104,7 +101,8 @@
           1
         ],
         "metallic": 0,
-        "roughness": 0.98
+        "roughness": 0.98,
+        "surface": "rib-knit-void"
       },
       "hoodInterior": {
         "name": "MAT_HOODIE_HOOD_INTERIOR",
@@ -115,7 +113,8 @@
           1
         ],
         "metallic": 0,
-        "roughness": 1
+        "roughness": 1,
+        "surface": "washed-fleece-void"
       },
       "artwork": {
         "name": "MAT_HOODIE_ASCII_REVERSE_EXACT",
@@ -150,18 +149,18 @@
       },
       "mobile": {
         "default": {
-          "orbit": "160deg 80deg 126%",
-          "target": "auto 0.590m auto",
+          "orbit": "162deg 80deg 110%",
+          "target": "auto 0.630m auto",
           "fieldOfView": "20deg"
         },
         "front": {
-          "orbit": "0deg 83deg 124%",
-          "target": "auto 0.590m auto",
+          "orbit": "0deg 83deg 108%",
+          "target": "auto 0.630m auto",
           "fieldOfView": "20deg"
         },
         "rear": {
-          "orbit": "180deg 83deg 124%",
-          "target": "auto 0.590m auto",
+          "orbit": "180deg 83deg 108%",
+          "target": "auto 0.630m auto",
           "fieldOfView": "20deg"
         }
       }
@@ -174,27 +173,17 @@
     "inventory": {
       "nodes": [
         "Hoodie_001_Centred_Grounded_Pivot",
-        "Hoodie_Body",
-        "Hoodie_Sleeve_Left",
-        "Hoodie_Sleeve_Right",
-        "Hoodie_Rib_Hem",
-        "Hoodie_Cuff_Left",
-        "Hoodie_Cuff_Right",
-        "Hoodie_Dimensional_Hood",
+        "Hoodie_Draped_Shell",
+        "Hoodie_Integrated_Rib_Trim",
+        "Hoodie_Open_Hood_Shell",
         "Hoodie_Hood_Centre_Seam",
-        "Hoodie_Hood_Opening",
         "Hoodie_Back_Artwork"
       ],
       "meshes": [
-        "Hoodie_Body_Mesh",
-        "Hoodie_Sleeve_Left_Mesh",
-        "Hoodie_Sleeve_Right_Mesh",
-        "Hoodie_Rib_Hem_Mesh",
-        "Hoodie_Cuff_Left_Mesh",
-        "Hoodie_Cuff_Right_Mesh",
-        "Hoodie_Dimensional_Hood_Mesh",
+        "Hoodie_Draped_Shell_Mesh",
+        "Hoodie_Integrated_Rib_Trim_Mesh",
+        "Hoodie_Open_Hood_Shell_Mesh",
         "Hoodie_Hood_Centre_Seam_Mesh",
-        "Hoodie_Hood_Opening_Mesh",
         "Hoodie_Back_Artwork_Mesh"
       ],
       "materials": [
@@ -204,7 +193,11 @@
         "MAT_HOODIE_HOOD_INTERIOR"
       ],
       "textures": [
-        "hoodie-001_Exact_Artwork_Texture"
+        "hoodie-001_Exact_Artwork_Texture",
+        "MAT_HOODIE_VOID_FABRIC_Woven_Normal",
+        "MAT_HOODIE_VOID_FABRIC_Woven_Roughness",
+        "MAT_HOODIE_VOID_RIB_Woven_Normal",
+        "MAT_HOODIE_VOID_RIB_Woven_Roughness"
       ],
       "animations": 0,
       "extensionsUsed": []
@@ -214,19 +207,19 @@
     "method": "reopened-glb-bounds-node-and-texture-metadata",
     "boundsMm": {
       "min": [
-        -592.193067073822,
+        -589.9999737739563,
         0,
-        -146.50000631809235
+        -112.0000034570694
       ],
       "max": [
-        592.193067073822,
-        1350.000023841858,
-        115.99999666213989
+        589.9999737739563,
+        1340.000033378601,
+        86.0000029206276
       ],
       "size": [
-        1184.386134147644,
-        1350.000023841858,
-        262.50000298023224
+        1179.9999475479126,
+        1340.000033378601,
+        198.000006377697
       ]
     },
     "geometryPurpose": "volumetric placement and front/back readability",
@@ -253,18 +246,18 @@
     },
     "mobile": {
       "default": {
-        "orbit": "160deg 80deg 126%",
-        "target": "auto 0.590m auto",
+        "orbit": "162deg 80deg 110%",
+        "target": "auto 0.630m auto",
         "fieldOfView": "20deg"
       },
       "front": {
-        "orbit": "0deg 83deg 124%",
-        "target": "auto 0.590m auto",
+        "orbit": "0deg 83deg 108%",
+        "target": "auto 0.630m auto",
         "fieldOfView": "20deg"
       },
       "rear": {
-        "orbit": "180deg 83deg 124%",
-        "target": "auto 0.590m auto",
+        "orbit": "180deg 83deg 108%",
+        "target": "auto 0.630m auto",
         "fieldOfView": "20deg"
       }
     }
@@ -272,13 +265,13 @@
   "validation": {
     "errors": 0,
     "warnings": 0,
-    "infos": 1,
+    "infos": 2,
     "hints": 0
   },
   "budget": {
-    "triangles": 3274,
-    "drawCalls": 10,
-    "bytes": 364448,
+    "triangles": 720,
+    "drawCalls": 5,
+    "bytes": 272004,
     "ceilings": {
       "maxBytes": 4000000,
       "maxTriangles": 80000,
@@ -287,7 +280,7 @@
   },
   "output": {
     "path": "assets/merch-3d/hoodie-001.glb",
-    "sha256": "fff29a338a7ab526011853aa5f11f9ea6531be08f83c14c037bdc0b761292092"
+    "sha256": "4cd3c0f4e9ce8f83a8fdab397c4aa11fa38ff90b236b96cc17ced205300d8d18"
   },
   "deterministic": {
     "verifiedBySecondInMemoryBuild": true
