@@ -385,11 +385,11 @@
       "slug": "hoodie",
       "role": "print-macro",
       "source": "site/tools/fixtures/apparel-registration/renders/hoodie-print-macro-registration-v02.png",
-      "sourceSha256": "fa59bfe3647119262d46b5ec9f4b8f6870ba827a6012cf88e7b777d7814a46b3",
+      "sourceSha256": "bd5fe42f0ff3e1cd7f5bcd9e2da3eb97b2b3fc550a69c61626f73517309ab504",
       "publicPath": "assets/merch/hoodie-print-macro.webp",
       "sourceWidth": 1536,
       "sourceHeight": 1024,
-      "outputSha256": "baa7e813825638e74cc3581faa4768a42f81116dfc065b0faaa96678f2a80fc7",
+      "outputSha256": "63c3a21c90ed11286e1e34e561858038d079236aa445204fc2328277a0cea89a",
       "width": 1536,
       "height": 1024,
       "encoder": "ffmpeg/libwebp q=88 yuv420p metadata-stripped"

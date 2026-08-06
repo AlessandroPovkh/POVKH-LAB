@@ -81,3 +81,29 @@ Fresh final run:
 - Visual defect prevention: transparent hoodie master pixels are asserted byte-identical to the garment base, preventing recurrence of rectangular texture-return matte.
 - Shared worktree safety: unrelated concurrent 3D/catalog changes were left untouched and will not be staged in this commit.
 - Remaining concerns: none within Task 1 scope.
+
+## Review-fix evidence — baked hoodie macro matte
+
+The first review conclusion above was incomplete: alpha-clipping removed compositor spill, but the accepted v1 hoodie macro blank itself still contained a baked high-frequency rectangular panel. The primary production `PVKH_VOID_BACKMARK_HOODIE_STANDARD_BG_BLANK_v10.png` and related clean sources were inspected at original resolution; they are authoritative flat-back photographs with a different camera and could not replace the macro without changing garment geometry.
+
+The renderer now deterministically creates `PVKH_VOID_BACKMARK_HOODIE_PRINT_FIBER_MACRO_BLANK_BASE_v02.png` from the governed v1 macro source. A 28 px low-frequency field preserves the original lighting, folds, and garment geometry. Only the contaminated fabric detail is replaced from clean pixels in the same photograph, with a smooth feather over `735,430 -> 1415,870`; 261,343 pixels change inside that region and zero pixels change outside it. The repaired base is locked at SHA-256 `d0e01e873ebd68673f25407efa08f8c6325ee088e2ad9ccae49f811f607bc905`.
+
+The registration test now measures each applied-artwork mask directly. It locks both the visible bounds and alpha-weighted pixel centroid, then derives hero-relative center/scale from those measurements and the master artwork's measured visible bounds/centroid. It no longer derives visual registration from `artworkQuad`.
+
+The base-preservation regression now covers all four corrected views. For every mask-zero pixel in each 1536 x 1024 view, source-render RGB must equal blank-base RGB byte-for-byte. Fresh audit counts are 1,550,397 (tee macro), 1,568,491 (tee on-body), 1,547,777 (hoodie macro), and 1,568,801 (hoodie worn), all with zero changed pixels.
+
+Fresh regenerated evidence:
+
+- Hoodie macro public WebP SHA-256: `63c3a21c90ed11286e1e34e561858038d079236aa445204fc2328277a0cea89a`.
+- Hoodie macro governed source-render SHA-256: `bd5fe42f0ff3e1cd7f5bcd9e2da3eb97b2b3fc550a69c61626f73517309ab504`.
+- Contact-sheet SHA-256: `db677701f1ad170c293c64f615eb940b16d2fe3ff40c2be57ff928d86e0d737d` (decoded RGBA `47e7a870ed73d450d46ebe2f897349f11061a80032c6b1cefd9d5f779939864a`).
+- Original-resolution inspection of the repaired blank, public WebP, and 1800 x 800 contact sheet confirms the dark panel is gone and the garment silhouette, folds, hood, shoulder, and right-side seam remain intact.
+
+Fresh test evidence:
+
+- `npm run test:merch-registration` — all seven primary registration/compositor tests passed through full four-view dry rerender; the two long-running stale-hash/rollback cases also passed independently (9/9 total).
+- `npm run test:merch-assets` — 2/2 passed.
+- `npm run test:merch-pages` — 2/2 passed.
+- `npm run test:merch` — 11/11 passed.
+
+No 3D model, viewer catalog, or `merch.json` file is part of this fix.

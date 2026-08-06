@@ -59,7 +59,7 @@ export const SOURCE_MAPPINGS = [
 
   mapping("MRCH-006", "hoodie", "rear", "production/physical-merch/concepts/drop-001/explorations/ascii-bullet/revised-capsule/renders/PVKH_DROP001_VOID_BACKMARK_HOODIE_CONCEPT_v09.png", "66fd2ab026b9135af7ea1bbe07e7dce32d73392f470ac2b1355c367fcd7b8645"),
   mapping("MRCH-006", "hoodie", "front", "production/physical-merch/concepts/drop-001/explorations/ascii-bullet/revised-capsule/renders/gallery-v01/PVKH_DROP001_VOID_BACKMARK_HOODIE_FRONT_FLATLAY_CONCEPT_v01.png", "0e687da476ba55adf820d315df911e71c057a7fab0ec7a274d240597830b7d17"),
-  mapping("MRCH-006", "hoodie", "print-macro", "site/tools/fixtures/apparel-registration/renders/hoodie-print-macro-registration-v02.png", "fa59bfe3647119262d46b5ec9f4b8f6870ba827a6012cf88e7b777d7814a46b3"),
+  mapping("MRCH-006", "hoodie", "print-macro", "site/tools/fixtures/apparel-registration/renders/hoodie-print-macro-registration-v02.png", "bd5fe42f0ff3e1cd7f5bcd9e2da3eb97b2b3fc550a69c61626f73517309ab504"),
   mapping("MRCH-006", "hoodie", "worn-rear", "site/tools/fixtures/apparel-registration/renders/hoodie-worn-rear-registration-v02.png", "7ba52a0c0233114bc66429bb443145633eff116078ffa543daf1b8570c7e19f2"),
 
   mapping("MRCH-007", "cap", "front", "production/physical-merch/concepts/drop-001/explorations/ascii-bullet/revised-capsule/cap-field-issue/renders/PVKH_DROP001_FIELD_ISSUE_CAP_FRONT_CONCEPT_v01.png", "066c0c8b1b64d48205bd888bd469f0f515771bfb7af918fc286977ddd314fe5a"),
