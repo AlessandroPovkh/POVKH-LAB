@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { after, before, test } from "node:test";
+import { setTimeout as delay } from "node:timers/promises";
 import path from "node:path";
 import { readFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
@@ -18,6 +19,15 @@ const heavyRequest = /(?:assets\/product-viewer\.js|assets\/vendor\/model-viewer
 const deg = (value) => value * Math.PI / 180;
 const closeTo = (actual, expected, tolerance, label) => {
   assert.ok(Math.abs(actual - expected) <= tolerance, `${label}: expected ${expected}, received ${actual}`);
+};
+const waitForRequestQuiet = async (lastRequestAt, { quietMs = 750, timeoutMs = 5_000 } = {}) => {
+  const deadline = Date.now() + timeoutMs;
+  while (Date.now() < deadline) {
+    const remaining = quietMs - (Date.now() - lastRequestAt());
+    if (remaining <= 0) return;
+    await delay(Math.min(remaining, 100));
+  }
+  assert.fail(`network did not remain quiet for ${quietMs}ms`);
 };
 
 let app;
@@ -90,6 +100,28 @@ const assertGovernedCamera = (evidence, object, profileName, { pixels = false } 
   if (pixels) assert.ok(evidence.visiblePixels > 0, `${profileName}/${object.slug} rendered no visible geometry`);
 };
 
+const perturbCamera = async (page, initialTheta, label) => {
+  const viewer = page.locator("model-viewer");
+  const box = await viewer.boundingBox();
+  assert.ok(box, `${label} has no viewer pointer surface`);
+  const start = { x: box.x + box.width * 0.39, y: box.y + box.height * 0.44 };
+  const hit = await viewer.evaluate((model, point) => {
+    const target = model.shadowRoot?.elementFromPoint(point.x, point.y);
+    return {
+      id: target?.id || "",
+      reachesUserInput: Boolean(model.shadowRoot?.querySelector(".userInput")?.contains(target))
+    };
+  }, start);
+  assert.notEqual(hit.id, "default-pan-target", `${label} drag hit model-viewer's pan target`);
+  assert.equal(hit.reachesUserInput, true, `${label} drag missed model-viewer's input surface`);
+  await page.mouse.move(start.x, start.y);
+  await page.mouse.down();
+  await page.mouse.move(box.x + box.width * 0.7, box.y + box.height * 0.55, { steps: 10 });
+  await page.mouse.up();
+  await page.waitForFunction((theta) => Math.abs(document.querySelector("model-viewer")?.getCameraOrbit().theta - theta) > 0.03, initialTheta);
+  await delay(250);
+};
+
 test("activates every released GLB poster-first with exact governed cameras and visible geometry", { timeout: 180_000 }, async () => {
   assert.equal(interactive.length, 8, "DROP 001 must expose eight governed GLB viewers");
 
@@ -99,7 +131,11 @@ test("activates every released GLB poster-first with exact governed cameras and 
       const page = await context.newPage();
       const requests = [];
       const errors = [];
-      page.on("request", (request) => requests.push(request.url()));
+      let lastRequestAt = Date.now();
+      page.on("request", (request) => {
+        requests.push(request.url());
+        lastRequestAt = Date.now();
+      });
       page.on("pageerror", (error) => errors.push(error.message));
       await page.setViewportSize(profile.viewport);
       await page.goto(`${baseUrl}/merch/${object.slug}/`, { waitUntil: "networkidle" });
@@ -121,6 +157,7 @@ test("activates every released GLB poster-first with exact governed cameras and 
         null,
         { timeout: 20_000 }
       );
+      await waitForRequestQuiet(() => lastRequestAt);
       const activationRequests = requests.slice(activationStart);
       assert.ok(
         activationRequests.some((url) => url.endsWith(`/${object.viewer.src}`)),
@@ -136,6 +173,7 @@ test("activates every released GLB poster-first with exact governed cameras and 
       assertGovernedCamera(evidence, object, profile.name, { pixels: true });
       assert.deepEqual(errors, [], `${profile.name}/${object.slug} emitted a page error`);
 
+      await perturbCamera(page, evidence.orbit[0], `${profile.name}/${object.slug}`);
       await page.locator("[data-product-viewer-reset]").click();
       await page.waitForFunction(
         ({ orbit, fieldOfView, target }) => {

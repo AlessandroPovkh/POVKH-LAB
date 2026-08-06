@@ -94,11 +94,11 @@ test("data key GLB is a static closed dual-interface device inside the 86 x 20 x
   assert.equal(report.output.sha256, sha256(bytes));
   assert.deepEqual(report.cameraRecommendations.desktop.default, {orbit: "35deg 75deg 120%", target: "auto 0.010m auto", fieldOfView: "24deg"});
   assert.deepEqual(browserQa.checks, {sixRequiredViews: true, noBrowserErrors: true, readabilityCrop: true, sourceCompare: true, modelLoaded: true});
-  assert.equal(browserQa.capturedAtPolicy, "timestamp-omitted; checked-in hashes prove snapshot integrity, while rerenders use semantic and perceptual gates");
+  assert.equal(browserQa.capturedAtPolicy, "timestamp-omitted; checked-in hashes prove snapshot integrity only, while cross-rerender acceptance uses semantic gates and human visual review");
   assert.deepEqual(browserQa.rerenderPolicy, {
     pixelHashes: "snapshot-integrity-only",
-    maxChannelDelta: 8,
-    maxMeanAbsoluteChannelDelta: 0.001,
+    automatedPixelTolerance: false,
+    crossRerenderComparison: "semantic-gates-and-human-visual-review",
     semanticGatesRemainAuthoritative: true
   });
   assert.deepEqual(browserQa.views.filter((view) => /^(desktop|mobile)-(default|front|rear)$/.test(view.view)).map((view) => view.view).sort(), ["desktop-default","desktop-front","desktop-rear","mobile-default","mobile-front","mobile-rear"]);

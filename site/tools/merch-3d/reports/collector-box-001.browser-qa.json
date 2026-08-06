@@ -2,11 +2,11 @@
   "schemaVersion": 1,
   "assetKey": "collector-box-001",
   "baseUrl": "http://127.0.0.1:4173/merch/collector-box-set/",
-  "capturedAtPolicy": "timestamp-omitted; checked-in hashes prove snapshot integrity, while rerenders use semantic and perceptual gates",
+  "capturedAtPolicy": "timestamp-omitted; checked-in hashes prove snapshot integrity only, while cross-rerender acceptance uses semantic gates and human visual review",
   "rerenderPolicy": {
     "pixelHashes": "snapshot-integrity-only",
-    "maxChannelDelta": 8,
-    "maxMeanAbsoluteChannelDelta": 0.001,
+    "automatedPixelTolerance": false,
+    "crossRerenderComparison": "semantic-gates-and-human-visual-review",
     "semanticGatesRemainAuthoritative": true
   },
   "views": [
