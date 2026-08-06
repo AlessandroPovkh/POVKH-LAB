@@ -1,0 +1,70 @@
+import assert from "node:assert/strict";
+import { access, readFile, stat } from "node:fs/promises";
+import path from "node:path";
+import test from "node:test";
+import { fileURLToPath } from "node:url";
+
+const here = path.dirname(fileURLToPath(import.meta.url));
+const siteRoot = path.resolve(here, "..");
+const readJson = async (relative) => JSON.parse(await readFile(path.join(siteRoot, relative), "utf8"));
+
+test("pins the audited local model build and validation toolchain", async () => {
+  const packageJson = await readJson("package.json");
+  assert.equal(packageJson.devDependencies?.["@gltf-transform/core"], "4.4.2");
+  assert.equal(packageJson.devDependencies?.["@gltf-transform/functions"], "4.4.2");
+  assert.equal(packageJson.devDependencies?.["gltf-validator"], "2.0.0-dev.3.10");
+  assert.equal(packageJson.devDependencies?.sharp, "0.35.3");
+});
+
+test("governs the cassette source, deterministic build and release report", async () => {
+  const source = await readJson("tools/merch-3d/cassette-002.source.json");
+  const report = await readJson("tools/merch-3d/reports/cassette-002.report.json");
+  const assetPath = path.join(siteRoot, "assets/merch-3d/cassette-002.glb");
+  const asset = await stat(assetPath);
+
+  assert.equal(source.assetKey, "cassette-002");
+  assert.deepEqual(source.dimensionsMm.cassette, [100.4, 63.8, 12]);
+  assert.deepEqual(source.dimensionsMm.case, [109, 70, 17]);
+  assert.equal(source.dimensionsAuthority.status, "nominal-provisional");
+  assert.match(source.identity.ascii.sha256, /^[a-f0-9]{64}$/);
+  assert.match(source.identity.compactDark.sha256, /^[a-f0-9]{64}$/);
+  assert.match(source.identity.compactReverse.sha256, /^[a-f0-9]{64}$/);
+
+  assert.equal(report.assetKey, source.assetKey);
+  assert.equal(report.validation.errors, 0);
+  assert.equal(report.validation.warnings, 0);
+  assert.equal(report.mechanics.screws, 5);
+  assert.equal(report.mechanics.hubs, 2);
+  assert.equal(report.mechanics.guideRollers, 2);
+  assert.equal(report.mechanics.continuousTapePath, true);
+  assert.equal(report.mechanics.pressurePad, true);
+  assert.equal(report.registration.maxErrorPercent <= 1, true);
+  assert.equal(report.budget.bytes <= 2_500_000, true);
+  assert.equal(report.budget.triangles <= 50_000, true);
+  assert.equal(report.budget.drawCalls <= 12, true);
+  assert.equal(asset.size, report.budget.bytes);
+  assert.match(report.output.sha256, /^[a-f0-9]{64}$/);
+});
+
+test("records an evidence-based hoodie GLB or honest physical-sample fallback", async () => {
+  const decision = await readJson("tools/merch-3d/hoodie-001.decision.json");
+  assert.equal(decision.assetKey, "hoodie-001");
+  assert.ok(["verified-glb", "physical-sample-spin", "source-blocked"].includes(decision.outcome));
+  assert.equal(decision.syntheticSpinFromGallery, false);
+
+  if (decision.outcome === "verified-glb") {
+    await access(path.join(siteRoot, "assets/merch-3d/hoodie-001.glb"));
+    assert.equal(decision.gates.authoritativeMesh, true);
+    assert.equal(decision.gates.silhouetteIou >= 0.95, true);
+    assert.equal(decision.gates.maxLandmarkErrorPercent <= 2, true);
+    assert.equal(decision.gates.printRegistrationErrorPercent <= 1, true);
+  } else if (decision.outcome === "physical-sample-spin") {
+    assert.equal(decision.gates.approvedPhysicalSample, true);
+    assert.equal(decision.frameCount >= 24, true);
+  } else {
+    assert.equal(decision.gates.authoritativeMesh, false);
+    assert.equal(decision.gates.approvedPhysicalSample, false);
+    assert.match(decision.reason, /authoritative|physical sample/i);
+  }
+});
+
