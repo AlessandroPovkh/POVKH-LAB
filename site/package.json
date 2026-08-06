@@ -30,6 +30,7 @@
     "test:product-viewer-runtime": "node --test tests/product-viewer-runtime.test.mjs",
     "test:product-viewer-camera": "node --test tests/product-viewer-camera-browser.test.mjs",
     "test:product-viewer-catalog": "node --test tests/product-viewer-catalog-browser.test.mjs",
+    "benchmark:product-viewer": "node --test tests/product-viewer-performance-browser.test.mjs",
     "test:merch-model-assets": "node --test tests/merch-model-assets.test.mjs",
     "test:merch-model-builds": "node --test tools/merch-3d/*.test.mjs",
     "test:interface-hierarchy": "node --test tests/interface-hierarchy.test.mjs",

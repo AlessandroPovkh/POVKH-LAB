@@ -18,7 +18,12 @@ test("pins the audited local model build and validation toolchain", async () => 
     packageJson.scripts?.["test:merch-model-builds"],
     "node --test tools/merch-3d/*.test.mjs"
   );
+  assert.equal(
+    packageJson.scripts?.["benchmark:product-viewer"],
+    "node --test tests/product-viewer-performance-browser.test.mjs"
+  );
   assert.match(packageJson.scripts?.test ?? "", /npm run test:merch-model-builds/);
+  assert.doesNotMatch(packageJson.scripts?.test ?? "", /benchmark:product-viewer/);
 });
 
 test("governs the cassette source, deterministic build and release report", async () => {
