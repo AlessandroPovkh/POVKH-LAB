@@ -1,0 +1,93 @@
+{
+  "schemaVersion": 1,
+  "artifactVersion": "v06",
+  "status": "PRIVATE_SYNTHETIC_CONCEPT",
+  "physicalMaster": {
+    "path": "source/artwork/PVKH_SIGNAL_KIT_001_SELECTED_SHEET_MASTER_v06.svg",
+    "sha256": "be373904e0986ef4e4f61c6bf61f6c42cb0c281b085c48326d48a27014a1cf20",
+    "width": 888,
+    "height": 1260,
+    "viewBox": "0 0 888 1260"
+  },
+  "sourceAuthorities": [
+    {
+      "role": "ASCII",
+      "path": "assets/logo/povkh-lab-ascii-reverse-transparent-outlined.svg",
+      "sha256": "d5ce2d292638e4d290dfdb1bde225e6b99332e7971ac09a9660e7000a6ebb659"
+    },
+    {
+      "role": "PRIMARY",
+      "path": "assets/logo/povkh-lab-primary-reverse-transparent-outlined.svg",
+      "sha256": "555950948f6c3863692500f1f8bba4fe70007eabb477872827d09aa2ba379ff1"
+    },
+    {
+      "role": "COMPACT",
+      "path": "assets/logo/povkh-lab-compact-reverse-transparent-outlined.svg",
+      "sha256": "72a56616e3606420c36923e94ac0bf3fe8c434391630cb89a4354729b48436bf"
+    },
+    {
+      "role": "TYPEFACE",
+      "path": "assets/fonts/IBMPlexMono-SemiBold.ttf",
+      "sha256": "d3c38e55c78f5b0f28009fddba4834ec503278936a5986032424c9bd2d23aa46"
+    }
+  ],
+  "qrAuthority": {
+    "path": "source/qr/PVKH_SOCIAL_ACCESS_QR_PRODUCTION_CONCEPT_v06.png",
+    "metadataPath": "source/qr/PVKH_SOCIAL_ACCESS_QR_PRODUCTION_CONCEPT_v06.json",
+    "targetUrl": "https://alessandropovkh.github.io/POVKH-LAB/links/",
+    "sha256": "dc1d01331f2d58fca1ff49a2929d1bc2f835355f2ed7453a767eba85bd773e2e"
+  },
+  "placementContract": {
+    "path": "placements.json",
+    "sha256": "04c73d6322291384401da88dc0e09d7dc5cfba702de3661930ee1bf28d4c857a"
+  },
+  "motifCrops": {
+    "ASCII": {
+      "x": 48,
+      "y": 60,
+      "width": 792,
+      "height": 366
+    },
+    "PRIMARY": {
+      "x": 60,
+      "y": 474,
+      "width": 390,
+      "height": 390
+    },
+    "COMPACT": {
+      "x": 498,
+      "y": 498,
+      "width": 330,
+      "height": 330
+    },
+    "SIGNAL_RED_WORDMARK": {
+      "x": 60,
+      "y": 936,
+      "width": 360,
+      "height": 54
+    },
+    "ACCESS_QR": {
+      "x": 576,
+      "y": 852,
+      "width": 240,
+      "height": 300
+    },
+    "QR_FIELD": {
+      "x": 600,
+      "y": 876,
+      "width": 192,
+      "height": 192
+    }
+  },
+  "governance": {
+    "syntheticConcept": true,
+    "siteGalleryEligible": false,
+    "productionArt": false,
+    "realProductPhoto": false,
+    "manufacturedInventory": false,
+    "notAvailableForSale": true,
+    "vendorDielineConfirmed": false,
+    "printProofConfirmed": false,
+    "qrTargetReadyForPrint": false
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 1,
+  "artifactVersion": "v05",
+  "supersedes": "v04",
+  "canvas": {
+    "width": 888,
+    "height": 1260,
+    "widthMm": 148,
+    "heightMm": 210,
+    "pxPerMm": 6
+  },
+  "spacing": {
+    "outerMarginMm": 8,
+    "minimumGapMm": 4,
+    "planningGeometryOnly": true,
+    "vendorDieline": false
+  },
+  "identity": {
+    "asciiDark": "assets/logo/povkh-lab-ascii-dark-outlined.svg",
+    "asciiReverse": "assets/logo/povkh-lab-ascii-reverse-transparent-outlined.svg",
+    "primaryDark": "assets/logo/povkh-lab-primary-dark-outlined.svg",
+    "primaryDarkTransparent": "assets/logo/povkh-lab-primary-dark-transparent-outlined.svg",
+    "primaryReverse": "assets/logo/povkh-lab-primary-reverse-transparent-outlined.svg",
+    "compactDark": "assets/logo/povkh-lab-compact-dark-outlined.svg",
+    "compactLight": "assets/logo/povkh-lab-compact-light-outlined.svg",
+    "compactReverse": "assets/logo/povkh-lab-compact-reverse-transparent-outlined.svg",
+    "generatedByImageModel": false,
+    "asciiRightHalfPreserved": true
+  },
+  "qr": {
+    "source": "source/qr/PVKH_SOCIAL_ACCESS_QR_PREVIEW_v01.png",
+    "previewTarget": "https://t.me/povkhlab",
+    "previewTargetStatus": "CONFIRMED_TELEGRAM_FALLBACK",
+    "productionTargetApproved": false,
+    "productionSmartLinkUrl": null,
+    "errorCorrection": "H",
+    "quietZoneModules": 4
+  },
+  "layouts": {
+    "01": {
+      "label": "ASYMMETRIC SIGNAL FIELD",
+      "motifs": [
+        {"role":"ASCII","identityVariant":"ASCII_REVERSE","carrier":"VOID","shape":"rounded-rect","x":48,"y":60,"width":792,"height":366,"radius":24,"artX":84,"artY":108,"artWidth":720,"artHeight":270},
+        {"role":"PRIMARY","identityVariant":"PRIMARY_REVERSE","carrier":"VOID","shape":"rounded-rect","x":60,"y":474,"width":390,"height":390,"radius":30,"artX":111,"artY":525,"artWidth":288,"artHeight":288},
+        {"role":"COMPACT","identityVariant":"COMPACT_REVERSE","carrier":"VOID","shape":"rounded-rect","x":498,"y":498,"width":330,"height":330,"radius":30,"artX":543,"artY":543,"artWidth":240,"artHeight":240},
+        {"role":"SIGNAL_RED_WORDMARK","carrier":"SIGNAL_RED","shape":"registration-tape","x":60,"y":936,"width":360,"height":54,"chamfer":18,"text":"POVKH LAB","textAlign":"left","textColor":"VOID","textX":84,"textY":945,"fontSize":28},
+        {"role":"ACCESS_QR","carrier":"VOID","shape":"access-node","x":576,"y":852,"width":240,"height":300,"sourceQr":"source/qr/PVKH_SOCIAL_ACCESS_QR_PREVIEW_v01.png","targetUrl":"https://t.me/povkhlab","errorCorrection":"H","quietZoneModules":4,"productionTargetApproved":false,"qrX":600,"qrY":876,"qrWidth":192,"qrHeight":192,"footerText":"POVKH LAB","cutType":"chamfered-kiss-cut"}
+      ]
+    },
+    "02": {
+      "label": "VOID INDEX",
+      "motifs": [
+        {"role":"ASCII","identityVariant":"ASCII_REVERSE","carrier":"VOID","shape":"rounded-rect","x":48,"y":84,"width":792,"height":366,"radius":24,"artX":84,"artY":132,"artWidth":720,"artHeight":270},
+        {"role":"PRIMARY","identityVariant":"PRIMARY_REVERSE","carrier":"VOID","shape":"rounded-rect","x":60,"y":522,"width":330,"height":330,"radius":30,"artX":102,"artY":564,"artWidth":246,"artHeight":246},
+        {"role":"COMPACT","identityVariant":"COMPACT_REVERSE","carrier":"VOID","shape":"rounded-rect","x":474,"y":498,"width":354,"height":354,"radius":30,"artX":519,"artY":543,"artWidth":264,"artHeight":264},
+        {"role":"SIGNAL_RED_WORDMARK","carrier":"SIGNAL_RED","shape":"registration-tape","x":60,"y":960,"width":360,"height":54,"chamfer":18,"text":"POVKH LAB","textAlign":"left","textColor":"VOID","textX":84,"textY":969,"fontSize":28},
+        {"role":"ACCESS_QR","carrier":"VOID","shape":"access-node","x":582,"y":876,"width":240,"height":300,"sourceQr":"source/qr/PVKH_SOCIAL_ACCESS_QR_PREVIEW_v01.png","targetUrl":"https://t.me/povkhlab","errorCorrection":"H","quietZoneModules":4,"productionTargetApproved":false,"qrX":606,"qrY":900,"qrWidth":192,"qrHeight":192,"footerText":"POVKH LAB","cutType":"chamfered-kiss-cut"}
+      ]
+    },
+    "03": {
+      "label": "OFFSET REGISTER",
+      "motifs": [
+        {"role":"PRIMARY","identityVariant":"PRIMARY_REVERSE","carrier":"VOID","shape":"rounded-rect","x":60,"y":66,"width":336,"height":336,"radius":30,"artX":105,"artY":111,"artWidth":246,"artHeight":246},
+        {"role":"COMPACT","identityVariant":"COMPACT_REVERSE","carrier":"VOID","shape":"rounded-rect","x":504,"y":108,"width":300,"height":300,"radius":30,"artX":543,"artY":147,"artWidth":222,"artHeight":222},
+        {"role":"ASCII","identityVariant":"ASCII_REVERSE","carrier":"VOID","shape":"rounded-rect","x":48,"y":492,"width":792,"height":342,"radius":24,"artX":84,"artY":528,"artWidth":720,"artHeight":270},
+        {"role":"SIGNAL_RED_WORDMARK","carrier":"SIGNAL_RED","shape":"registration-tape","x":60,"y":918,"width":420,"height":54,"chamfer":18,"text":"POVKH LAB","textAlign":"left","textColor":"VOID","textX":84,"textY":927,"fontSize":28},
+        {"role":"ACCESS_QR","carrier":"VOID","shape":"access-node","x":576,"y":858,"width":240,"height":300,"sourceQr":"source/qr/PVKH_SOCIAL_ACCESS_QR_PREVIEW_v01.png","targetUrl":"https://t.me/povkhlab","errorCorrection":"H","quietZoneModules":4,"productionTargetApproved":false,"qrX":600,"qrY":882,"qrWidth":192,"qrHeight":192,"footerText":"POVKH LAB","cutType":"chamfered-kiss-cut"}
+      ]
+    }
+  }
+}

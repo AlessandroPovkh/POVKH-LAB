@@ -1,0 +1,307 @@
+{
+  "schemaVersion": 1,
+  "artifactVersion": "v06",
+  "status": "PRIVATE_SYNTHETIC_CONCEPT",
+  "smartLinkUrl": "https://alessandropovkh.github.io/POVKH-LAB/links/",
+  "targetUrlFixed": true,
+  "printTargetReachable": false,
+  "reachabilityEvidence": {
+    "checkedAt": "2026-08-05",
+    "httpStatus": 404
+  },
+  "syntheticConcept": true,
+  "siteGalleryEligible": false,
+  "productionArt": false,
+  "realProductPhoto": false,
+  "manufacturedInventory": false,
+  "notAvailableForSale": true,
+  "vendorDielineConfirmed": false,
+  "printProofConfirmed": false,
+  "qrTargetReadyForPrint": false,
+  "nextGate": "PUBLIC_LINKS_ROUTE_HTTP_200_AFTER_GITHUB_PAGES_RELEASE",
+  "dependencies": {
+    "qrcode": "1.5.4",
+    "@zxing/library": "0.23.0",
+    "pngjs": "7.0.0",
+    "playwright": "1.61.1"
+  },
+  "authorities": [
+    {
+      "role": "DESIGN_SPEC",
+      "path": "docs/superpowers/specs/2026-08-05-povkh-signal-kit-production-qr-gallery-design.md",
+      "sha256": "eee0384203dcce1cfcb0c93a7f96ed8d7f05846c9e139339dcac9f64b48aabf0"
+    },
+    {
+      "role": "IMPLEMENTATION_PLAN",
+      "path": "docs/superpowers/plans/2026-08-05-povkh-signal-kit-production-qr-gallery.md",
+      "sha256": "b73f928594c941765861398bd6fca571f2759fe11ceacd4e313b0eaa4cf940d1"
+    },
+    {
+      "role": "TOOLS_PACKAGE",
+      "path": "tools/package.json",
+      "sha256": "fb8cc709f616d9ed8271abb7e42315f567ff3b763adf5ddeabbf1b5144b9a3a2"
+    },
+    {
+      "role": "TOOLS_LOCKFILE",
+      "path": "tools/package-lock.json",
+      "sha256": "d9725e1a67df1e345905495ba711c3ff97381a71089834d430655e66b7060b5c"
+    },
+    {
+      "role": "ASCII_IDENTITY",
+      "path": "assets/logo/povkh-lab-ascii-reverse-transparent-outlined.svg",
+      "sha256": "d5ce2d292638e4d290dfdb1bde225e6b99332e7971ac09a9660e7000a6ebb659"
+    },
+    {
+      "role": "PRIMARY_IDENTITY",
+      "path": "assets/logo/povkh-lab-primary-reverse-transparent-outlined.svg",
+      "sha256": "555950948f6c3863692500f1f8bba4fe70007eabb477872827d09aa2ba379ff1"
+    },
+    {
+      "role": "COMPACT_IDENTITY",
+      "path": "assets/logo/povkh-lab-compact-reverse-transparent-outlined.svg",
+      "sha256": "72a56616e3606420c36923e94ac0bf3fe8c434391630cb89a4354729b48436bf"
+    },
+    {
+      "role": "TYPEFACE",
+      "path": "assets/fonts/IBMPlexMono-SemiBold.ttf",
+      "sha256": "d3c38e55c78f5b0f28009fddba4834ec503278936a5986032424c9bd2d23aa46"
+    }
+  ],
+  "builders": [
+    {
+      "role": "QR_BUILDER",
+      "path": "scripts/build_signal_kit_001_production_qr_v06.mjs",
+      "sha256": "81457534a4607c4cb2255ecea0099af6ae6fb8478d98ab26dd7ea6d3b7517ef1"
+    },
+    {
+      "role": "MASTER_BUILDER",
+      "path": "scripts/build_signal_kit_001_master_v06.mjs",
+      "sha256": "878115298112d027dbbde91bc4f4045aef26644b069d47bfc671a7c60acef7ab"
+    },
+    {
+      "role": "QR_DECODER",
+      "path": "scripts/decode_signal_kit_001_qr_v06.mjs",
+      "sha256": "5ae4d109fca24728be8601001f7475d494b1c2471db945fb7d9a5ee0dbdd6176"
+    },
+    {
+      "role": "GALLERY_RENDERER",
+      "path": "scripts/render_signal_kit_001_gallery_v06.sh",
+      "sha256": "cbc53605c281edda0a5cc1614a39e0272bdffd09b5ccff41ba6e64894b243118"
+    }
+  ],
+  "immutableParents": [
+    {
+      "role": "SELECTED_LAYOUT_V01",
+      "path": "production/physical-merch/concepts/drop-001/renders/archive-objects/signal-kit-001/PVKH_DROP001_SIGNAL_KIT_001_SELECTED_LAYOUT_v01.png",
+      "sha256": "20f5143012dfb0044467b28099d856ce4a6b37e402640bbbcf7ecdce754ab130",
+      "dimensions": "1536x1024"
+    },
+    {
+      "role": "PLACEMENTS_V05",
+      "path": "production/physical-merch/concepts/drop-001/renders/archive-objects/signal-kit-001/placements.json",
+      "sha256": "04c73d6322291384401da88dc0e09d7dc5cfba702de3661930ee1bf28d4c857a"
+    },
+    {
+      "role": "PREVIEW_QR_PNG",
+      "path": "source/qr/PVKH_SOCIAL_ACCESS_QR_PREVIEW_v01.png",
+      "sha256": "03948454708c75404a0a460ae2b1f8b240f28a09fdb0217b0a64d8360a248ab1",
+      "dimensions": "1024x1024"
+    },
+    {
+      "role": "PREVIEW_QR_METADATA",
+      "path": "source/qr/PVKH_SOCIAL_ACCESS_QR_PREVIEW_v01.json",
+      "sha256": "8395f24b0ea6ae408ca8ff565cb52f79bebca6b84bac89074eb86e819f43472d"
+    }
+  ],
+  "qrSources": [
+    {
+      "role": "PRODUCTION_QR_PNG",
+      "path": "source/qr/PVKH_SOCIAL_ACCESS_QR_PRODUCTION_CONCEPT_v06.png",
+      "sha256": "dc1d01331f2d58fca1ff49a2929d1bc2f835355f2ed7453a767eba85bd773e2e",
+      "dimensions": "1024x1024",
+      "pixelFormat": "rgba"
+    },
+    {
+      "role": "PRODUCTION_QR_SVG",
+      "path": "source/qr/PVKH_SOCIAL_ACCESS_QR_PRODUCTION_CONCEPT_v06.svg",
+      "sha256": "946539b650b6ed41e05dba5f2a5bb07bebb78153174691df616c95f16967ad55"
+    },
+    {
+      "role": "PRODUCTION_QR_METADATA",
+      "path": "source/qr/PVKH_SOCIAL_ACCESS_QR_PRODUCTION_CONCEPT_v06.json",
+      "sha256": "d041814f79c0ccf4f2a4adce97bb77f786d224dbdfccf3999b8bb0c65c9415fe"
+    }
+  ],
+  "physicalMaster": [
+    {
+      "role": "SELECTED_SHEET_MASTER",
+      "path": "source/artwork/PVKH_SIGNAL_KIT_001_SELECTED_SHEET_MASTER_v06.svg",
+      "sha256": "be373904e0986ef4e4f61c6bf61f6c42cb0c281b085c48326d48a27014a1cf20"
+    },
+    {
+      "role": "MASTER_AUTHORITY",
+      "path": "source/artwork/master-authority-v06.json",
+      "sha256": "c2056c207509d7df8e837ecc7c41e4a608df655e59f9abffc725c08e73797167"
+    }
+  ],
+  "baseLineage": [
+    {
+      "role": "BASE_GENERATION_MANIFEST",
+      "path": "source/gallery-base-generation-v06.json",
+      "sha256": "fe4878b774d750607dd0e792bacd9e76d4963d8412a7009f7d4f3bd1d9c6cb0f"
+    },
+    {
+      "role": "SELECTED_SHEET_BASE",
+      "path": "source/accepted-traces/PVKH_SIGNAL_KIT_001_A5_BLANK_ACCEPTED_v01.png",
+      "sha256": "0893c40baed5d95e42a22c26d82dbf255e23d6bd806bc19f2f1c43337508d0fc",
+      "dimensions": "1536x1024",
+      "pixelFormat": "rgb24"
+    },
+    {
+      "role": "GOVERNED_PRODUCT_BACKGROUND",
+      "path": "production/physical-merch/concepts/drop-001/explorations/ascii-bullet/revised-capsule/source/PVKH_PRODUCT_BACKGROUND_MASTER_v04.png",
+      "sha256": "c27a1a6874c7810a240888f7b5004aeea73a366b3af6aa5041e14a989d95e92e",
+      "dimensions": "1536x1024"
+    },
+    {
+      "role": "PEEL_PROMPT",
+      "path": "source/prompts/PVKH_SIGNAL_KIT_001_PEEL_EDGE_BLANK_BASE_v06.txt",
+      "sha256": "3524ad27cc6133c21445a77370c0dfdbbd302cebb43b3cf922bf35986a4a4b53"
+    },
+    {
+      "role": "PEEL_BASE",
+      "path": "source/accepted-traces/PVKH_SIGNAL_KIT_001_PEEL_EDGE_BLANK_BASE_v06.png",
+      "sha256": "392ab9a76b16bd4d66cc23f73fc6bb4e076438deff4474ac20c0205df7c5d879",
+      "dimensions": "1536x1024",
+      "pixelFormat": "rgb24"
+    },
+    {
+      "role": "SEPARATED_PROMPT",
+      "path": "source/prompts/PVKH_SIGNAL_KIT_001_SEPARATED_SET_BLANK_BASE_v06.txt",
+      "sha256": "b7bd276e2c8d59ed17e667f5611d5fbc9aa66dd4efeb7599cdafaee95b7e21f1"
+    },
+    {
+      "role": "SEPARATED_BASE",
+      "path": "source/accepted-traces/PVKH_SIGNAL_KIT_001_SEPARATED_SET_BLANK_BASE_v06.png",
+      "sha256": "dc063b242151f135855c1f86f598076672fbf2f8e5656e8baf6e1f59b38ab90e",
+      "dimensions": "1536x1024",
+      "pixelFormat": "rgb24"
+    },
+    {
+      "role": "APPLIED_PROMPT",
+      "path": "source/prompts/PVKH_SIGNAL_KIT_001_APPLIED_SURFACE_BLANK_BASE_v06.txt",
+      "sha256": "b298c1cdc89b91d3009835557f0699c949abeed811c65be399da02176220245b"
+    },
+    {
+      "role": "APPLIED_BASE",
+      "path": "source/accepted-traces/PVKH_SIGNAL_KIT_001_APPLIED_SURFACE_BLANK_BASE_v06.png",
+      "sha256": "e73fa99d25424b708e989daabc039e443a4fd3840dffc5e9b7681632b163a6b2",
+      "dimensions": "1536x1024",
+      "pixelFormat": "rgb24"
+    }
+  ],
+  "governedArtifacts": [
+    {
+      "role": "SELECTION",
+      "path": "production-concept-selection-v06.json",
+      "sha256": "2ee24cfa1fd8b9127dbfbde66d1a589431f52dcbb2d2417cb8a5b6dab8501702"
+    },
+    {
+      "role": "GEOMETRY",
+      "path": "source/gallery-geometry-v06.json",
+      "sha256": "4acc87f71632168de82eabf6bd768ad6f55d11caa35b5fe2709b8ca7396c467b"
+    },
+    {
+      "role": "COMPOSITOR",
+      "path": "source/PVKH_SIGNAL_KIT_001_GALLERY_COMPOSITOR_v06.html",
+      "sha256": "b6744102e8382ae5bd7fae5c49c5bb9536ad15044ad4bc0f8850ddc72a12dd11"
+    },
+    {
+      "role": "GALLERY_MANIFEST",
+      "path": "gallery-v06.json",
+      "sha256": "18c29d70731b270accd61d636d777e99fc5eebdf3cf34a5f256aa67ba7b816fc"
+    },
+    {
+      "role": "REVIEW_BOARD",
+      "path": "PVKH_DROP001_SIGNAL_KIT_001_GALLERY_REVIEW_v06.html",
+      "sha256": "18c24b4971ff1ae0528d9801caeadf168daa04ba1a18fe92b9bf45511d563086"
+    },
+    {
+      "role": "FOCUSED_QA",
+      "path": "qa/qa_signal_kit_001_production_qr_gallery_v06.sh",
+      "sha256": "0dee7358163ba85e3d44a179ff6fa1d5c6d4d44f5b64dbdd972967ca76c7fde2"
+    },
+    {
+      "role": "MUTATION_QA",
+      "path": "qa/mutate_signal_kit_001_v06.sh",
+      "sha256": "8f85833ef8ae34c83d37ccb75a7924d8d3c662524cf8310178f4d33a45f1efa6"
+    },
+    {
+      "role": "README_STATE",
+      "path": "README.md",
+      "sha256": "226850f9dc653f82c46bee606fa38f051e27c3961368d6695d0879ddd3fb934b"
+    }
+  ],
+  "outputs": [
+    {
+      "role": "selectedSheet",
+      "path": "renders/gallery/PVKH_DROP001_SIGNAL_KIT_001_SELECTED_SHEET_PRODUCTION_CONCEPT_v06.png",
+      "sha256": "dba69b9b616452f949763690d21208cf6dd61804cb15ee3fc2e5c59ebd3bf050",
+      "dimensions": "1536x1024",
+      "syntheticConcept": true,
+      "siteGalleryEligible": false,
+      "productionArt": false,
+      "realProductPhoto": false,
+      "manufacturedInventory": false,
+      "notAvailableForSale": true,
+      "vendorDielineConfirmed": false,
+      "printProofConfirmed": false,
+      "qrTargetReadyForPrint": false
+    },
+    {
+      "role": "peelEdgeMacro",
+      "path": "renders/gallery/PVKH_DROP001_SIGNAL_KIT_001_PEEL_EDGE_MACRO_PRODUCTION_CONCEPT_v06.png",
+      "sha256": "50fc0ed444d3744a46c5a8c4f7472db4d6a015559d0e681f130e12a2edc380fa",
+      "dimensions": "1536x1024",
+      "syntheticConcept": true,
+      "siteGalleryEligible": false,
+      "productionArt": false,
+      "realProductPhoto": false,
+      "manufacturedInventory": false,
+      "notAvailableForSale": true,
+      "vendorDielineConfirmed": false,
+      "printProofConfirmed": false,
+      "qrTargetReadyForPrint": false
+    },
+    {
+      "role": "separatedSet",
+      "path": "renders/gallery/PVKH_DROP001_SIGNAL_KIT_001_SEPARATED_SET_PRODUCTION_CONCEPT_v06.png",
+      "sha256": "b47596cf8523a4418e4827fbf19058fef4290139852c2484d96a70f56702802a",
+      "dimensions": "1536x1024",
+      "syntheticConcept": true,
+      "siteGalleryEligible": false,
+      "productionArt": false,
+      "realProductPhoto": false,
+      "manufacturedInventory": false,
+      "notAvailableForSale": true,
+      "vendorDielineConfirmed": false,
+      "printProofConfirmed": false,
+      "qrTargetReadyForPrint": false
+    },
+    {
+      "role": "appliedSurface",
+      "path": "renders/gallery/PVKH_DROP001_SIGNAL_KIT_001_APPLIED_SURFACE_PRODUCTION_CONCEPT_v06.png",
+      "sha256": "60583434d000a675b0c57c4b297243c048b4ef5379c5ddf9ee2abb95c1747372",
+      "dimensions": "1536x1024",
+      "syntheticConcept": true,
+      "siteGalleryEligible": false,
+      "productionArt": false,
+      "realProductPhoto": false,
+      "manufacturedInventory": false,
+      "notAvailableForSale": true,
+      "vendorDielineConfirmed": false,
+      "printProofConfirmed": false,
+      "qrTargetReadyForPrint": false
+    }
+  ]
+}
