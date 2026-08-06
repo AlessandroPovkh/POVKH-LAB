@@ -6,7 +6,7 @@ import { promisify } from "node:util";
 import path from "node:path";
 import { readFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
-import { chromium } from "playwright";
+import { chromium, errors as playwrightErrors } from "playwright";
 import { createStaticServer } from "../tools/server.mjs";
 
 const siteRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -108,22 +108,60 @@ const perturbCamera = async (page, initialTheta, label) => {
   const viewer = page.locator("model-viewer");
   const box = await viewer.boundingBox();
   assert.ok(box, `${label} has no viewer pointer surface`);
-  const start = { x: box.x + box.width * 0.39, y: box.y + box.height * 0.44 };
-  const hit = await viewer.evaluate((model, point) => {
-    const target = model.shadowRoot?.elementFromPoint(point.x, point.y);
-    return {
-      id: target?.id || "",
-      reachesUserInput: Boolean(model.shadowRoot?.querySelector(".userInput")?.contains(target))
+  const trajectories = [
+    { start: [0.39, 0.44], end: [0.70, 0.55] },
+    { start: [0.62, 0.42], end: [0.30, 0.57] },
+    { start: [0.48, 0.62], end: [0.72, 0.38] }
+  ];
+  let validPointerSurface = false;
+
+  for (const trajectory of trajectories) {
+    const start = {
+      x: box.x + box.width * trajectory.start[0],
+      y: box.y + box.height * trajectory.start[1]
     };
-  }, start);
-  assert.notEqual(hit.id, "default-pan-target", `${label} drag hit model-viewer's pan target`);
-  assert.equal(hit.reachesUserInput, true, `${label} drag missed model-viewer's input surface`);
-  await page.mouse.move(start.x, start.y);
-  await page.mouse.down();
-  await page.mouse.move(box.x + box.width * 0.7, box.y + box.height * 0.55, { steps: 10 });
-  await page.mouse.up();
-  await page.waitForFunction((theta) => Math.abs(document.querySelector("model-viewer")?.getCameraOrbit().theta - theta) > 0.03, initialTheta);
-  await delay(250);
+    const hit = await viewer.evaluate((model, point) => {
+      const target = model.shadowRoot?.elementFromPoint(point.x, point.y);
+      return {
+        id: target?.id || "",
+        reachesUserInput: Boolean(model.shadowRoot?.querySelector(".userInput")?.contains(target))
+      };
+    }, start);
+    if (hit.id === "default-pan-target" || !hit.reachesUserInput) continue;
+    validPointerSurface = true;
+
+    await page.mouse.move(start.x, start.y);
+    await page.mouse.down();
+    try {
+      await page.mouse.move(
+        box.x + box.width * trajectory.end[0],
+        box.y + box.height * trajectory.end[1],
+        { steps: 12 }
+      );
+    } finally {
+      await page.mouse.up();
+    }
+
+    const moved = await page.waitForFunction(
+      (theta) => {
+        const currentTheta = document.querySelector("model-viewer")?.getCameraOrbit().theta;
+        return Number.isFinite(currentTheta) && Math.abs(currentTheta - theta) > 0.03;
+      },
+      initialTheta,
+      { timeout: 5_000 }
+    ).then(() => true, (error) => {
+      if (error instanceof playwrightErrors.TimeoutError) return false;
+      throw error;
+    });
+    if (moved) {
+      await delay(250);
+      return;
+    }
+  }
+
+  assert.equal(validPointerSurface, true, `${label} has no usable model-viewer orbit input surface`);
+  const finalTheta = await viewer.evaluate((model) => model.getCameraOrbit().theta);
+  assert.fail(`${label} ignored all real pointer-drag trajectories (initial theta ${initialTheta}, final theta ${finalTheta})`);
 };
 
 test("activates every released GLB poster-first with exact governed cameras and visible geometry", { timeout: 180_000 }, async () => {
