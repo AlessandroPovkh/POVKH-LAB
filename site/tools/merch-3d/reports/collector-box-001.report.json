@@ -201,17 +201,17 @@
       "default": {
         "orbit": "25deg 58deg 145%",
         "target": "auto 0.075m auto",
-        "fieldOfView": "34deg"
+        "fieldOfView": "30deg"
       },
       "front": {
         "orbit": "0deg 56deg 145%",
         "target": "auto 0.075m auto",
-        "fieldOfView": "34deg"
+        "fieldOfView": "30deg"
       },
       "rear": {
         "orbit": "180deg 58deg 148%",
         "target": "auto 0.075m auto",
-        "fieldOfView": "34deg"
+        "fieldOfView": "30deg"
       }
     }
   },

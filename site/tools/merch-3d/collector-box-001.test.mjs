@@ -99,9 +99,9 @@ test("collector sources govern a default-open ARCHIVE CLAMSHELL concept without 
   });
   assert.equal(source.camera.poster, "assets/merch/collector-box-set-closed.webp", "governed gallery-order contract keeps the inert closed hero poster");
   assert.deepEqual(source.camera.mobile, {
-    default: {orbit: "25deg 58deg 145%", target: "auto 0.075m auto", fieldOfView: "34deg"},
-    front: {orbit: "0deg 56deg 145%", target: "auto 0.075m auto", fieldOfView: "34deg"},
-    rear: {orbit: "180deg 58deg 148%", target: "auto 0.075m auto", fieldOfView: "34deg"}
+    default: {orbit: "25deg 58deg 145%", target: "auto 0.075m auto", fieldOfView: "30deg"},
+    front: {orbit: "0deg 56deg 145%", target: "auto 0.075m auto", fieldOfView: "30deg"},
+    rear: {orbit: "180deg 58deg 148%", target: "auto 0.075m auto", fieldOfView: "30deg"}
   });
   assert.deepEqual(source.uncertainty, {
     openStateModeled: true,
@@ -195,6 +195,11 @@ test("collector GLB defaults open with a lined lid, modular tray and separately 
     semanticGatesRemainAuthoritative: true
   });
   assert.deepEqual(browserQa.views.filter((view) => /^(desktop|mobile)-(default|front|rear)$/.test(view.view)).map((view) => view.view).sort(), ["desktop-default","desktop-front","desktop-rear","mobile-default","mobile-front","mobile-rear"]);
+  for (const view of browserQa.views.filter((entry) => /^(desktop|mobile)-(default|front|rear)$/.test(entry.view))) {
+    const [breakpoint, profile] = view.view.split("-");
+    const declaredFieldOfViewDeg = Number.parseFloat(source.camera[breakpoint][profile].fieldOfView);
+    assert.ok(Math.abs(view.fieldOfViewDeg - declaredFieldOfViewDeg) < 0.02, `${view.view} clamps ${declaredFieldOfViewDeg}deg to ${view.fieldOfViewDeg}deg`);
+  }
   for (const view of browserQa.views.filter((entry) => /^mobile-(default|front|rear)$/.test(entry.view))) {
     assert.ok(view.visualMarginsPx.every((value) => value >= 12), `${view.view} clips the model: ${view.visualMarginsPx}`);
   }

@@ -129,9 +129,9 @@
       "rear": {"orbit": "180deg 57deg 140%", "target": "auto 0.075m auto", "fieldOfView": "30deg"}
     },
     "mobile": {
-      "default": {"orbit": "25deg 58deg 145%", "target": "auto 0.075m auto", "fieldOfView": "34deg"},
-      "front": {"orbit": "0deg 56deg 145%", "target": "auto 0.075m auto", "fieldOfView": "34deg"},
-      "rear": {"orbit": "180deg 58deg 148%", "target": "auto 0.075m auto", "fieldOfView": "34deg"}
+      "default": {"orbit": "25deg 58deg 145%", "target": "auto 0.075m auto", "fieldOfView": "30deg"},
+      "front": {"orbit": "0deg 56deg 145%", "target": "auto 0.075m auto", "fieldOfView": "30deg"},
+      "rear": {"orbit": "180deg 58deg 148%", "target": "auto 0.075m auto", "fieldOfView": "30deg"}
     }
   },
   "budgets": {"maxBytes": 2100000, "maxTriangles": 40000, "maxDrawCalls": 10, "hardMaxBytes": 2500000, "hardMaxTriangles": 50000, "hardMaxDrawCalls": 12},

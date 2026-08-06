@@ -172,12 +172,12 @@
     {
       "view": "mobile-default",
       "path": "tools/merch-3d/reports/screenshots/collector-box-001-mobile-default.png",
-      "sha256": "e94b20dcf9a23290bc032c5e57db263877d85a957c6bdbe2b20052fe963f81dc",
+      "sha256": "8c8817020ec10509d1599635cf822efc85508e947240cd6db927cd1b4382ee34",
       "viewportPx": [
         390,
         844
       ],
-      "entropy": 3.0052,
+      "entropy": 2.7952,
       "errors": [],
       "loaded": true,
       "dimensionsM": [
@@ -194,24 +194,24 @@
       "cameraOrbit": {
         "theta": 0.4363323129985824,
         "phi": 1.0122909661567112,
-        "radius": 0.8115823945763004
+        "radius": 0.9167939250036387
       },
       "foregroundBoundsPx": [
-        85,
-        14,
-        270,
-        212
+        96,
+        25,
+        259,
+        200
       ],
       "visualMarginsPx": [
-        85,
-        14,
-        85,
-        25
+        96,
+        25,
+        96,
+        37
       ],
-      "boneInteriorPixels": 14197,
-      "signalRedPixels": 849,
+      "boneInteriorPixels": 11112,
+      "signalRedPixels": 661,
       "signalRedRegions": 2,
-      "identityContrastPixels": 2020,
+      "identityContrastPixels": 1829,
       "analysisFramePx": [
         356,
         238
@@ -225,12 +225,12 @@
     {
       "view": "mobile-front",
       "path": "tools/merch-3d/reports/screenshots/collector-box-001-mobile-front.png",
-      "sha256": "1f1b5fb0565cabe82fd3ee07c4e6383fb177084ec56274024a7894cbdc61d1fe",
+      "sha256": "bcef94e28dc9c155d840b2c39b1c566ecc175b561828fd776435fbb30698371d",
       "viewportPx": [
         390,
         844
       ],
-      "entropy": 2.9918,
+      "entropy": 2.8044,
       "errors": [],
       "loaded": true,
       "dimensionsM": [
@@ -247,24 +247,24 @@
       "cameraOrbit": {
         "theta": 0,
         "phi": 0.9773843811168246,
-        "radius": 0.8115823945763004
+        "radius": 0.9167939250036387
       },
       "foregroundBoundsPx": [
-        102,
-        20,
-        253,
-        196
+        112,
+        31,
+        243,
+        186
       ],
       "visualMarginsPx": [
-        102,
-        20,
-        102,
-        41
+        112,
+        31,
+        112,
+        51
       ],
-      "boneInteriorPixels": 13848,
-      "signalRedPixels": 785,
-      "signalRedRegions": 3,
-      "identityContrastPixels": 2162,
+      "boneInteriorPixels": 10741,
+      "signalRedPixels": 634,
+      "signalRedRegions": 2,
+      "identityContrastPixels": 1965,
       "analysisFramePx": [
         356,
         238
@@ -278,12 +278,12 @@
     {
       "view": "mobile-rear",
       "path": "tools/merch-3d/reports/screenshots/collector-box-001-mobile-rear.png",
-      "sha256": "3ec2800b450c6cb07bbf86d6dfee2249ae8ec200e98788e6ab416e26b636d36b",
+      "sha256": "3681a4a7d1c208fe2c0d3d4364f40dd2a541592766eb901683048f3b315526f3",
       "viewportPx": [
         390,
         844
       ],
-      "entropy": 2.0794,
+      "entropy": 2.0868,
       "errors": [],
       "loaded": true,
       "dimensionsM": [
@@ -300,19 +300,19 @@
       "cameraOrbit": {
         "theta": 3.141592653589793,
         "phi": 1.0122909661567112,
-        "radius": 0.8115823945763004
+        "radius": 0.9167939250036387
       },
       "foregroundBoundsPx": [
-        90,
-        74,
-        264,
-        174
+        103,
+        81,
+        252,
+        168
       ],
       "visualMarginsPx": [
-        90,
-        74,
-        91,
-        63
+        103,
+        81,
+        103,
+        69
       ],
       "boneInteriorPixels": 0,
       "signalRedPixels": 0,

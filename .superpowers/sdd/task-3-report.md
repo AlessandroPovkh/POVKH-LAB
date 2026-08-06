@@ -9,7 +9,7 @@ Collector correction implemented; clean integration verification remains pending
 - Reused the governed exact reverse identity raster for the lid card and zine mark; no identity was retyped or generated.
 - Increased product recognizability with a dark zine cover, smoke cassette/reel cues, smoke CD case plus silver disc, data-key connector cue and a Signal Red archive-sleeve stripe.
 - Kept hinge, dimensions, clearances and manufacturing internals explicitly provisional/non-machinable in source data, node extras and the build report.
-- Tuned desktop/mobile default cameras and updated only the collector viewer fields in `data/merch.json`.
+- Tuned desktop/mobile default cameras; the collector commit deliberately deferred `data/merch.json` to the combined catalog integrator.
 - Regenerated the deterministic GLB, validator/inspection/build reports, six browser views, readability crop and approved-open source comparison.
 
 ## TDD evidence
@@ -24,7 +24,7 @@ Initial GREEN verification (superseded by the Important review below):
 
 ```text
 node --test site/tools/merch-3d/collector-box-001.test.mjs
-4 tests passed, 0 failed
+3 tests passed, 1 catalog-binding test failed pending deferred `merch.json` integration
 
 node site/tools/merch-3d/build-collector-box-001.mjs --verify
 verified 2bf98876e57104cd434a6236b6c8ecc36b20fd7ad620832cdffda148e03d1249
@@ -54,14 +54,28 @@ Fresh correction evidence:
 
 ```text
 node --test site/tools/merch-3d/collector-box-001.test.mjs
-4 tests passed, 0 failed
+3 tests passed, 1 catalog-binding test failed on the exact scoped commit before combined catalog integration
 
 node site/tools/merch-3d/build-collector-box-001.mjs --verify
 verified 886f26820f6dcd5f6d4e2cc32d8a4840db2761d6d499191dae12b441c3b230e2
 271352 bytes, 934 runtime triangles, 9 runtime draw calls, 9 unique mesh primitives
 
 npm run build
-POVKH LAB site built: 345 files
+POVKH LAB site built: 342 files
 ```
 
 Khronos validation reports 0 errors and 0 warnings. Regenerated browser QA reports every semantic gate true across six required views, including mobile interior, separate archive-red and exact-identity contrast gates.
+
+## Supported mobile field-of-view correction
+
+Integration exposed that the viewer attribute declared `34deg` while `model-viewer.getFieldOfView()` clamped it to `30deg`. A new regression now compares every declared desktop/mobile field of view with the effective runtime value.
+
+The supported mobile camera records are:
+
+- default: orbit `25deg 58deg 145%`, target `auto 0.075m auto`, field of view `30deg`;
+- front: orbit `0deg 56deg 145%`, target `auto 0.075m auto`, field of view `30deg`;
+- rear: orbit `180deg 58deg 148%`, target `auto 0.075m auto`, field of view `30deg`.
+
+The radii did not require an increase: the former captures were already rendered at the runtime-clamped 30 degrees. With 30 degrees governed explicitly, regenerated margins improved to `[96, 25, 96, 37]` for mobile default and `[112, 31, 112, 51]` for mobile front, while interior, separate archive-red and identity-contrast gates remained true.
+
+This scoped correction does not edit `merch.json`. Captures were regenerated against the built page with only its generated/untracked collector mobile FOV changed to the pending integration value. Exact-commit collector verification therefore remains 3/4 until the catalog integrator changes the collector mobile FOV from 34 to 30 degrees; the other three collector tests, deterministic builder verification and capture gates pass. After the catalog owner applied that working-tree integration value, the combined-worktree collector run passed 4/4.
