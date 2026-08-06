@@ -19,8 +19,8 @@
   "geometry": {
     "scene": "Cap_001_Concept_Visualization",
     "pivot": "Cap_001_Centred_Grounded_Pivot",
-    "requiredNodes": ["Cap_Panel_01", "Cap_Panel_02", "Cap_Panel_03", "Cap_Panel_04", "Cap_Panel_05", "Cap_Panel_06", "Cap_Curved_Brim", "Cap_Top_Button", "Cap_Rear_Aperture_Rim", "Cap_Adjustment_Strap", "Cap_Adjustment_Keeper", "Cap_Front_Patch", "Cap_Patch_Mark"],
-    "features": ["six-panel crown with removed rear geometry", "curved dimensional brim", "top button", "unfilled rear through-aperture", "single bridging adjustment strap with keeper", "conformed bone front patch", "exact compact mark"]
+    "requiredNodes": ["Cap_Panel_01", "Cap_Panel_02", "Cap_Panel_03", "Cap_Panel_04", "Cap_Panel_05", "Cap_Panel_06", "Cap_Crown_Seams", "Cap_Crown_Creases", "Cap_Eyelets", "Cap_Curved_Brim", "Cap_Bill_Edge_Stitching", "Cap_Crown_Bill_Transition", "Cap_Top_Button", "Cap_Rear_Aperture_Rim", "Cap_Adjustment_Strap", "Cap_Adjustment_Keeper", "Cap_Front_Patch", "Cap_Patch_Border", "Cap_Patch_Mark"],
+    "features": ["six shaped crown panels with raised seam topology and subtle creases", "four embroidered eyelets", "doubly curved dimensional brim with two tonal stitch rows", "crown-to-bill transition", "top button", "unfilled anatomical rear through-aperture", "single bridging adjustment strap with keeper", "conformed bone front patch with integrated border", "exact compact mark"]
   },
   "artwork": {
     "path": "sources/cap-001/PVKH_COMPACT_DARK_KNOCKOUT_EXACT_1000x1000_v01.png",
@@ -32,12 +32,12 @@
     "registration": { "surfaceMm": [20, 20], "patchMm": [55, 28], "aspectRatio": "1:1", "side": "front-patch", "sourceUse": "full-image-no-crop-no-redraw" }
   },
   "materials": {
-    "crown": { "name": "MAT_CAP_WASHED_VOID_TWILL", "baseColor": [0.018, 0.019, 0.021, 1], "metallic": 0, "roughness": 0.95, "surface": "washed-twill-void" },
-    "seam": { "name": "MAT_CAP_TONAL_SEAM", "baseColor": [0.005, 0.006, 0.007, 1], "metallic": 0, "roughness": 0.98, "surface": "woven-seam-void" },
-    "patch": { "name": "MAT_CAP_BONE_PATCH", "baseColor": [0.82, 0.79, 0.71, 1], "metallic": 0, "roughness": 0.98, "surface": "woven-patch-bone" },
+    "crown": { "name": "MAT_CAP_WASHED_VOID_TWILL", "baseColor": [0.028, 0.030, 0.034, 1], "metallic": 0, "roughness": 0.95, "surface": "washed-twill-void", "doubleSided": false },
+    "seam": { "name": "MAT_CAP_TONAL_SEAM", "baseColor": [0.018, 0.020, 0.023, 1], "metallic": 0, "roughness": 0.98, "surface": "woven-seam-void", "doubleSided": false },
+    "patch": { "name": "MAT_CAP_BONE_PATCH", "baseColor": [0.82, 0.79, 0.71, 1], "metallic": 0, "roughness": 0.98, "surface": "woven-patch-bone", "doubleSided": false },
     "opening": { "name": "MAT_CAP_REAR_OPENING", "baseColor": [0.001, 0.001, 0.002, 1], "metallic": 0, "roughness": 1 },
     "hardware": { "name": "MAT_CAP_MATTE_HARDWARE", "baseColor": [0.04, 0.045, 0.05, 1], "metallic": 0.72, "roughness": 0.42 },
-    "artwork": { "name": "MAT_CAP_COMPACT_DARK_EXACT", "baseColor": [1, 1, 1, 1], "metallic": 0, "roughness": 0.9 }
+    "artwork": { "name": "MAT_CAP_COMPACT_DARK_EXACT", "baseColor": [1, 1, 1, 1], "metallic": 0, "roughness": 0.9, "doubleSided": false }
   },
   "poster": { "path": "assets/merch/cap-front.webp", "sha256": "89a7eb03898676f0c0e7c63f551380ec42fea52e677282c938d648a41029d45b", "role": "approved-concept-poster-not-texture" },
   "camera": {

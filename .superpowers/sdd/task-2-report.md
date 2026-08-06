@@ -79,3 +79,59 @@ The same `data/merch.json` staging includes the already-reviewed collector-box c
 ## Remaining concern
 
 No remaining concern exists in the three apparel GLBs or their catalog integration. All dimensional records remain explicit viewer envelopes and must be replaced by selected blanks, vendor proofs and measured approved samples before production.
+
+---
+
+## Task 6 apparel 3D release-quality refinement — 2026-08-06
+
+Status: DONE
+
+### Outcome
+
+The three apparel concepts were rebuilt from the original governed artwork bytes and reviewed again at native capture size.
+
+- The tee now has a tapered tubular body, continuous covered shoulder roots, flatter relaxed sleeves with open hems, a dark open collar cavity, a curved hem and a normal-offset exact 300 x 112.5 mm art surface.
+- The hoodie now reads as a hood-down garment: the rear exterior is a solid two-lobe drape with a centre seam, while the real opening turns upward into the neckline. The body, cuffs, waistband and exact rear art remain separately governed.
+- The cap now has six-panel crown construction, raised seams, crease cues, eyelets, bill edge stitching, a crown-to-bill transition and a genuinely omitted rear aperture bounded by a smooth rim and restrained lower strap/keeper.
+- Woven normal and roughness maps remain deterministic and subtle; dark materials were lifted enough to preserve form without washing out the near-black direction.
+
+The activated mobile viewer now withholds `ready` until the responsive camera profile has settled. Camera tests distinguish the declared FOV attribute from model-viewer's intentional aspect-adjusted effective FOV, preserving full portrait-canvas framing instead of forcing cropped renders.
+
+### Final artifacts
+
+| Model | GLB SHA-256 | Bytes | Triangles | Draw calls | Reopened bounds mm | Validator |
+| --- | --- | ---: | ---: | ---: | --- | --- |
+| t-shirt | `933668f46ff6f89532ef1eac7ae0ff1b6f69ed608c5b1ce545969a7e5a0be2b4` | 465,260 | 2,988 | 6 | 1136.800 x 1041.000 x 165.000 | 0 errors / 0 warnings |
+| hoodie | `dcdc70995f27079ad1f80931eeb3aa369a7c90dcdbca215825d7e5aabb828fbb` | 600,844 | 3,842 | 7 | 1179.024 x 1065.000 x 271.387 | 0 errors / 0 warnings |
+| cap | `2c52d94ecff7fa083f22afc0d7fb06db6bda764ede10b075fed2c23621fd84a3` | 3,565,776 | 38,090 | 19 | 269.862 x 266.000 x 382.500 | 0 errors / 0 warnings |
+
+All remain below the governed ceilings of 4,000,000 bytes, 80,000 triangles and 20 draw calls and rebuild byte-for-byte deterministically.
+
+### Final browser evidence
+
+| View | Size | SHA-256 |
+| --- | ---: | --- |
+| tee desktop default | 900 x 900 | `4d7e567ec43ad683d608ff3bb960286a79003d3a3fe7107b49ba08dabb6dd827` |
+| tee built mobile stage | 358 x 521 | `1e13397f22f4cea7c7574a324b20c67cf5ff4fda0afccdf144423aa502619284` |
+| hoodie desktop default | 900 x 900 | `4bca2903f7511f15d125622e45a59853453070979e5b7f6c8eed096d94d03cb9` |
+| hoodie desktop front cavity | 900 x 900 | `fa1dbf3f40c20ed8b0a03b339cc74b824a021c2bafb062a91643c4d79048e65f` |
+| hoodie built mobile stage | 358 x 521 | `b120f1444e6c39ba531b4d5735b12d1003182f9461daf9fe9bb8486526a878ac` |
+| cap desktop default | 900 x 900 | `d15c39eda8ecbab1720254f1cadd7cbcf74b441d6d5c18f46ba1902ea716e1a6` |
+| cap desktop rear aperture | 900 x 900 | `1c64a863208bb301a821698e95376a35ad02c2aaf4df7d01a8a1c018244f3d1e` |
+| cap built mobile stage | 358 x 521 | `9d2a8a9d7d07c4fef8ccaf14b18c78d1f22bd50c9084120ae669db231a333d24` |
+
+At the real 390 x 844 browser viewport, all three active stages are 358 x 521 px (356 x 518 rendered canvas), have zero horizontal overflow, preserve pointer orbit/reset behavior, make no third-party requests and pass every stored QA check. Foreground/artwork contrast pixels were tee 60,917/2,661, hoodie 63,471/6,670 and cap 43,425/29,449.
+
+Native-size review accepted the continuous tee shoulders and collar void, the hoodie-down rear and neckline cavity, and the cap's clean background-black aperture with no crown/detail fragments crossing it.
+
+### Final verification
+
+- `node --test site/tools/merch-3d/apparel-concept-models.test.mjs site/tools/merch-3d/apparel-concept-browser-qa.test.mjs` — 4/4 passed.
+- `node --test site/tests/merch-model-assets.test.mjs` — 5/5 passed.
+- `node --test --test-concurrency=1 site/tests/product-viewer-runtime.test.mjs site/tests/product-viewer-camera-browser.test.mjs site/tests/product-viewer-catalog-browser.test.mjs` — 11/11 passed. Serialization prevents the browser files from racing their shared `dist` rebuild.
+- `node site/tools/merch-3d/capture-apparel-concepts.mjs` — all three isolated and built-product-page evidence sets captured successfully.
+- `git diff --check` — passed.
+
+### Remaining concern
+
+The cap intentionally spends most of the current release budget (3.57 MB and 19 of 20 draw calls) to keep the rear aperture and crown rim smooth at inspection distance. It is within policy, but any future detail should replace or consolidate existing geometry rather than add another draw call. As before, all three assets remain concept visualizations and are not fit, construction or manufacturing references.

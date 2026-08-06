@@ -13,6 +13,10 @@ const deg = (value) => value * Math.PI / 180;
 const closeTo = (actual, expected, tolerance, label) => {
   assert.ok(Math.abs(actual - expected) <= tolerance, `${label}: expected ${expected}, received ${actual}`);
 };
+const adjustedFieldOfView = (declaredDegrees, idealAspect, renderedAspect) => {
+  const vertical = Math.tan(deg(declaredDegrees) / 2) * Math.max(1, idealAspect / renderedAspect);
+  return Math.atan(vertical) * 360 / Math.PI;
+};
 const governed = {
   desktop: {
     orbit: "18deg 70deg 103%",
@@ -53,6 +57,7 @@ const cameraState = (page, { pixels = false } = {}) => page.locator("model-viewe
   const target = model.getCameraTarget();
   const dimensions = model.getDimensions();
   const center = model.getBoundingBoxCenter();
+  const rect = model.getBoundingClientRect();
   let visiblePixels = null;
   if (includePixels) {
     const blob = await model.toBlob();
@@ -77,6 +82,8 @@ const cameraState = (page, { pixels = false } = {}) => page.locator("model-viewe
     },
     orbit: { theta: orbit.theta, phi: orbit.phi, radius: orbit.radius },
     fieldOfView: model.getFieldOfView(),
+    idealAspect: model.getIdealAspect(),
+    renderedAspect: rect.width / rect.height,
     target: { x: target.x, y: target.y, z: target.z },
     dimensions: { x: dimensions.x, y: dimensions.y, z: dimensions.z },
     center: { x: center.x, y: center.y, z: center.z },
@@ -92,7 +99,12 @@ const assertCamera = (state, profile, { pixels = false } = {}) => {
   });
   closeTo(state.orbit.theta, profile.theta, 0.002, "camera theta");
   closeTo(state.orbit.phi, profile.phi, 0.002, "camera phi");
-  closeTo(state.fieldOfView, profile.fieldOfViewNumber, 0.02, "field of view");
+  closeTo(
+    state.fieldOfView,
+    adjustedFieldOfView(profile.fieldOfViewNumber, state.idealAspect, state.renderedAspect),
+    0.02,
+    "aspect-adjusted field of view"
+  );
   assert.ok(Number.isFinite(state.orbit.radius) && state.orbit.radius > 0, "camera radius must be finite and positive");
   assert.ok(Object.values(state.target).every(Number.isFinite), "camera target must be finite");
   assert.ok(Object.values(state.dimensions).every((value) => Number.isFinite(value) && value > 0), "model dimensions must be finite and positive");
@@ -140,7 +152,6 @@ const activateCassette = async (context, viewport) => {
 test("applies governed desktop metadata, preserves pointer orbit on mobile switch, and resets the current profile", { timeout: 60_000 }, async () => {
   const context = await browser.newContext({ reducedMotion: "no-preference" });
   const page = await activateCassette(context, { width: 1440, height: 1000 });
-  await page.waitForFunction(() => Math.abs(document.querySelector("model-viewer")?.getFieldOfView() - 22) < 0.02);
   assertCamera(await cameraState(page, { pixels: true }), governed.desktop, { pixels: true });
 
   const box = await page.locator("model-viewer").boundingBox();
@@ -180,15 +191,19 @@ test("applies governed desktop metadata, preserves pointer orbit on mobile switc
   closeTo(switched.orbit.phi, interacted.orbit.phi, 0.015, "user phi after profile switch");
   assert.equal(switched.attributes.fieldOfView, governed.mobile.fieldOfView);
   assert.equal(switched.attributes.target, governed.mobile.target);
-  closeTo(switched.fieldOfView, governed.mobile.fieldOfViewNumber, 0.02, "mobile field of view after switch");
+  closeTo(
+    switched.fieldOfView,
+    adjustedFieldOfView(governed.mobile.fieldOfViewNumber, switched.idealAspect, switched.renderedAspect),
+    0.02,
+    "aspect-adjusted mobile field of view after switch"
+  );
   closeTo(switched.target.y, 0.078, 0.002, "mobile target after switch");
 
   await page.locator("[data-product-viewer-reset]").click();
   await page.waitForFunction((profile) => {
     const model = document.querySelector("model-viewer");
     return model?.getAttribute("camera-orbit") === profile.orbit
-      && Math.abs(model.getCameraOrbit().theta - profile.theta) < 0.002
-      && Math.abs(model.getFieldOfView() - profile.fieldOfViewNumber) < 0.02;
+      && Math.abs(model.getCameraOrbit().theta - profile.theta) < 0.002;
   }, governed.mobile);
   assertCamera(await cameraState(page), governed.mobile);
 
@@ -196,8 +211,7 @@ test("applies governed desktop metadata, preserves pointer orbit on mobile switc
   await page.waitForFunction((profile) => {
     const model = document.querySelector("model-viewer");
     return model?.getAttribute("camera-orbit") === profile.orbit
-      && Math.abs(model.getCameraOrbit().theta - profile.theta) < 0.002
-      && Math.abs(model.getFieldOfView() - profile.fieldOfViewNumber) < 0.02;
+      && Math.abs(model.getCameraOrbit().theta - profile.theta) < 0.002;
   }, governed.desktop);
   assertCamera(await cameraState(page), governed.desktop);
   await context.close();
@@ -206,7 +220,6 @@ test("applies governed desktop metadata, preserves pointer orbit on mobile switc
 test("activates the real cassette directly into the governed mobile profile", { timeout: 30_000 }, async () => {
   const context = await browser.newContext({ reducedMotion: "no-preference" });
   const page = await activateCassette(context, { width: 375, height: 812 });
-  await page.waitForFunction(() => Math.abs(document.querySelector("model-viewer")?.getFieldOfView() - 19) < 0.02);
   assertCamera(await cameraState(page, { pixels: true }), governed.mobile, { pixels: true });
   await context.close();
 });

@@ -21,29 +21,35 @@ const records = [
   {
     assetKey: "t-shirt-001",
     productId: "MRCH-005",
-    requiredNodes: ["T_Shirt_Draped_Shell", "T_Shirt_Collar", "T_Shirt_Seam_Cues", "T_Shirt_Front_Artwork"],
+    requiredNodes: ["T_Shirt_Draped_Shell", "T_Shirt_Collar", "T_Shirt_Collar_Interior", "T_Shirt_Sleeve_Hems", "T_Shirt_Curved_Hem", "T_Shirt_Front_Artwork"],
     artworkNode: "T_Shirt_Front_Artwork",
     fabricMaterial: "MAT_T_SHIRT_BONE_FABRIC",
     artworkSurfaceMm: [300, 112.5],
-    minimumBoundsMm: [800, 1000, 60]
+    minimumBoundsMm: [800, 1000, 110],
+    minimumFabricRgb: 0.70,
+    fabricDoubleSided: true
   },
   {
     assetKey: "hoodie-001",
     productId: "MRCH-006",
-    requiredNodes: ["Hoodie_Draped_Shell", "Hoodie_Integrated_Rib_Trim", "Hoodie_Open_Hood_Shell", "Hoodie_Hood_Centre_Seam", "Hoodie_Back_Artwork"],
+    requiredNodes: ["Hoodie_Draped_Shell", "Hoodie_Shaped_Cuffs", "Hoodie_Waistband", "Hoodie_Open_Hood_Shell", "Hoodie_Hood_Throat_Overlap", "Hoodie_Hood_Centre_Seam", "Hoodie_Back_Artwork"],
     artworkNode: "Hoodie_Back_Artwork",
     fabricMaterial: "MAT_HOODIE_VOID_FABRIC",
     artworkSurfaceMm: [300, 112.5],
-    minimumBoundsMm: [850, 1100, 100]
+    minimumBoundsMm: [850, 1050, 140],
+    minimumFabricRgb: 0.018,
+    fabricDoubleSided: true
   },
   {
     assetKey: "cap-001",
     productId: "MRCH-007",
-    requiredNodes: ["Cap_Panel_01", "Cap_Panel_02", "Cap_Panel_03", "Cap_Panel_04", "Cap_Panel_05", "Cap_Panel_06", "Cap_Curved_Brim", "Cap_Top_Button", "Cap_Rear_Aperture_Rim", "Cap_Adjustment_Strap", "Cap_Adjustment_Keeper", "Cap_Front_Patch", "Cap_Patch_Mark"],
+    requiredNodes: ["Cap_Panel_01", "Cap_Panel_02", "Cap_Panel_03", "Cap_Panel_04", "Cap_Panel_05", "Cap_Panel_06", "Cap_Crown_Seams", "Cap_Crown_Creases", "Cap_Eyelets", "Cap_Curved_Brim", "Cap_Bill_Edge_Stitching", "Cap_Crown_Bill_Transition", "Cap_Top_Button", "Cap_Rear_Aperture_Rim", "Cap_Adjustment_Strap", "Cap_Adjustment_Keeper", "Cap_Front_Patch", "Cap_Patch_Border", "Cap_Patch_Mark"],
     artworkNode: "Cap_Patch_Mark",
     fabricMaterial: "MAT_CAP_WASHED_VOID_TWILL",
     artworkSurfaceMm: [20, 20],
-    minimumBoundsMm: [220, 250, 300]
+    minimumBoundsMm: [220, 250, 300],
+    minimumFabricRgb: 0.020,
+    fabricDoubleSided: false
   }
 ];
 
@@ -132,6 +138,28 @@ const crownTrianglesInRearAperture = (nodes) => {
   return intrusions;
 };
 
+const rearFacingDetailTrianglesInAperture = (nodes, names) => {
+  let intrusions = 0;
+  for (const name of names) {
+    const primitive = nodes.get(name).getMesh().listPrimitives()[0];
+    const positions = primitive.getAttribute("POSITION").getArray();
+    const indices = primitive.getIndices().getArray();
+    for (let offset = 0; offset < indices.length; offset += 3) {
+      const points = [0, 1, 2].map((corner) => {
+        const vertex = indices[offset + corner] * 3;
+        return [positions[vertex], positions[vertex + 1], positions[vertex + 2]];
+      });
+      const centroid = points.reduce((result, point) => result.map((value, axis) => value + point[axis] / 3), [0, 0, 0]);
+      const ab = points[1].map((value, axis) => value - points[0][axis]);
+      const ac = points[2].map((value, axis) => value - points[0][axis]);
+      const faceZ = ab[0] * ac[1] - ab[1] * ac[0];
+      const inOpening = (centroid[0] / 0.057) ** 2 + ((centroid[1] - 0.115) / 0.049) ** 2 < 1;
+      if (centroid[2] > -0.060 && inOpening && faceZ < -1e-8) intrusions += 1;
+    }
+  }
+  return intrusions;
+};
+
 const faceNormalAgreement = (node) => {
   const primitive = node.getMesh().listPrimitives()[0];
   const positions = primitive.getAttribute("POSITION").getArray();
@@ -157,6 +185,62 @@ const faceNormalAgreement = (node) => {
     if (face[0] * averageNormal[0] + face[1] * averageNormal[1] + face[2] * averageNormal[2] <= 0) disagreeing += 1;
   }
   return disagreeing;
+};
+
+const projectedFrontCoverage = (node, samples) => {
+  const primitive = node.getMesh().listPrimitives()[0];
+  const positions = primitive.getAttribute("POSITION").getArray();
+  const indices = primitive.getIndices().getArray();
+  const insideTriangle = ([x, y], triangle) => {
+    const [[x1, y1], [x2, y2], [x3, y3]] = triangle;
+    const denominator = (y2 - y3) * (x1 - x3) + (x3 - x2) * (y1 - y3);
+    if (Math.abs(denominator) < 1e-9) return false;
+    const a = ((y2 - y3) * (x - x3) + (x3 - x2) * (y - y3)) / denominator;
+    const b = ((y3 - y1) * (x - x3) + (x1 - x3) * (y - y3)) / denominator;
+    const c = 1 - a - b;
+    return a >= -0.001 && b >= -0.001 && c >= -0.001;
+  };
+  return samples.map((sample) => {
+    for (let offset = 0; offset < indices.length; offset += 3) {
+      const triangle = [0, 1, 2].map((corner) => {
+        const vertex = indices[offset + corner] * 3;
+        return [positions[vertex], positions[vertex + 1]];
+      });
+      if (insideTriangle(sample, triangle)) return true;
+    }
+    return false;
+  });
+};
+
+const minimumProjectedClearance = (surfaceNode, garmentNode, side = "front") => {
+  const surfacePositions = surfaceNode.getMesh().listPrimitives()[0].getAttribute("POSITION").getArray();
+  const garmentPrimitive = garmentNode.getMesh().listPrimitives()[0];
+  const garmentPositions = garmentPrimitive.getAttribute("POSITION").getArray();
+  const garmentIndices = garmentPrimitive.getIndices().getArray();
+  let minimum = Infinity;
+  for (let surfaceOffset = 0; surfaceOffset < surfacePositions.length; surfaceOffset += 3) {
+    const point = [surfacePositions[surfaceOffset], surfacePositions[surfaceOffset + 1], surfacePositions[surfaceOffset + 2]];
+    const projectedDepths = [];
+    for (let indexOffset = 0; indexOffset < garmentIndices.length; indexOffset += 3) {
+      const triangle = [0, 1, 2].map((corner) => {
+        const vertex = garmentIndices[indexOffset + corner] * 3;
+        return [garmentPositions[vertex], garmentPositions[vertex + 1], garmentPositions[vertex + 2]];
+      });
+      const [[x1, y1], [x2, y2], [x3, y3]] = triangle;
+      const denominator = (y2 - y3) * (x1 - x3) + (x3 - x2) * (y1 - y3);
+      if (Math.abs(denominator) < 1e-9) continue;
+      const a = ((y2 - y3) * (point[0] - x3) + (x3 - x2) * (point[1] - y3)) / denominator;
+      const b = ((y3 - y1) * (point[0] - x3) + (x1 - x3) * (point[1] - y3)) / denominator;
+      const c = 1 - a - b;
+      if (a < -0.0001 || b < -0.0001 || c < -0.0001) continue;
+      projectedDepths.push(a * triangle[0][2] + b * triangle[1][2] + c * triangle[2][2]);
+    }
+    assert.ok(projectedDepths.length, "artwork vertex must project onto the garment shell");
+    const garmentDepth = side === "front" ? Math.max(...projectedDepths) : Math.min(...projectedDepths);
+    const clearance = side === "front" ? point[2] - garmentDepth : garmentDepth - point[2];
+    minimum = Math.min(minimum, clearance);
+  }
+  return minimum;
 };
 
 for (const record of records) {
@@ -188,12 +272,19 @@ for (const record of records) {
     assert.ok(Array.from(artworkPixels).filter((_, index) => index % 4 === 3).some((alpha) => alpha < 255), `${record.assetKey} exact art must preserve transparency`);
     assert.ok(doc.getRoot().listTextures().some((texture) => texture.getExtras().canonicalSourceSha256 === source.artwork.sha256));
     const artworkMaterial = nodes.get(record.artworkNode).getMesh().listPrimitives()[0].getMaterial();
+    const artworkUvs = Array.from(nodes.get(record.artworkNode).getMesh().listPrimitives()[0].getAttribute("TEXCOORD_0").getArray());
+    const uValues = artworkUvs.filter((_, index) => index % 2 === 0);
+    const vValues = artworkUvs.filter((_, index) => index % 2 === 1);
     assert.equal(artworkMaterial.getAlphaMode(), "BLEND", `${record.assetKey} artwork must composite without an opaque texture card`);
+    assert.deepEqual([Math.min(...uValues), Math.max(...uValues), Math.min(...vValues), Math.max(...vValues)], [0, 1, 0, 1], `${record.assetKey} artwork surface must map the complete approved source bbox without cropping`);
+    assert.ok(nodes.get(record.artworkNode).getExtras().normalOffsetMm >= 4, `${record.assetKey} artwork must clear the garment consistently along surface normals`);
     const fabricMaterial = doc.getRoot().listMaterials().find((material) => material.getName() === record.fabricMaterial);
     assert.equal(fabricMaterial.getExtras().surfaceResponse, "deterministic-woven-normal-and-roughness");
     assert.ok(fabricMaterial.getNormalTexture(), `${record.assetKey} fabric must include deterministic cloth normal response`);
     assert.ok(fabricMaterial.getMetallicRoughnessTexture(), `${record.assetKey} fabric must include deterministic roughness variation`);
     assert.ok(fabricMaterial.getNormalScale() <= 0.03, `${record.assetKey} cloth normal must remain subtle at full-garment framing`);
+    assert.equal(fabricMaterial.getDoubleSided(), record.fabricDoubleSided, `${record.assetKey} cloth sidedness must preserve garment interiors without filling the cap aperture`);
+    assert.ok(fabricMaterial.getBaseColorFactor().slice(0, 3).every((value) => value >= record.minimumFabricRgb), `${record.assetKey} fabric must retain readable dark-on-dark tonal separation`);
     if (record.assetKey !== "cap-001") assert.ok(distinctAxisValues(nodes.get(record.artworkNode), 2) >= 5, `${record.assetKey} artwork must conform to a curved surface`);
     sizeMm.forEach((value, axis) => assert.ok(value >= record.minimumBoundsMm[axis], `${record.assetKey} axis ${axis} is not meaningfully volumetric: ${value} mm`));
     sizeMm.forEach((value, axis) => {
@@ -225,22 +316,50 @@ for (const record of records) {
       const shellBounds = getBounds(shell);
       assert.equal(connectedTriangleComponents(shell), 1, "t-shirt body, shoulders and sleeves must be one connected shell");
       assert.ok(distinctAxisValues(shell, 2) >= 8, "t-shirt shell must carry shaped cloth depth");
-      assert.ok((shellBounds.max[2] - shellBounds.min[2]) / (shellBounds.max[0] - shellBounds.min[0]) < 0.15, "t-shirt must read as flattened hanging cloth rather than assembled tubes");
-      assert.equal(shell.getExtras().construction, "unified-draped-front-back-shell");
+      const depthRatio = (shellBounds.max[2] - shellBounds.min[2]) / (shellBounds.max[0] - shellBounds.min[0]);
+      assert.ok(depthRatio >= 0.11 && depthRatio <= 0.20, "t-shirt must carry relaxed torso and sleeve depth without becoming a rigid tube");
+      assert.equal(shell.getExtras().construction, "tailored-torso-attached-sleeves");
+      assert.ok(shell.getExtras().shoulderDropM >= 0.06, "t-shirt must preserve a natural oversized shoulder drop");
+      assert.equal(shell.getExtras().sleeveAttachment, "explicit-bridge-patches");
+      assert.equal(shell.getExtras().armholeCoverage, "continuous-torso-shoulders-over-underlapping-sleeve-roots");
+      assert.ok(projectedFrontCoverage(shell, [[0.275, 0.970], [0.305, 0.958], [0.345, 0.945], [-0.275, 0.970], [-0.305, 0.958], [-0.345, 0.945]]).every(Boolean), "t-shirt front shoulder projection must not expose triangular armhole gaps");
+      assert.ok(triangleCount(shell) >= 1200, "t-shirt tailored shell must have enough sections for shaped torso and sleeve transitions");
+      assert.equal(nodes.get("T_Shirt_Collar").getExtras().opening, "unfilled-neckline");
+      assert.ok(nodes.get("T_Shirt_Collar").getExtras().frontDropM >= 0.03, "t-shirt collar must expose a readable dropped front opening");
+      assert.ok(nodes.get("T_Shirt_Collar").getExtras().innerDepthM >= 0.045, "t-shirt collar cavity must not collapse to a flat lip");
+      assert.equal(nodes.get("T_Shirt_Collar_Interior").getExtras().opening, "unfilled-dark-cavity");
+      assert.equal(nodes.get("T_Shirt_Sleeve_Hems").getExtras().opening, "unfilled-cuff-rims");
+      assert.equal(nodes.get("T_Shirt_Curved_Hem").getExtras().profile, "level-curved-drape");
+      const artworkClearance = minimumProjectedClearance(nodes.get("T_Shirt_Front_Artwork"), shell, "front");
+      assert.ok(artworkClearance >= 0.006, `every artwork mesh section spanning the approved source mask must clear the torso by at least 6 mm; got ${(artworkClearance * 1000).toFixed(3)} mm`);
       assert.equal(faceNormalAgreement(shell), 0, "t-shirt shell winding must agree with its vertex normals");
     }
     if (record.assetKey === "hoodie-001") {
       const shell = nodes.get("Hoodie_Draped_Shell");
       const hood = nodes.get("Hoodie_Open_Hood_Shell");
       assert.equal(connectedTriangleComponents(shell), 1, "hoodie body, shoulders and sleeves must be one connected shell");
-      assert.equal(shell.getExtras().construction, "unified-draped-front-back-shell");
+      assert.equal(shell.getExtras().construction, "tailored-torso-attached-sleeves");
+      assert.equal(shell.getExtras().sleeveAttachment, "explicit-bridge-patches");
+      assert.equal(shell.getExtras().armholeCoverage, "continuous-torso-shoulders-over-underlapping-sleeve-roots");
+      assert.ok(projectedFrontCoverage(shell, [[0.270, 0.995], [0.320, 0.970], [0.350, 0.940], [-0.270, 0.995], [-0.320, 0.970], [-0.350, 0.940]]).every(Boolean), "hoodie front shoulder projection must not expose triangular armhole gaps");
+      assert.ok(triangleCount(shell) >= 1800, "hoodie shell must have enough shaped sections for body, sleeves and shoulders");
       assert.ok(boundaryEdgeCount(hood) >= 24, "hood must preserve a real open face cavity");
       assert.equal(hood.getExtras().opening, "unfilled-face-cavity");
+      assert.equal(hood.getExtras().construction, "attached-two-panel-down-hood");
+      assert.equal(hood.getExtras().panelCount, 2);
+      assert.equal(hood.getExtras().orientation, "down-resting-on-upper-back");
+      assert.equal(hood.getExtras().openingPlane, "upward-forward-neckline");
+      assert.equal(hood.getExtras().rearExterior, "solid-two-lobe-panel");
+      assert.ok(hood.getExtras().necklineOverlapM >= 0.08, "hood must visibly drape into the neckline and shoulders");
+      assert.ok(hood.getExtras().shoulderDrapeWidthM >= 0.50, "down hood must spread as two fabric lobes across the upper back");
       assert.equal(connectedTriangleComponents(hood), 1, "hood back, side walls and opening rim must remain attached");
       const hoodBounds = getBounds(hood);
       const hoodAspect = (hoodBounds.max[0] - hoodBounds.min[0]) / (hoodBounds.max[1] - hoodBounds.min[1]);
-      assert.ok(hoodAspect >= 1.25 && hoodAspect <= 1.45, "hood silhouette must be taller and garment-like rather than a horizontal halo or sphere");
-      assert.ok(hoodBounds.min[1] <= 0.98, "hood must drape into and overlap the body neckline rather than float above it");
+      assert.ok(hoodAspect >= 1.45 && hoodAspect <= 1.95, "down hood must read as a broad folded garment lobe rather than an upright halo or sphere");
+      assert.ok(hoodBounds.min[1] <= 0.80, "down hood must rest low enough on the upper back to read as attached drape");
+      assert.equal(nodes.get("Hoodie_Hood_Throat_Overlap").getExtras().construction, "overlapped-neckline-fold");
+      assert.equal(nodes.get("Hoodie_Shaped_Cuffs").getExtras().opening, "unfilled-cuff-rims");
+      assert.equal(nodes.get("Hoodie_Waistband").getExtras().integration, "conforming-body-overlap");
       for (const name of ["Hoodie_Draped_Shell", "Hoodie_Open_Hood_Shell"]) assert.equal(faceNormalAgreement(nodes.get(name)), 0, `${name} winding must agree with its vertex normals`);
     }
     if (record.assetKey === "cap-001") {
@@ -256,9 +375,18 @@ for (const record of records) {
       assert.ok(distinctAxisValues(nodes.get("Cap_Front_Patch"), 2) >= 5, "cap patch must conform to the crown instead of remaining a flat box");
       assert.ok(patchBounds.min[2] >= 0.112, "cap patch must stand proud of the crown instead of being occluded by it");
       assert.ok(markBounds.min[2] - patchBounds.max[2] >= 0.001, "cap mark must clear the patch surface without z-fighting");
+      assert.deepEqual(nodes.get("Cap_Crown_Seams").getExtras(), { role: "raised-tonal-panel-seams", panelCount: 6 });
+      assert.equal(nodes.get("Cap_Crown_Creases").getExtras().role, "subtle-panel-form-creases");
+      assert.equal(nodes.get("Cap_Eyelets").getExtras().count, 4);
+      assert.equal(nodes.get("Cap_Curved_Brim").getExtras().curvatureAxes, 2);
+      assert.equal(nodes.get("Cap_Bill_Edge_Stitching").getExtras().rows, 2);
+      assert.equal(nodes.get("Cap_Crown_Bill_Transition").getExtras().role, "front-crown-bill-join");
+      assert.equal(nodes.get("Cap_Patch_Border").getExtras().integration, "stitched-conforming-border");
       assert.equal(nodes.has("Cap_Rear_Opening"), false, "a filled dark rear-opening ellipse must never masquerade as topology");
       assert.equal(crownTrianglesInRearAperture(nodes), 0, "cap crown geometry must be removed inside the rear aperture");
       assert.equal(nodes.get("Cap_Rear_Aperture_Rim").getExtras().opening, "unfilled-through-aperture");
+      assert.equal(rearFacingDetailTrianglesInAperture(nodes, ["Cap_Crown_Seams", "Cap_Crown_Creases", "Cap_Eyelets", "Cap_Crown_Bill_Transition", "Cap_Front_Patch", "Cap_Patch_Border", "Cap_Patch_Mark"]), 0, "no front detail may render as a rear-facing fragment inside the clear aperture projection");
+      for (const name of ["Cap_Front_Patch", "Cap_Patch_Border", "Cap_Patch_Mark"]) assert.equal(nodes.get(name).getMesh().listPrimitives()[0].getMaterial().getDoubleSided(), false, `${name} must be culled from the rear opening`);
       const apertureBounds = getBounds(nodes.get("Cap_Rear_Aperture_Rim"));
       const strapBounds = getBounds(nodes.get("Cap_Adjustment_Strap"));
       assert.ok(strapBounds.min[0] <= apertureBounds.min[0] && strapBounds.max[0] >= apertureBounds.max[0], "adjustment strap must bridge the real crown aperture");

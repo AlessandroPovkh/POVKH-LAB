@@ -207,6 +207,8 @@ const activateModel = async (root, elements, routeSignal) => {
   const model = document.createElement("model-viewer");
   const mobileCamera = window.matchMedia("(max-width: 640px)");
   let userAdjustedOrbit = false;
+  let applyingCameraProfile = false;
+  let cameraProfileRevision = 0;
   const applyCameraProfile = ({ preserveUserOrbit = false, jump = true } = {}) => {
     const preservedOrbit = preserveUserOrbit ? model.getCameraOrbit?.() : null;
     const profile = cameraProfileFor(root, mobileCamera.matches);
@@ -219,6 +221,26 @@ const activateModel = async (root, elements, routeSignal) => {
       model.setAttribute("camera-orbit", profile.orbit);
     }
     if (jump) model.jumpCameraToGoal?.();
+  };
+  const nextFrame = () => new Promise((resolve) => requestAnimationFrame(resolve));
+  const settleCameraProfile = async ({ preserveUserOrbit = false } = {}) => {
+    const revision = ++cameraProfileRevision;
+    await nextFrame();
+    await nextFrame();
+    if (signal.aborted || !model.isConnected || revision !== cameraProfileRevision) return;
+
+    applyingCameraProfile = true;
+    applyCameraProfile({ preserveUserOrbit });
+    await model.updateComplete;
+    model.jumpCameraToGoal?.();
+    await model.updateComplete;
+    await nextFrame();
+    if (signal.aborted || !model.isConnected || revision !== cameraProfileRevision) {
+      applyingCameraProfile = false;
+      return;
+    }
+
+    applyingCameraProfile = false;
   };
   model.className = "product-viewer-model";
   model.setAttribute("camera-controls", "");
@@ -251,12 +273,14 @@ const activateModel = async (root, elements, routeSignal) => {
     const suffix = Number.isFinite(progress) ? ` ${Math.round(progress * 100)}%` : "";
     elements.status.textContent = `${stateCopy(root, "viewerLoading", "Loading object")}${suffix}`;
   }, { signal });
-  model.addEventListener("load", () => {
+  model.addEventListener("load", async () => {
     if (signal.aborted) return;
     if (!hasRenderableBounds(model)) {
       fail();
       return;
     }
+    await settleCameraProfile();
+    if (signal.aborted || !model.isConnected) return;
     showReady(root, elements);
     const input = model.shadowRoot?.querySelector(".userInput");
     input?.setAttribute("aria-describedby", elements.instructions.id);
@@ -265,14 +289,14 @@ const activateModel = async (root, elements, routeSignal) => {
   }, { signal });
   model.addEventListener("error", fail, { signal });
   model.addEventListener("camera-change", (event) => {
-    if (event.detail?.source === "user-interaction") userAdjustedOrbit = true;
+    if (!applyingCameraProfile && event.detail?.source === "user-interaction") userAdjustedOrbit = true;
   }, { signal });
   mobileCamera.addEventListener("change", () => {
-    applyCameraProfile({ preserveUserOrbit: userAdjustedOrbit });
+    settleCameraProfile({ preserveUserOrbit: userAdjustedOrbit });
   }, { signal });
   elements.reset.addEventListener("click", () => {
     userAdjustedOrbit = false;
-    applyCameraProfile();
+    settleCameraProfile();
     (model.shadowRoot?.querySelector(".userInput") || model).focus({ preventScroll: true });
   }, { signal });
 

@@ -34,8 +34,8 @@
       "authority": "provisional-viewer-envelope-not-production-dimensions",
       "viewerEnvelopeMm": [
         1180,
-        1340,
-        198
+        1076,
+        272
       ],
       "replacementGate": "selected vendor blank, measured approved sample and size-specific tech pack"
     },
@@ -44,19 +44,21 @@
       "pivot": "Hoodie_001_Centred_Grounded_Pivot",
       "requiredNodes": [
         "Hoodie_Draped_Shell",
-        "Hoodie_Integrated_Rib_Trim",
+        "Hoodie_Shaped_Cuffs",
+        "Hoodie_Waistband",
         "Hoodie_Open_Hood_Shell",
+        "Hoodie_Hood_Throat_Overlap",
         "Hoodie_Hood_Centre_Seam",
         "Hoodie_Back_Artwork"
       ],
       "features": [
-        "unified draped front/back shell",
-        "continuous shoulders and long sleeves",
-        "gapless integrated rib hem and cuffs",
-        "open draped hood with unfilled face cavity and body attachment",
-        "rear centre seam",
+        "tailored tubular torso with attached shaped long sleeves",
+        "explicit internal shoulder bridge patches",
+        "conforming open rib cuffs and waistband",
+        "attached two-panel hood down with two upper-back fabric lobes",
+        "upward neckline-facing unfilled cavity, overlapped neckline fold and rear centre seam",
         "readable front and back",
-        "back artwork surface"
+        "exact back artwork surface"
       ]
     },
     "artwork": {
@@ -83,9 +85,9 @@
       "fabric": {
         "name": "MAT_HOODIE_VOID_FABRIC",
         "baseColor": [
-          0.012,
-          0.013,
-          0.016,
+          0.024,
+          0.026,
+          0.032,
           1
         ],
         "metallic": 0,
@@ -95,9 +97,9 @@
       "rib": {
         "name": "MAT_HOODIE_VOID_RIB",
         "baseColor": [
-          0.006,
-          0.007,
-          0.009,
+          0.018,
+          0.02,
+          0.025,
           1
         ],
         "metallic": 0,
@@ -107,9 +109,9 @@
       "hoodInterior": {
         "name": "MAT_HOODIE_HOOD_INTERIOR",
         "baseColor": [
-          0.002,
-          0.002,
-          0.003,
+          0.01,
+          0.011,
+          0.014,
           1
         ],
         "metallic": 0,
@@ -174,15 +176,19 @@
       "nodes": [
         "Hoodie_001_Centred_Grounded_Pivot",
         "Hoodie_Draped_Shell",
-        "Hoodie_Integrated_Rib_Trim",
+        "Hoodie_Shaped_Cuffs",
+        "Hoodie_Waistband",
         "Hoodie_Open_Hood_Shell",
+        "Hoodie_Hood_Throat_Overlap",
         "Hoodie_Hood_Centre_Seam",
         "Hoodie_Back_Artwork"
       ],
       "meshes": [
         "Hoodie_Draped_Shell_Mesh",
-        "Hoodie_Integrated_Rib_Trim_Mesh",
+        "Hoodie_Shaped_Cuffs_Mesh",
+        "Hoodie_Waistband_Mesh",
         "Hoodie_Open_Hood_Shell_Mesh",
+        "Hoodie_Hood_Throat_Overlap_Mesh",
         "Hoodie_Hood_Centre_Seam_Mesh",
         "Hoodie_Back_Artwork_Mesh"
       ],
@@ -207,19 +213,19 @@
     "method": "reopened-glb-bounds-node-and-texture-metadata",
     "boundsMm": {
       "min": [
-        -589.9999737739563,
+        -589.5118117332458,
         0,
-        -112.0000034570694
+        -174.99999701976776
       ],
       "max": [
-        589.9999737739563,
-        1340.000033378601,
-        86.0000029206276
+        589.5118117332458,
+        1065.000057220459,
+        96.38719260692596
       ],
       "size": [
-        1179.9999475479126,
-        1340.000033378601,
-        198.000006377697
+        1179.0236234664917,
+        1065.000057220459,
+        271.3871896266937
       ]
     },
     "geometryPurpose": "volumetric placement and front/back readability",
@@ -269,9 +275,9 @@
     "hints": 0
   },
   "budget": {
-    "triangles": 720,
-    "drawCalls": 5,
-    "bytes": 272004,
+    "triangles": 3842,
+    "drawCalls": 7,
+    "bytes": 600844,
     "ceilings": {
       "maxBytes": 4000000,
       "maxTriangles": 80000,
@@ -280,7 +286,7 @@
   },
   "output": {
     "path": "assets/merch-3d/hoodie-001.glb",
-    "sha256": "4cd3c0f4e9ce8f83a8fdab397c4aa11fa38ff90b236b96cc17ced205300d8d18"
+    "sha256": "dcdc70995f27079ad1f80931eeb3aa369a7c90dcdbca215825d7e5aabb828fbb"
   },
   "deterministic": {
     "verifiedBySecondInMemoryBuild": true

@@ -440,8 +440,8 @@
         "kind": "glb",
         "poster": "assets/merch/t-shirt-front.webp",
         "src": "assets/merch-3d/t-shirt-001.glb",
-        "cameraOrbit": { "desktop": "25deg 78deg 115%", "mobile": "18deg 80deg 108%" },
-        "fieldOfView": { "desktop": "24deg", "mobile": "20deg" },
+        "cameraOrbit": { "desktop": "8deg 78deg 113%", "mobile": "6deg 80deg 107%" },
+        "fieldOfView": { "desktop": "23deg", "mobile": "20deg" },
         "cameraTarget": { "desktop": "auto 0.550m auto", "mobile": "auto 0.530m auto" },
         "alt": {
           "en": "3D concept visualization of a relaxed bone T-shirt with exact front artwork; not a manufacturing reference.",

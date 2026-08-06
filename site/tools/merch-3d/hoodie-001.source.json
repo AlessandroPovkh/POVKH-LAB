@@ -13,14 +13,14 @@
   },
   "dimensions": {
     "authority": "provisional-viewer-envelope-not-production-dimensions",
-    "viewerEnvelopeMm": [1180, 1340, 198],
+    "viewerEnvelopeMm": [1180, 1076, 272],
     "replacementGate": "selected vendor blank, measured approved sample and size-specific tech pack"
   },
   "geometry": {
     "scene": "Hoodie_001_Concept_Visualization",
     "pivot": "Hoodie_001_Centred_Grounded_Pivot",
-    "requiredNodes": ["Hoodie_Draped_Shell", "Hoodie_Integrated_Rib_Trim", "Hoodie_Open_Hood_Shell", "Hoodie_Hood_Centre_Seam", "Hoodie_Back_Artwork"],
-    "features": ["unified draped front/back shell", "continuous shoulders and long sleeves", "gapless integrated rib hem and cuffs", "open draped hood with unfilled face cavity and body attachment", "rear centre seam", "readable front and back", "back artwork surface"]
+    "requiredNodes": ["Hoodie_Draped_Shell", "Hoodie_Shaped_Cuffs", "Hoodie_Waistband", "Hoodie_Open_Hood_Shell", "Hoodie_Hood_Throat_Overlap", "Hoodie_Hood_Centre_Seam", "Hoodie_Back_Artwork"],
+    "features": ["tailored tubular torso with attached shaped long sleeves", "explicit internal shoulder bridge patches", "conforming open rib cuffs and waistband", "attached two-panel hood down with two upper-back fabric lobes", "upward neckline-facing unfilled cavity, overlapped neckline fold and rear centre seam", "readable front and back", "exact back artwork surface"]
   },
   "artwork": {
     "path": "sources/hoodie-001/PVKH_ASCII_REVERSE_EXACT_1600x600_v01.png",
@@ -32,9 +32,9 @@
     "registration": { "surfaceMm": [300, 112.5], "aspectRatio": "8:3", "side": "back", "sourceUse": "full-image-no-crop-no-redraw" }
   },
   "materials": {
-    "fabric": { "name": "MAT_HOODIE_VOID_FABRIC", "baseColor": [0.012, 0.013, 0.016, 1], "metallic": 0, "roughness": 0.94, "surface": "washed-fleece-void" },
-    "rib": { "name": "MAT_HOODIE_VOID_RIB", "baseColor": [0.006, 0.007, 0.009, 1], "metallic": 0, "roughness": 0.98, "surface": "rib-knit-void" },
-    "hoodInterior": { "name": "MAT_HOODIE_HOOD_INTERIOR", "baseColor": [0.002, 0.002, 0.003, 1], "metallic": 0, "roughness": 1, "surface": "washed-fleece-void" },
+    "fabric": { "name": "MAT_HOODIE_VOID_FABRIC", "baseColor": [0.024, 0.026, 0.032, 1], "metallic": 0, "roughness": 0.94, "surface": "washed-fleece-void" },
+    "rib": { "name": "MAT_HOODIE_VOID_RIB", "baseColor": [0.018, 0.020, 0.025, 1], "metallic": 0, "roughness": 0.98, "surface": "rib-knit-void" },
+    "hoodInterior": { "name": "MAT_HOODIE_HOOD_INTERIOR", "baseColor": [0.010, 0.011, 0.014, 1], "metallic": 0, "roughness": 1, "surface": "washed-fleece-void" },
     "artwork": { "name": "MAT_HOODIE_ASCII_REVERSE_EXACT", "baseColor": [1, 1, 1, 1], "metallic": 0, "roughness": 0.9 }
   },
   "poster": { "path": "assets/merch/hoodie-rear.webp", "sha256": "d46462cbac738c17c4f4aaddb1ba1fc7c35f13ebe09cc70d967377927219aefa", "role": "approved-concept-poster-not-texture" },

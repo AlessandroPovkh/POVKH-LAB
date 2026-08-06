@@ -8,18 +8,18 @@
           "name": "Hoodie_001_Concept_Visualization",
           "rootName": "Hoodie_001_Centred_Grounded_Pivot",
           "bboxMin": [
-            -0.59,
+            -0.58951,
             0,
-            -0.112
+            -0.175
           ],
           "bboxMax": [
-            0.59,
-            1.34,
-            0.086
+            0.58951,
+            1.065,
+            0.09639
           ],
-          "renderVertexCount": 2160,
-          "uploadVertexCount": 1768,
-          "uploadNaiveVertexCount": 1768
+          "renderVertexCount": 11526,
+          "uploadVertexCount": 7780,
+          "uploadNaiveVertexCount": 7780
         }
       ]
     },
@@ -31,8 +31,8 @@
             "TRIANGLES"
           ],
           "meshPrimitives": 1,
-          "glPrimitives": 348,
-          "vertices": 868,
+          "glPrimitives": 2468,
+          "vertices": 4992,
           "indices": [
             "u32"
           ],
@@ -43,16 +43,16 @@
             "TEXCOORD_0:f32"
           ],
           "instances": 1,
-          "size": 45840
+          "size": 269232
         },
         {
-          "name": "Hoodie_Integrated_Rib_Trim_Mesh",
+          "name": "Hoodie_Shaped_Cuffs_Mesh",
           "mode": [
             "TRIANGLES"
           ],
           "meshPrimitives": 1,
-          "glPrimitives": 12,
-          "vertices": 36,
+          "glPrimitives": 336,
+          "vertices": 672,
           "indices": [
             "u32"
           ],
@@ -63,7 +63,27 @@
             "TEXCOORD_0:f32"
           ],
           "instances": 1,
-          "size": 1872
+          "size": 36288
+        },
+        {
+          "name": "Hoodie_Waistband_Mesh",
+          "mode": [
+            "TRIANGLES"
+          ],
+          "meshPrimitives": 1,
+          "glPrimitives": 144,
+          "vertices": 288,
+          "indices": [
+            "u32"
+          ],
+          "attributes": [
+            "NORMAL:f32",
+            "POSITION:f32",
+            "TANGENT:f32",
+            "TEXCOORD_0:f32"
+          ],
+          "instances": 1,
+          "size": 15552
         },
         {
           "name": "Hoodie_Open_Hood_Shell_Mesh",
@@ -71,8 +91,8 @@
             "TRIANGLES"
           ],
           "meshPrimitives": 1,
-          "glPrimitives": 240,
-          "vertices": 624,
+          "glPrimitives": 442,
+          "vertices": 924,
           "indices": [
             "u32"
           ],
@@ -83,7 +103,27 @@
             "TEXCOORD_0:f32"
           ],
           "instances": 1,
-          "size": 32832
+          "size": 49656
+        },
+        {
+          "name": "Hoodie_Hood_Throat_Overlap_Mesh",
+          "mode": [
+            "TRIANGLES"
+          ],
+          "meshPrimitives": 1,
+          "glPrimitives": 320,
+          "vertices": 640,
+          "indices": [
+            "u32"
+          ],
+          "attributes": [
+            "NORMAL:f32",
+            "POSITION:f32",
+            "TANGENT:f32",
+            "TEXCOORD_0:f32"
+          ],
+          "instances": 1,
+          "size": 34560
         },
         {
           "name": "Hoodie_Hood_Centre_Seam_Mesh",
@@ -91,8 +131,8 @@
             "TRIANGLES"
           ],
           "meshPrimitives": 1,
-          "glPrimitives": 24,
-          "vertices": 48,
+          "glPrimitives": 36,
+          "vertices": 72,
           "indices": [
             "u32"
           ],
@@ -103,7 +143,7 @@
             "TEXCOORD_0:f32"
           ],
           "instances": 1,
-          "size": 2592
+          "size": 3888
         },
         {
           "name": "Hoodie_Back_Artwork_Mesh",
@@ -145,17 +185,17 @@
             "metallicRoughnessTexture"
           ],
           "alphaMode": "OPAQUE",
-          "doubleSided": false
+          "doubleSided": true
         },
         {
           "name": "MAT_HOODIE_VOID_RIB",
-          "instances": 2,
+          "instances": 4,
           "textures": [
             "normalTexture",
             "metallicRoughnessTexture"
           ],
           "alphaMode": "OPAQUE",
-          "doubleSided": false
+          "doubleSided": true
         },
         {
           "name": "MAT_HOODIE_HOOD_INTERIOR",
@@ -165,7 +205,7 @@
             "metallicRoughnessTexture"
           ],
           "alphaMode": "OPAQUE",
-          "doubleSided": false
+          "doubleSided": true
         }
       ]
     },

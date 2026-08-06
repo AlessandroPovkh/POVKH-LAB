@@ -9,60 +9,60 @@
       "view": "desktop-default",
       "surface": "isolated-model-viewer",
       "path": "tools/merch-3d/reports/screenshots/t-shirt-001-desktop-default.png",
-      "sha256": "63846ae66a02d83a3c3fd39c8bf38ef5b6a62f4672bde236efa3daaaba8f6ec4",
+      "sha256": "4d7e567ec43ad683d608ff3bb960286a79003d3a3fe7107b49ba08dabb6dd827",
       "viewportPx": [
         900,
         900
       ],
       "camera": {
-        "orbit": "25deg 78deg 115%",
+        "orbit": "8deg 78deg 113%",
         "target": "auto 0.550m auto",
-        "fieldOfView": "24deg"
+        "fieldOfView": "23deg"
       },
       "errors": [],
       "loaded": true,
       "modelIsVisible": true,
       "dimensionsM": [
-        1.059999942779541,
-        1.0399999618530273,
-        0.10850000008940697
+        1.1368001699447632,
+        1.0410000085830688,
+        0.16499999910593033
       ],
       "centreM": [
         0,
-        0.5199999809265137,
-        0.0022499989718198776
+        0.5205000042915344,
+        0.0025000013411045074
       ],
       "cameraOrbit": {
-        "theta": 0.4363323129985824,
+        "theta": 0.13962634015954636,
         "phi": 1.361356816555577,
-        "radius": 2.9763703679725184
+        "radius": 3.2610789938026876
       },
-      "fieldOfViewDeg": 24.000000000000004,
-      "foregroundPixels": 354542,
+      "fieldOfViewDeg": 23,
+      "foregroundPixels": 342802,
       "foregroundBoundsPx": [
-        114,
-        95,
-        832,
-        847
+        71,
+        110,
+        846,
+        817
       ],
       "visualMarginsPx": [
-        114,
-        95,
-        67,
-        52
+        71,
+        110,
+        53,
+        82
       ]
     },
     {
       "view": "mobile-default",
       "surface": "isolated-model-viewer",
       "path": "tools/merch-3d/reports/screenshots/t-shirt-001-mobile-default.png",
-      "sha256": "7fc643f3e15cd4dbe3f3ac43886a8265902dadb7cc8fa9d040793bb1b6c4c716",
+      "sha256": "30ddb92bfccb4387e9e98f5bfc92a31bacfe6026d5ea6f80892af4b06553b920",
       "viewportPx": [
         390,
         600
       ],
       "camera": {
-        "orbit": "18deg 80deg 108%",
+        "orbit": "6deg 80deg 107%",
         "target": "auto 0.530m auto",
         "fieldOfView": "20deg"
       },
@@ -70,33 +70,33 @@
       "loaded": true,
       "modelIsVisible": true,
       "dimensionsM": [
-        1.059999942779541,
-        1.0399999618530273,
-        0.10850000008940697
+        1.1368001699447632,
+        1.0410000085830688,
+        0.16499999910593033
       ],
       "centreM": [
         0,
-        0.5199999809265137,
-        0.0022499989718198776
+        0.5205000042915344,
+        0.0025000013411045074
       ],
       "cameraOrbit": {
-        "theta": 0.3141592653589793,
+        "theta": 0.10471975511965977,
         "phi": 1.3962634015954636,
-        "radius": 3.5370158811028722
+        "radius": 3.7139994355796198
       },
-      "fieldOfViewDeg": 29.245569702928126,
-      "foregroundPixels": 76956,
+      "fieldOfViewDeg": 29.645889628433594,
+      "foregroundPixels": 70342,
       "foregroundBoundsPx": [
-        32,
-        132,
-        370,
-        473
+        23,
+        141,
+        372,
+        460
       ],
       "visualMarginsPx": [
-        32,
-        132,
-        19,
-        126
+        23,
+        141,
+        17,
+        139
       ]
     },
     {
@@ -121,7 +121,7 @@
       "surface": "built-product-page",
       "activated": true,
       "path": "tools/merch-3d/reports/screenshots/t-shirt-001-mobile-product-stage.png",
-      "sha256": "adee8e981efc39ed6a2c89b05664c264f3bd589497f18a29a55c80305109e2f0",
+      "sha256": "1e13397f22f4cea7c7574a324b20c67cf5ff4fda0afccdf144423aa502619284",
       "browserViewportPx": [
         390,
         844
@@ -131,7 +131,7 @@
         521
       ],
       "camera": {
-        "orbit": "18deg 80deg 108%",
+        "orbit": "6deg 80deg 107%",
         "target": "auto 0.530m auto",
         "fieldOfView": "20deg"
       },
@@ -145,38 +145,38 @@
       "loaded": true,
       "modelIsVisible": true,
       "dimensionsM": [
-        1.059999942779541,
-        1.0399999618530273,
-        0.10850000008940697
+        1.1368001699447632,
+        1.0410000085830688,
+        0.16499999910593033
       ],
       "centreM": [
         0,
-        0.5199999809265137,
-        0.0022499989718198776
+        0.5205000042915344,
+        0.0025000013411045074
       ],
       "cameraOrbit": {
-        "theta": 0.3141592653589793,
+        "theta": 0.10471975511965977,
         "phi": 1.3962634015954636,
-        "radius": 3.5370158811028722
+        "radius": 3.7139994355796198
       },
-      "fieldOfViewDeg": 27.722850150762817,
+      "fieldOfViewDeg": 28.10406473141534,
       "canvasPx": [
         356,
         518
       ],
-      "foregroundPixels": 66998,
-      "artworkContrastPixels": 2834,
+      "foregroundPixels": 60917,
+      "artworkContrastPixels": 2661,
       "foregroundBoundsPx": [
-        29,
-        105,
-        338,
-        431
+        21,
+        114,
+        339,
+        414
       ],
       "visualMarginsPx": [
-        29,
-        105,
-        17,
-        86
+        21,
+        114,
+        16,
+        103
       ]
     }
   ],

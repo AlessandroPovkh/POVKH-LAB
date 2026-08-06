@@ -8,18 +8,18 @@
           "name": "Cap_001_Concept_Visualization",
           "rootName": "Cap_001_Centred_Grounded_Pivot",
           "bboxMin": [
-            -0.135,
+            -0.13493,
             0,
-            -0.129
+            -0.1275
           ],
           "bboxMax": [
-            0.135,
+            0.13493,
             0.266,
             0.255
           ],
-          "renderVertexCount": 12996,
-          "uploadVertexCount": 8796,
-          "uploadNaiveVertexCount": 8796
+          "renderVertexCount": 114270,
+          "uploadVertexCount": 76588,
+          "uploadNaiveVertexCount": 76588
         }
       ]
     },
@@ -31,8 +31,8 @@
             "TRIANGLES"
           ],
           "meshPrimitives": 1,
-          "glPrimitives": 350,
-          "vertices": 714,
+          "glPrimitives": 5820,
+          "vertices": 11700,
           "indices": [
             "u32"
           ],
@@ -43,7 +43,7 @@
             "TEXCOORD_0:f32"
           ],
           "instances": 1,
-          "size": 38472
+          "size": 631440
         },
         {
           "name": "Cap_Panel_02_Mesh",
@@ -51,8 +51,8 @@
             "TRIANGLES"
           ],
           "meshPrimitives": 1,
-          "glPrimitives": 350,
-          "vertices": 714,
+          "glPrimitives": 5820,
+          "vertices": 11700,
           "indices": [
             "u32"
           ],
@@ -63,7 +63,7 @@
             "TEXCOORD_0:f32"
           ],
           "instances": 1,
-          "size": 38472
+          "size": 631440
         },
         {
           "name": "Cap_Panel_03_Mesh",
@@ -71,8 +71,8 @@
             "TRIANGLES"
           ],
           "meshPrimitives": 1,
-          "glPrimitives": 350,
-          "vertices": 714,
+          "glPrimitives": 5820,
+          "vertices": 11700,
           "indices": [
             "u32"
           ],
@@ -83,7 +83,7 @@
             "TEXCOORD_0:f32"
           ],
           "instances": 1,
-          "size": 38472
+          "size": 631440
         },
         {
           "name": "Cap_Panel_04_Mesh",
@@ -91,8 +91,8 @@
             "TRIANGLES"
           ],
           "meshPrimitives": 1,
-          "glPrimitives": 286,
-          "vertices": 586,
+          "glPrimitives": 4158,
+          "vertices": 8376,
           "indices": [
             "u32"
           ],
@@ -103,7 +103,7 @@
             "TEXCOORD_0:f32"
           ],
           "instances": 1,
-          "size": 31560
+          "size": 451944
         },
         {
           "name": "Cap_Panel_05_Mesh",
@@ -111,8 +111,8 @@
             "TRIANGLES"
           ],
           "meshPrimitives": 1,
-          "glPrimitives": 350,
-          "vertices": 714,
+          "glPrimitives": 5820,
+          "vertices": 11700,
           "indices": [
             "u32"
           ],
@@ -123,7 +123,7 @@
             "TEXCOORD_0:f32"
           ],
           "instances": 1,
-          "size": 38472
+          "size": 631440
         },
         {
           "name": "Cap_Panel_06_Mesh",
@@ -131,8 +131,8 @@
             "TRIANGLES"
           ],
           "meshPrimitives": 1,
-          "glPrimitives": 350,
-          "vertices": 714,
+          "glPrimitives": 5820,
+          "vertices": 11700,
           "indices": [
             "u32"
           ],
@@ -143,7 +143,67 @@
             "TEXCOORD_0:f32"
           ],
           "instances": 1,
-          "size": 38472
+          "size": 631440
+        },
+        {
+          "name": "Cap_Crown_Seams_Mesh",
+          "mode": [
+            "TRIANGLES"
+          ],
+          "meshPrimitives": 1,
+          "glPrimitives": 192,
+          "vertices": 384,
+          "indices": [
+            "u32"
+          ],
+          "attributes": [
+            "NORMAL:f32",
+            "POSITION:f32",
+            "TANGENT:f32",
+            "TEXCOORD_0:f32"
+          ],
+          "instances": 1,
+          "size": 20736
+        },
+        {
+          "name": "Cap_Crown_Creases_Mesh",
+          "mode": [
+            "TRIANGLES"
+          ],
+          "meshPrimitives": 1,
+          "glPrimitives": 160,
+          "vertices": 320,
+          "indices": [
+            "u32"
+          ],
+          "attributes": [
+            "NORMAL:f32",
+            "POSITION:f32",
+            "TANGENT:f32",
+            "TEXCOORD_0:f32"
+          ],
+          "instances": 1,
+          "size": 17280
+        },
+        {
+          "name": "Cap_Eyelets_Mesh",
+          "mode": [
+            "TRIANGLES"
+          ],
+          "meshPrimitives": 1,
+          "glPrimitives": 640,
+          "vertices": 1280,
+          "indices": [
+            "u32"
+          ],
+          "attributes": [
+            "NORMAL:f32",
+            "POSITION:f32",
+            "TANGENT:f32",
+            "TEXCOORD_0:f32"
+          ],
+          "instances": 1,
+          "size": 69120
         },
         {
           "name": "Cap_Curved_Brim_Mesh",
@@ -151,8 +211,8 @@
             "TRIANGLES"
           ],
           "meshPrimitives": 1,
-          "glPrimitives": 1696,
-          "vertices": 3392,
+          "glPrimitives": 2768,
+          "vertices": 5536,
           "indices": [
             "u32"
           ],
@@ -163,7 +223,47 @@
             "TEXCOORD_0:f32"
           ],
           "instances": 1,
-          "size": 183168
+          "size": 298944
+        },
+        {
+          "name": "Cap_Bill_Edge_Stitching_Mesh",
+          "mode": [
+            "TRIANGLES"
+          ],
+          "meshPrimitives": 1,
+          "glPrimitives": 128,
+          "vertices": 256,
+          "indices": [
+            "u32"
+          ],
+          "attributes": [
+            "NORMAL:f32",
+            "POSITION:f32",
+            "TANGENT:f32",
+            "TEXCOORD_0:f32"
+          ],
+          "instances": 1,
+          "size": 13824
+        },
+        {
+          "name": "Cap_Crown_Bill_Transition_Mesh",
+          "mode": [
+            "TRIANGLES"
+          ],
+          "meshPrimitives": 1,
+          "glPrimitives": 56,
+          "vertices": 112,
+          "indices": [
+            "u32"
+          ],
+          "attributes": [
+            "NORMAL:f32",
+            "POSITION:f32",
+            "TANGENT:f32",
+            "TEXCOORD_0:f32"
+          ],
+          "instances": 1,
+          "size": 6048
         },
         {
           "name": "Cap_Top_Button_Mesh",
@@ -191,8 +291,8 @@
             "TRIANGLES"
           ],
           "meshPrimitives": 1,
-          "glPrimitives": 320,
-          "vertices": 640,
+          "glPrimitives": 512,
+          "vertices": 1024,
           "indices": [
             "u32"
           ],
@@ -203,7 +303,7 @@
             "TEXCOORD_0:f32"
           ],
           "instances": 1,
-          "size": 34560
+          "size": 55296
         },
         {
           "name": "Cap_Adjustment_Strap_Mesh",
@@ -242,6 +342,26 @@
           ],
           "instances": 1,
           "size": 720
+        },
+        {
+          "name": "Cap_Patch_Border_Mesh",
+          "mode": [
+            "TRIANGLES"
+          ],
+          "meshPrimitives": 1,
+          "glPrimitives": 96,
+          "vertices": 192,
+          "indices": [
+            "u32"
+          ],
+          "attributes": [
+            "NORMAL:f32",
+            "POSITION:f32",
+            "TANGENT:f32",
+            "TEXCOORD_0:f32"
+          ],
+          "instances": 1,
+          "size": 10368
         },
         {
           "name": "Cap_Front_Patch_Mesh",
@@ -293,7 +413,7 @@
             "baseColorTexture"
           ],
           "alphaMode": "BLEND",
-          "doubleSided": true
+          "doubleSided": false
         },
         {
           "name": "MAT_CAP_WASHED_VOID_TWILL",
@@ -307,7 +427,7 @@
         },
         {
           "name": "MAT_CAP_TONAL_SEAM",
-          "instances": 3,
+          "instances": 9,
           "textures": [
             "normalTexture",
             "metallicRoughnessTexture"

@@ -13,14 +13,14 @@
   },
   "dimensions": {
     "authority": "provisional-viewer-envelope-not-production-dimensions",
-    "viewerEnvelopeMm": [1074, 1040, 112],
+    "viewerEnvelopeMm": [1137, 1042, 165],
     "replacementGate": "selected vendor blank, measured approved sample and size-specific tech pack"
   },
   "geometry": {
     "scene": "T_Shirt_001_Concept_Visualization",
     "pivot": "T_Shirt_001_Centred_Grounded_Pivot",
-    "requiredNodes": ["T_Shirt_Draped_Shell", "T_Shirt_Collar", "T_Shirt_Seam_Cues", "T_Shirt_Front_Artwork"],
-    "features": ["unified draped front/back shell", "continuous shoulders and short sleeves", "curved side seams and hem", "dimensional collar", "readable front and back", "front artwork surface"]
+    "requiredNodes": ["T_Shirt_Draped_Shell", "T_Shirt_Collar", "T_Shirt_Collar_Interior", "T_Shirt_Sleeve_Hems", "T_Shirt_Curved_Hem", "T_Shirt_Front_Artwork"],
+    "features": ["tailored tubular torso with continuous outer shoulders and underlapping attached short-sleeve roots", "explicit internal shoulder bridge patches", "open tubular sleeve hems", "level curved hem", "open dimensional rib collar with dark inner wall", "readable front and back", "exact front artwork surface"]
   },
   "artwork": {
     "path": "sources/t-shirt-001/PVKH_ASCII_DARK_KNOCKOUT_EXACT_1600x600_v01.png",
@@ -34,18 +34,19 @@
   "materials": {
     "fabric": { "name": "MAT_T_SHIRT_BONE_FABRIC", "baseColor": [0.82, 0.79, 0.71, 1], "metallic": 0, "roughness": 0.96, "surface": "woven-bone" },
     "collar": { "name": "MAT_T_SHIRT_BONE_RIB", "baseColor": [0.75, 0.72, 0.65, 1], "metallic": 0, "roughness": 0.98, "surface": "rib-knit-bone" },
+    "interior": { "name": "MAT_T_SHIRT_NECK_INTERIOR", "baseColor": [0.025, 0.024, 0.022, 1], "metallic": 0, "roughness": 1, "surface": "rib-knit-shadow" },
     "artwork": { "name": "MAT_T_SHIRT_ASCII_DARK_EXACT", "baseColor": [1, 1, 1, 1], "metallic": 0, "roughness": 0.9 }
   },
   "poster": { "path": "assets/merch/t-shirt-front.webp", "sha256": "89cac41d6abf06cccc1952823b5c2dcdf4a063a063a98dfebb998b19c428db4e", "role": "approved-concept-poster-not-texture" },
   "camera": {
     "poster": "assets/merch/t-shirt-front.webp",
     "desktop": {
-      "default": { "orbit": "25deg 78deg 115%", "target": "auto 0.550m auto", "fieldOfView": "24deg" },
+      "default": { "orbit": "8deg 78deg 113%", "target": "auto 0.550m auto", "fieldOfView": "23deg" },
       "front": { "orbit": "0deg 82deg 112%", "target": "auto 0.550m auto", "fieldOfView": "23deg" },
       "rear": { "orbit": "180deg 82deg 112%", "target": "auto 0.550m auto", "fieldOfView": "23deg" }
     },
     "mobile": {
-      "default": { "orbit": "18deg 80deg 108%", "target": "auto 0.530m auto", "fieldOfView": "20deg" },
+      "default": { "orbit": "6deg 80deg 107%", "target": "auto 0.530m auto", "fieldOfView": "20deg" },
       "front": { "orbit": "0deg 83deg 106%", "target": "auto 0.530m auto", "fieldOfView": "20deg" },
       "rear": { "orbit": "180deg 83deg 106%", "target": "auto 0.530m auto", "fieldOfView": "20deg" }
     }

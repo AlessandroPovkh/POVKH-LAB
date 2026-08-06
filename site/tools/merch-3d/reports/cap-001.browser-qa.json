@@ -9,7 +9,7 @@
       "view": "desktop-default",
       "surface": "isolated-model-viewer",
       "path": "tools/merch-3d/reports/screenshots/cap-001-desktop-default.png",
-      "sha256": "428319a5cd96a9d9f684dba5f8040f209ab7db18f0a5b96f81db3ae19ada777a",
+      "sha256": "d15c39eda8ecbab1720254f1cadd7cbcf74b441d6d5c18f46ba1902ea716e1a6",
       "viewportPx": [
         900,
         900
@@ -23,32 +23,32 @@
       "loaded": true,
       "modelIsVisible": true,
       "dimensionsM": [
-        0.27000001072883606,
+        0.2698618769645691,
         0.26600000262260437,
-        0.3839999884366989
+        0.3824999928474426
       ],
       "centreM": [
         0,
         0.13300000131130219,
-        0.06300000101327896
+        0.0637499988079071
       ],
       "cameraOrbit": {
         "theta": 0.4363323129985824,
         "phi": 1.2566370614359172,
-        "radius": 1.3307857069488895
+        "radius": 1.3282012974540138
       },
       "fieldOfViewDeg": 24.000000000000004,
-      "foregroundPixels": 194919,
+      "foregroundPixels": 196775,
       "foregroundBoundsPx": [
         140,
         261,
-        676,
+        678,
         826
       ],
       "visualMarginsPx": [
         140,
         261,
-        223,
+        221,
         73
       ]
     },
@@ -56,7 +56,7 @@
       "view": "mobile-default",
       "surface": "isolated-model-viewer",
       "path": "tools/merch-3d/reports/screenshots/cap-001-mobile-default.png",
-      "sha256": "5cf43a3e62f7db5da5f2cc1d67041871e07150b18375c0837e0d81e3e7ea3062",
+      "sha256": "296394e84fa0296dae48bc9faef8c4ac16be74939a157f7de8089e420765a49c",
       "viewportPx": [
         390,
         600
@@ -70,32 +70,32 @@
       "loaded": true,
       "modelIsVisible": true,
       "dimensionsM": [
-        0.27000001072883606,
+        0.2698618769645691,
         0.26600000262260437,
-        0.3839999884366989
+        0.3824999928474426
       ],
       "centreM": [
         0,
         0.13300000131130219,
-        0.06300000101327896
+        0.0637499988079071
       ],
       "cameraOrbit": {
         "theta": 0.3141592653589793,
         "phi": 1.3089969389957472,
-        "radius": 1.55974298125837
+        "radius": 1.5565817796602914
       },
-      "fieldOfViewDeg": 27.827239072187652,
-      "foregroundPixels": 45117,
+      "fieldOfViewDeg": 27.810172422861797,
+      "foregroundPixels": 45611,
       "foregroundBoundsPx": [
         54,
         201,
-        301,
+        302,
         464
       ],
       "visualMarginsPx": [
         54,
         201,
-        88,
+        87,
         135
       ]
     },
@@ -103,7 +103,7 @@
       "view": "desktop-rear-aperture",
       "surface": "isolated-model-viewer",
       "path": "tools/merch-3d/reports/screenshots/cap-001-desktop-rear-aperture.png",
-      "sha256": "67919ffe29fb43b0f6e7486c393d6ba189b2adb43cb26f075752d6c90548a712",
+      "sha256": "1c64a863208bb301a821698e95376a35ad02c2aaf4df7d01a8a1c018244f3d1e",
       "viewportPx": [
         900,
         900
@@ -117,32 +117,32 @@
       "loaded": true,
       "modelIsVisible": true,
       "dimensionsM": [
-        0.27000001072883606,
+        0.2698618769645691,
         0.26600000262260437,
-        0.3839999884366989
+        0.3824999928474426
       ],
       "centreM": [
         0,
         0.13300000131130219,
-        0.06300000101327896
+        0.0637499988079071
       ],
       "cameraOrbit": {
         "theta": 3.141592653589793,
         "phi": 1.53588974175501,
-        "radius": 1.330677113541174
+        "radius": 1.3278659828301058
       },
       "fieldOfViewDeg": 23,
-      "foregroundPixels": 107672,
+      "foregroundPixels": 118688,
       "foregroundBoundsPx": [
-        231,
-        233,
-        668,
+        230,
+        232,
+        669,
         642
       ],
       "visualMarginsPx": [
-        231,
-        233,
-        231,
+        230,
+        232,
+        230,
         257
       ]
     },
@@ -168,7 +168,7 @@
       "surface": "built-product-page",
       "activated": true,
       "path": "tools/merch-3d/reports/screenshots/cap-001-mobile-product-stage.png",
-      "sha256": "1864521be69e8323526a8fee5aa25f4a3ff5a3d183b8fce7743d95046a9cded7",
+      "sha256": "9d2a8a9d7d07c4fef8ccaf14b18c78d1f22bd50c9084120ae669db231a333d24",
       "browserViewportPx": [
         390,
         844
@@ -192,37 +192,37 @@
       "loaded": true,
       "modelIsVisible": true,
       "dimensionsM": [
-        0.27000001072883606,
+        0.2698618769645691,
         0.26600000262260437,
-        0.3839999884366989
+        0.3824999928474426
       ],
       "centreM": [
         0,
         0.13300000131130219,
-        0.06300000101327896
+        0.0637499988079071
       ],
       "cameraOrbit": {
         "theta": 0.3141592653589793,
         "phi": 1.3089969389957472,
-        "radius": 1.55974298125837
+        "radius": 1.5565817796602914
       },
-      "fieldOfViewDeg": 26.37275959848484,
+      "fieldOfViewDeg": 26.35651919525108,
       "canvasPx": [
         356,
         518
       ],
-      "foregroundPixels": 43065,
-      "artworkContrastPixels": 19114,
+      "foregroundPixels": 43425,
+      "artworkContrastPixels": 29449,
       "foregroundBoundsPx": [
         28,
         169,
-        289,
+        288,
         424
       ],
       "visualMarginsPx": [
         28,
         169,
-        66,
+        67,
         93
       ]
     }

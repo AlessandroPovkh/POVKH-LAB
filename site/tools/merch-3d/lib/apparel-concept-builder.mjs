@@ -56,6 +56,94 @@ const appendGeometry = (target, source) => {
   return target;
 };
 
+const orientedQuad = (geometry, points, normal, uvs = [[0, 0], [1, 0], [1, 1], [0, 1]]) => {
+  const ab = points[1].map((value, axis) => value - points[0][axis]);
+  const ac = points[2].map((value, axis) => value - points[0][axis]);
+  const face = [
+    ab[1] * ac[2] - ab[2] * ac[1],
+    ab[2] * ac[0] - ab[0] * ac[2],
+    ab[0] * ac[1] - ab[1] * ac[0]
+  ];
+  const ordered = face[0] * normal[0] + face[1] * normal[1] + face[2] * normal[2] >= 0
+    ? { points, uvs }
+    : { points: [points[0], points[3], points[2], points[1]], uvs: [uvs[0], uvs[3], uvs[2], uvs[1]] };
+  geometry.quad(ordered.points, normalise(normal), ordered.uvs);
+};
+
+const tailoredTorso = (rings, { segments = 36, capStart = false, capEnd = false } = {}) => {
+  const geometry = new Geometry();
+  const point = (ringIndex, angle) => {
+    const ring = rings[ringIndex];
+    const xRatio = Math.cos(angle);
+    const side = Math.sin(angle);
+    const heightRatio = ringIndex / Math.max(1, rings.length - 1);
+    const fold = (ring.fold || 0) * Math.sin(xRatio * Math.PI * 3) * Math.sin(heightRatio * Math.PI) * Math.abs(side);
+    return [
+      ring.centreX + xRatio * ring.halfWidth,
+      ring.y + (ring.hemCurve || 0) * xRatio ** 2 - (ring.frontDrop || 0) * Math.max(0, side),
+      ring.centreZ + side * (ring.halfDepth + fold)
+    ];
+  };
+  const pointNormal = (ringIndex, angle) => {
+    const ring = rings[ringIndex];
+    return normalise([Math.cos(angle) / ring.halfWidth, 0, Math.sin(angle) / ring.halfDepth]);
+  };
+  for (let row = 0; row < rings.length - 1; row += 1) {
+    for (let column = 0; column < segments; column += 1) {
+      const a0 = column / segments * Math.PI * 2;
+      const a1 = (column + 1) / segments * Math.PI * 2;
+      const corners = [point(row, a0), point(row + 1, a0), point(row + 1, a1), point(row, a1)];
+      const normals = [pointNormal(row, a0), pointNormal(row + 1, a0), pointNormal(row + 1, a1), pointNormal(row, a1)];
+      const vertices = corners.map((entry, index) => geometry.vertex(entry, normals[index], [column / segments, (row + [0, 1, 1, 0][index]) / (rings.length - 1)]));
+      geometry.indices.push(vertices[0], vertices[1], vertices[2], vertices[0], vertices[2], vertices[3]);
+    }
+  }
+  const addCap = (ringIndex, normal, reverse) => {
+    const ring = rings[ringIndex];
+    for (let column = 0; column < segments; column += 1) {
+      const a0 = column / segments * Math.PI * 2;
+      const a1 = (column + 1) / segments * Math.PI * 2;
+      const triangle = [[ring.centreX, ring.y, ring.centreZ], point(ringIndex, a0), point(ringIndex, a1)];
+      geometry.triangle(reverse ? [triangle[0], triangle[2], triangle[1]] : triangle, normal);
+    }
+  };
+  if (capStart) addCap(0, [0, -1, 0], true);
+  if (capEnd) addCap(rings.length - 1, [0, 1, 0], false);
+  return { geometry, point, rings };
+};
+
+const sleeveFrames = (rings) => rings.map((ring, index) => {
+  const previous = rings[Math.max(0, index - 1)].centre;
+  const next = rings[Math.min(rings.length - 1, index + 1)].centre;
+  const tangent = normalise([next[0] - previous[0], next[1] - previous[1], 0]);
+  return { ...ring, tangent, perpendicular: [-tangent[1], tangent[0]] };
+});
+
+const sleevePoint = (frame, angle) => [
+  frame.centre[0] + frame.perpendicular[0] * frame.radius * Math.cos(angle),
+  frame.centre[1] + frame.perpendicular[1] * frame.radius * Math.cos(angle),
+  (frame.centre[2] || 0) + frame.depth * Math.sin(angle)
+];
+
+const shoulderBridge = ({ torso, torsoRingIndex, side, sleeveRings }) => {
+  const geometry = new Geometry();
+  const frames = sleeveFrames(sleeveRings);
+  const start = frames[0];
+  // Keep the bridge endpoints on torso ring vertices (36 sections) so the
+  // shoulder patch is topologically connected after GLB serialization.
+  const shoulderAngle = Math.PI / 6;
+  const bodyFrontAngle = side > 0 ? shoulderAngle : Math.PI - shoulderAngle;
+  const bodyBackAngle = side > 0 ? -shoulderAngle : Math.PI + shoulderAngle;
+  const points = [
+    torso.point(torsoRingIndex, bodyBackAngle),
+    torso.point(torsoRingIndex, bodyFrontAngle),
+    sleevePoint(start, Math.PI / 2),
+    sleevePoint(start, -Math.PI / 2)
+  ];
+  orientedQuad(geometry, points, [side * 0.55, 0.84, 0]);
+  return geometry;
+};
+
 const chaikinClosed = (points, iterations = 2) => {
   let result = points;
   for (let iteration = 0; iteration < iterations; iteration += 1) {
@@ -184,52 +272,52 @@ const curvedHemSeam = ({ width, y, curve, halfDepth, thickness = 0.008, segments
   return geometry;
 };
 
-const openHoodShell = ({ centre = [0, 1.155], outer = [0.245, 0.185], inner = [0.130, 0.145] } = {}) => {
+const openHoodShell = () => {
   const geometry = new Geometry();
-  const outerPoints = fittedGarmentOutline([
-    [-0.18, 0], [0, -0.015], [0.18, 0], [0.235, 0.07], [0.25, 0.18], [0.205, 0.30],
-    [0.10, 0.365], [0, 0.38], [-0.10, 0.365], [-0.205, 0.30], [-0.25, 0.18], [-0.235, 0.07]
-  ], { width: outer[0] * 2, height: outer[1] * 2 }).map(([x, y]) => [x + centre[0], y + centre[1] - outer[1]]);
-  const segments = outerPoints.length;
-  const innerPoints = fittedGarmentOutline([
-    [-0.08, 0], [0, -0.02], [0.08, 0], [0.135, 0.06], [0.145, 0.14], [0.115, 0.23],
-    [0.06, 0.27], [0, 0.28], [-0.06, 0.27], [-0.115, 0.23], [-0.145, 0.14], [-0.135, 0.06]
-  ], { width: inner[0] * 2, height: inner[1] * 2 }).map(([x, y]) => [x + centre[0], y + centre[1] - inner[1]]);
-  const backPoint = ([x, y]) => [x, y, -0.085 - 0.020 * Math.cos(Math.max(-1, Math.min(1, (y - centre[1]) / outer[1])) * Math.PI / 2)];
-  const backCentre = [centre[0], centre[1], -0.112];
+  const outer = chaikinClosed([
+    [-0.19, 0.755], [0, 0.730], [0.19, 0.755], [0.28, 0.855], [0.25, 0.975],
+    [0.14, 1.050], [0, 1.010], [-0.14, 1.050], [-0.25, 0.975], [-0.28, 0.855]
+  ], 2);
+  const outerFront = ([x, y]) => [x, y, -0.096 - 0.003 * (1 - y / 1.050)];
+  const outerBack = ([x, y]) => [x, y, -0.118 - 0.010 * (1 - Math.abs(x) / 0.28)];
+  const backCentre = [0, 0.875, -0.132];
+  for (let index = 0; index < outer.length; index += 1) {
+    const next = (index + 1) % outer.length;
+    const outerNormal = [outer[next][1] - outer[index][1], outer[index][0] - outer[next][0], 0];
+    orientedQuad(geometry, [outerFront(outer[index]), outerFront(outer[next]), outerBack(outer[next]), outerBack(outer[index])], outerNormal);
+    geometry.triangle([backCentre, outerBack(outer[next]), outerBack(outer[index])], [0, 0, -1]);
+  }
+  const openingCentre = [0, 1.018, -0.115];
+  appendGeometry(geometry, ellipticalRingY({ centre: openingCentre, outer: [0.170, 0.060], inner: [0.120, 0.038], height: 0.012, segments: 40 }));
+  const topLeft = outer.reduce((selected, point) => Math.hypot(point[0] + 0.14, point[1] - 1.05) < Math.hypot(selected[0] + 0.14, selected[1] - 1.05) ? point : selected, outer[0]);
+  const topRight = outer.reduce((selected, point) => Math.hypot(point[0] - 0.14, point[1] - 1.05) < Math.hypot(selected[0] - 0.14, selected[1] - 1.05) ? point : selected, outer[0]);
+  const openingY = openingCentre[1] + 0.006;
+  const connector = new Geometry();
+  orientedQuad(connector, [outerBack(topLeft), outerBack(topRight), [0.170, openingY, openingCentre[2]], [-0.170, openingY, openingCentre[2]]], [0, 1, 0]);
+  appendGeometry(geometry, connector);
+  return geometry;
+};
+
+const hoodThroatOverlap = () => ellipticalRingY({ centre: [0, 1.045, 0], outer: [0.180, 0.075], inner: [0.120, 0.045], height: 0.018, frontDrop: 0.020, segments: 40 });
+
+const hoodCentreSeam = ({ startY = 0.750, endY = 1.015, segments = 18 } = {}) => {
+  const geometry = new Geometry();
+  const point = (y, x) => [x, y, -0.143 + 0.008 * ((y - startY) / (endY - startY))];
   for (let index = 0; index < segments; index += 1) {
-    const next = (index + 1) % segments;
-    const backA = backPoint(outerPoints[index]);
-    const backB = backPoint(outerPoints[next]);
-    const frontA = [...outerPoints[index], 0.082];
-    const frontB = [...outerPoints[next], 0.082];
-    const innerA = [...innerPoints[index], 0.086];
-    const innerB = [...innerPoints[next], 0.086];
-    geometry.triangle([backCentre, backB, backA], [0, 0, -1]);
-    const sideNormal = normalise([outerPoints[next][1] - outerPoints[index][1], outerPoints[index][0] - outerPoints[next][0], 0]);
-    geometry.quad([backA, backB, frontB, frontA], sideNormal);
-    for (const points of [[frontA, frontB, innerB], [frontA, innerB, innerA]]) {
-      const crossZ = (points[1][0] - points[0][0]) * (points[2][1] - points[0][1])
-        - (points[1][1] - points[0][1]) * (points[2][0] - points[0][0]);
-      geometry.triangle(crossZ >= 0 ? points : [points[0], points[2], points[1]], [0, 0, 1]);
-    }
+    const y0 = startY + index / segments * (endY - startY);
+    const y1 = startY + (index + 1) / segments * (endY - startY);
+    orientedQuad(geometry, [point(y0, 0.004), point(y0, -0.004), point(y1, -0.004), point(y1, 0.004)], [0, 0, -1]);
   }
   return geometry;
 };
 
-const hoodCentreSeam = ({ centreY = 1.155, radiusY = 0.185, segments = 12 } = {}) => {
+const extrudePolygonZ = (inputPoints, depth) => {
   const geometry = new Geometry();
-  const point = (y, x) => [x, y, -0.108 + 0.023 * ((y - centreY) / radiusY) ** 2];
-  for (let index = 0; index < segments; index += 1) {
-    const y0 = centreY - radiusY + index / segments * radiusY * 2;
-    const y1 = centreY - radiusY + (index + 1) / segments * radiusY * 2;
-    geometry.quad([point(y0, 0.004), point(y0, -0.004), point(y1, -0.004), point(y1, 0.004)], [0, 0, -1]);
-  }
-  return geometry;
-};
-
-const extrudePolygonZ = (points, depth) => {
-  const geometry = new Geometry();
+  const signedArea = inputPoints.reduce((area, point, index) => {
+    const next = inputPoints[(index + 1) % inputPoints.length];
+    return area + point[0] * next[1] - next[0] * point[1];
+  }, 0);
+  const points = signedArea >= 0 ? inputPoints : inputPoints.toReversed();
   const zFront = depth / 2;
   const zBack = -depth / 2;
   const centre = points.reduce((result, point) => [result[0] + point[0] / points.length, result[1] + point[1] / points.length], [0, 0]);
@@ -314,17 +402,8 @@ const taperedTubeBetween = ({ start, end, startRadius, endRadius, startDepth, en
 
 const loftedTubeAlongPath = (rings, { segments = 28, capStart = true, capEnd = true } = {}) => {
   const geometry = new Geometry();
-  const frames = rings.map((ring, index) => {
-    const previous = rings[Math.max(0, index - 1)].centre;
-    const next = rings[Math.min(rings.length - 1, index + 1)].centre;
-    const tangent = normalise([next[0] - previous[0], next[1] - previous[1], 0]);
-    return { ...ring, tangent, perpendicular: [-tangent[1], tangent[0]] };
-  });
-  const point = (frame, angle) => [
-    frame.centre[0] + frame.perpendicular[0] * frame.radius * Math.cos(angle),
-    frame.centre[1] + frame.perpendicular[1] * frame.radius * Math.cos(angle),
-    frame.depth * Math.sin(angle)
-  ];
+  const frames = sleeveFrames(rings);
+  const point = sleevePoint;
   const pointNormal = (frame, angle) => normalise([
     frame.perpendicular[0] * Math.cos(angle),
     frame.perpendicular[1] * Math.cos(angle),
@@ -338,7 +417,10 @@ const loftedTubeAlongPath = (rings, { segments = 28, capStart = true, capEnd = t
       const a1 = (index + 1) / segments * Math.PI * 2;
       const points = [point(start, a0), point(start, a1), point(end, a1), point(end, a0)];
       const normals = [pointNormal(start, a0), pointNormal(start, a1), pointNormal(end, a1), pointNormal(end, a0)];
-      const vertices = points.map((entry, pointIndex) => geometry.vertex(entry, normals[pointIndex], [[0, 0], [1, 0], [1, 1], [0, 1]][pointIndex]));
+      const vertices = points.map((entry, pointIndex) => geometry.vertex(entry, normals[pointIndex], [
+        (index + [0, 1, 1, 0][pointIndex]) / segments,
+        (row + [0, 0, 1, 1][pointIndex]) / (frames.length - 1)
+      ]));
       geometry.indices.push(vertices[0], vertices[1], vertices[2], vertices[0], vertices[2], vertices[3]);
     }
   }
@@ -347,8 +429,10 @@ const loftedTubeAlongPath = (rings, { segments = 28, capStart = true, capEnd = t
   for (let index = 0; index < segments; index += 1) {
     const a0 = index / segments * Math.PI * 2;
     const a1 = (index + 1) / segments * Math.PI * 2;
-    if (capStart) geometry.triangle([[...start.centre, 0], point(start, a1), point(start, a0)], start.tangent.map((value) => -value));
-    if (capEnd) geometry.triangle([[...end.centre, 0], point(end, a0), point(end, a1)], end.tangent);
+    const startCentre = [start.centre[0], start.centre[1], start.centre[2] || 0];
+    const endCentre = [end.centre[0], end.centre[1], end.centre[2] || 0];
+    if (capStart) geometry.triangle([startCentre, point(start, a1), point(start, a0)], start.tangent.map((value) => -value));
+    if (capEnd) geometry.triangle([endCentre, point(end, a0), point(end, a1)], end.tangent);
   }
   return geometry;
 };
@@ -390,9 +474,11 @@ const curvedArtworkSurface = ({ centre, size, bodyHalfWidth, bodyHalfDepth, side
     const v = row / heightSegments;
     const x = cx - width / 2 + width * u;
     const ellipse = Math.sqrt(Math.max(0, 1 - (x / bodyHalfWidth) ** 2));
+    const normal = normalise([x / bodyHalfWidth ** 2, 0, sideSign * ellipse / bodyHalfDepth]);
+    const base = [x, cy - height / 2 + height * v, sideSign * bodyHalfDepth * ellipse];
     return {
-      position: [x, cy - height / 2 + height * v, sideSign * (bodyHalfDepth * ellipse + surfaceOffset)],
-      normal: normalise([x / bodyHalfWidth ** 2, 0, sideSign * ellipse / bodyHalfDepth]),
+      position: base.map((value, axis) => value + normal[axis] * surfaceOffset),
+      normal,
       uv: [side === "back" ? 1 - u : u, 1 - v]
     };
   };
@@ -456,6 +542,23 @@ const ellipticalRingZ = ({ centre, outer, inner, depth, segments = 32 }) => {
   return geometry;
 };
 
+const ellipticalRingY = ({ centre, outer, inner, height, frontDrop = 0, segments = 36 }) => {
+  const geometry = new Geometry();
+  const [cx, cy, cz] = centre;
+  const y0 = cy - height / 2;
+  const y1 = cy + height / 2;
+  const point = (radii, angle, y) => [cx + Math.cos(angle) * radii[0], y - frontDrop * Math.max(0, Math.sin(angle)), cz + Math.sin(angle) * radii[1]];
+  for (let index = 0; index < segments; index += 1) {
+    const a0 = index / segments * Math.PI * 2;
+    const a1 = (index + 1) / segments * Math.PI * 2;
+    orientedQuad(geometry, [point(outer, a0, y1), point(outer, a1, y1), point(inner, a1, y1), point(inner, a0, y1)], [0, 1, 0]);
+    orientedQuad(geometry, [point(outer, a1, y0), point(outer, a0, y0), point(inner, a0, y0), point(inner, a1, y0)], [0, -1, 0]);
+    orientedQuad(geometry, [point(outer, a0, y0), point(outer, a1, y0), point(outer, a1, y1), point(outer, a0, y1)], [Math.cos((a0 + a1) / 2), 0, Math.sin((a0 + a1) / 2)]);
+    orientedQuad(geometry, [point(inner, a1, y0), point(inner, a0, y0), point(inner, a0, y1), point(inner, a1, y1)], [-Math.cos((a0 + a1) / 2), 0, -Math.sin((a0 + a1) / 2)]);
+  }
+  return geometry;
+};
+
 const ellipsePlaneZ = ({ centre, radii, side = "front", segments = 32 }) => {
   const geometry = new Geometry();
   const [cx, cy, z] = centre;
@@ -488,7 +591,7 @@ const cylinderY = ({ centre, radius, height, segments = 24 }) => {
   return geometry;
 };
 
-const crownPanel = (panelIndex, { panels = 6, azimuthSegments = 14, verticalSegments = 12 } = {}) => {
+const crownPanel = (panelIndex, { panels = 6, azimuthSegments = 60, verticalSegments = 48 } = {}) => {
   const geometry = new Geometry();
   const radiusX = 0.125;
   const radiusZ = 0.120;
@@ -497,7 +600,9 @@ const crownPanel = (panelIndex, { panels = 6, azimuthSegments = 14, verticalSegm
   const start = -Math.PI / panels + panelIndex * Math.PI * 2 / panels;
   const end = start + Math.PI * 2 / panels;
   const point = (azimuth, elevation) => {
-    const radial = Math.cos(elevation) ** 0.62;
+    const panelProgress = (azimuth - start) / (end - start);
+    const panelShape = 1 + 0.020 * Math.sin(Math.PI * panelProgress) * Math.sin(elevation);
+    const radial = Math.cos(elevation) ** 0.62 * panelShape;
     return [radiusX * Math.sin(azimuth) * radial, baseY + height * Math.sin(elevation), radiusZ * Math.cos(azimuth) * radial];
   };
   const pointNormal = ([x, y, z]) => normalise([x / radiusX ** 2, (y - baseY) / height ** 2, z / radiusZ ** 2]);
@@ -509,9 +614,9 @@ const crownPanel = (panelIndex, { panels = 6, azimuthSegments = 14, verticalSegm
       const a0 = start + (end - start) * column / azimuthSegments;
       const a1 = start + (end - start) * (column + 1) / azimuthSegments;
       const points = [point(a0, e0), point(a1, e0), point(a1, e1), point(a0, e1)];
-      const centroid = points.reduce((result, entry) => result.map((value, axis) => value + entry[axis] / points.length), [0, 0, 0]);
-      const rearAperture = centroid[2] < -0.075
-        && (centroid[0] / 0.052) ** 2 + ((centroid[1] - 0.115) / 0.042) ** 2 < 1;
+      const triangleCentroids = [[0, 1, 2], [0, 2, 3]].map((corners) => corners.reduce((result, pointIndex) => result.map((value, axis) => value + points[pointIndex][axis] / 3), [0, 0, 0]));
+      const rearAperture = triangleCentroids.some((sample) => sample[2] < -0.060
+        && (sample[0] / 0.060) ** 2 + ((sample[1] - 0.115) / 0.052) ** 2 < 1);
       if (rearAperture) continue;
       const vertices = points.map((entry, index) => geometry.vertex(entry, pointNormal(entry), [[0, 0], [1, 0], [1, 1], [0, 1]][index]));
       geometry.indices.push(vertices[0], vertices[1], vertices[2], vertices[0], vertices[2], vertices[3]);
@@ -524,6 +629,42 @@ const crownPanel = (panelIndex, { panels = 6, azimuthSegments = 14, verticalSegm
     const p0 = point(a0, topElevation);
     const p1 = point(a1, topElevation);
     geometry.triangle([p0, p1, top], [pointNormal(p0), pointNormal(p1), [0, 1, 0]]);
+  }
+  return geometry;
+};
+
+const crownConstructionPoint = (azimuth, elevation, radialOffset = 0) => {
+  const radiusX = 0.125 + radialOffset;
+  const radiusZ = 0.120 + radialOffset;
+  const radial = Math.cos(elevation) ** 0.62;
+  return [radiusX * Math.sin(azimuth) * radial, 0.055 + 0.205 * Math.sin(elevation), radiusZ * Math.cos(azimuth) * radial];
+};
+
+const crownRibbons = ({ offsetAngles, halfWidth, radialOffset }) => {
+  const geometry = new Geometry();
+  const verticalSegments = 16;
+  const topElevation = Math.PI / 2 * 0.91;
+  for (const azimuth of offsetAngles) {
+    for (let row = 0; row < verticalSegments; row += 1) {
+      const e0 = 0.035 + row / verticalSegments * (topElevation - 0.035);
+      const e1 = 0.035 + (row + 1) / verticalSegments * (topElevation - 0.035);
+      const middle = crownConstructionPoint(azimuth, (e0 + e1) / 2, radialOffset);
+      const normal = normalise([middle[0] / 0.125 ** 2, (middle[1] - 0.055) / 0.205 ** 2, middle[2] / 0.120 ** 2]);
+      orientedQuad(geometry, [
+        crownConstructionPoint(azimuth - halfWidth, e0, radialOffset),
+        crownConstructionPoint(azimuth + halfWidth, e0, radialOffset),
+        crownConstructionPoint(azimuth + halfWidth, e1, radialOffset),
+        crownConstructionPoint(azimuth - halfWidth, e1, radialOffset)
+      ], normal);
+    }
+  }
+  return geometry;
+};
+
+const capEyelets = () => {
+  const geometry = new Geometry();
+  for (const centre of [[-0.074, 0.178, 0.090], [0.074, 0.178, 0.090], [-0.108, 0.162, 0.022], [0.108, 0.162, 0.022]]) {
+    appendGeometry(geometry, ellipticalRingZ({ centre, outer: [0.0060, 0.0052], inner: [0.0032, 0.0028], depth: 0.0025, segments: 20 }));
   }
   return geometry;
 };
@@ -572,6 +713,40 @@ const curvedBrim = ({ widthSegments = 24, lengthSegments = 16 } = {}) => {
   return geometry;
 };
 
+const curvedBrimStitching = ({ widthSegments = 32 } = {}) => {
+  const geometry = new Geometry();
+  const point = (u, v) => {
+    const halfWidth = 0.100 + 0.035 * Math.sin(Math.PI * v * 0.8);
+    const x = u * halfWidth;
+    const z = 0.075 + 0.180 * v - 0.012 * u * u;
+    const y = 0.0158 + 0.010 * Math.abs(u) + 0.036 * (1 - v);
+    return [x, y, z];
+  };
+  for (const rowV of [0.82, 0.91]) {
+    for (let column = 0; column < widthSegments; column += 1) {
+      const u0 = -0.91 + column / widthSegments * 1.82;
+      const u1 = -0.91 + (column + 1) / widthSegments * 1.82;
+      orientedQuad(geometry, [point(u0, rowV - 0.004), point(u1, rowV - 0.004), point(u1, rowV + 0.004), point(u0, rowV + 0.004)], [0, 1, 0]);
+    }
+  }
+  return geometry;
+};
+
+const crownBillTransition = ({ segments = 28 } = {}) => {
+  const geometry = new Geometry();
+  const point = (u, z) => {
+    const x = u * 0.108;
+    const edgeRise = 0.005 * u ** 2;
+    return [x, 0.051 + edgeRise, z - 0.006 * u ** 2];
+  };
+  for (let index = 0; index < segments; index += 1) {
+    const u0 = -1 + index / segments * 2;
+    const u1 = -1 + (index + 1) / segments * 2;
+    orientedQuad(geometry, [point(u0, 0.071), point(u1, 0.071), point(u1, 0.123), point(u0, 0.123)], [0, 1, 0]);
+  }
+  return geometry;
+};
+
 const proceduralSurfaceTextures = async (doc, preset) => {
   if (!preset.surface) return null;
   const size = 64;
@@ -608,6 +783,7 @@ const materialFor = async (doc, preset) => {
     .setBaseColorFactor(preset.baseColor)
     .setMetallicFactor(preset.metallic)
     .setRoughnessFactor(preset.roughness)
+    .setDoubleSided(preset.doubleSided ?? Boolean(preset.surface))
     .setExtras(preset.surface ? { surfaceResponse: "deterministic-woven-normal-and-roughness", surfacePreset: preset.surface } : {});
   const textures = await proceduralSurfaceTextures(doc, preset);
   if (textures) material.setNormalTexture(textures.normal).setNormalScale(0.025).setMetallicRoughnessTexture(textures.roughness);
@@ -632,7 +808,7 @@ const artworkMaterialFor = async (doc, source) => {
   const material = (await materialFor(doc, source.materials.artwork))
     .setBaseColorTexture(texture)
     .setAlphaMode("BLEND")
-    .setDoubleSided(true);
+    .setDoubleSided(source.materials.artwork.doubleSided ?? true);
   return { material, bytes, decodedPixelSha256: sha256(decoded) };
 };
 
@@ -666,65 +842,132 @@ const addNode = (doc, parent, buffer, name, geometry, material, extras = {}) => 
 };
 
 const buildTShirt = (doc, assembly, buffer, source, materials) => {
-  const outline = fittedGarmentOutline([
-    [-0.31, 0.015], [0, 0], [0.31, 0.015], [0.32, 0.20], [0.34, 0.67],
-    [0.43, 0.70], [0.54, 0.74], [0.51, 0.84], [0.36, 0.94], [0.30, 1.00], [0.12, 1.04],
-    [0, 1.025], [-0.12, 1.04], [-0.30, 1.00], [-0.36, 0.94], [-0.51, 0.84], [-0.54, 0.74],
-    [-0.43, 0.70], [-0.34, 0.67], [-0.32, 0.20]
-  ], { width: 1.06, height: 1.02 });
-  addNode(doc, assembly, buffer, "T_Shirt_Draped_Shell", drapedShell(outline, { halfDepth: 0.050, foldScale: 0.004 }), materials.fabric, {
+  const torsoRings = [
+    { y: 0, halfWidth: 0.31, halfDepth: 0.058, centreX: 0, centreZ: 0, hemCurve: 0.014, fold: 0.002 },
+    { y: 0.18, halfWidth: 0.32, halfDepth: 0.066, centreX: 0, centreZ: 0, fold: 0.004 },
+    { y: 0.54, halfWidth: 0.34, halfDepth: 0.073, centreX: 0, centreZ: 0, fold: 0.006 },
+    { y: 0.78, halfWidth: 0.35, halfDepth: 0.075, centreX: 0, centreZ: 0, fold: 0.004 },
+    { y: 0.90, halfWidth: 0.36, halfDepth: 0.074, centreX: 0, centreZ: 0, fold: 0.002 },
+    { y: 0.965, halfWidth: 0.355, halfDepth: 0.073, centreX: 0, centreZ: 0 },
+    { y: 1.000, halfWidth: 0.300, halfDepth: 0.068, centreX: 0, centreZ: 0 },
+    { y: 1.040, halfWidth: 0.14, halfDepth: 0.063, centreX: 0, centreZ: 0, frontDrop: 0.035 }
+  ];
+  const torso = tailoredTorso(torsoRings);
+  const rightSleeve = smoothSleeveRings({
+    start: [0.275, 0.880], control: [0.405, 0.835], end: [0.520, 0.715],
+    startRadius: 0.080, endRadius: 0.068, radiusBulge: 0.010,
+    startDepth: 0.052, endDepth: 0.045, samples: 14
+  });
+  const leftSleeve = rightSleeve.map((ring) => ({ ...ring, centre: [-ring.centre[0], ring.centre[1], 0] }));
+  const shell = new Geometry();
+  appendGeometry(shell, torso.geometry);
+  appendGeometry(shell, loftedTubeAlongPath(rightSleeve, { segments: 28, capStart: true, capEnd: false }));
+  appendGeometry(shell, loftedTubeAlongPath(leftSleeve, { segments: 28, capStart: true, capEnd: false }));
+  appendGeometry(shell, shoulderBridge({ torso, torsoRingIndex: 4, side: 1, sleeveRings: rightSleeve }));
+  appendGeometry(shell, shoulderBridge({ torso, torsoRingIndex: 4, side: -1, sleeveRings: leftSleeve }));
+  addNode(doc, assembly, buffer, "T_Shirt_Draped_Shell", shell, materials.fabric, {
     role: "continuous-garment-shell",
-    construction: "unified-draped-front-back-shell",
+    construction: "tailored-torso-attached-sleeves",
+    shoulderDropM: 0.075,
+    sleeveAttachment: "explicit-bridge-patches",
+    armholeCoverage: "continuous-torso-shoulders-over-underlapping-sleeve-roots",
+    sleeveCrossSection: "flattened-relaxed-elliptical-open-cuff",
     shoulderSleeveContinuity: true,
     frontBackReadable: true,
     dimensionsAuthority: source.dimensions.authority
   });
-  addNode(doc, assembly, buffer, "T_Shirt_Collar", ellipticalRingZ({ centre: [0, 0.975, 0], outer: [0.125, 0.065], inner: [0.085, 0.040], depth: 0.090 }), materials.collar, { role: "dimensional-collar", constructionAccuracyClaim: false });
-  addNode(doc, assembly, buffer, "T_Shirt_Seam_Cues", curvedHemSeam({ width: 0.50, y: 0.020, curve: -0.008, halfDepth: 0.052 }), materials.collar, { role: "curved-hem-seam-cue", integratedByOverlap: true });
-  addNode(doc, assembly, buffer, "T_Shirt_Front_Artwork", curvedArtworkSurface({ centre: [0, 0.655], size: [0.300, 0.1125], bodyHalfWidth: 0.34, bodyHalfDepth: 0.055, side: "front" }), materials.artwork, { role: "exact-front-artwork", surfaceMm: source.artwork.registration.surfaceMm, sourceSha256: source.artwork.sha256 });
+  addNode(doc, assembly, buffer, "T_Shirt_Collar", ellipticalRingY({ centre: [0, 1.032, 0], outer: [0.155, 0.080], inner: [0.108, 0.052], height: 0.018, frontDrop: 0.038 }), materials.collar, { role: "dimensional-collar", opening: "unfilled-neckline", frontDropM: 0.038, innerDepthM: 0.052, constructionAccuracyClaim: false });
+  addNode(doc, assembly, buffer, "T_Shirt_Collar_Interior", ellipticalRingY({ centre: [0, 1.014, 0], outer: [0.108, 0.052], inner: [0.096, 0.043], height: 0.040, frontDrop: 0.035 }), materials.interior, { role: "shadowed-inner-rib-wall", opening: "unfilled-dark-cavity", constructionAccuracyClaim: false });
+  const sleeveHems = new Geometry();
+  appendGeometry(sleeveHems, loftedTubeAlongPath(rightSleeve.slice(-3), { segments: 28, capStart: false, capEnd: false }));
+  appendGeometry(sleeveHems, loftedTubeAlongPath(leftSleeve.slice(-3), { segments: 28, capStart: false, capEnd: false }));
+  addNode(doc, assembly, buffer, "T_Shirt_Sleeve_Hems", sleeveHems, materials.collar, { role: "tubular-sleeve-hem-rims", opening: "unfilled-cuff-rims" });
+  const hem = tailoredTorso([torsoRings[0], { ...torsoRings[0], y: 0.028, halfWidth: 0.312, halfDepth: 0.060 }], { segments: 36 });
+  addNode(doc, assembly, buffer, "T_Shirt_Curved_Hem", hem.geometry, materials.collar, { role: "level-curved-hem-rim", profile: "level-curved-drape", integratedByOverlap: true });
+  addNode(doc, assembly, buffer, "T_Shirt_Front_Artwork", curvedArtworkSurface({ centre: [0, 0.655], size: [0.300, 0.1125], bodyHalfWidth: 0.34, bodyHalfDepth: 0.073, side: "front", surfaceOffset: 0.012 }), materials.artwork, { role: "exact-front-artwork", surfaceMm: source.artwork.registration.surfaceMm, normalOffsetMm: 12, uvCoverage: "full-source-0-1", sourceSha256: source.artwork.sha256 });
 };
 
 const buildHoodie = (doc, assembly, buffer, source, materials) => {
-  const outline = fittedGarmentOutline([
-    [-0.34, 0.015], [0, 0], [0.34, 0.015], [0.35, 0.19], [0.37, 0.71],
-    [0.44, 0.62], [0.51, 0.27], [0.60, 0.24], [0.57, 0.60], [0.51, 0.86], [0.34, 1.03],
-    [0.14, 1.08], [0, 1.06], [-0.14, 1.08], [-0.34, 1.03], [-0.51, 0.86],
-    [-0.57, 0.60], [-0.60, 0.24], [-0.51, 0.27], [-0.44, 0.62], [-0.37, 0.71], [-0.35, 0.19]
-  ], { width: 1.17, height: 1.08 });
-  addNode(doc, assembly, buffer, "Hoodie_Draped_Shell", drapedShell(outline, { halfDepth: 0.068, foldScale: 0.006 }), materials.fabric, {
+  const torsoRings = [
+    { y: 0.065, halfWidth: 0.335, halfDepth: 0.078, centreX: 0, centreZ: 0, fold: 0.003 },
+    { y: 0.22, halfWidth: 0.350, halfDepth: 0.084, centreX: 0, centreZ: 0, fold: 0.005 },
+    { y: 0.55, halfWidth: 0.370, halfDepth: 0.090, centreX: 0, centreZ: 0, fold: 0.008 },
+    { y: 0.78, halfWidth: 0.380, halfDepth: 0.092, centreX: 0, centreZ: 0, fold: 0.006 },
+    { y: 0.92, halfWidth: 0.370, halfDepth: 0.095, centreX: 0, centreZ: 0, fold: 0.003 },
+    { y: 0.980, halfWidth: 0.340, halfDepth: 0.090, centreX: 0, centreZ: 0 },
+    { y: 1.025, halfWidth: 0.250, halfDepth: 0.080, centreX: 0, centreZ: 0 },
+    { y: 1.065, halfWidth: 0.150, halfDepth: 0.068, centreX: 0, centreZ: 0, frontDrop: 0.025 }
+  ];
+  const torso = tailoredTorso(torsoRings);
+  const rightSleeve = smoothSleeveRings({
+    start: [0.275, 0.885], control: [0.470, 0.690], end: [0.520, 0.225],
+    startRadius: 0.095, endRadius: 0.070, radiusBulge: 0.016,
+    startDepth: 0.068, endDepth: 0.052, samples: 18
+  });
+  const leftSleeve = rightSleeve.map((ring) => ({ ...ring, centre: [-ring.centre[0], ring.centre[1], 0] }));
+  const shell = new Geometry();
+  appendGeometry(shell, torso.geometry);
+  appendGeometry(shell, loftedTubeAlongPath(rightSleeve, { segments: 28, capStart: true, capEnd: false }));
+  appendGeometry(shell, loftedTubeAlongPath(leftSleeve, { segments: 28, capStart: true, capEnd: false }));
+  appendGeometry(shell, shoulderBridge({ torso, torsoRingIndex: 4, side: 1, sleeveRings: rightSleeve }));
+  appendGeometry(shell, shoulderBridge({ torso, torsoRingIndex: 4, side: -1, sleeveRings: leftSleeve }));
+  addNode(doc, assembly, buffer, "Hoodie_Draped_Shell", shell, materials.fabric, {
     role: "continuous-garment-shell",
-    construction: "unified-draped-front-back-shell",
+    construction: "tailored-torso-attached-sleeves",
+    sleeveAttachment: "explicit-bridge-patches",
+    armholeCoverage: "continuous-torso-shoulders-over-underlapping-sleeve-roots",
+    sleeveCrossSection: "relaxed-tapered-long-sleeve-open-cuff",
     shoulderSleeveContinuity: true,
     frontBackReadable: true,
     dimensionsAuthority: source.dimensions.authority
   });
-  const integratedTrim = new Geometry();
-  appendGeometry(integratedTrim, frontBackPatch([[-0.30, 0.008], [0.30, 0.008], [0.32, 0.095], [-0.32, 0.095]], 0.070));
-  appendGeometry(integratedTrim, frontBackPatch([[0.505, 0.245], [0.59, 0.225], [0.585, 0.305], [0.495, 0.325]], 0.055));
-  appendGeometry(integratedTrim, frontBackPatch(mirrorPolygonX([[0.505, 0.245], [0.59, 0.225], [0.585, 0.305], [0.495, 0.325]]), 0.055));
-  addNode(doc, assembly, buffer, "Hoodie_Integrated_Rib_Trim", integratedTrim, materials.rib, { role: "gapless-hem-and-cuff-trim", integratedByOverlap: true });
+  const cuffs = new Geometry();
+  appendGeometry(cuffs, loftedTubeAlongPath(rightSleeve.slice(-4), { segments: 28, capStart: false, capEnd: false }));
+  appendGeometry(cuffs, loftedTubeAlongPath(leftSleeve.slice(-4), { segments: 28, capStart: false, capEnd: false }));
+  addNode(doc, assembly, buffer, "Hoodie_Shaped_Cuffs", cuffs, materials.rib, { role: "conforming-rib-cuffs", opening: "unfilled-cuff-rims", integratedByOverlap: true });
+  const waistband = tailoredTorso([
+    { y: 0, halfWidth: 0.325, halfDepth: 0.074, centreX: 0, centreZ: 0 },
+    { y: 0.055, halfWidth: 0.335, halfDepth: 0.078, centreX: 0, centreZ: 0 },
+    { y: 0.110, halfWidth: 0.345, halfDepth: 0.082, centreX: 0, centreZ: 0 }
+  ], { segments: 36 });
+  addNode(doc, assembly, buffer, "Hoodie_Waistband", waistband.geometry, materials.rib, { role: "conforming-rib-waistband", integration: "conforming-body-overlap", opening: "unfilled-body-rim" });
   addNode(doc, assembly, buffer, "Hoodie_Open_Hood_Shell", openHoodShell(), materials.fabric, {
     role: "open-attached-hood-shell",
     opening: "unfilled-face-cavity",
-    attachedAtNecklineY: 1.0,
+    construction: "attached-two-panel-down-hood",
+    panelCount: 2,
+    orientation: "down-resting-on-upper-back",
+    openingPlane: "upward-forward-neckline",
+    rearExterior: "solid-two-lobe-panel",
+    necklineOverlapM: 0.285,
+    shoulderDrapeWidthM: 0.53,
+    attachedAtNecklineY: 1.035,
     containsHeadForm: false,
     constructionAccuracyClaim: false
   });
+  addNode(doc, assembly, buffer, "Hoodie_Hood_Throat_Overlap", hoodThroatOverlap(), materials.rib, { role: "hood-neckline-fold", construction: "overlapped-neckline-fold", opening: "unfilled-neckline" });
   addNode(doc, assembly, buffer, "Hoodie_Hood_Centre_Seam", hoodCentreSeam(), materials.rib, { role: "hood-rear-centre-seam", constructionAccuracyClaim: false });
-  addNode(doc, assembly, buffer, "Hoodie_Back_Artwork", curvedArtworkSurface({ centre: [0, 0.690], size: [0.300, 0.1125], bodyHalfWidth: 0.38, bodyHalfDepth: 0.076, side: "back" }), materials.artwork, { role: "exact-back-artwork", surfaceMm: source.artwork.registration.surfaceMm, sourceSha256: source.artwork.sha256 });
+  addNode(doc, assembly, buffer, "Hoodie_Back_Artwork", curvedArtworkSurface({ centre: [0, 0.655], size: [0.300, 0.1125], bodyHalfWidth: 0.38, bodyHalfDepth: 0.090, side: "back", surfaceOffset: 0.010 }), materials.artwork, { role: "exact-back-artwork", surfaceMm: source.artwork.registration.surfaceMm, normalOffsetMm: 10, uvCoverage: "full-source-0-1", sourceSha256: source.artwork.sha256 });
 };
 
 const buildCap = (doc, assembly, buffer, source, materials) => {
   for (let index = 0; index < 6; index += 1) {
     addNode(doc, assembly, buffer, `Cap_Panel_${String(index + 1).padStart(2, "0")}`, crownPanel(index), materials.crown, { role: "crown-panel", panel: index + 1, panelCount: 6, constructionAccuracyClaim: false });
   }
-  addNode(doc, assembly, buffer, "Cap_Curved_Brim", curvedBrim(), materials.crown, { role: "curved-dimensional-brim", productionDimensionsClaim: false });
+  const seamAngles = Array.from({ length: 6 }, (_, index) => -Math.PI / 6 + index * Math.PI / 3);
+  addNode(doc, assembly, buffer, "Cap_Crown_Seams", crownRibbons({ offsetAngles: seamAngles, halfWidth: 0.010, radialOffset: 0.0015 }), materials.seam, { role: "raised-tonal-panel-seams", panelCount: 6 });
+  addNode(doc, assembly, buffer, "Cap_Crown_Creases", crownRibbons({ offsetAngles: [-2 * Math.PI / 3, -Math.PI / 3, 0, Math.PI / 3, 2 * Math.PI / 3], halfWidth: 0.004, radialOffset: 0.0010 }), materials.seam, { role: "subtle-panel-form-creases" });
+  addNode(doc, assembly, buffer, "Cap_Eyelets", capEyelets(), materials.seam, { role: "embroidered-vent-eyelets", count: 4 });
+  addNode(doc, assembly, buffer, "Cap_Curved_Brim", curvedBrim({ widthSegments: 32, lengthSegments: 20 }), materials.crown, { role: "curved-dimensional-brim", curvatureAxes: 2, productionDimensionsClaim: false });
+  addNode(doc, assembly, buffer, "Cap_Bill_Edge_Stitching", curvedBrimStitching(), materials.seam, { role: "tonal-bill-edge-stitching", rows: 2 });
+  addNode(doc, assembly, buffer, "Cap_Crown_Bill_Transition", crownBillTransition(), materials.seam, { role: "front-crown-bill-join" });
   addNode(doc, assembly, buffer, "Cap_Top_Button", cylinderY({ centre: [0, 0.263, 0], radius: 0.008, height: 0.006 }), materials.seam, { role: "top-button" });
-  addNode(doc, assembly, buffer, "Cap_Rear_Aperture_Rim", ellipticalRingZ({ centre: [0, 0.115, -0.108], outer: [0.065, 0.057], inner: [0.052, 0.043], depth: 0.008, segments: 40 }), materials.seam, { role: "rear-aperture-boundary", opening: "unfilled-through-aperture", crownGeometryRemoved: true });
-  addNode(doc, assembly, buffer, "Cap_Adjustment_Strap", boxGeometry([0, 0.076, -0.118], [0.142, 0.014, 0.008]), materials.seam, { role: "single-rear-adjustment-strap", bridgesAperture: true, mechanismMeasured: false });
-  addNode(doc, assembly, buffer, "Cap_Adjustment_Keeper", boxGeometry([0.040, 0.076, -0.126], [0.014, 0.024, 0.006]), materials.hardware, { role: "small-adjustment-keeper", mechanismMeasured: false });
-  addNode(doc, assembly, buffer, "Cap_Front_Patch", curvedArtworkSurface({ centre: [0, 0.150], size: [0.055, 0.028], bodyHalfWidth: 0.125, bodyHalfDepth: 0.115, side: "front", surfaceOffset: 0.004 }), materials.patch, { role: "bone-woven-patch", nominalMm: source.artwork.registration.patchMm, standOffMm: 4, vendorProofRequired: true });
-  addNode(doc, assembly, buffer, "Cap_Patch_Mark", curvedArtworkSurface({ centre: [0, 0.150], size: [0.020, 0.020], bodyHalfWidth: 0.125, bodyHalfDepth: 0.115, side: "front", surfaceOffset: 0.0055, widthSegments: 8, heightSegments: 4 }), materials.artwork, { role: "exact-compact-mark", surfaceMm: source.artwork.registration.surfaceMm, sourceSha256: source.artwork.sha256 });
+  addNode(doc, assembly, buffer, "Cap_Rear_Aperture_Rim", ellipticalRingZ({ centre: [0, 0.115, -0.108], outer: [0.068, 0.060], inner: [0.057, 0.049], depth: 0.007, segments: 64 }), materials.seam, { role: "rear-aperture-boundary", opening: "unfilled-through-aperture", crownGeometryRemoved: true, profile: "smooth-bound-edge-over-topology-cut" });
+  addNode(doc, assembly, buffer, "Cap_Adjustment_Strap", boxGeometry([0, 0.069, -0.117], [0.136, 0.010, 0.007]), materials.seam, { role: "single-rear-adjustment-strap", bridgesAperture: true, alignedWithLowerRim: true, mechanismMeasured: false });
+  addNode(doc, assembly, buffer, "Cap_Adjustment_Keeper", boxGeometry([0.040, 0.069, -0.125], [0.014, 0.020, 0.005]), materials.hardware, { role: "small-adjustment-keeper", mechanismMeasured: false });
+  addNode(doc, assembly, buffer, "Cap_Patch_Border", curvedArtworkSurface({ centre: [0, 0.150], size: [0.061, 0.034], bodyHalfWidth: 0.125, bodyHalfDepth: 0.115, side: "front", surfaceOffset: 0.0040 }), materials.seam, { role: "patch-stitch-border", integration: "stitched-conforming-border" });
+  addNode(doc, assembly, buffer, "Cap_Front_Patch", curvedArtworkSurface({ centre: [0, 0.150], size: [0.055, 0.028], bodyHalfWidth: 0.125, bodyHalfDepth: 0.115, side: "front", surfaceOffset: 0.0055 }), materials.patch, { role: "bone-woven-patch", nominalMm: source.artwork.registration.patchMm, standOffMm: 5.5, vendorProofRequired: true });
+  addNode(doc, assembly, buffer, "Cap_Patch_Mark", curvedArtworkSurface({ centre: [0, 0.150], size: [0.020, 0.020], bodyHalfWidth: 0.125, bodyHalfDepth: 0.115, side: "front", surfaceOffset: 0.0075, widthSegments: 8, heightSegments: 4 }), materials.artwork, { role: "exact-compact-mark", surfaceMm: source.artwork.registration.surfaceMm, normalOffsetMm: 7.5, uvCoverage: "full-source-0-1", sourceSha256: source.artwork.sha256 });
 };
 
 const builders = {

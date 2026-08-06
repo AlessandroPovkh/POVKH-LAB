@@ -8,18 +8,18 @@
           "name": "T_Shirt_001_Concept_Visualization",
           "rootName": "T_Shirt_001_Centred_Grounded_Pivot",
           "bboxMin": [
-            -0.53,
+            -0.5684,
             0,
-            -0.052
+            -0.08
           ],
           "bboxMax": [
-            0.53,
-            1.04,
-            0.0565
+            0.5684,
+            1.041,
+            0.085
           ],
-          "renderVertexCount": 2220,
-          "uploadVertexCount": 1636,
-          "uploadNaiveVertexCount": 1636
+          "renderVertexCount": 8964,
+          "uploadVertexCount": 6032,
+          "uploadNaiveVertexCount": 6032
         }
       ]
     },
@@ -31,8 +31,8 @@
             "TRIANGLES"
           ],
           "meshPrimitives": 1,
-          "glPrimitives": 316,
-          "vertices": 788,
+          "glPrimitives": 2020,
+          "vertices": 4096,
           "indices": [
             "u32"
           ],
@@ -43,7 +43,7 @@
             "TEXCOORD_0:f32"
           ],
           "instances": 1,
-          "size": 41616
+          "size": 220848
         },
         {
           "name": "T_Shirt_Collar_Mesh",
@@ -51,8 +51,8 @@
             "TRIANGLES"
           ],
           "meshPrimitives": 1,
-          "glPrimitives": 256,
-          "vertices": 512,
+          "glPrimitives": 288,
+          "vertices": 576,
           "indices": [
             "u32"
           ],
@@ -63,10 +63,50 @@
             "TEXCOORD_0:f32"
           ],
           "instances": 1,
-          "size": 27648
+          "size": 31104
         },
         {
-          "name": "T_Shirt_Seam_Cues_Mesh",
+          "name": "T_Shirt_Collar_Interior_Mesh",
+          "mode": [
+            "TRIANGLES"
+          ],
+          "meshPrimitives": 1,
+          "glPrimitives": 288,
+          "vertices": 576,
+          "indices": [
+            "u32"
+          ],
+          "attributes": [
+            "NORMAL:f32",
+            "POSITION:f32",
+            "TANGENT:f32",
+            "TEXCOORD_0:f32"
+          ],
+          "instances": 1,
+          "size": 31104
+        },
+        {
+          "name": "T_Shirt_Sleeve_Hems_Mesh",
+          "mode": [
+            "TRIANGLES"
+          ],
+          "meshPrimitives": 1,
+          "glPrimitives": 224,
+          "vertices": 448,
+          "indices": [
+            "u32"
+          ],
+          "attributes": [
+            "NORMAL:f32",
+            "POSITION:f32",
+            "TANGENT:f32",
+            "TEXCOORD_0:f32"
+          ],
+          "instances": 1,
+          "size": 24192
+        },
+        {
+          "name": "T_Shirt_Curved_Hem_Mesh",
           "mode": [
             "TRIANGLES"
           ],
@@ -125,17 +165,27 @@
             "metallicRoughnessTexture"
           ],
           "alphaMode": "OPAQUE",
-          "doubleSided": false
+          "doubleSided": true
         },
         {
           "name": "MAT_T_SHIRT_BONE_RIB",
-          "instances": 2,
+          "instances": 3,
           "textures": [
             "normalTexture",
             "metallicRoughnessTexture"
           ],
           "alphaMode": "OPAQUE",
-          "doubleSided": false
+          "doubleSided": true
+        },
+        {
+          "name": "MAT_T_SHIRT_NECK_INTERIOR",
+          "instances": 1,
+          "textures": [
+            "normalTexture",
+            "metallicRoughnessTexture"
+          ],
+          "alphaMode": "OPAQUE",
+          "doubleSided": true
         }
       ]
     },
@@ -204,6 +254,32 @@
           "compression": "",
           "resolution": "64x64",
           "size": 2637,
+          "gpuSize": 21844
+        },
+        {
+          "name": "MAT_T_SHIRT_NECK_INTERIOR_Woven_Normal",
+          "uri": "",
+          "slots": [
+            "normalTexture"
+          ],
+          "instances": 1,
+          "mimeType": "image/png",
+          "compression": "",
+          "resolution": "64x64",
+          "size": 3692,
+          "gpuSize": 21844
+        },
+        {
+          "name": "MAT_T_SHIRT_NECK_INTERIOR_Woven_Roughness",
+          "uri": "",
+          "slots": [
+            "metallicRoughnessTexture"
+          ],
+          "instances": 1,
+          "mimeType": "image/png",
+          "compression": "",
+          "resolution": "64x64",
+          "size": 2677,
           "gpuSize": 21844
         }
       ]

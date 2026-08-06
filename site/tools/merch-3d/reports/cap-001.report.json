@@ -49,21 +49,29 @@
         "Cap_Panel_04",
         "Cap_Panel_05",
         "Cap_Panel_06",
+        "Cap_Crown_Seams",
+        "Cap_Crown_Creases",
+        "Cap_Eyelets",
         "Cap_Curved_Brim",
+        "Cap_Bill_Edge_Stitching",
+        "Cap_Crown_Bill_Transition",
         "Cap_Top_Button",
         "Cap_Rear_Aperture_Rim",
         "Cap_Adjustment_Strap",
         "Cap_Adjustment_Keeper",
         "Cap_Front_Patch",
+        "Cap_Patch_Border",
         "Cap_Patch_Mark"
       ],
       "features": [
-        "six-panel crown with removed rear geometry",
-        "curved dimensional brim",
+        "six shaped crown panels with raised seam topology and subtle creases",
+        "four embroidered eyelets",
+        "doubly curved dimensional brim with two tonal stitch rows",
+        "crown-to-bill transition",
         "top button",
-        "unfilled rear through-aperture",
+        "unfilled anatomical rear through-aperture",
         "single bridging adjustment strap with keeper",
-        "conformed bone front patch",
+        "conformed bone front patch with integrated border",
         "exact compact mark"
       ]
     },
@@ -95,26 +103,28 @@
       "crown": {
         "name": "MAT_CAP_WASHED_VOID_TWILL",
         "baseColor": [
-          0.018,
-          0.019,
-          0.021,
+          0.028,
+          0.03,
+          0.034,
           1
         ],
         "metallic": 0,
         "roughness": 0.95,
-        "surface": "washed-twill-void"
+        "surface": "washed-twill-void",
+        "doubleSided": false
       },
       "seam": {
         "name": "MAT_CAP_TONAL_SEAM",
         "baseColor": [
-          0.005,
-          0.006,
-          0.007,
+          0.018,
+          0.02,
+          0.023,
           1
         ],
         "metallic": 0,
         "roughness": 0.98,
-        "surface": "woven-seam-void"
+        "surface": "woven-seam-void",
+        "doubleSided": false
       },
       "patch": {
         "name": "MAT_CAP_BONE_PATCH",
@@ -126,7 +136,8 @@
         ],
         "metallic": 0,
         "roughness": 0.98,
-        "surface": "woven-patch-bone"
+        "surface": "woven-patch-bone",
+        "doubleSided": false
       },
       "opening": {
         "name": "MAT_CAP_REAR_OPENING",
@@ -159,7 +170,8 @@
           1
         ],
         "metallic": 0,
-        "roughness": 0.9
+        "roughness": 0.9,
+        "doubleSided": false
       }
     },
     "camera": {
@@ -213,11 +225,17 @@
         "Cap_Panel_04",
         "Cap_Panel_05",
         "Cap_Panel_06",
+        "Cap_Crown_Seams",
+        "Cap_Crown_Creases",
+        "Cap_Eyelets",
         "Cap_Curved_Brim",
+        "Cap_Bill_Edge_Stitching",
+        "Cap_Crown_Bill_Transition",
         "Cap_Top_Button",
         "Cap_Rear_Aperture_Rim",
         "Cap_Adjustment_Strap",
         "Cap_Adjustment_Keeper",
+        "Cap_Patch_Border",
         "Cap_Front_Patch",
         "Cap_Patch_Mark"
       ],
@@ -228,11 +246,17 @@
         "Cap_Panel_04_Mesh",
         "Cap_Panel_05_Mesh",
         "Cap_Panel_06_Mesh",
+        "Cap_Crown_Seams_Mesh",
+        "Cap_Crown_Creases_Mesh",
+        "Cap_Eyelets_Mesh",
         "Cap_Curved_Brim_Mesh",
+        "Cap_Bill_Edge_Stitching_Mesh",
+        "Cap_Crown_Bill_Transition_Mesh",
         "Cap_Top_Button_Mesh",
         "Cap_Rear_Aperture_Rim_Mesh",
         "Cap_Adjustment_Strap_Mesh",
         "Cap_Adjustment_Keeper_Mesh",
+        "Cap_Patch_Border_Mesh",
         "Cap_Front_Patch_Mesh",
         "Cap_Patch_Mark_Mesh"
       ],
@@ -260,19 +284,19 @@
     "method": "reopened-glb-bounds-node-and-texture-metadata",
     "boundsMm": {
       "min": [
-        -135.00000536441803,
+        -134.93093848228455,
         0,
-        -128.9999932050705
+        -127.49999761581421
       ],
       "max": [
-        135.00000536441803,
+        134.93093848228455,
         266.00000262260437,
         254.99999523162842
       ],
       "size": [
-        270.00001072883606,
+        269.8618769645691,
         266.00000262260437,
-        383.9999884366989
+        382.4999928474426
       ]
     },
     "geometryPurpose": "volumetric placement and front/back readability",
@@ -322,9 +346,9 @@
     "hints": 0
   },
   "budget": {
-    "triangles": 4332,
-    "drawCalls": 13,
-    "bytes": 517072,
+    "triangles": 38090,
+    "drawCalls": 19,
+    "bytes": 3565776,
     "ceilings": {
       "maxBytes": 4000000,
       "maxTriangles": 80000,
@@ -333,7 +357,7 @@
   },
   "output": {
     "path": "assets/merch-3d/cap-001.glb",
-    "sha256": "4d6adbeef3bd80a80586dfe463ebc203b9815228d6acd7a6573096902f64524e"
+    "sha256": "2c52d94ecff7fa083f22afc0d7fb06db6bda764ede10b075fed2c23621fd84a3"
   },
   "deterministic": {
     "verifiedBySecondInMemoryBuild": true
