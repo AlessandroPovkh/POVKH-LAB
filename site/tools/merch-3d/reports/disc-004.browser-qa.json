@@ -7,12 +7,12 @@
     {
       "view": "desktop-default",
       "path": "tools/merch-3d/reports/screenshots/disc-004-desktop-default.png",
-      "sha256": "646e373f800efe284cf726387efae039374c4fd8b95a08c572784c6172925a56",
+      "sha256": "a8756124bc96defde1284ea1ec08d8e8eb16d00451cacd4d708171da20c90253",
       "viewportPx": [
         1440,
         1000
       ],
-      "entropy": 2.5822,
+      "entropy": 2.3474,
       "errors": [],
       "loaded": true,
       "dimensionsM": [
@@ -29,18 +29,18 @@
       "cameraOrbit": {
         "theta": 0.4363323129985824,
         "phi": 1.2217304763960306,
-        "radius": 0.3843201243257465
+        "radius": 0.4800909275319899
       }
     },
     {
       "view": "desktop-front",
       "path": "tools/merch-3d/reports/screenshots/disc-004-desktop-front.png",
-      "sha256": "3dd9d37651dc756a49af573f91449e516f09cc53b54a14ba76068eb2d081c277",
+      "sha256": "7eb700be838b5d322ae9e3cc82f65f5ca219c46b6fea7b64055bd8f0eb4bb38b",
       "viewportPx": [
         1440,
         1000
       ],
-      "entropy": 2.709,
+      "entropy": 2.4209,
       "errors": [],
       "loaded": true,
       "dimensionsM": [
@@ -57,18 +57,18 @@
       "cameraOrbit": {
         "theta": 0,
         "phi": 1.2217304763960306,
-        "radius": 0.3843201243257465
+        "radius": 0.4800909275319899
       }
     },
     {
       "view": "desktop-rear",
       "path": "tools/merch-3d/reports/screenshots/disc-004-desktop-rear.png",
-      "sha256": "f82063876dea01d1c21e4135b41e7ae708b280a29a99e1fa8b3934be8852fc92",
+      "sha256": "b0f6b479c029750dac2b4b809860d567fd00189e0affd12165dfecbb5c75f26f",
       "viewportPx": [
         1440,
         1000
       ],
-      "entropy": 4.1644,
+      "entropy": 3.2942,
       "errors": [],
       "loaded": true,
       "dimensionsM": [
@@ -85,18 +85,18 @@
       "cameraOrbit": {
         "theta": 3.141592653589793,
         "phi": 1.2217304763960306,
-        "radius": 0.3843201243257465
+        "radius": 0.4800909275319899
       }
     },
     {
       "view": "mobile-default",
       "path": "tools/merch-3d/reports/screenshots/disc-004-mobile-default.png",
-      "sha256": "7ca0c9f5a511e0634e1f42607124449bec47475a604774fe06b0235f635401c5",
+      "sha256": "d5b42bb4a1be72dea479fa7b388e27f21a45aff0ab33d31a71e6d3a88c843d2c",
       "viewportPx": [
         390,
         844
       ],
-      "entropy": 3.159,
+      "entropy": 2.4737,
       "errors": [],
       "loaded": true,
       "dimensionsM": [
@@ -113,18 +113,18 @@
       "cameraOrbit": {
         "theta": 0.3839724354387525,
         "phi": 1.2566370614359172,
-        "radius": 0.3843201243257465
+        "radius": 0.578845371479327
       }
     },
     {
       "view": "mobile-front",
       "path": "tools/merch-3d/reports/screenshots/disc-004-mobile-front.png",
-      "sha256": "a462d37c66d4a9f8a2c3491abaada534486bfd417fb4c8058543bd763bfa91af",
+      "sha256": "06cb58c2c816f99de7e54902fbe76c38ea373433057052dab3a0c9d14c32f09a",
       "viewportPx": [
         390,
         844
       ],
-      "entropy": 3.1913,
+      "entropy": 2.5024,
       "errors": [],
       "loaded": true,
       "dimensionsM": [
@@ -141,18 +141,18 @@
       "cameraOrbit": {
         "theta": 0,
         "phi": 1.2566370614359172,
-        "radius": 0.3843201243257465
+        "radius": 0.578845371479327
       }
     },
     {
       "view": "mobile-rear",
       "path": "tools/merch-3d/reports/screenshots/disc-004-mobile-rear.png",
-      "sha256": "7ee53ecc3b40a4fe1d39687f48f9ca465de2af8e8d4a661558890585fcef32f3",
+      "sha256": "fd1948d4f1b6978695d2f1e44ca9c71ff3b1844f4aaed751b5ab1dfff285c4fb",
       "viewportPx": [
         390,
         844
       ],
-      "entropy": 5.1198,
+      "entropy": 3.2637,
       "errors": [],
       "loaded": true,
       "dimensionsM": [
@@ -169,13 +169,13 @@
       "cameraOrbit": {
         "theta": 3.141592653589793,
         "phi": 1.2566370614359172,
-        "radius": 0.3843201243257465
+        "radius": 0.578845371479327
       }
     },
     {
       "view": "desktop-readability-crop",
       "path": "tools/merch-3d/reports/screenshots/disc-004-desktop-readability-crop.png",
-      "sha256": "2b882533b045ec41be04a41e9a182c438436fb41403b4b14650ad08039e69e93",
+      "sha256": "e03918774b7ed5469002619aaa1cb28e6961c3e0b79147c89035ed55262aecf9",
       "expected": "exact governed ASCII attachment without retyped metadata"
     }
   ],
@@ -195,7 +195,7 @@
       }
     ],
     "artifactPath": "tools/merch-3d/reports/screenshots/disc-004-selected-gallery-compare.png",
-    "artifactSha256": "39ef4fee2ec39c848e7a622b98781ff7e3491bf6e4027ed9491ad2b747cd077a",
+    "artifactSha256": "11757736cbd56ea8e7e9b02b8124db63d215bb2295ce938b17719d5795c80bb9",
     "layout": "case / open / material-detail / live-front / live-rear"
   },
   "checks": {

@@ -60,11 +60,20 @@ test("disc sources pin the selected packet while retaining reverse compact as au
   assert.equal(sha256(await readFile(path.join(here, source.identity.ascii.path))), source.identity.ascii.sha256);
   assert.equal(source.identity.compactReverse.application, "audit-only-not-embedded");
   assert.equal(source.discTreatment, "clean-silver-no-printed-mark");
+  assert.deepEqual(source.geometryPolicy, {
+    carrierRadialSegments: 64,
+    carrierGrooveCount: 9,
+    indexComponent: "UNSIGNED_SHORT",
+    indexBits: 16,
+    decoderPolicy: "uncompressed-only"
+  });
+  assert.deepEqual(source.budgets, {maxBytes: 700_000, maxTriangles: 6_000, maxDrawCalls: 6});
 });
 
 test("disc GLB preserves exact jewel and disc dimensions with an unmarked silver carrier", async () => {
-  const [source, bytes, report, browserQa] = await Promise.all([
+  const [source, merch, bytes, report, browserQa] = await Promise.all([
     readJson(path.join(here, "disc-004.source.json")),
+    readJson(path.join(siteRoot, "data/merch.json")),
     readFile(glbPath),
     readJson(path.join(here, "reports/disc-004.report.json")),
     readJson(path.join(here, "reports/disc-004.browser-qa.json"))
@@ -78,17 +87,32 @@ test("disc GLB preserves exact jewel and disc dimensions with an unmarked silver
   const primitiveBounds = (name) => boundsForAccessor(node(name).getMesh().listPrimitives()[0].getAttribute("POSITION"));
   assert.deepEqual(primitiveBounds("Disc_Jewel_Case").sizeMm.map((value) => Number(value.toFixed(3))), [142, 125, 10.4]);
   assert.deepEqual(primitiveBounds("Disc_Carrier").sizeMm.map((value) => Number(value.toFixed(3))), [120, 120, 1.2]);
+  const carrierPositions = node("Disc_Carrier").getMesh().listPrimitives()[0].getAttribute("POSITION").getArray();
+  let minimumCarrierRadiusM = Infinity;
+  for (let offset = 0; offset < carrierPositions.length; offset += 3) {
+    minimumCarrierRadiusM = Math.min(minimumCarrierRadiusM, Math.hypot(carrierPositions[offset], carrierPositions[offset + 1] - 0.06));
+  }
+  assert.equal(Number((minimumCarrierRadiusM * 2_000).toFixed(3)), 15, "carrier geometry must preserve the 15 mm centre hole");
   assert.equal(Number(node("Disc_Carrier").getExtras().centreHoleDiameterMm), 15);
   assert.equal(node("Disc_Carrier").getExtras().printedMark, false);
+  assert.equal(node("Disc_Carrier").getExtras().radialSegments, source.geometryPolicy.carrierRadialSegments);
+  assert.equal(node("Disc_Carrier").getExtras().grooveCount, source.geometryPolicy.carrierGrooveCount);
   assert.match(node("Disc_Carrier").getMesh().listPrimitives()[0].getMaterial().getName(), /CLEAN_SILVER/);
   assert.equal(doc.getRoot().listTextures().length, 2, "only exact ASCII plus non-identity silver response may be embedded");
   assert.equal(doc.getRoot().listTextures().filter((texture) => texture.getExtras().canonicalSourceSha256 === source.identity.ascii.sha256).length, 1);
   assert.equal(doc.getRoot().listTextures().filter((texture) => texture.getExtras().proceduralRecipe === "pvkh-clean-silver-radial-v1" && texture.getExtras().containsIdentity === false).length, 1);
   assert.equal(doc.getRoot().listMaterials().some((material) => /logo|compact|identity.*disc/i.test(material.getName())), false);
+  for (const mesh of doc.getRoot().listMeshes()) {
+    for (const primitive of mesh.listPrimitives()) assert.ok(primitive.getIndices().getArray() instanceof Uint16Array, `${mesh.getName()} must use u16 indices`);
+  }
   const metrics = metricsFor(doc);
-  assert.ok(bytes.byteLength <= 1_800_000);
-  assert.ok(metrics.triangles <= 35_000);
-  assert.ok(metrics.drawCalls <= 10);
+  assert.deepEqual(metrics, {triangles: 2_842, drawCalls: 6});
+  assert.ok(bytes.byteLength <= 700_000);
+  assert.ok(metrics.triangles <= 6_000);
+  assert.equal(metrics.drawCalls, 6);
+  const merchObject = merch.objects.find((object) => object.id === source.productId);
+  assert.deepEqual(merchObject.viewer.budget, {bytes: 700_000, triangles: 6_000, drawCalls: 6});
+  assert.deepEqual(report.geometryPolicy, source.geometryPolicy);
   assert.deepEqual(report.budget, {...metrics, bytes: bytes.byteLength, ceilings: source.budgets});
   assert.equal(report.output.sha256, sha256(bytes));
   assert.equal(doc.getRoot().listExtensionsUsed().length, 0);
@@ -106,4 +130,29 @@ test("disc GLB validates without warnings and checked-in output is deterministic
   assert.equal(validation.issues.numWarnings, 0);
   const {stdout} = await execFile(process.execPath, [path.join(here, "build-disc-004.mjs"), "--verify"], {cwd: siteRoot});
   assert.match(stdout, /verified [a-f0-9]{64}/);
+});
+
+test("disc optimization audit pins the accepted visual and emulated performance evidence", async () => {
+  const [bytes, report, audit] = await Promise.all([
+    readFile(glbPath),
+    readJson(path.join(here, "reports/disc-004.report.json")),
+    readJson(path.join(here, "reports/disc-004.optimization-audit.json"))
+  ]);
+  assert.equal(audit.schemaVersion, 1);
+  assert.equal(audit.assetKey, "disc-004");
+  assert.equal(audit.decision, "accepted-64-radial-segments-9-grooves-u16");
+  assert.equal(audit.selected.outputSha256, sha256(bytes));
+  assert.equal(audit.selected.rawBytes, bytes.byteLength);
+  assert.equal(audit.selected.triangles, report.budget.triangles);
+  assert.equal(audit.selected.drawCalls, report.budget.drawCalls);
+  assert.deepEqual(audit.selected.geometryPolicy, report.geometryPolicy);
+  assert.deepEqual(audit.validation, {errors: 0, warnings: 0, extensionsUsed: [], extensionsRequired: []});
+  assert.equal(audit.visualComparison.profiles.length, 6);
+  assert.ok(audit.visualComparison.worstCase.minimumSsim >= 0.9989);
+  assert.ok(audit.visualComparison.worstCase.maximumChangedPixelRatio4 <= 0.0014);
+  assert.ok(audit.performanceExperiment.pairedDelta.medianClickToReadyMs < 0);
+  assert.ok(audit.performanceExperiment.pairedDelta.firstPartyTransferredBytes < 0);
+  assert.equal(audit.performanceExperiment.releaseTarget.coldClickToReadyMs, 2_500);
+  assert.equal(audit.performanceExperiment.releaseTarget.metByPrototype, false);
+  assert.equal(audit.performanceExperiment.physicalAndroidRequired, true);
 });

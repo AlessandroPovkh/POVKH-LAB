@@ -286,7 +286,7 @@
           "it": "Vista 3D interattiva del jewel case trasparente POVKH LAB e del compact disc argentato.",
           "ru": "Интерактивный 3D-вид прозрачного футляра POVKH LAB и серебристого компакт-диска."
         },
-        "budget": { "bytes": 1800000, "triangles": 35000, "drawCalls": 10 }
+        "budget": { "bytes": 700000, "triangles": 6000, "drawCalls": 6 }
       },
       "releaseGate": {
         "state": "requiredBeforeProduction",

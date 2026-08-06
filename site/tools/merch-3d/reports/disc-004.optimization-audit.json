@@ -1,0 +1,125 @@
+{
+  "schemaVersion": 1,
+  "assetKey": "disc-004",
+  "decision": "accepted-64-radial-segments-9-grooves-u16",
+  "baseline": {
+    "outputSha256": "54d072484a4580a94a3f9c5af06762efbf8e5b724f497c6fba88e78e96c7f873",
+    "rawBytes": 1270180,
+    "gzip9NoNameBytes": 489755,
+    "triangles": 12442,
+    "drawCalls": 6,
+    "carrierRadialSegments": 256,
+    "carrierGrooveCount": 18,
+    "indexComponent": "UNSIGNED_INT"
+  },
+  "selected": {
+    "outputSha256": "dd967959b2b2d50c97179fd90733d3dba334b26ab1f1f2b8e5f8e756b573c624",
+    "rawBytes": 523660,
+    "gzip9NoNameBytes": 358206,
+    "triangles": 2842,
+    "drawCalls": 6,
+    "geometryPolicy": {
+      "carrierRadialSegments": 64,
+      "carrierGrooveCount": 9,
+      "indexComponent": "UNSIGNED_SHORT",
+      "indexBits": 16,
+      "decoderPolicy": "uncompressed-only"
+    },
+    "sceneBoundsM": {
+      "minimum": [-0.071, 0, -0.0052],
+      "maximum": [0.071, 0.125, 0.0052]
+    },
+    "discDimensionsMm": {
+      "diameter": 120,
+      "depth": 1.2,
+      "centreHoleDiameter": 15
+    }
+  },
+  "reduction": {
+    "rawBytes": -746520,
+    "rawPercent": -58.773,
+    "gzip9NoNameBytes": -131549,
+    "gzip9NoNamePercent": -26.859,
+    "triangles": -9600,
+    "trianglesPercent": -77.158,
+    "drawCalls": 0
+  },
+  "validation": {
+    "errors": 0,
+    "warnings": 0,
+    "extensionsUsed": [],
+    "extensionsRequired": []
+  },
+  "identity": {
+    "asciiSourceSha256": "1c122d375b5b46f4aa06549e339e288ae89f185fab4e61c68fb7790a2f33bad7",
+    "cleanSilverRadialSha256": "7db5b492c5517da464ba05fb5d30f7d743a3d4f8ddc7d9ffac58d2840e71f5b0",
+    "printedMark": false,
+    "cameraPolicy": "source camera orbit, target and field-of-view strings unchanged"
+  },
+  "visualComparison": {
+    "method": "Fresh Playwright Chromium contexts rendered the governed desktop/mobile default, front and rear profiles through the vendored model-viewer runtime. Only the GLB response changed; viewport, camera strings, runtime, lighting and page layout remained fixed. Pixel metrics compare model-viewer element screenshots. A second baseline capture for every profile was pixel-exact.",
+    "prototypeCandidate": {
+      "outputSha256": "d53230212c7891a596dee514d53c175e0a85dbb9e1f0c4cc776a4ffe5396c589",
+      "rawBytes": 523592,
+      "productionDeltaBytes": 68,
+      "productionDifference": "The accepted build adds explicit geometry-policy extras only; rendered primitives, materials, textures and physical bounds are unchanged."
+    },
+    "profiles": [
+      {"profile": "desktop-default", "rmse": 0.07747, "psnrDb": 70.348108, "ssim": 0.999998, "changedPixelRatio4": 0.00004, "changedPixelRatio12": 0.000018},
+      {"profile": "desktop-front", "rmse": 0.200857, "psnrDb": 62.073069, "ssim": 0.999717, "changedPixelRatio4": 0.000092, "changedPixelRatio12": 0.000026},
+      {"profile": "desktop-rear", "rmse": 0.956152, "psnrDb": 48.520262, "ssim": 0.999258, "changedPixelRatio4": 0.00131, "changedPixelRatio12": 0.000811},
+      {"profile": "mobile-default", "rmse": 0.064425, "psnrDb": 71.949761, "ssim": 1, "changedPixelRatio4": 0.000035, "changedPixelRatio12": 0.000012},
+      {"profile": "mobile-front", "rmse": 0.327032, "psnrDb": 57.838992, "ssim": 0.998926, "changedPixelRatio4": 0.000153, "changedPixelRatio12": 0.000059},
+      {"profile": "mobile-rear", "rmse": 0.877724, "psnrDb": 49.263649, "ssim": 0.999499, "changedPixelRatio4": 0.001216, "changedPixelRatio12": 0.000803}
+    ],
+    "worstCase": {
+      "maximumRmse": 0.956152,
+      "minimumPsnrDb": 48.520262,
+      "minimumSsim": 0.998926,
+      "maximumChangedPixelRatio4": 0.00131,
+      "maximumChangedPixelRatio12": 0.000811
+    },
+    "governedProductionQa": {
+      "browserQa": "tools/merch-3d/reports/disc-004.browser-qa.json",
+      "selectedSourceCompare": "tools/merch-3d/reports/screenshots/disc-004-selected-gallery-compare.png",
+      "review": "six governed views and source comparison visually inspected after the production rebuild"
+    }
+  },
+  "transferEstimate": {
+    "fast4gDownloadBytesPerSecond": 524288,
+    "rawModelOnly": {"baselineMs": 2422.7, "selectedMs": 998.8, "savedMs": 1423.9},
+    "gzip9ModelOnly": {"baselineMs": 934.1, "selectedMs": 683.2, "savedMs": 250.9},
+    "caveat": "Byte-only estimates exclude latency, runtime transfer, parsing, GPU upload and release-CDN behavior."
+  },
+  "performanceExperiment": {
+    "method": "Three cold samples per asset in Chromium 149 at 393x851 CSS pixels, device scale factor 2.75, mobile touch enabled, CDP Fast-4G at 150 ms / 4 Mbps down / 3 Mbps up, CPU slowdown x4, new incognito context and disabled cache per sample.",
+    "current": {
+      "modelBytes": 1270180,
+      "medianClickToReadyMs": 6897.2,
+      "maximumClickToReadyMs": 7049.1,
+      "medianFirstPartyTransferredBytes": 2351821,
+      "minimumDragFramesPerSecond": 20.98,
+      "maximumDragP95FrameIntervalMs": 85.7
+    },
+    "prototype": {
+      "modelBytes": 523592,
+      "medianClickToReadyMs": 5228.6,
+      "maximumClickToReadyMs": 5460.3,
+      "medianFirstPartyTransferredBytes": 1604822,
+      "minimumDragFramesPerSecond": 27.78,
+      "maximumDragP95FrameIntervalMs": 75.5
+    },
+    "pairedDelta": {
+      "medianClickToReadyMs": -1668.6,
+      "medianClickToReadyPercent": -24.192,
+      "firstPartyTransferredBytes": -746999,
+      "firstPartyTransferredPercent": -31.763
+    },
+    "releaseTarget": {
+      "coldClickToReadyMs": 2500,
+      "metByPrototype": false
+    },
+    "physicalAndroidRequired": true,
+    "caveat": "Chromium CDP results are paired lab evidence, not physical Pixel measurements. Drag cadence was noisy and is directional only. The 68-byte production metadata delta is immaterial to the measured timing."
+  }
+}

@@ -41,6 +41,13 @@
     "disc": {"diameter": 120, "depth": 1.2, "centreHoleDiameter": 15},
     "frontInsert": [120, 120, 0.25]
   },
+  "geometryPolicy": {
+    "carrierRadialSegments": 64,
+    "carrierGrooveCount": 9,
+    "indexComponent": "UNSIGNED_SHORT",
+    "indexBits": 16,
+    "decoderPolicy": "uncompressed-only"
+  },
   "materials": {
     "clear": {"baseColor": [0.78, 0.84, 0.88, 0.09], "metallic": 0, "roughness": 0.08, "alphaMode": "BLEND"},
     "tray": {"baseColor": [0.012, 0.013, 0.015, 1], "metallic": 0.05, "roughness": 0.38},
@@ -60,5 +67,5 @@
       "rear": {"orbit": "180deg 72deg 112%", "target": "auto 0.064m auto", "fieldOfView": "20deg"}
     }
   },
-  "budgets": {"maxBytes": 1800000, "maxTriangles": 35000, "maxDrawCalls": 10}
+  "budgets": {"maxBytes": 700000, "maxTriangles": 6000, "maxDrawCalls": 6}
 }

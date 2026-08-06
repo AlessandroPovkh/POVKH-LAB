@@ -1,6 +1,13 @@
 {
   "schemaVersion": 1,
   "assetKey": "disc-004",
+  "geometryPolicy": {
+    "carrierRadialSegments": 64,
+    "carrierGrooveCount": 9,
+    "indexComponent": "UNSIGNED_SHORT",
+    "indexBits": 16,
+    "decoderPolicy": "uncompressed-only"
+  },
   "sourceIntegrity": {
     "ascii": {
       "path": "sources/disc-004/PVKH_ASCII_DARK_EXACT_1600x600_v01.png",
@@ -105,18 +112,18 @@
     "hints": 0
   },
   "budget": {
-    "triangles": 12442,
+    "triangles": 2842,
     "drawCalls": 6,
-    "bytes": 1270180,
+    "bytes": 523660,
     "ceilings": {
-      "maxBytes": 1800000,
-      "maxTriangles": 35000,
-      "maxDrawCalls": 10
+      "maxBytes": 700000,
+      "maxTriangles": 6000,
+      "maxDrawCalls": 6
     }
   },
   "output": {
     "path": "assets/merch-3d/disc-004.glb",
-    "sha256": "54d072484a4580a94a3f9c5af06762efbf8e5b724f497c6fba88e78e96c7f873"
+    "sha256": "dd967959b2b2d50c97179fd90733d3dba334b26ab1f1f2b8e5f8e756b573c624"
   },
   "deterministic": {
     "verifiedBySecondInMemoryBuild": true

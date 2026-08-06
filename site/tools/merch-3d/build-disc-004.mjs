@@ -92,11 +92,18 @@ const createSilverMaterial=async(doc,preset)=>{
   return {material,image};
 };
 
+const uint16IndicesFor=(g,name)=>{
+  let maximumIndex=0;
+  for(const index of g.indices)maximumIndex=Math.max(maximumIndex,index);
+  assert.ok(maximumIndex<=65_535,`${name} exceeds u16 index range`);
+  return new Uint16Array(g.indices);
+};
+
 const primitiveFor=(doc,buffer,name,g,material)=>doc.createPrimitive()
   .setAttribute("POSITION",doc.createAccessor(`${name}_POSITION`).setType("VEC3").setArray(new Float32Array(g.positions)).setBuffer(buffer))
   .setAttribute("NORMAL",doc.createAccessor(`${name}_NORMAL`).setType("VEC3").setArray(new Float32Array(g.normals)).setBuffer(buffer))
   .setAttribute("TEXCOORD_0",doc.createAccessor(`${name}_TEXCOORD_0`).setType("VEC2").setArray(new Float32Array(g.uvs)).setBuffer(buffer))
-  .setIndices(doc.createAccessor(`${name}_INDICES`).setType("SCALAR").setArray(new Uint32Array(g.indices)).setBuffer(buffer))
+  .setIndices(doc.createAccessor(`${name}_INDICES`).setType("SCALAR").setArray(uint16IndicesFor(g,name)).setBuffer(buffer))
   .setMaterial(material);
 
 const addMeshNode=(doc,parent,buffer,name,g,material,translation=[0,0,0],extras={})=>{const node=doc.createNode(name).setTranslation(translation).setExtras(extras).setMesh(doc.createMesh(`${name}_Mesh`).addPrimitive(primitiveFor(doc,buffer,name,g,material)));parent.addChild(node);return node;};
@@ -110,6 +117,9 @@ const verifySources=async(source)=>{
 };
 
 const buildDocument=async(source)=>{
+  assert.equal(source.geometryPolicy.indexComponent,"UNSIGNED_SHORT");
+  assert.equal(source.geometryPolicy.indexBits,16);
+  assert.equal(source.geometryPolicy.decoderPolicy,"uncompressed-only");
   const doc=new Document();
   const scene=doc.createScene("Disc_004_Closed_Jewel_Display");doc.getRoot().setDefaultScene(scene);
   const buffer=doc.createBuffer("Disc_004_Buffer");
@@ -138,8 +148,9 @@ const buildDocument=async(source)=>{
   addMeshNode(doc,assembly,buffer,"Disc_Bone_Insert",insert,bone,[mm(4),mm(2.5),mm(4.15)],{nominalDimensionsMm:source.dimensionsMm.frontInsert,copyPolicy:"exact-attachment-only-no-retyped-metadata"});
   const ascii=new Geometry();addFrontQuad(ascii,mm(104),mm(39),mm(76),mm(0.001));
   addMeshNode(doc,assembly,buffer,"Disc_Insert_ASCII_Identity",ascii,asciiMaterial,[mm(4),0,mm(4.285)],{canonicalSourceSha256:source.identity.ascii.sha256,warped:false});
-  const carrier=new Geometry();addAnnulus(carrier,mm(60),mm(7.5),mm(1.2),256,{grooves:18});
-  addMeshNode(doc,assembly,buffer,"Disc_Carrier",carrier,silver,[0,mm(2.5),mm(-2.45)],{diameterMm:120,depthMm:1.2,centreHoleDiameterMm:15,printedMark:false,treatment:source.discTreatment});
+  const discDimensions=source.dimensionsMm.disc;
+  const carrier=new Geometry();addAnnulus(carrier,mm(discDimensions.diameter/2),mm(discDimensions.centreHoleDiameter/2),mm(discDimensions.depth),source.geometryPolicy.carrierRadialSegments,{grooves:source.geometryPolicy.carrierGrooveCount});
+  addMeshNode(doc,assembly,buffer,"Disc_Carrier",carrier,silver,[0,mm(2.5),mm(-2.45)],{diameterMm:discDimensions.diameter,depthMm:discDimensions.depth,centreHoleDiameterMm:discDimensions.centreHoleDiameter,radialSegments:source.geometryPolicy.carrierRadialSegments,grooveCount:source.geometryPolicy.carrierGrooveCount,indexComponent:source.geometryPolicy.indexComponent,printedMark:false,treatment:source.discTreatment});
   const hub=new Geometry();addAnnulus(hub,mm(7.25),mm(2.1),mm(1.4),96);
   addMeshNode(doc,assembly,buffer,"Disc_Clear_Hub",hub,clear,[0,mm(55.25),mm(-3.0)],{part:"tray-hub",doesNotAlterDiscHole:true});
 
@@ -155,7 +166,7 @@ const buildArtifact=async()=>{
   const validation=await validateBytes(new Uint8Array(bytes),{uri:"disc-004.glb",format:"glb",writeTimestamp:false,maxIssues:100});const summary=validationSummary(validation);
   assert.equal(summary.errors,0,"Khronos validator errors");assert.equal(summary.warnings,0,"Khronos validator warnings");assert.ok(bytes.byteLength<=source.budgets.maxBytes);assert.ok(metrics.triangles<=source.budgets.maxTriangles);assert.ok(metrics.drawCalls<=source.budgets.maxDrawCalls);
   const silverTexture=reopened.getRoot().listTextures().find(texture=>texture.getExtras().proceduralRecipe==="pvkh-clean-silver-radial-v1");
-  const report={schemaVersion:1,assetKey:source.assetKey,sourceIntegrity:integrity.identity,authorityIntegrity:integrity.authority,derivedMaterialSha256:{cleanSilverRadial:sha256(silverTexture.getImage())},physicalEvidence:{method:"reopened-glb-accessor-bounds",dimensionsMm:source.dimensionsMm,centreHoleDiameterMm:15,discTreatment:source.discTreatment,printedMark:false},cameraRecommendations:source.camera,validation:summary,budget:{...metrics,bytes:bytes.byteLength,ceilings:source.budgets},output:{path:"assets/merch-3d/disc-004.glb",sha256:sha256(bytes)},deterministic:{verifiedBySecondInMemoryBuild:false},visualComparison:{canonicalSelected:["PVKH_DROP001_DISC_004_CASE_HERO_CONCEPT_v01.png","PVKH_DROP001_DISC_004_OPEN_SET_CONCEPT_v01.png","PVKH_DROP001_DISC_004_MATERIAL_DETAIL_CONCEPT_v01.png"],reviewStatus:"captured-six-views-readability-selected-compare",browserQa:"tools/merch-3d/reports/disc-004.browser-qa.json"}};
+  const report={schemaVersion:1,assetKey:source.assetKey,geometryPolicy:source.geometryPolicy,sourceIntegrity:integrity.identity,authorityIntegrity:integrity.authority,derivedMaterialSha256:{cleanSilverRadial:sha256(silverTexture.getImage())},physicalEvidence:{method:"reopened-glb-accessor-bounds",dimensionsMm:source.dimensionsMm,centreHoleDiameterMm:source.dimensionsMm.disc.centreHoleDiameter,discTreatment:source.discTreatment,printedMark:false},cameraRecommendations:source.camera,validation:summary,budget:{...metrics,bytes:bytes.byteLength,ceilings:source.budgets},output:{path:"assets/merch-3d/disc-004.glb",sha256:sha256(bytes)},deterministic:{verifiedBySecondInMemoryBuild:false},visualComparison:{canonicalSelected:["PVKH_DROP001_DISC_004_CASE_HERO_CONCEPT_v01.png","PVKH_DROP001_DISC_004_OPEN_SET_CONCEPT_v01.png","PVKH_DROP001_DISC_004_MATERIAL_DETAIL_CONCEPT_v01.png"],reviewStatus:"captured-six-views-readability-selected-compare",browserQa:"tools/merch-3d/reports/disc-004.browser-qa.json"}};
   return {source,bytes,report,validation,inspection:inspect(reopened)};
 };
 

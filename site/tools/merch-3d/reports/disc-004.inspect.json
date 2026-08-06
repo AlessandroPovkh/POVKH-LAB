@@ -14,9 +14,9 @@
           0.125,
           0.0052
         ],
-        "renderVertexCount": 37326,
-        "uploadVertexCount": 25028,
-        "uploadNaiveVertexCount": 25028
+        "renderVertexCount": 8526,
+        "uploadVertexCount": 5828,
+        "uploadNaiveVertexCount": 5828
       }
     ]
   },
@@ -31,14 +31,14 @@
         "glPrimitives": 384,
         "vertices": 912,
         "indices": [
-          "u32"
+          "u16"
         ],
         "attributes": [
           "NORMAL:f32",
           "POSITION:f32"
         ],
         "instances": 1,
-        "size": 26496
+        "size": 24192
       },
       {
         "name": "Disc_Black_Tray_Mesh",
@@ -49,14 +49,14 @@
         "glPrimitives": 12,
         "vertices": 24,
         "indices": [
-          "u32"
+          "u16"
         ],
         "attributes": [
           "NORMAL:f32",
           "POSITION:f32"
         ],
         "instances": 1,
-        "size": 720
+        "size": 648
       },
       {
         "name": "Disc_Bone_Insert_Mesh",
@@ -67,14 +67,14 @@
         "glPrimitives": 12,
         "vertices": 24,
         "indices": [
-          "u32"
+          "u16"
         ],
         "attributes": [
           "NORMAL:f32",
           "POSITION:f32"
         ],
         "instances": 1,
-        "size": 720
+        "size": 648
       },
       {
         "name": "Disc_Insert_ASCII_Identity_Mesh",
@@ -85,7 +85,7 @@
         "glPrimitives": 2,
         "vertices": 4,
         "indices": [
-          "u32"
+          "u16"
         ],
         "attributes": [
           "NORMAL:f32",
@@ -93,7 +93,7 @@
           "TEXCOORD_0:f32"
         ],
         "instances": 1,
-        "size": 152
+        "size": 140
       },
       {
         "name": "Disc_Carrier_Mesh",
@@ -101,10 +101,10 @@
           "TRIANGLES"
         ],
         "meshPrimitives": 1,
-        "glPrimitives": 11264,
-        "vertices": 22528,
+        "glPrimitives": 1664,
+        "vertices": 3328,
         "indices": [
-          "u32"
+          "u16"
         ],
         "attributes": [
           "NORMAL:f32",
@@ -112,7 +112,7 @@
           "TEXCOORD_0:f32"
         ],
         "instances": 1,
-        "size": 856064
+        "size": 116480
       },
       {
         "name": "Disc_Clear_Hub_Mesh",
@@ -123,14 +123,14 @@
         "glPrimitives": 768,
         "vertices": 1536,
         "indices": [
-          "u32"
+          "u16"
         ],
         "attributes": [
           "NORMAL:f32",
           "POSITION:f32"
         ],
         "instances": 1,
-        "size": 46080
+        "size": 41472
       }
     ]
   },
