@@ -3,8 +3,8 @@ let runtimePromise = null;
 const connection = () => navigator.connection || navigator.mozConnection || navigator.webkitConnection;
 const reducedMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-const localUrl = (value, label) => {
-  const url = new URL(value, document.baseURI);
+const localUrl = (value, label, base = document.baseURI) => {
+  const url = new URL(value, base);
   if (url.origin !== location.origin) throw new Error(`${label} must remain first-party`);
   return url.href;
 };
@@ -18,39 +18,167 @@ const supportsWebGL = () => {
   }
 };
 
-const loadRuntime = async (runtimeUrl) => {
+const decoderLocationsFor = (runtimeUrl) => ({
+  dracoDecoderLocation: new URL("model-viewer-support/draco/", runtimeUrl).href,
+  ktx2TranscoderLocation: new URL("model-viewer-support/basis/", runtimeUrl).href,
+  meshoptDecoderLocation: null,
+  lottieLoaderLocation: new URL("model-viewer-support/lottie-loader.disabled.js", runtimeUrl).href
+});
+
+const loadRuntime = async (runtimeValue) => {
+  const runtimeUrl = localUrl(runtimeValue, "model-viewer runtime");
+  const locations = decoderLocationsFor(runtimeUrl);
+  const preset = globalThis.ModelViewerElement || {};
+  Object.assign(preset, locations);
+  globalThis.ModelViewerElement = preset;
+
   if (!runtimePromise) {
-    runtimePromise = import(localUrl(runtimeUrl, "model-viewer runtime")).then(async () => {
+    runtimePromise = import(runtimeUrl).then(async () => {
       await customElements.whenDefined("model-viewer");
+      return customElements.get("model-viewer");
     }).catch((error) => {
       runtimePromise = null;
       throw error;
     });
   }
-  return runtimePromise;
+  const ModelViewer = await runtimePromise;
+  const { meshoptDecoderLocation: unusedMeshoptLocation, ...lazyLocations } = locations;
+  Object.assign(ModelViewer, lazyLocations);
+  return ModelViewer;
 };
 
 const stateCopy = (root, key, fallback) => root.dataset[key] || fallback;
 
-export const activateProductViewer = async (root, { signal: routeSignal } = {}) => {
-  if (!(root instanceof HTMLElement)) throw new TypeError("A product viewer root is required");
-  const canvas = root.querySelector("[data-product-viewer-canvas]");
-  const poster = root.querySelector("[data-product-viewer-poster]");
-  const activate = root.querySelector("[data-product-viewer-activate]");
-  const reset = root.querySelector("[data-product-viewer-reset]");
-  const status = root.querySelector("[data-product-viewer-status]");
-  const instructions = root.querySelector("[data-product-viewer-instructions]");
-  if (!canvas || !poster || !activate || !reset || !status || !instructions) {
-    throw new Error("Product viewer markup is incomplete");
+const elementsFor = (root) => {
+  const elements = {
+    canvas: root.querySelector("[data-product-viewer-canvas]"),
+    poster: root.querySelector("[data-product-viewer-poster]"),
+    activate: root.querySelector("[data-product-viewer-activate]"),
+    reset: root.querySelector("[data-product-viewer-reset]"),
+    status: root.querySelector("[data-product-viewer-status]"),
+    instructions: root.querySelector("[data-product-viewer-instructions]")
+  };
+  if (Object.values(elements).some((element) => !element)) throw new Error("Product viewer markup is incomplete");
+  return elements;
+};
+
+const showFailure = (root, { poster, activate, reset, status, instructions }) => {
+  root.dataset.viewerState = "error";
+  root.setAttribute("aria-busy", "false");
+  root.classList.remove("is-viewer-ready");
+  poster.hidden = false;
+  activate.hidden = false;
+  activate.disabled = root.dataset.viewerAvailability === "sourceBlocked";
+  reset.hidden = true;
+  instructions.hidden = true;
+  status.textContent = stateCopy(root, "viewerError", "3D view unavailable");
+};
+
+const showReady = (root, { poster, activate, reset, status, instructions }) => {
+  root.dataset.viewerState = "ready";
+  root.setAttribute("aria-busy", "false");
+  root.classList.add("is-viewer-ready");
+  poster.hidden = true;
+  activate.hidden = true;
+  reset.hidden = false;
+  instructions.hidden = false;
+  status.textContent = stateCopy(root, "viewerReady", "Interactive view ready");
+};
+
+const waitForImage = (image) => new Promise((resolve, reject) => {
+  if (image.complete && image.naturalWidth) return resolve();
+  image.addEventListener("load", resolve, { once: true });
+  image.addEventListener("error", reject, { once: true });
+});
+
+const activateSpin = async (root, elements, routeSignal) => {
+  const controller = new AbortController();
+  const { signal } = controller;
+  const dispose = () => {
+    if (signal.aborted) return;
+    controller.abort();
+    elements.canvas.replaceChildren();
+  };
+  routeSignal?.addEventListener("abort", dispose, { once: true });
+
+  try {
+    const manifestUrl = localUrl(root.dataset.viewerSrc, "spin manifest");
+    const response = await fetch(manifestUrl, { credentials: "same-origin", signal });
+    if (!response.ok) throw new Error(`Spin manifest failed with ${response.status}`);
+    const manifest = await response.json();
+    const variant = window.matchMedia("(max-width: 640px)").matches ? "mobile" : "desktop";
+    const frames = manifest?.variants?.[variant]?.frames;
+    if (manifest?.schemaVersion !== 1 || !Array.isArray(frames) || frames.length < 2) {
+      throw new Error("Spin manifest is invalid");
+    }
+    const frameUrls = frames.map((frame) => localUrl(frame, "spin frame", manifestUrl));
+    const image = document.createElement("img");
+    image.className = "product-viewer-spin";
+    image.dataset.productViewerSpin = "";
+    image.dataset.frameIndex = "0";
+    image.tabIndex = 0;
+    image.alt = elements.poster.alt;
+    image.setAttribute("aria-describedby", elements.instructions.id);
+    image.draggable = false;
+    image.src = frameUrls[0];
+    elements.canvas.replaceChildren(image);
+    elements.canvas.removeAttribute("aria-hidden");
+    await waitForImage(image);
+    if (signal.aborted || !root.isConnected) return { dispose };
+
+    let frameIndex = 0;
+    let pointerStart = null;
+    const showFrame = (next) => {
+      frameIndex = (next + frameUrls.length) % frameUrls.length;
+      image.dataset.frameIndex = String(frameIndex);
+      image.src = frameUrls[frameIndex];
+    };
+    image.addEventListener("keydown", (event) => {
+      if (event.key === "ArrowRight") showFrame(frameIndex + 1);
+      else if (event.key === "ArrowLeft") showFrame(frameIndex - 1);
+      else if (event.key === "Home") showFrame(0);
+      else return;
+      event.preventDefault();
+    }, { signal });
+    image.addEventListener("pointerdown", (event) => {
+      if (event.button !== 0) return;
+      pointerStart = { x: event.clientX, index: frameIndex };
+      try { image.setPointerCapture(event.pointerId); } catch { /* synthetic pointer events */ }
+    }, { signal });
+    image.addEventListener("pointermove", (event) => {
+      if (!pointerStart) return;
+      const steps = Math.trunc((pointerStart.x - event.clientX) / 40);
+      showFrame(pointerStart.index + steps);
+    }, { signal });
+    const endPointer = (event) => {
+      pointerStart = null;
+      try { image.releasePointerCapture(event.pointerId); } catch { /* synthetic pointer events */ }
+    };
+    image.addEventListener("pointerup", endPointer, { signal });
+    image.addEventListener("pointercancel", endPointer, { signal });
+    elements.reset.addEventListener("click", () => {
+      showFrame(0);
+      image.focus({ preventScroll: true });
+    }, { signal });
+
+    showReady(root, elements);
+    image.focus({ preventScroll: true });
+    return { dispose };
+  } catch (error) {
+    if (!signal.aborted) showFailure(root, elements);
+    dispose();
+    return null;
   }
+};
 
-  status.setAttribute("aria-live", "polite");
-  status.setAttribute("aria-atomic", "true");
-  if (routeSignal?.aborted) return null;
-  if (!supportsWebGL()) throw new Error("WebGL is unavailable");
-
-  const saver = connection()?.saveData === true;
-  if (saver) status.textContent = stateCopy(root, "viewerDataSaver", "Data Saver is active");
+const activateModel = async (root, elements, routeSignal) => {
+  if (!supportsWebGL()) {
+    showFailure(root, elements);
+    return null;
+  }
+  if (connection()?.saveData === true) {
+    elements.status.textContent = stateCopy(root, "viewerDataSaver", "Data Saver is active");
+  }
   await loadRuntime(root.dataset.viewerRuntime);
   if (routeSignal?.aborted || !root.isConnected) return null;
 
@@ -60,7 +188,6 @@ export const activateProductViewer = async (root, { signal: routeSignal } = {}) 
   const initialOrbit = root.dataset.viewerOrbit || "0deg 75deg 105%";
   model.className = "product-viewer-model";
   model.setAttribute("camera-controls", "");
-  model.setAttribute("tabindex", "0");
   model.setAttribute("touch-action", "pan-y");
   model.setAttribute("interaction-prompt", "none");
   model.setAttribute("loading", "eager");
@@ -69,49 +196,41 @@ export const activateProductViewer = async (root, { signal: routeSignal } = {}) 
   model.setAttribute("shadow-softness", "0.85");
   model.setAttribute("exposure", "0.9");
   model.setAttribute("camera-orbit", initialOrbit);
-  model.setAttribute("alt", poster.alt);
+  model.setAttribute("alt", elements.poster.alt);
+  model.setAttribute("aria-describedby", elements.instructions.id);
+  model.a11y = { "interaction-prompt": elements.instructions.textContent.trim() };
   if (reducedMotion()) model.setAttribute("data-reduced-motion", "true");
-  canvas.replaceChildren(model);
-  canvas.removeAttribute("aria-hidden");
+  elements.canvas.replaceChildren(model);
+  elements.canvas.removeAttribute("aria-hidden");
 
   const fail = () => {
-    root.dataset.viewerState = "error";
-    root.setAttribute("aria-busy", "false");
-    root.classList.remove("is-viewer-ready");
-    poster.hidden = false;
-    activate.hidden = false;
-    activate.disabled = false;
-    reset.hidden = true;
-    instructions.hidden = true;
-    status.textContent = stateCopy(root, "viewerError", "3D view unavailable");
+    if (signal.aborted) return;
+    showFailure(root, elements);
     model.removeAttribute("src");
     model.remove();
     controller.abort();
   };
 
   model.addEventListener("progress", (event) => {
-    if (signal.aborted) return;
+    if (signal.aborted || root.dataset.viewerState === "ready") return;
     const progress = Number(event.detail?.totalProgress);
     const suffix = Number.isFinite(progress) ? ` ${Math.round(progress * 100)}%` : "";
-    status.textContent = `${stateCopy(root, "viewerLoading", "Loading object")}${suffix}`;
+    elements.status.textContent = `${stateCopy(root, "viewerLoading", "Loading object")}${suffix}`;
   }, { signal });
   model.addEventListener("load", () => {
     if (signal.aborted) return;
-    root.dataset.viewerState = "ready";
-    root.setAttribute("aria-busy", "false");
-    root.classList.add("is-viewer-ready");
-    poster.hidden = true;
-    activate.hidden = true;
-    reset.hidden = false;
-    instructions.hidden = false;
-    status.textContent = stateCopy(root, "viewerReady", "3D view ready");
+    showReady(root, elements);
+    const input = model.shadowRoot?.querySelector(".userInput");
+    input?.setAttribute("aria-describedby", elements.instructions.id);
+    elements.reset.scrollIntoView({ block: "center", inline: "nearest" });
+    elements.reset.focus({ preventScroll: true });
   }, { signal });
   model.addEventListener("error", fail, { signal });
-  reset.addEventListener("click", () => {
+  elements.reset.addEventListener("click", () => {
     model.cameraOrbit = initialOrbit;
     model.fieldOfView = "auto";
     model.jumpCameraToGoal?.();
-    model.focus({ preventScroll: true });
+    (model.shadowRoot?.querySelector(".userInput") || model).focus({ preventScroll: true });
   }, { signal });
 
   const dispose = () => {
@@ -121,10 +240,24 @@ export const activateProductViewer = async (root, { signal: routeSignal } = {}) 
     model.remove();
   };
   routeSignal?.addEventListener("abort", dispose, { once: true });
+  model.setAttribute("src", localUrl(root.dataset.viewerSrc, "product model"));
+  return { dispose };
+};
+
+export const activateProductViewer = async (root, { signal: routeSignal } = {}) => {
+  if (!(root instanceof HTMLElement)) throw new TypeError("A product viewer root is required");
+  const elements = elementsFor(root);
+  elements.status.setAttribute("aria-live", "polite");
+  elements.status.setAttribute("aria-atomic", "true");
+  if (routeSignal?.aborted) return null;
+  if (root.dataset.viewerAvailability === "sourceBlocked") {
+    showFailure(root, elements);
+    return null;
+  }
 
   root.dataset.viewerState = "loading";
   root.setAttribute("aria-busy", "true");
-  status.textContent = stateCopy(root, "viewerLoading", "Loading object");
-  model.setAttribute("src", localUrl(root.dataset.viewerSrc, "product model"));
-  return { dispose };
+  elements.status.textContent = stateCopy(root, "viewerLoading", "Loading object");
+  if (root.dataset.viewerKind === "spin") return activateSpin(root, elements, routeSignal);
+  return activateModel(root, elements, routeSignal);
 };

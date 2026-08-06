@@ -84,6 +84,7 @@
       "specifications": [],
       "viewer": {
         "kind": "glb",
+        "decoderPolicy": "uncompressed-only",
         "poster": "assets/merch/vinyl-hero.webp",
         "src": "assets/merch-3d/vinyl-001.glb",
         "cameraOrbit": "24deg 72deg 112%",
@@ -163,6 +164,7 @@
       "specifications": [],
       "viewer": {
         "kind": "glb",
+        "decoderPolicy": "uncompressed-only",
         "poster": "assets/merch/cassette-hero.webp",
         "src": "assets/merch-3d/cassette-002.glb",
         "cameraOrbit": "28deg 68deg 108%",
@@ -242,8 +244,9 @@
       "specifications": [],
       "viewer": {
         "kind": "glb",
+        "decoderPolicy": "uncompressed-only",
         "poster": "assets/merch/cd-case.webp",
-        "src": "assets/merch-3d/cd-003.glb",
+        "src": "assets/merch-3d/disc-004.glb",
         "cameraOrbit": "26deg 70deg 110%",
         "alt": {
           "en": "Interactive 3D view of the POVKH LAB clear jewel case and silver compact disc.",
@@ -321,8 +324,9 @@
       "specifications": [],
       "viewer": {
         "kind": "glb",
+        "decoderPolicy": "uncompressed-only",
         "poster": "assets/merch/usb-edition-packaging.webp",
-        "src": "assets/merch-3d/usb-edition-004.glb",
+        "src": "assets/merch-3d/data-key-003.glb",
         "cameraOrbit": "32deg 66deg 116%",
         "alt": {
           "en": "Interactive 3D view of the black POVKH LAB dual-connector data key and packaging.",
@@ -389,16 +393,16 @@
       ],
       "specifications": [],
       "viewer": {
-        "kind": "glb",
+        "kind": "spin",
+        "availability": "sourceBlocked",
         "poster": "assets/merch/t-shirt-front.webp",
-        "src": "assets/merch-3d/t-shirt-005.glb",
-        "cameraOrbit": "18deg 75deg 105%",
+        "src": "assets/merch-360/t-shirt/manifest.json",
         "alt": {
-          "en": "Interactive 3D view of the bone T-shirt with the registered POVKH LAB ASCII print.",
-          "it": "Vista 3D interattiva della T-shirt bone con stampa ASCII POVKH LAB registrata.",
-          "ru": "Интерактивный 3D-вид светлой футболки с выверенным ASCII-принтом POVKH LAB."
+          "en": "Approved front concept image of the bone T-shirt with the registered POVKH LAB ASCII print.",
+          "it": "Immagine concept frontale approvata della T-shirt bone con stampa ASCII POVKH LAB registrata.",
+          "ru": "Утверждённый фронтальный концепт светлой футболки с выверенным ASCII-принтом POVKH LAB."
         },
-        "budget": { "bytes": 3800000, "triangles": 76000, "drawCalls": 18 }
+        "budget": { "mobileBytes": 2300000, "desktopBytes": 3800000, "mobileFrames": 24, "desktopFrames": 36 }
       },
       "releaseGate": {
         "state": "requiredBeforeProduction",
@@ -458,16 +462,16 @@
       ],
       "specifications": [],
       "viewer": {
-        "kind": "glb",
+        "kind": "spin",
+        "availability": "sourceBlocked",
         "poster": "assets/merch/hoodie-rear.webp",
-        "src": "assets/merch-3d/hoodie-006.glb",
-        "cameraOrbit": "16deg 76deg 108%",
+        "src": "assets/merch-360/hoodie/manifest.json",
         "alt": {
-          "en": "Interactive 3D view of the black hoodie with the registered rear POVKH LAB ASCII print.",
-          "it": "Vista 3D interattiva della felpa nera con stampa ASCII POVKH LAB registrata sul retro.",
-          "ru": "Интерактивный 3D-вид чёрного худи с выверенным задним ASCII-принтом POVKH LAB."
+          "en": "Approved rear concept image of the black hoodie with the registered POVKH LAB ASCII print.",
+          "it": "Immagine concept posteriore approvata della felpa nera con stampa ASCII POVKH LAB registrata.",
+          "ru": "Утверждённый задний концепт чёрного худи с выверенным ASCII-принтом POVKH LAB."
         },
-        "budget": { "bytes": 3900000, "triangles": 78000, "drawCalls": 19 }
+        "budget": { "mobileBytes": 2300000, "desktopBytes": 3800000, "mobileFrames": 24, "desktopFrames": 36 }
       },
       "releaseGate": {
         "state": "requiredBeforeProduction",
@@ -527,16 +531,16 @@
       ],
       "specifications": [],
       "viewer": {
-        "kind": "glb",
+        "kind": "spin",
+        "availability": "sourceBlocked",
         "poster": "assets/merch/cap-front.webp",
-        "src": "assets/merch-3d/cap-007.glb",
-        "cameraOrbit": "24deg 70deg 112%",
+        "src": "assets/merch-360/cap/manifest.json",
         "alt": {
-          "en": "Interactive 3D view of the black POVKH LAB cap with its woven front patch.",
-          "it": "Vista 3D interattiva del cappellino nero POVKH LAB con patch frontale tessuta.",
-          "ru": "Интерактивный 3D-вид чёрной кепки POVKH LAB с тканым патчем спереди."
+          "en": "Approved front concept image of the black POVKH LAB cap with its woven patch.",
+          "it": "Immagine concept frontale approvata del cappellino nero POVKH LAB con patch tessuta.",
+          "ru": "Утверждённый фронтальный концепт чёрной кепки POVKH LAB с тканым патчем."
         },
-        "budget": { "bytes": 3500000, "triangles": 70000, "drawCalls": 16 }
+        "budget": { "mobileBytes": 2300000, "desktopBytes": 3800000, "mobileFrames": 24, "desktopFrames": 36 }
       },
       "releaseGate": {
         "state": "requiredBeforeProduction",
@@ -597,8 +601,9 @@
       "specifications": [],
       "viewer": {
         "kind": "glb",
+        "decoderPolicy": "uncompressed-only",
         "poster": "assets/merch/poster-diptych.webp",
-        "src": "assets/merch-3d/poster-008.glb",
+        "src": "assets/merch-3d/print-001.glb",
         "cameraOrbit": "8deg 82deg 118%",
         "alt": {
           "en": "Interactive 3D view of the POVKH LAB archival poster set on bone paper.",
@@ -666,8 +671,9 @@
       "specifications": [],
       "viewer": {
         "kind": "glb",
+        "decoderPolicy": "uncompressed-only",
         "poster": "assets/merch/sticker-pack-sheet.webp",
-        "src": "assets/merch-3d/sticker-pack-009.glb",
+        "src": "assets/merch-3d/signal-kit-001.glb",
         "cameraOrbit": "12deg 78deg 114%",
         "alt": {
           "en": "Interactive 3D view of the black POVKH LAB sticker sheet and separate die-cut marks.",
@@ -755,8 +761,9 @@
       "specifications": [],
       "viewer": {
         "kind": "glb",
+        "decoderPolicy": "uncompressed-only",
         "poster": "assets/merch/zine-booklet-closed.webp",
-        "src": "assets/merch-3d/zine-booklet-010.glb",
+        "src": "assets/merch-3d/zine-001.glb",
         "cameraOrbit": "22deg 68deg 112%",
         "alt": {
           "en": "Interactive 3D view of the POVKH LAB art zine with its bound bone-paper cover.",
@@ -824,8 +831,9 @@
       "specifications": [],
       "viewer": {
         "kind": "glb",
+        "decoderPolicy": "uncompressed-only",
         "poster": "assets/merch/collector-box-set-closed.webp",
-        "src": "assets/merch-3d/collector-box-set-011.glb",
+        "src": "assets/merch-3d/collector-box-001.glb",
         "cameraOrbit": "28deg 66deg 116%",
         "alt": {
           "en": "Interactive 3D view of the closed POVKH LAB collector archive box and drawer construction.",

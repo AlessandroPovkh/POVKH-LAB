@@ -61,6 +61,11 @@ test("renders every localized product as an inert poster-first viewer shell", ()
       assert.match(viewer, /data-viewer-runtime="[^"]*assets\/vendor\/model-viewer\.min\.js"/);
       assert.doesNotMatch(viewer, /<model-viewer\b/i, `${locale}/${object.slug} must not instantiate WebGL before activation`);
       assert.doesNotMatch(viewer, /<script\b/i, `${locale}/${object.slug} viewer shell must stay inert at parse time`);
+      if (object.viewer.availability === "sourceBlocked") {
+        assert.match(viewer, /data-viewer-availability="sourceBlocked"/);
+        assert.match(viewer, /data-product-viewer-activate[^>]*disabled[^>]*aria-disabled="true"/);
+        assert.doesNotMatch(viewer, /data-product-viewer-spin/);
+      }
     }
   }
 });
@@ -77,7 +82,42 @@ test("keeps the viewer launcher local, explicit, recoverable and route-disposabl
   assert.match(viewerSource, /WebGL/i);
   assert.match(viewerSource, /saveData/);
   assert.match(viewerSource, /prefers-reduced-motion/);
+  assert.match(viewerSource, /dataset\.viewerKind/);
+  assert.match(viewerSource, /viewerKind\s*===\s*["']spin["']/);
+  assert.match(viewerSource, /dracoDecoderLocation/);
+  assert.match(viewerSource, /ktx2TranscoderLocation/);
+  assert.match(viewerSource, /meshoptDecoderLocation/);
+  assert.match(viewerSource, /meshoptDecoderLocation:\s*null/);
+  assert.match(viewerSource, /lottieLoaderLocation/);
+  assert.match(viewerSource, /lottie-loader\.disabled\.js/);
+  assert.doesNotMatch(viewerSource, /model\.setAttribute\(["']tabindex["']/, "model host must not add a dead keyboard stop");
+  assert.match(viewerSource, /aria-describedby/);
+  assert.match(viewerSource, /\.userInput/);
   assert.doesNotMatch(viewerSource, /https?:\/\//i, "runtime must not call a cloud converter, CDN or remote decoder");
+});
+
+test("authorizes model-viewer wasm and shadow styles without widening network policy", () => {
+  for (const locale of locales) {
+    const html = pages.get(outputFor(locale, "cassette")).toString();
+    const csp = html.match(/<meta http-equiv="Content-Security-Policy" content="([^"]+)">/)?.[1] || "";
+    assert.match(csp, /script-src 'self' 'wasm-unsafe-eval'/);
+    assert.match(csp, /style-src 'self' 'unsafe-inline'/);
+    assert.match(csp, /img-src 'self' data: blob:/);
+    assert.match(csp, /connect-src 'self' blob:/);
+    assert.doesNotMatch(csp, /https?:|\*/);
+  }
+});
+
+test("rejects release GLBs that would require non-vendored decoders or Lottie loaders", async () => {
+  const qaSource = await readFile(path.join(siteRoot, "tools", "qa.mjs"), "utf8");
+  for (const extension of [
+    "KHR_draco_mesh_compression",
+    "KHR_texture_basisu",
+    "EXT_meshopt_compression",
+    "application/lottie+json"
+  ]) {
+    assert.match(qaSource, new RegExp(extension.replaceAll("+", "\\+")));
+  }
 });
 
 test("does not expose viewer runtime or model requests on the merch index", () => {

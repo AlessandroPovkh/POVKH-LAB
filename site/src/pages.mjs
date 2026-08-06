@@ -32,6 +32,12 @@ const PRESS_ASSETS = [
   "assets/logo/povkh-lab-ascii-reverse-transparent-outlined.svg"
 ];
 
+const SOURCE_BLOCKED_VIEWER_COPY = Object.freeze({
+  en: "360° view after approval of a physical sample",
+  it: "Vista 360° dopo l'approvazione di un campione fisico",
+  ru: "Обзор 360° после утверждения физического образца"
+});
+
 const escapeHtml = (value) => String(value)
   .replaceAll("&", "&amp;")
   .replaceAll("<", "&lt;")
@@ -280,7 +286,7 @@ const shell = ({ locale, route, title, description, body, catalog, audioLibrary,
   <meta name="color-scheme" content="dark">
   <meta name="robots" content="${route === "404" ? "noindex, follow" : ROBOTS_CONTENT}" data-route-head>
   <meta name="referrer" content="no-referrer">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self'; font-src 'self'; script-src 'self' 'sha256-${structuredDataHash}'; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; font-src 'self'; script-src 'self' 'wasm-unsafe-eval' 'sha256-${structuredDataHash}'; connect-src 'self' blob:; object-src 'none'; base-uri 'none'; form-action 'self'">
   <title data-route-head>${escapeHtml(fullTitle)}</title>
   <meta name="description" content="${escapeHtml(description)}" data-route-head>
   <link rel="canonical" href="${canonical}" data-route-head>
@@ -550,18 +556,21 @@ const productViewerMarkup = ({ object, locale, route, copy }) => {
   const viewer = object.viewer;
   const hero = object.gallery[0];
   const dataSaverCopy = copy.viewerDataSaver;
-  return `<section class="product-viewer" data-product-viewer data-viewer-kind="${escapeHtml(viewer.kind)}" data-viewer-src="${prefix}${escapeHtml(viewer.src)}" data-viewer-poster="${prefix}${escapeHtml(viewer.poster)}" data-viewer-orbit="${escapeHtml(viewer.cameraOrbit || "0deg 75deg 105%")}" data-viewer-module="${prefix}assets/product-viewer.js" data-viewer-runtime="${prefix}assets/vendor/model-viewer.min.js" data-viewer-loading="${escapeHtml(copy.viewerLoading)}" data-viewer-ready="${escapeHtml(copy.viewerReady)}" data-viewer-error="${escapeHtml(copy.viewerError)}" data-viewer-data-saver="${escapeHtml(dataSaverCopy)}" data-viewer-budget="${escapeHtml(String(viewer.budget.bytes || viewer.budget.desktopBytes || 0))}" aria-label="${escapeHtml(copy.viewerLabel)}">
+  const sourceBlocked = viewer.availability === "sourceBlocked";
+  const blockedCopy = SOURCE_BLOCKED_VIEWER_COPY[locale];
+  const instructionsId = `${object.id.toLowerCase()}-viewer-instructions`;
+  return `<section class="product-viewer" data-product-viewer data-viewer-kind="${escapeHtml(viewer.kind)}" data-viewer-availability="${sourceBlocked ? "sourceBlocked" : "available"}" data-viewer-src="${prefix}${escapeHtml(viewer.src)}" data-viewer-poster="${prefix}${escapeHtml(viewer.poster)}" data-viewer-orbit="${escapeHtml(viewer.cameraOrbit || "0deg 75deg 105%")}" data-viewer-module="${prefix}assets/product-viewer.js" data-viewer-runtime="${prefix}assets/vendor/model-viewer.min.js" data-viewer-loading="${escapeHtml(copy.viewerLoading)}" data-viewer-ready="${escapeHtml(copy.viewerReady)}" data-viewer-error="${escapeHtml(copy.viewerError)}" data-viewer-data-saver="${escapeHtml(dataSaverCopy)}" data-viewer-budget="${escapeHtml(String(viewer.budget.bytes || viewer.budget.desktopBytes || 0))}" aria-label="${escapeHtml(copy.viewerLabel)}">
     <div class="product-viewer-stage" data-product-viewer-stage>
       <img data-product-viewer-poster src="${prefix}${escapeHtml(hero.path)}" width="${hero.width}" height="${hero.height}" alt="${escapeHtml(viewer.alt[locale])}" loading="eager" fetchpriority="high" decoding="async">
       <div class="product-viewer-canvas" data-product-viewer-canvas aria-hidden="true"></div>
       <span class="product-viewer-datum" aria-hidden="true">OBJECT / ${escapeHtml(object.id.slice(-3))}</span>
     </div>
     <div class="product-viewer-controls">
-      <button class="button" type="button" data-product-viewer-activate>${escapeHtml(copy.viewerActivate)}</button>
+      <button class="button" type="button" data-product-viewer-activate${sourceBlocked ? ` disabled aria-disabled="true"` : ""}>${escapeHtml(sourceBlocked ? blockedCopy : copy.viewerActivate)}</button>
       <button class="button button-secondary" type="button" data-product-viewer-reset hidden>${escapeHtml(copy.viewerReset)}</button>
-      <p class="product-viewer-status" data-product-viewer-status role="status" aria-live="polite" aria-atomic="true"></p>
+      <p class="product-viewer-status" data-product-viewer-status role="status" aria-live="polite" aria-atomic="true">${sourceBlocked ? escapeHtml(blockedCopy) : ""}</p>
     </div>
-    <p class="product-viewer-instructions" data-product-viewer-instructions hidden>${escapeHtml(copy.viewerInstructions)}</p>
+    <p class="product-viewer-instructions" id="${escapeHtml(instructionsId)}" data-product-viewer-instructions hidden>${escapeHtml(copy.viewerInstructions)}</p>
     <figcaption>${escapeHtml(hero.caption[locale])}</figcaption>
   </section>`;
 };

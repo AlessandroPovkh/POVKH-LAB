@@ -7,6 +7,11 @@ const locales = ["en", "it", "ru"];
 const apparel = new Set(["t-shirt", "hoodie", "cap"]);
 const flat = new Set(["poster", "sticker-pack", "zine-booklet"]);
 const safeProjectPath = /^(?!\/)(?!.*(?:^|\/)\.\.(?:\/|$))(?![a-z][a-z0-9+.-]*:)[A-Za-z0-9._/-]+$/i;
+const sourceBlocked = new Map([
+  ["t-shirt", "assets/merch-360/t-shirt/manifest.json"],
+  ["hoodie", "assets/merch-360/hoodie/manifest.json"],
+  ["cap", "assets/merch-360/cap/manifest.json"]
+]);
 
 const limitsFor = (slug) => {
   if (apparel.has(slug)) return { bytes: 4_000_000, triangles: 80_000, drawCalls: 20 };
@@ -31,9 +36,18 @@ test("declares one poster-first interactive viewer for every DROP 001 object", (
     assert.ok(!sources.has(viewer.src), `${object.id}.viewer.src must be unique`);
     sources.add(viewer.src);
 
+    if (sourceBlocked.has(object.slug)) {
+      assert.equal(viewer.availability, "sourceBlocked", `${object.id} must state that authoritative source evidence is blocked`);
+      assert.equal(viewer.kind, "spin", `${object.id} must reserve the honest physical-sample spin path`);
+      assert.equal(viewer.src, sourceBlocked.get(object.slug), `${object.id} must use the approved future spin asset key`);
+    } else {
+      assert.notEqual(viewer.availability, "sourceBlocked", `${object.id} must not inherit an apparel source block`);
+    }
+
     if (viewer.kind === "glb") {
       assert.match(viewer.src, /^assets\/merch-3d\/[a-z0-9-]+\.glb$/);
       assert.match(viewer.cameraOrbit || "", /^-?\d+(?:\.\d+)?deg \d+(?:\.\d+)?deg \d+(?:\.\d+)?%$/, `${object.id} needs a deterministic camera orbit`);
+      assert.equal(viewer.decoderPolicy, "uncompressed-only", `${object.id} must prohibit remote-decoder GLB extensions`);
     } else {
       assert.ok(apparel.has(object.slug), `${object.id} may use spin360 only for apparel`);
       assert.match(viewer.src, /^assets\/merch-360\/[a-z0-9-]+\/manifest\.json$/);
@@ -72,5 +86,14 @@ test("keeps declared viewer budgets inside the approved product-class ceilings",
       assert.ok(viewer.budget.triangles <= limits.triangles, `${object.id} exceeds its ${limits.triangles}-triangle ceiling`);
       assert.ok(viewer.budget.drawCalls <= limits.drawCalls, `${object.id} exceeds its ${limits.drawCalls}-draw-call ceiling`);
     }
+  }
+});
+
+test("never publishes synthetic apparel spin evidence while physical sources are blocked", () => {
+  for (const object of library.objects.filter(({ slug }) => sourceBlocked.has(slug))) {
+    assert.equal(object.viewer.availability, "sourceBlocked");
+    assert.equal(object.viewer.kind, "spin");
+    assert.equal(object.viewer.budget.mobileFrames, 24);
+    assert.equal(object.viewer.budget.desktopFrames, 36);
   }
 });

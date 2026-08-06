@@ -61,9 +61,16 @@ const exactKeySet = (value, keys) => JSON.stringify(Object.keys(value || {}).sor
 const validateViewer = (object) => {
   const viewer = object.viewer;
   if (!viewer || !["glb", "spin"].includes(viewer.kind)) throw new Error(`${object.id} viewer must declare glb or spin`);
+  const sourceBlocked = viewer.availability === "sourceBlocked";
+  if (viewer.availability !== undefined && !sourceBlocked) {
+    throw new Error(`${object.id} viewer availability must be sourceBlocked when explicitly declared`);
+  }
+  if (sourceBlocked && (viewer.kind !== "spin" || !["t-shirt", "hoodie", "cap"].includes(object.slug))) {
+    throw new Error(`${object.id} sourceBlocked availability is reserved for apparel spin sources`);
+  }
   const keys = viewer.kind === "glb"
-    ? ["kind", "poster", "src", "cameraOrbit", "alt", "budget"]
-    : ["kind", "poster", "src", "alt", "budget"];
+    ? ["kind", "poster", "src", "cameraOrbit", "alt", "budget", "decoderPolicy"]
+    : ["kind", "poster", "src", "alt", "budget", ...(sourceBlocked ? ["availability"] : [])];
   if (!exactKeySet(viewer, keys)) throw new Error(`${object.id} viewer must use the exact ${viewer.kind} contract`);
   if (viewer.poster !== object.gallery[0]?.path || !safeProjectPath(viewer.poster)) {
     throw new Error(`${object.id} viewer poster must reuse the approved hero asset`);
@@ -76,6 +83,7 @@ const validateViewer = (object) => {
     }
   }
   if (viewer.kind === "glb") {
+    if (viewer.decoderPolicy !== "uncompressed-only") throw new Error(`${object.id} GLB decoder policy is invalid`);
     if (!/^assets\/merch-3d\/[a-z0-9-]+\.glb$/.test(viewer.src)) throw new Error(`${object.id} GLB source path is invalid`);
     if (!/^-?\d+(?:\.\d+)?deg \d+(?:\.\d+)?deg \d+(?:\.\d+)?%$/.test(viewer.cameraOrbit || "")) {
       throw new Error(`${object.id} viewer camera orbit is invalid`);
@@ -102,7 +110,8 @@ const rejectForbiddenFields = (value, path = "merch") => {
     return;
   }
   for (const [key, entry] of Object.entries(value)) {
-    if (FORBIDDEN_FIELDS.has(key.toLowerCase())) throw new Error(`${path} uses forbidden commerce field ${key}`);
+    const isViewerSourceState = key === "availability" && path.endsWith(".viewer");
+    if (FORBIDDEN_FIELDS.has(key.toLowerCase()) && !isViewerSourceState) throw new Error(`${path} uses forbidden commerce field ${key}`);
     rejectForbiddenFields(entry, `${path}.${key}`);
   }
 };

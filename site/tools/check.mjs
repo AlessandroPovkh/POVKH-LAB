@@ -1078,7 +1078,16 @@ for (const pageCase of pageCases) {
 
   const csp = singleMetaContent(html, "http-equiv", "Content-Security-Policy", label);
   if (csp !== null) {
-    for (const directive of ["default-src 'self'", "object-src 'none'", "base-uri 'none'", "form-action 'self'"]) {
+    for (const directive of [
+      "default-src 'self'",
+      "img-src 'self' data: blob:",
+      "style-src 'self' 'unsafe-inline'",
+      "script-src 'self' 'wasm-unsafe-eval'",
+      "connect-src 'self' blob:",
+      "object-src 'none'",
+      "base-uri 'none'",
+      "form-action 'self'"
+    ]) {
       if (!csp.includes(directive)) fail(`${label}: CSP missing ${directive}`);
     }
     const structuredDataScripts = [...html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)]

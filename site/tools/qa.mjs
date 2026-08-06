@@ -1,4 +1,4 @@
-import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
+import { mkdir, readFile, readdir, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import AxeBuilder from "@axe-core/playwright";
@@ -16,6 +16,52 @@ const audioLibrary = JSON.parse(await readFile(path.join(siteRoot, "data", "audi
 const artistLibrary = JSON.parse(await readFile(path.join(siteRoot, "data", "artists.json"), "utf8"));
 const merchLibrary = JSON.parse(await readFile(path.join(siteRoot, "data", "merch.json"), "utf8"));
 const defaultAudioTrack = audioLibrary.tracks.find((track) => track.catalogId === audioLibrary.defaultCatalogId);
+const tinyTexturedGlb = () => {
+  const png = Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAYAAABytg0kAAAACXBIWXMAAAPoAAAD6AG1e1JrAAAAEUlEQVQImWP4oKHxH4QZYAwAUJQI/QlXOVQAAAAASUVORK5CYII=", "base64");
+  const imageOffset = 60;
+  const binaryLength = imageOffset + png.length + ((4 - (png.length % 4)) % 4);
+  const document = {
+    asset: { version: "2.0" },
+    buffers: [{ byteLength: binaryLength }],
+    bufferViews: [
+      { buffer: 0, byteOffset: 0, byteLength: 36, target: 34962 },
+      { buffer: 0, byteOffset: 36, byteLength: 24, target: 34962 },
+      { buffer: 0, byteOffset: imageOffset, byteLength: png.length }
+    ],
+    accessors: [
+      { bufferView: 0, componentType: 5126, count: 3, type: "VEC3", min: [-0.5, -0.5, 0], max: [0.5, 0.5, 0] },
+      { bufferView: 1, componentType: 5126, count: 3, type: "VEC2", min: [0, 0], max: [1, 1] }
+    ],
+    images: [{ bufferView: 2, mimeType: "image/png" }],
+    textures: [{ source: 0 }],
+    materials: [{ pbrMetallicRoughness: { baseColorTexture: { index: 0 } } }],
+    meshes: [{ primitives: [{ attributes: { POSITION: 0, TEXCOORD_0: 1 }, material: 0 }] }],
+    nodes: [{ mesh: 0 }],
+    scenes: [{ nodes: [0] }],
+    scene: 0
+  };
+  let json = Buffer.from(JSON.stringify(document));
+  json = Buffer.concat([json, Buffer.alloc((4 - (json.length % 4)) % 4, 0x20)]);
+  const binary = Buffer.alloc(binaryLength);
+  [-0.5, -0.5, 0, 0.5, -0.5, 0, 0, 0.5, 0].forEach((value, index) => binary.writeFloatLE(value, index * 4));
+  [0, 0, 1, 0, 0.5, 1].forEach((value, index) => binary.writeFloatLE(value, 36 + index * 4));
+  png.copy(binary, imageOffset);
+  const glb = Buffer.alloc(12 + 8 + json.length + 8 + binary.length);
+  let offset = 0;
+  for (const value of [0x46546c67, 2, glb.length, json.length, 0x4e4f534a]) {
+    glb.writeUInt32LE(value, offset);
+    offset += 4;
+  }
+  json.copy(glb, offset);
+  offset += json.length;
+  glb.writeUInt32LE(binary.length, offset);
+  offset += 4;
+  glb.writeUInt32LE(0x004e4942, offset);
+  offset += 4;
+  binary.copy(glb, offset);
+  return glb;
+};
+const tinySpinPng = Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAusB9Wl2nLkAAAAASUVORK5CYII=", "base64");
 const publishedReleaseCount = catalog.releases.filter((release) => release.status === "published").length;
 const upcomingReleaseCount = catalog.releases.filter((release) => release.status === "upcoming").length;
 const baseRoutes = [
@@ -99,6 +145,64 @@ let viewportChecks = 0;
 let fallbackTypographyChecks = 0;
 
 const fail = (message) => failures.push(message);
+const releaseBlockedGlbFeatures = [
+  "KHR_draco_mesh_compression",
+  "KHR_texture_basisu",
+  "EXT_meshopt_compression"
+];
+const glbFilesBelow = async (directory) => {
+  let entries;
+  try {
+    entries = await readdir(directory, { withFileTypes: true });
+  } catch (error) {
+    if (error.code === "ENOENT") return [];
+    throw error;
+  }
+  const files = [];
+  for (const entry of entries) {
+    const absolute = path.join(directory, entry.name);
+    if (entry.isDirectory()) files.push(...await glbFilesBelow(absolute));
+    else if (entry.isFile() && entry.name.endsWith(".glb")) files.push(absolute);
+  }
+  return files;
+};
+const glbJsonDocument = (bytes) => {
+  if (bytes.length < 20 || bytes.readUInt32LE(0) !== 0x46546c67 || bytes.readUInt32LE(4) !== 2) {
+    throw new Error("invalid GLB header");
+  }
+  let offset = 12;
+  while (offset + 8 <= bytes.length) {
+    const length = bytes.readUInt32LE(offset);
+    const type = bytes.readUInt32LE(offset + 4);
+    offset += 8;
+    if (offset + length > bytes.length) throw new Error("invalid GLB chunk length");
+    if (type === 0x4e4f534a) {
+      return JSON.parse(bytes.subarray(offset, offset + length).toString("utf8").replace(/\0+$/u, "").trim());
+    }
+    offset += length;
+  }
+  throw new Error("missing GLB JSON chunk");
+};
+const auditReleaseGlbs = async () => {
+  for (const directory of [path.join(siteRoot, "assets", "merch-3d"), path.join(siteRoot, "dist", "assets", "merch-3d")]) {
+    for (const file of await glbFilesBelow(directory)) {
+      const relative = path.relative(siteRoot, file);
+      try {
+        const document = glbJsonDocument(await readFile(file));
+        const json = JSON.stringify(document);
+        for (const extension of releaseBlockedGlbFeatures) {
+          if (json.includes(extension)) fail(`${relative}: release GLB requires non-vendored decoder ${extension}`);
+        }
+        const lottieImage = (document.images || []).find(({ mimeType = "", uri = "" }) => (
+          mimeType === "application/lottie+json" || /\.lottie(?:\.json)?(?:[?#].*)?$/iu.test(uri)
+        ));
+        if (lottieImage) fail(`${relative}: release GLB requires the non-vendored Lottie loader`);
+      } catch (error) {
+        fail(`${relative}: cannot enforce release GLB decoder policy (${error.message})`);
+      }
+    }
+  }
+};
 const interpolate = (template, values) => Object.entries(values)
   .reduce((result, [key, value]) => result.replaceAll(`{${key}}`, value), template);
 const expectedAlternatesFor = (baseRoute) => ({
@@ -229,6 +333,29 @@ const applyTextZoom = async (page) => {
   await page.evaluate(() => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))));
 };
 
+const viewerControlHitTest = async (page, selector) => {
+  const control = page.locator(selector);
+  await control.scrollIntoViewIfNeeded();
+  return control.evaluate((button) => {
+    const rect = button.getBoundingClientRect();
+    const points = [
+      [rect.left + rect.width / 2, rect.top + rect.height / 2],
+      [rect.left + 3, rect.top + rect.height / 2],
+      [rect.right - 3, rect.top + rect.height / 2],
+      [rect.left + rect.width / 2, rect.top + 3],
+      [rect.left + rect.width / 2, rect.bottom - 3]
+    ];
+    const player = document.querySelector("[data-audio-player]");
+    return {
+      insideViewport: rect.left >= 0 && rect.right <= innerWidth && rect.top >= 0 && rect.bottom <= innerHeight,
+      points: points.map(([x, y]) => {
+        const hit = document.elementFromPoint(x, y);
+        return { viewer: button === hit || button.contains(hit), player: Boolean(player?.contains(hit)) };
+      })
+    };
+  });
+};
+
 const verifyDisplayFontGrowth = (label, before, after) => {
   if (before.length !== after.length) {
     fail(`${label}: display node count changed from ${before.length} to ${after.length}`);
@@ -248,6 +375,7 @@ const verifyDisplayFontGrowth = (label, before, after) => {
 };
 
 const app = createStaticServer({ root: path.join(siteRoot, "dist"), basePath: SITE_BASE_PATH });
+await auditReleaseGlbs();
 const baseUrl = await app.listen();
 await rm(screenshotDir, { recursive: true, force: true });
 await mkdir(screenshotDir, { recursive: true });
@@ -2402,6 +2530,188 @@ try {
     fail(`Save-Data timeline: pending seek restored ${deferredSeekTime}`);
   }
   await saveDataContext.close();
+
+  const readyViewerContext = await browser.newContext({
+    viewport: { width: 375, height: 812 },
+    reducedMotion: "no-preference"
+  });
+  const readyViewerPage = await readyViewerContext.newPage();
+  const readyViewerRequests = [];
+  const readyViewerConsoleErrors = [];
+  const readyViewerPageErrors = [];
+  readyViewerPage.on("request", (request) => readyViewerRequests.push(request.url()));
+  readyViewerPage.on("console", (message) => {
+    if (message.type() === "error") readyViewerConsoleErrors.push(message.text());
+  });
+  readyViewerPage.on("pageerror", (error) => readyViewerPageErrors.push(error.message));
+  await readyViewerPage.route("**/assets/merch-3d/cassette-002.glb", (route) => route.fulfill({
+    status: 200,
+    contentType: "model/gltf-binary",
+    body: tinyTexturedGlb()
+  }));
+  await readyViewerPage.goto(`${baseUrl}/it/merch/cassette/`, { waitUntil: "load" });
+  await readyViewerPage.waitForFunction(() => document.querySelector("[data-audio-player]")?.classList.contains("is-ready"));
+  const activationHitTest = await viewerControlHitTest(readyViewerPage, "[data-product-viewer-activate]");
+  await readyViewerPage.evaluate(() => {
+    window.__viewerCspViolations = [];
+    document.addEventListener("securitypolicyviolation", (event) => {
+      window.__viewerCspViolations.push({
+        blockedURI: event.blockedURI,
+        directive: event.effectiveDirective
+      });
+    });
+  });
+  const readyViewerRequestStart = readyViewerRequests.length;
+  await readyViewerPage.locator("[data-product-viewer-activate]").focus();
+  await readyViewerPage.locator("[data-product-viewer-activate]").press("Enter");
+  await readyViewerPage.waitForFunction(() => ["ready", "error"].includes(
+    document.querySelector("[data-product-viewer]")?.dataset.viewerState
+  ));
+  const readyViewerContract = await readyViewerPage.evaluate(() => {
+    const root = document.querySelector("[data-product-viewer]");
+    const model = root?.querySelector("model-viewer");
+    const instructions = root?.querySelector("[data-product-viewer-instructions]");
+    const reset = root?.querySelector("[data-product-viewer-reset]");
+    const input = model?.shadowRoot?.querySelector(".userInput");
+    const resetRect = reset?.getBoundingClientRect();
+    const resetHit = resetRect
+      ? document.elementFromPoint(resetRect.left + resetRect.width / 2, resetRect.top + resetRect.height / 2)
+      : null;
+    return {
+      state: root?.dataset.viewerState,
+      status: root?.querySelector("[data-product-viewer-status]")?.textContent.trim(),
+      expectedStatus: root?.dataset.viewerReady,
+      instructionsVisible: instructions ? !instructions.hidden : false,
+      describedBy: model?.getAttribute("aria-describedby"),
+      instructionsId: instructions?.id,
+      focusOnInput: model?.shadowRoot?.activeElement === input,
+      focusOnReset: document.activeElement === reset,
+      inputLabel: input?.getAttribute("aria-label") || "",
+      modelHasTabindex: model?.hasAttribute("tabindex"),
+      resetReachable: Boolean(resetRect
+        && resetRect.top >= 0
+        && resetRect.bottom <= innerHeight
+        && (resetHit === reset || reset?.contains(resetHit))),
+      cspViolations: window.__viewerCspViolations
+    };
+  });
+  const resetHitTest = readyViewerContract.state === "ready"
+    ? await viewerControlHitTest(readyViewerPage, "[data-product-viewer-reset]")
+    : null;
+  let readyTabOrder = null;
+  if (readyViewerContract.state === "ready") {
+    await readyViewerPage.locator("[data-product-viewer-reset]").focus();
+    await readyViewerPage.keyboard.press("Shift+Tab");
+    const backwardToInput = await readyViewerPage.evaluate(() => {
+      const model = document.querySelector("model-viewer");
+      return document.activeElement === model && model?.shadowRoot?.activeElement?.classList.contains("userInput");
+    });
+    await readyViewerPage.keyboard.press("Tab");
+    const forwardToReset = await readyViewerPage.locator("[data-product-viewer-reset]").evaluate((reset) => document.activeElement === reset);
+    readyTabOrder = { backwardToInput, forwardToReset };
+  }
+  if (readyViewerContract.state === "ready") {
+    await readyViewerPage.locator("model-viewer").evaluate((model) => { model.cameraOrbit = "140deg 80deg 130%"; });
+    await readyViewerPage.locator("[data-product-viewer-reset]").click();
+  }
+  const resetOrbit = await readyViewerPage.locator("model-viewer").evaluate((model) => model.cameraOrbit).catch(() => null);
+  const readyActivationRequests = readyViewerRequests.slice(readyViewerRequestStart);
+  if (readyViewerContract.state !== "ready"
+    || readyViewerContract.status !== readyViewerContract.expectedStatus
+    || !readyViewerContract.instructionsVisible
+    || readyViewerContract.describedBy !== readyViewerContract.instructionsId
+    || (!readyViewerContract.focusOnInput && !readyViewerContract.focusOnReset)
+    || !/Trascina|frecce/.test(readyViewerContract.inputLabel)
+    || readyViewerContract.modelHasTabindex
+    || !readyTabOrder?.backwardToInput
+    || !readyTabOrder?.forwardToReset
+    || !readyViewerContract.resetReachable
+    || !activationHitTest.insideViewport
+    || activationHitTest.points.some(({ viewer, player }) => !viewer || player)
+    || !resetHitTest?.insideViewport
+    || resetHitTest.points.some(({ viewer, player }) => !viewer || player)
+    || resetOrbit !== "28deg 68deg 108%"
+    || readyViewerContract.cspViolations.length
+    || readyViewerConsoleErrors.length
+    || readyViewerPageErrors.length
+    || readyActivationRequests.some((url) => /model-viewer-support/.test(url))
+    || readyActivationRequests.some((url) => new URL(url).origin !== baseUrl)) {
+    fail(`Product viewer: successful localized GLB contract failed ${JSON.stringify({ readyViewerContract, readyTabOrder, activationHitTest, resetHitTest, resetOrbit, readyViewerConsoleErrors, readyViewerPageErrors, readyActivationRequests })}`);
+  }
+  await readyViewerContext.close();
+
+  const cassetteContext = await browser.newContext({ viewport: { width: 1024, height: 900 } });
+  const cassettePage = await cassetteContext.newPage();
+  const cassetteRequests = [];
+  cassettePage.on("request", (request) => cassetteRequests.push(request.url()));
+  await cassettePage.goto(`${baseUrl}/merch/cassette/`, { waitUntil: "load" });
+  const cassetteRequestStart = cassetteRequests.length;
+  await cassettePage.locator("[data-product-viewer-activate]").click();
+  await cassettePage.waitForFunction(() => ["ready", "error"].includes(
+    document.querySelector("[data-product-viewer]")?.dataset.viewerState
+  ));
+  const cassetteState = await cassettePage.locator("[data-product-viewer]").getAttribute("data-viewer-state");
+  const cassetteActivationRequests = cassetteRequests.slice(cassetteRequestStart);
+  if (cassetteState !== "ready"
+    || cassetteActivationRequests.some((url) => /model-viewer-support/.test(url))
+    || cassetteActivationRequests.some((url) => new URL(url).origin !== baseUrl)) {
+    fail(`Product viewer: actual cassette activation failed ${JSON.stringify({ cassetteState, cassetteActivationRequests })}`);
+  }
+  await cassetteContext.close();
+
+  const spinContext = await browser.newContext({ viewport: { width: 375, height: 812 }, hasTouch: true, isMobile: true });
+  const spinPage = await spinContext.newPage();
+  const spinRequests = [];
+  spinPage.on("request", (request) => spinRequests.push(new URL(request.url()).pathname));
+  await spinPage.route("**/assets/merch-360/fixture/manifest.json", (route) => route.fulfill({
+    status: 200,
+    contentType: "application/json",
+    body: JSON.stringify({
+      schemaVersion: 1,
+      assetKey: "fixture-spin",
+      variants: {
+        mobile: { frames: ["frame-000.png", "frame-001.png", "frame-002.png"] },
+        desktop: { frames: ["frame-000.png", "frame-001.png", "frame-002.png"] }
+      }
+    })
+  }));
+  await spinPage.route("**/assets/merch-360/fixture/frame-*.png", (route) => route.fulfill({
+    status: 200,
+    contentType: "image/png",
+    body: tinySpinPng
+  }));
+  await spinPage.goto(`${baseUrl}/merch/cassette/`, { waitUntil: "load" });
+  await spinPage.locator("[data-product-viewer]").evaluate((root) => {
+    root.dataset.viewerKind = "spin";
+    root.dataset.viewerSrc = "../../assets/merch-360/fixture/manifest.json";
+  });
+  const spinRequestStart = spinRequests.length;
+  await spinPage.locator("[data-product-viewer-activate]").click();
+  await spinPage.waitForFunction(() => document.querySelector("[data-product-viewer]")?.dataset.viewerState === "ready");
+  const spinActivationRequests = spinRequests.slice(spinRequestStart);
+  const spin = spinPage.locator("[data-product-viewer-spin]");
+  const spinBeforeStep = await spin.getAttribute("data-frame-index");
+  await spin.press("ArrowRight");
+  await spinPage.waitForFunction(() => document.querySelector("[data-product-viewer-spin]")?.dataset.frameIndex === "1");
+  const spinAfterKey = await spin.getAttribute("data-frame-index");
+  await spinPage.locator("[data-product-viewer-reset]").click();
+  const spinAfterReset = await spin.getAttribute("data-frame-index");
+  await spin.dispatchEvent("pointerdown", { pointerId: 7, pointerType: "touch", clientX: 220, clientY: 180, button: 0 });
+  await spin.dispatchEvent("pointermove", { pointerId: 7, pointerType: "touch", clientX: 170, clientY: 180, buttons: 1 });
+  await spin.dispatchEvent("pointerup", { pointerId: 7, pointerType: "touch", clientX: 170, clientY: 180, button: 0 });
+  await spinPage.waitForFunction(() => document.querySelector("[data-product-viewer-spin]")?.dataset.frameIndex === "1");
+  const spinAfterTouch = await spin.getAttribute("data-frame-index");
+  if (spinBeforeStep !== "0"
+    || spinAfterKey !== "1"
+    || spinAfterReset !== "0"
+    || spinAfterTouch !== "1"
+    || spinActivationRequests.some((pathname) => /model-viewer|merch-3d/.test(pathname))
+    || !spinActivationRequests.some((pathname) => pathname.endsWith("/manifest.json"))
+    || !spinActivationRequests.some((pathname) => pathname.endsWith("/frame-000.png"))
+    || spinActivationRequests.some((pathname) => pathname.endsWith("/frame-001.png"))) {
+    fail(`Product viewer: lazy spin contract failed ${JSON.stringify({ spinActivationRequests, spinBeforeStep, spinAfterKey, spinAfterReset, spinAfterTouch })}`);
+  }
+  await spinContext.close();
 
   const viewerContext = await browser.newContext({
     viewport: { width: 1024, height: 900 },

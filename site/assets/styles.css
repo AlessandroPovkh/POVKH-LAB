@@ -3769,7 +3769,8 @@ html[lang="ru"] .merch-detail-copy .page-title {
 
 .product-viewer-stage > img,
 .product-viewer-canvas,
-.product-viewer-model {
+.product-viewer-model,
+.product-viewer-spin {
   display: block;
   width: 100%;
   height: 100%;
@@ -3803,6 +3804,20 @@ html[lang="ru"] .merch-detail-copy .page-title {
   outline-offset: -3px;
 }
 
+.product-viewer-spin {
+  object-fit: contain;
+  background: var(--void);
+  cursor: ew-resize;
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.product-viewer-spin:focus-visible {
+  outline: 2px solid var(--signal);
+  outline-offset: -3px;
+}
+
 .product-viewer-datum {
   position: absolute;
   z-index: 4;
@@ -3824,6 +3839,18 @@ html[lang="ru"] .merch-detail-copy .page-title {
   gap: 0.75rem;
   min-height: 3.75rem;
   padding-top: 0.75rem;
+}
+
+.product-viewer-controls .button {
+  position: relative;
+  z-index: 5;
+}
+
+.product-viewer-controls [data-product-viewer-activate][disabled] {
+  max-width: 100%;
+  cursor: not-allowed;
+  opacity: 0.72;
+  white-space: normal;
 }
 
 .product-viewer-status {
@@ -4153,6 +4180,25 @@ html[lang="ru"] .merch-detail-story .section-title {
 
   .merch-adjacent a {
     width: 100%;
+  }
+}
+
+@media (max-width: 48rem) {
+  html:has(body.audio-player-ready.page-merch-detail) {
+    scroll-padding-bottom: calc(10rem + env(safe-area-inset-bottom));
+  }
+
+  body.audio-player-ready.page-merch-detail .product-viewer {
+    padding-bottom: calc(9.75rem + env(safe-area-inset-bottom));
+  }
+
+  body.audio-player-ready.page-merch-detail .product-viewer-controls {
+    position: sticky;
+    z-index: 6;
+    bottom: calc(9.5rem + env(safe-area-inset-bottom));
+    padding-bottom: 0.5rem;
+    background: var(--void);
+    scroll-margin-block: 5rem calc(10rem + env(safe-area-inset-bottom));
   }
 }
 
