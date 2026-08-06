@@ -61,12 +61,14 @@ test("governs the cassette source, deterministic build and release report", asyn
   assert.match(report.output.sha256, /^[a-f0-9]{64}$/);
 });
 
-test("binds released vinyl, disc and print viewers to their governed build records", async () => {
+test("binds released rigid and flat viewers to their governed build records", async () => {
   const merch = await readJson("data/merch.json");
   const records = [
     ["vinyl", "vinyl-001", "nested"],
     ["cd", "disc-004", "nested"],
-    ["poster", "print-001", "flat"]
+    ["poster", "print-001", "flat"],
+    ["sticker-pack", "signal-kit-001", "flat"],
+    ["zine-booklet", "zine-001", "flat"]
   ];
 
   for (const [slug, assetKey, cameraShape] of records) {

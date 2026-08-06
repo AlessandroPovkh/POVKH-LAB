@@ -661,9 +661,9 @@
           "mobile": "auto auto auto"
         },
         "alt": {
-          "en": "Interactive 3D view of the POVKH LAB archival poster set on bone paper.",
-          "it": "Vista 3D interattiva del set di poster d'archivio POVKH LAB su carta bone.",
-          "ru": "Интерактивный 3D-вид архивного комплекта постеров POVKH LAB на светлой бумаге."
+          "en": "Interactive 3D view of two upright A2 POVKH LAB archival posters: one bone, one void black.",
+          "it": "Vista 3D interattiva di due poster A2 d'archivio POVKH LAB verticali: uno bone e uno nero void.",
+          "ru": "Интерактивный 3D-вид двух вертикальных архивных постеров POVKH LAB формата A2: светлого и чёрного."
         },
         "budget": { "bytes": 650000, "triangles": 1500, "drawCalls": 4 }
       },
@@ -730,23 +730,23 @@
         "poster": "assets/merch/sticker-pack-sheet.webp",
         "src": "assets/merch-3d/signal-kit-001.glb",
         "cameraOrbit": {
-          "desktop": "12deg 78deg 114%",
-          "mobile": "12deg 78deg 114%"
+          "desktop": "0deg 70deg 115%",
+          "mobile": "0deg 70deg 115%"
         },
         "fieldOfView": {
-          "desktop": "auto",
-          "mobile": "auto"
+          "desktop": "30deg",
+          "mobile": "30deg"
         },
         "cameraTarget": {
           "desktop": "auto auto auto",
           "mobile": "auto auto auto"
         },
         "alt": {
-          "en": "Interactive 3D view of the black POVKH LAB sticker sheet and separate die-cut marks.",
-          "it": "Vista 3D interattiva del foglio di sticker nero POVKH LAB e dei marchi fustellati.",
-          "ru": "Интерактивный 3D-вид чёрного стикерпака POVKH LAB и отдельных вырубных знаков."
+          "en": "Interactive 3D view of five black POVKH LAB kiss-cut stickers attached to a bone A5 carrier.",
+          "it": "Vista 3D interattiva di cinque sticker neri POVKH LAB kiss-cut fissati a un supporto A5 color bone.",
+          "ru": "Интерактивный 3D-вид пяти чёрных стикеров POVKH LAB на светлой несущей основе A5."
         },
-        "budget": { "bytes": 760000, "triangles": 4600, "drawCalls": 4 }
+        "budget": { "bytes": 750000, "triangles": 4000, "drawCalls": 4 }
       },
       "releaseGate": {
         "state": "requiredBeforeProduction",
@@ -831,23 +831,23 @@
         "poster": "assets/merch/zine-booklet-closed.webp",
         "src": "assets/merch-3d/zine-001.glb",
         "cameraOrbit": {
-          "desktop": "22deg 68deg 112%",
-          "mobile": "22deg 68deg 112%"
+          "desktop": "20deg 70deg 110%",
+          "mobile": "20deg 70deg 110%"
         },
         "fieldOfView": {
-          "desktop": "auto",
-          "mobile": "auto"
+          "desktop": "30deg",
+          "mobile": "30deg"
         },
         "cameraTarget": {
           "desktop": "auto auto auto",
           "mobile": "auto auto auto"
         },
         "alt": {
-          "en": "Interactive 3D view of the POVKH LAB art zine with its bound bone-paper cover.",
-          "it": "Vista 3D interattiva dello zine d'arte POVKH LAB con copertina rilegata in carta bone.",
-          "ru": "Интерактивный 3D-вид арт-зина POVKH LAB со светлой переплетённой обложкой."
+          "en": "Interactive 3D view of the closed black POVKH LAB art zine with a thin page block and two saddle staples.",
+          "it": "Vista 3D interattiva dello zine d'arte nero POVKH LAB chiuso, con blocco pagine sottile e due punti metallici.",
+          "ru": "Интерактивный 3D-вид закрытого чёрного арт-зина POVKH LAB с тонким блоком страниц и двумя скобами."
         },
-        "budget": { "bytes": 780000, "triangles": 4800, "drawCalls": 4 }
+        "budget": { "bytes": 780000, "triangles": 4500, "drawCalls": 4 }
       },
       "releaseGate": {
         "state": "requiredBeforeProduction",
