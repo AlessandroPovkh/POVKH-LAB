@@ -63,7 +63,15 @@ const shared = Object.fromEntries(LOCALES.map((locale) => [locale, {
   accessTerminal: "Access Terminal",
   previousObject: "Previous object",
   nextObject: "Next object",
-  galleryLabel: "Concept gallery"
+  galleryLabel: "Concept gallery",
+  viewerLabel: "Interactive object",
+  viewerActivate: "Load 3D view",
+  viewerLoading: "Loading object",
+  viewerReady: "3D view ready",
+  viewerError: "3D view unavailable. Approved photographs remain available.",
+  viewerReset: "Reset view",
+  viewerInstructions: "Drag to rotate and use arrow keys to orbit.",
+  viewerDataSaver: "Data Saver is active. Loading starts after this action."
 }]));
 
 const validAuthorities = () => {
@@ -95,6 +103,14 @@ const validAuthorities = () => {
         height: 1024
       })),
       specifications: [],
+      viewer: {
+        kind: "glb",
+        poster: `assets/merch/${slug}-${ROLE_CONTRACT[slug][0]}.webp`,
+        src: `assets/merch-3d/${slug}-${String(index + 1).padStart(3, "0")}.glb`,
+        cameraOrbit: "20deg 70deg 110%",
+        alt: Object.fromEntries(LOCALES.map((locale) => [locale, `Interactive 3D concept view of the ${slug} archive object.`])),
+        budget: { bytes: 700000, triangles: 4000, drawCalls: 4 }
+      },
       releaseGate: { state: "requiredBeforeProduction", copyKey: `${id}.releaseGate` }
     }))
   };

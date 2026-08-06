@@ -36,7 +36,9 @@ const PAGE_FIELDS = [
 const SHARED_FIELDS = [
   "conceptStatus", "viewGallery", "closeGallery", "previousImage", "nextImage",
   "imageCounter", "storyEyebrow", "specificationsTitle", "releaseGateTitle",
-  "backToDrop", "accessTerminal", "previousObject", "nextObject", "galleryLabel"
+  "backToDrop", "accessTerminal", "previousObject", "nextObject", "galleryLabel",
+  "viewerLabel", "viewerActivate", "viewerLoading", "viewerReady", "viewerError",
+  "viewerReset", "viewerInstructions", "viewerDataSaver"
 ];
 const PRODUCT_COPY_FIELDS = [
   "name", "metaDescription", "eyebrow", "lede", "storyTitle", "storyBody",
@@ -52,8 +54,46 @@ const COMMERCE_COPY = /\b(?:buy|order now|pre[- ]?order|preorder|in stock|sold o
 const nonEmpty = (value) => typeof value === "string" && Boolean(value.trim());
 const safeSlug = (value) => /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(value || "");
 const safeSpecificationKey = (value) => /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(value || "");
+const safeProjectPath = (value) => /^(?!\/)(?!.*(?:^|\/)\.\.(?:\/|$))(?![a-z][a-z0-9+.-]*:)[A-Za-z0-9._/-]+$/i.test(value || "");
 const exactKeys = (value, keys) => JSON.stringify(Object.keys(value || {})) === JSON.stringify(keys);
 const exactKeySet = (value, keys) => JSON.stringify(Object.keys(value || {}).sort()) === JSON.stringify([...keys].sort());
+
+const validateViewer = (object) => {
+  const viewer = object.viewer;
+  if (!viewer || !["glb", "spin"].includes(viewer.kind)) throw new Error(`${object.id} viewer must declare glb or spin`);
+  const keys = viewer.kind === "glb"
+    ? ["kind", "poster", "src", "cameraOrbit", "alt", "budget"]
+    : ["kind", "poster", "src", "alt", "budget"];
+  if (!exactKeySet(viewer, keys)) throw new Error(`${object.id} viewer must use the exact ${viewer.kind} contract`);
+  if (viewer.poster !== object.gallery[0]?.path || !safeProjectPath(viewer.poster)) {
+    throw new Error(`${object.id} viewer poster must reuse the approved hero asset`);
+  }
+  if (!safeProjectPath(viewer.src)) throw new Error(`${object.id} viewer source must be a base-safe project path`);
+  if (!exactKeySet(viewer.alt, MERCH_LOCALES)) throw new Error(`${object.id} viewer alt must preserve EN IT RU parity`);
+  for (const locale of MERCH_LOCALES) {
+    if (!nonEmpty(viewer.alt[locale]) || viewer.alt[locale].length < 12 || viewer.alt[locale].length > 180) {
+      throw new Error(`${object.id} viewer alt.${locale} must contain 12–180 characters`);
+    }
+  }
+  if (viewer.kind === "glb") {
+    if (!/^assets\/merch-3d\/[a-z0-9-]+\.glb$/.test(viewer.src)) throw new Error(`${object.id} GLB source path is invalid`);
+    if (!/^-?\d+(?:\.\d+)?deg \d+(?:\.\d+)?deg \d+(?:\.\d+)?%$/.test(viewer.cameraOrbit || "")) {
+      throw new Error(`${object.id} viewer camera orbit is invalid`);
+    }
+    if (!exactKeySet(viewer.budget, ["bytes", "triangles", "drawCalls"])
+      || !Number.isInteger(viewer.budget.bytes) || viewer.budget.bytes < 1
+      || !Number.isInteger(viewer.budget.triangles) || viewer.budget.triangles < 0
+      || !Number.isInteger(viewer.budget.drawCalls) || viewer.budget.drawCalls < 0) {
+      throw new Error(`${object.id} GLB viewer budget is invalid`);
+    }
+  } else {
+    if (!/^assets\/merch-360\/[a-z0-9-]+\/manifest\.json$/.test(viewer.src)) throw new Error(`${object.id} spin source path is invalid`);
+    if (!exactKeySet(viewer.budget, ["mobileBytes", "desktopBytes", "mobileFrames", "desktopFrames"])
+      || Object.values(viewer.budget).some((value) => !Number.isInteger(value) || value < 1)) {
+      throw new Error(`${object.id} spin viewer budget is invalid`);
+    }
+  }
+};
 
 const rejectForbiddenFields = (value, path = "merch") => {
   if (!value || typeof value !== "object") return;
@@ -165,7 +205,7 @@ export const validateMerchLibrary = async (
     if (!safeSlug(object.slug)) throw new Error(`${object.id} must use a safe slug`);
     if (!exactKeySet(object, [
       "id", "slug", "category", "order", "status", "stage", "detailEnabled", "copyKey",
-      "gallery", "specifications", "releaseGate"
+      "gallery", "specifications", "viewer", "releaseGate"
     ])) throw new Error(`${object.id} must use the exact schema v2 object keys`);
     if (object.status !== "comingSoon" || object.stage !== "concept" || object.detailEnabled !== true) {
       throw new Error(`${object.id} must declare concept, comingSoon and enabled detail state`);
@@ -177,6 +217,7 @@ export const validateMerchLibrary = async (
       throw new Error(`${object.id} gallery roles must match the immutable contract`);
     }
     if (!Array.isArray(object.specifications)) throw new Error(`${object.id} specifications must be an array`);
+    validateViewer(object);
     if (!exactKeySet(object.releaseGate, ["state", "copyKey"])
       || object.releaseGate.state !== "requiredBeforeProduction"
       || object.releaseGate.copyKey !== `${object.id}.releaseGate`) {

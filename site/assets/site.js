@@ -1178,6 +1178,47 @@
     };
   };
 
+  const initProductViewerLaunchers = () => {
+    const viewers = [...document.querySelectorAll("[data-product-viewer]")];
+    if (!viewers.length) return () => {};
+    const abortController = new AbortController();
+    const { signal } = abortController;
+    const controllers = new Set();
+
+    for (const viewer of viewers) {
+      const activate = viewer.querySelector("[data-product-viewer-activate]");
+      const status = viewer.querySelector("[data-product-viewer-status]");
+      if (!activate || !status || !viewer.dataset.viewerModule) continue;
+      activate.addEventListener("click", async () => {
+        if (signal.aborted || viewer.dataset.viewerState === "loading" || viewer.dataset.viewerState === "ready") return;
+        viewer.dataset.viewerState = "loading";
+        viewer.setAttribute("aria-busy", "true");
+        activate.disabled = true;
+        status.textContent = viewer.dataset.viewerLoading || "Loading object";
+        try {
+          const moduleUrl = new URL(viewer.dataset.viewerModule, document.baseURI).href;
+          const module = await import(moduleUrl);
+          if (signal.aborted || !viewer.isConnected) return;
+          const controller = await module.activateProductViewer(viewer, { signal });
+          if (controller) controllers.add(controller);
+        } catch (error) {
+          if (signal.aborted) return;
+          viewer.dataset.viewerState = "error";
+          viewer.setAttribute("aria-busy", "false");
+          activate.disabled = false;
+          status.textContent = viewer.dataset.viewerError || "3D view unavailable";
+          console.warn("POVKH product viewer activation failed", error);
+        }
+      }, { signal });
+    }
+
+    return () => {
+      abortController.abort();
+      for (const controller of controllers) controller.dispose?.();
+      controllers.clear();
+    };
+  };
+
   const initMerchGalleries = () => {
     const galleries = [...document.querySelectorAll("[data-merch-gallery]")];
     if (!galleries.length) return () => {};
@@ -1285,6 +1326,7 @@
       initMobileMenu(),
       initCatalogFilters(),
       initArtistGalleries(),
+      initProductViewerLaunchers(),
       initMerchGalleries()
     ];
     let disposed = false;

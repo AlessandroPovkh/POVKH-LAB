@@ -82,6 +82,18 @@
         }
       ],
       "specifications": [],
+      "viewer": {
+        "kind": "glb",
+        "poster": "assets/merch/vinyl-hero.webp",
+        "src": "assets/merch-3d/vinyl-001.glb",
+        "cameraOrbit": "24deg 72deg 112%",
+        "alt": {
+          "en": "Interactive 3D view of the red POVKH LAB vinyl edition and sleeve.",
+          "it": "Vista 3D interattiva dell'edizione in vinile rosso POVKH LAB e della custodia.",
+          "ru": "Интерактивный 3D-вид красной пластинки POVKH LAB и её конверта."
+        },
+        "budget": { "bytes": 2200000, "triangles": 42000, "drawCalls": 10 }
+      },
       "releaseGate": {
         "state": "requiredBeforeProduction",
         "copyKey": "MRCH-001.releaseGate"
@@ -149,6 +161,18 @@
         }
       ],
       "specifications": [],
+      "viewer": {
+        "kind": "glb",
+        "poster": "assets/merch/cassette-hero.webp",
+        "src": "assets/merch-3d/cassette-002.glb",
+        "cameraOrbit": "28deg 68deg 108%",
+        "alt": {
+          "en": "Interactive 3D view of the POVKH LAB cassette, shell and printed label.",
+          "it": "Vista 3D interattiva della cassetta POVKH LAB, guscio ed etichetta stampata.",
+          "ru": "Интерактивный 3D-вид кассеты POVKH LAB, корпуса и печатной этикетки."
+        },
+        "budget": { "bytes": 2100000, "triangles": 46000, "drawCalls": 12 }
+      },
       "releaseGate": {
         "state": "requiredBeforeProduction",
         "copyKey": "MRCH-002.releaseGate"
@@ -216,6 +240,18 @@
         }
       ],
       "specifications": [],
+      "viewer": {
+        "kind": "glb",
+        "poster": "assets/merch/cd-case.webp",
+        "src": "assets/merch-3d/cd-003.glb",
+        "cameraOrbit": "26deg 70deg 110%",
+        "alt": {
+          "en": "Interactive 3D view of the POVKH LAB clear jewel case and silver compact disc.",
+          "it": "Vista 3D interattiva del jewel case trasparente POVKH LAB e del compact disc argentato.",
+          "ru": "Интерактивный 3D-вид прозрачного футляра POVKH LAB и серебристого компакт-диска."
+        },
+        "budget": { "bytes": 2000000, "triangles": 38000, "drawCalls": 10 }
+      },
       "releaseGate": {
         "state": "requiredBeforeProduction",
         "copyKey": "MRCH-003.releaseGate"
@@ -283,6 +319,18 @@
         }
       ],
       "specifications": [],
+      "viewer": {
+        "kind": "glb",
+        "poster": "assets/merch/usb-edition-packaging.webp",
+        "src": "assets/merch-3d/usb-edition-004.glb",
+        "cameraOrbit": "32deg 66deg 116%",
+        "alt": {
+          "en": "Interactive 3D view of the black POVKH LAB dual-connector data key and packaging.",
+          "it": "Vista 3D interattiva della data key nera POVKH LAB a doppio connettore e confezione.",
+          "ru": "Интерактивный 3D-вид чёрного накопителя POVKH LAB с двумя разъёмами и упаковки."
+        },
+        "budget": { "bytes": 1800000, "triangles": 32000, "drawCalls": 9 }
+      },
       "releaseGate": {
         "state": "requiredBeforeProduction",
         "copyKey": "MRCH-004.releaseGate"
@@ -340,6 +388,18 @@
         }
       ],
       "specifications": [],
+      "viewer": {
+        "kind": "glb",
+        "poster": "assets/merch/t-shirt-front.webp",
+        "src": "assets/merch-3d/t-shirt-005.glb",
+        "cameraOrbit": "18deg 75deg 105%",
+        "alt": {
+          "en": "Interactive 3D view of the bone T-shirt with the registered POVKH LAB ASCII print.",
+          "it": "Vista 3D interattiva della T-shirt bone con stampa ASCII POVKH LAB registrata.",
+          "ru": "Интерактивный 3D-вид светлой футболки с выверенным ASCII-принтом POVKH LAB."
+        },
+        "budget": { "bytes": 3800000, "triangles": 76000, "drawCalls": 18 }
+      },
       "releaseGate": {
         "state": "requiredBeforeProduction",
         "copyKey": "MRCH-005.releaseGate"
@@ -397,6 +457,18 @@
         }
       ],
       "specifications": [],
+      "viewer": {
+        "kind": "glb",
+        "poster": "assets/merch/hoodie-rear.webp",
+        "src": "assets/merch-3d/hoodie-006.glb",
+        "cameraOrbit": "16deg 76deg 108%",
+        "alt": {
+          "en": "Interactive 3D view of the black hoodie with the registered rear POVKH LAB ASCII print.",
+          "it": "Vista 3D interattiva della felpa nera con stampa ASCII POVKH LAB registrata sul retro.",
+          "ru": "Интерактивный 3D-вид чёрного худи с выверенным задним ASCII-принтом POVKH LAB."
+        },
+        "budget": { "bytes": 3900000, "triangles": 78000, "drawCalls": 19 }
+      },
       "releaseGate": {
         "state": "requiredBeforeProduction",
         "copyKey": "MRCH-006.releaseGate"
@@ -454,6 +526,18 @@
         }
       ],
       "specifications": [],
+      "viewer": {
+        "kind": "glb",
+        "poster": "assets/merch/cap-front.webp",
+        "src": "assets/merch-3d/cap-007.glb",
+        "cameraOrbit": "24deg 70deg 112%",
+        "alt": {
+          "en": "Interactive 3D view of the black POVKH LAB cap with its woven front patch.",
+          "it": "Vista 3D interattiva del cappellino nero POVKH LAB con patch frontale tessuta.",
+          "ru": "Интерактивный 3D-вид чёрной кепки POVKH LAB с тканым патчем спереди."
+        },
+        "budget": { "bytes": 3500000, "triangles": 70000, "drawCalls": 16 }
+      },
       "releaseGate": {
         "state": "requiredBeforeProduction",
         "copyKey": "MRCH-007.releaseGate"
@@ -511,6 +595,18 @@
         }
       ],
       "specifications": [],
+      "viewer": {
+        "kind": "glb",
+        "poster": "assets/merch/poster-diptych.webp",
+        "src": "assets/merch-3d/poster-008.glb",
+        "cameraOrbit": "8deg 82deg 118%",
+        "alt": {
+          "en": "Interactive 3D view of the POVKH LAB archival poster set on bone paper.",
+          "it": "Vista 3D interattiva del set di poster d'archivio POVKH LAB su carta bone.",
+          "ru": "Интерактивный 3D-вид архивного комплекта постеров POVKH LAB на светлой бумаге."
+        },
+        "budget": { "bytes": 760000, "triangles": 4200, "drawCalls": 4 }
+      },
       "releaseGate": {
         "state": "requiredBeforeProduction",
         "copyKey": "MRCH-008.releaseGate"
@@ -568,6 +664,18 @@
         }
       ],
       "specifications": [],
+      "viewer": {
+        "kind": "glb",
+        "poster": "assets/merch/sticker-pack-sheet.webp",
+        "src": "assets/merch-3d/sticker-pack-009.glb",
+        "cameraOrbit": "12deg 78deg 114%",
+        "alt": {
+          "en": "Interactive 3D view of the black POVKH LAB sticker sheet and separate die-cut marks.",
+          "it": "Vista 3D interattiva del foglio di sticker nero POVKH LAB e dei marchi fustellati.",
+          "ru": "Интерактивный 3D-вид чёрного стикерпака POVKH LAB и отдельных вырубных знаков."
+        },
+        "budget": { "bytes": 760000, "triangles": 4600, "drawCalls": 4 }
+      },
       "releaseGate": {
         "state": "requiredBeforeProduction",
         "copyKey": "MRCH-009.releaseGate"
@@ -645,6 +753,18 @@
         }
       ],
       "specifications": [],
+      "viewer": {
+        "kind": "glb",
+        "poster": "assets/merch/zine-booklet-closed.webp",
+        "src": "assets/merch-3d/zine-booklet-010.glb",
+        "cameraOrbit": "22deg 68deg 112%",
+        "alt": {
+          "en": "Interactive 3D view of the POVKH LAB art zine with its bound bone-paper cover.",
+          "it": "Vista 3D interattiva dello zine d'arte POVKH LAB con copertina rilegata in carta bone.",
+          "ru": "Интерактивный 3D-вид арт-зина POVKH LAB со светлой переплетённой обложкой."
+        },
+        "budget": { "bytes": 780000, "triangles": 4800, "drawCalls": 4 }
+      },
       "releaseGate": {
         "state": "requiredBeforeProduction",
         "copyKey": "MRCH-010.releaseGate"
@@ -702,6 +822,18 @@
         }
       ],
       "specifications": [],
+      "viewer": {
+        "kind": "glb",
+        "poster": "assets/merch/collector-box-set-closed.webp",
+        "src": "assets/merch-3d/collector-box-set-011.glb",
+        "cameraOrbit": "28deg 66deg 116%",
+        "alt": {
+          "en": "Interactive 3D view of the closed POVKH LAB collector archive box and drawer construction.",
+          "it": "Vista 3D interattiva del box archivio da collezione POVKH LAB chiuso con struttura a cassetto.",
+          "ru": "Интерактивный 3D-вид закрытого коллекционного архива POVKH LAB с выдвижной конструкцией."
+        },
+        "budget": { "bytes": 2300000, "triangles": 44000, "drawCalls": 11 }
+      },
       "releaseGate": {
         "state": "requiredBeforeProduction",
         "copyKey": "MRCH-011.releaseGate"

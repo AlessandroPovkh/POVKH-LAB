@@ -144,7 +144,15 @@
       "accessTerminal": "Access Terminal",
       "previousObject": "Previous object",
       "nextObject": "Next object",
-      "galleryLabel": "Concept gallery"
+      "galleryLabel": "Concept gallery",
+      "viewerLabel": "Interactive object",
+      "viewerActivate": "Load 3D view",
+      "viewerLoading": "Loading object",
+      "viewerReady": "3D view ready",
+      "viewerError": "3D view unavailable. The approved photographs remain available below.",
+      "viewerReset": "Reset view",
+      "viewerInstructions": "Drag to rotate. Pinch or scroll to zoom. Keyboard: arrow keys to orbit.",
+      "viewerDataSaver": "Data Saver is active. The model loads only after this action."
     },
     "it": {
       "conceptStatus": "CONCEPT / PROSSIMAMENTE",
@@ -160,7 +168,15 @@
       "accessTerminal": "Terminale di accesso",
       "previousObject": "Oggetto precedente",
       "nextObject": "Oggetto successivo",
-      "galleryLabel": "Galleria concept"
+      "galleryLabel": "Galleria concept",
+      "viewerLabel": "Oggetto interattivo",
+      "viewerActivate": "Carica vista 3D",
+      "viewerLoading": "Caricamento oggetto",
+      "viewerReady": "Vista 3D pronta",
+      "viewerError": "Vista 3D non disponibile. Le fotografie approvate restano disponibili qui sotto.",
+      "viewerReset": "Reimposta vista",
+      "viewerInstructions": "Trascina per ruotare. Pizzica o scorri per ingrandire. Tastiera: frecce per orbitare.",
+      "viewerDataSaver": "Risparmio dati attivo. Il modello viene caricato solo dopo questa azione."
     },
     "ru": {
       "conceptStatus": "КОНЦЕПТ / СКОРО",
@@ -176,7 +192,15 @@
       "accessTerminal": "Терминал доступа",
       "previousObject": "Предыдущий объект",
       "nextObject": "Следующий объект",
-      "galleryLabel": "Галерея концепта"
+      "galleryLabel": "Галерея концепта",
+      "viewerLabel": "Интерактивный объект",
+      "viewerActivate": "Загрузить 3D-вид",
+      "viewerLoading": "Объект загружается",
+      "viewerReady": "3D-вид готов",
+      "viewerError": "3D-вид недоступен. Ниже остаются утверждённые фотографии.",
+      "viewerReset": "Вернуть ракурс",
+      "viewerInstructions": "Тяните, чтобы вращать. Щипок или колесо меняют масштаб. Клавиши-стрелки вращают объект.",
+      "viewerDataSaver": "Включена экономия трафика. Модель загрузится только после этого действия."
     }
   },
   "products": {

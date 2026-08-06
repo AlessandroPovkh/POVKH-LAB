@@ -507,7 +507,7 @@ try {
           const triggers = [...document.querySelectorAll("[data-merch-gallery-trigger]")];
           const figures = [...document.querySelectorAll("[data-merch-gallery-figure]")];
           const releaseGate = document.querySelector("[data-merch-release-gate]");
-          const hero = document.querySelector(".merch-detail-visual img");
+          const hero = document.querySelector("[data-product-viewer-poster]");
           return {
             rootCount: document.querySelectorAll("[data-merch-detail-id]").length,
             objectId: document.querySelector("[data-merch-detail-id]")?.dataset.merchDetailId || null,
@@ -2219,8 +2219,12 @@ try {
   });
   const reducedPage = await reducedContext.newPage();
   const reducedMotionRequests = [];
+  const reducedViewerRequests = [];
   reducedPage.on("request", (request) => {
     if (/\/assets\/motion\//.test(request.url())) reducedMotionRequests.push(request.url());
+    if (/\/assets\/(?:product-viewer\.js|vendor\/model-viewer\.min\.js|merch-3d\/)/.test(request.url())) {
+      reducedViewerRequests.push(request.url());
+    }
   });
   await reducedPage.goto(baseUrl, { waitUntil: "load" });
   const reducedStyles = await reducedPage.evaluate(() => ({
@@ -2290,6 +2294,11 @@ try {
     || reducedMerchDurations.some((value) => !Number.isFinite(value) || value > 0.00002)) {
     fail(`Reduced motion: merch fallback or card contract failed ${JSON.stringify({ reducedMotionRequests, reducedMerch })}`);
   }
+  await reducedPage.goto(`${baseUrl}/merch/cassette/`, { waitUntil: "load" });
+  const reducedViewerPoster = await reducedPage.locator("[data-product-viewer-poster]").isVisible();
+  if (!reducedViewerPoster || reducedViewerRequests.length) {
+    fail(`Reduced motion: poster-first viewer hydrated before activation ${JSON.stringify(reducedViewerRequests)}`);
+  }
   await reducedPage.goto(`${baseUrl}/links/`, { waitUntil: "load" });
   const reducedSocialAccess = await reducedPage.evaluate(() => {
     const terminal = document.querySelector(".social-access-terminal");
@@ -2318,9 +2327,13 @@ try {
   });
   const saveDataRequests = [];
   const saveDataAudioRequests = [];
+  const saveDataViewerRequests = [];
   saveDataPage.on("request", (request) => {
     if (/\/assets\/motion\//.test(request.url())) saveDataRequests.push(request.url());
     if (/\.mp3(?:$|\?)/.test(request.url())) saveDataAudioRequests.push(request.url());
+    if (/\/assets\/(?:product-viewer\.js|vendor\/model-viewer\.min\.js|merch-3d\/)/.test(request.url())) {
+      saveDataViewerRequests.push(request.url());
+    }
   });
   await saveDataPage.goto(baseUrl, { waitUntil: "load" });
   const saveDataStates = await saveDataPage.locator("[data-motion-video]").evaluateAll((videos) => videos.map((video) => ({
@@ -2353,6 +2366,11 @@ try {
     || saveDataMerchStates.some(({ state, currentSrc, sources }) => state !== "disabled" || currentSrc || sources.some(Boolean))) {
     fail(`Save-Data: merch PHYSICAL media was hydrated ${JSON.stringify({ saveDataRequests, saveDataMerchStates })}`);
   }
+  await saveDataPage.goto(`${baseUrl}/merch/cassette/`, { waitUntil: "load" });
+  const saveDataViewerPoster = await saveDataPage.locator("[data-product-viewer-poster]").isVisible();
+  if (!saveDataViewerPoster || saveDataViewerRequests.length) {
+    fail(`Save-Data: poster-first viewer hydrated before activation ${JSON.stringify(saveDataViewerRequests)}`);
+  }
   await saveDataPage.goto(`${baseUrl}/links/`, { waitUntil: "load" });
   const saveDataSocialAccess = await saveDataPage.evaluate(() => {
     const terminal = document.querySelector(".social-access-terminal");
@@ -2384,6 +2402,84 @@ try {
     fail(`Save-Data timeline: pending seek restored ${deferredSeekTime}`);
   }
   await saveDataContext.close();
+
+  const viewerContext = await browser.newContext({
+    viewport: { width: 1024, height: 900 },
+    reducedMotion: "no-preference"
+  });
+  const viewerPage = await viewerContext.newPage();
+  const viewerRequests = [];
+  viewerPage.on("request", (request) => {
+    if (/\/assets\/(?:product-viewer\.js|vendor\/model-viewer\.min\.js|merch-3d\/)/.test(request.url())) {
+      viewerRequests.push(request.url());
+    }
+  });
+  await viewerPage.route("**/assets/merch-3d/cassette-002.glb", (route) => route.fulfill({
+    status: 404,
+    contentType: "model/gltf-binary",
+    body: "missing model fixture"
+  }));
+  await viewerPage.goto(`${baseUrl}/merch/cassette/`, { waitUntil: "load" });
+  await viewerPage.waitForTimeout(120);
+  if (viewerRequests.length || !await viewerPage.locator("[data-product-viewer-poster]").isVisible()) {
+    fail(`Product viewer: runtime or model loaded before explicit activation ${JSON.stringify(viewerRequests)}`);
+  }
+  await viewerPage.locator("[data-product-viewer-activate]").click();
+  await viewerPage.waitForFunction(() => document.querySelector("[data-product-viewer]")?.dataset.viewerState === "error");
+  const viewerFallback = await viewerPage.evaluate(() => ({
+    posterVisible: !document.querySelector("[data-product-viewer-poster]")?.hidden,
+    activateDisabled: document.querySelector("[data-product-viewer-activate]")?.disabled,
+    modelCount: document.querySelectorAll("model-viewer").length,
+    status: document.querySelector("[data-product-viewer-status]")?.textContent.trim() || ""
+  }));
+  const viewerRequestPaths = viewerRequests.map((url) => new URL(url).pathname);
+  const expectedViewerRequests = [
+    "/assets/product-viewer.js",
+    "/assets/vendor/model-viewer.min.js",
+    "/assets/merch-3d/cassette-002.glb"
+  ];
+  if (JSON.stringify(viewerRequestPaths) !== JSON.stringify(expectedViewerRequests)
+    || viewerRequests.some((url) => new URL(url).origin !== baseUrl)
+    || !viewerFallback.posterVisible
+    || viewerFallback.activateDisabled
+    || viewerFallback.modelCount
+    || !viewerFallback.status) {
+    fail(`Product viewer: activation/fallback contract failed ${JSON.stringify({ viewerRequestPaths, viewerFallback })}`);
+  }
+  await viewerContext.close();
+
+  const noWebglContext = await browser.newContext({ viewport: { width: 375, height: 812 } });
+  const noWebglPage = await noWebglContext.newPage();
+  await noWebglPage.addInitScript(() => {
+    const nativeGetContext = HTMLCanvasElement.prototype.getContext;
+    HTMLCanvasElement.prototype.getContext = function getContext(type, options) {
+      if (type === "webgl" || type === "webgl2" || type === "experimental-webgl") return null;
+      return nativeGetContext.call(this, type, options);
+    };
+  });
+  const noWebglRequests = [];
+  noWebglPage.on("request", (request) => {
+    if (/\/assets\/(?:product-viewer\.js|vendor\/model-viewer\.min\.js|merch-3d\/)/.test(request.url())) {
+      noWebglRequests.push(new URL(request.url()).pathname);
+    }
+  });
+  await noWebglPage.goto(`${baseUrl}/merch/cassette/`, { waitUntil: "load" });
+  await noWebglPage.locator("[data-product-viewer-activate]").click();
+  await noWebglPage.waitForFunction(() => document.querySelector("[data-product-viewer]")?.dataset.viewerState === "error");
+  const noWebglFallback = await noWebglPage.evaluate(() => ({
+    posterVisible: !document.querySelector("[data-product-viewer-poster]")?.hidden,
+    activateDisabled: document.querySelector("[data-product-viewer-activate]")?.disabled,
+    modelCount: document.querySelectorAll("model-viewer").length,
+    busy: document.querySelector("[data-product-viewer]")?.getAttribute("aria-busy")
+  }));
+  if (JSON.stringify(noWebglRequests) !== JSON.stringify(["/assets/product-viewer.js"])
+    || !noWebglFallback.posterVisible
+    || noWebglFallback.activateDisabled
+    || noWebglFallback.modelCount
+    || noWebglFallback.busy !== "false") {
+    fail(`Product viewer: WebGL fallback failed ${JSON.stringify({ noWebglRequests, noWebglFallback })}`);
+  }
+  await noWebglContext.close();
 
   const touchSeekContext = await browser.newContext({
     viewport: { width: 375, height: 812 },

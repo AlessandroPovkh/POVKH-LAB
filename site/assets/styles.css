@@ -3727,6 +3727,7 @@ html[lang="ru"] .merch-detail-copy .page-title {
 }
 
 .merch-detail-visual figcaption,
+.product-viewer figcaption,
 .merch-gallery-caption,
 .merch-gallery-dialog figcaption {
   display: block;
@@ -3736,6 +3737,115 @@ html[lang="ru"] .merch-detail-copy .page-title {
   font-size: 0.68rem;
   letter-spacing: 0.07em;
   text-transform: uppercase;
+}
+
+.product-viewer {
+  grid-column: 5 / -1;
+  min-width: 0;
+  margin: 0;
+}
+
+.product-viewer-stage {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 3 / 2;
+  border: 1px solid var(--line-strong);
+  background:
+    radial-gradient(circle at 54% 44%, rgba(242, 239, 231, 0.08), transparent 40%),
+    repeating-linear-gradient(0deg, transparent 0 31px, rgba(242, 239, 231, 0.018) 31px 32px),
+    var(--void);
+}
+
+.product-viewer-stage::after {
+  content: "";
+  position: absolute;
+  z-index: 3;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(var(--signal), var(--signal)) 0.75rem 0.75rem / 3rem 2px no-repeat,
+    linear-gradient(var(--line-strong), var(--line-strong)) calc(100% - 0.75rem) calc(100% - 0.75rem) / 3rem 1px no-repeat;
+}
+
+.product-viewer-stage > img,
+.product-viewer-canvas,
+.product-viewer-model {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.product-viewer-stage > img {
+  position: relative;
+  z-index: 1;
+  object-fit: cover;
+  background: var(--void);
+}
+
+.product-viewer-stage > img[hidden] {
+  display: none;
+}
+
+.product-viewer-canvas {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+}
+
+.product-viewer-model {
+  --poster-color: transparent;
+  background: transparent;
+  touch-action: pan-y;
+}
+
+.product-viewer-model:focus-visible {
+  outline: 2px solid var(--signal);
+  outline-offset: -3px;
+}
+
+.product-viewer-datum {
+  position: absolute;
+  z-index: 4;
+  top: 0.75rem;
+  left: 0.75rem;
+  padding: 0.32rem 0.45rem;
+  color: var(--bone);
+  background: rgba(8, 8, 8, 0.78);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.64rem;
+  letter-spacing: 0.08em;
+  pointer-events: none;
+}
+
+.product-viewer-controls {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  min-height: 3.75rem;
+  padding-top: 0.75rem;
+}
+
+.product-viewer-status {
+  flex: 1 1 12rem;
+  min-height: 1.2em;
+  margin: 0;
+  color: var(--muted);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.product-viewer-instructions {
+  margin: 0.25rem 0 0;
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.product-viewer-controls [hidden],
+.product-viewer-instructions[hidden] {
+  display: none;
 }
 
 .merch-detail-gallery-section {
@@ -4001,12 +4111,14 @@ html[lang="ru"] .merch-detail-story .section-title {
   }
 
   .merch-detail-copy,
-  .merch-detail-visual {
+  .merch-detail-visual,
+  .product-viewer {
     grid-column: 1;
   }
 
   .merch-detail-copy { grid-row: 1; }
-  .merch-detail-visual { grid-row: 2; }
+  .merch-detail-visual,
+  .product-viewer { grid-row: 2; }
 
   .merch-detail-index {
     inset: -0.25em 0 auto auto;
@@ -4071,7 +4183,8 @@ html[lang="ru"] .merch-detail-story .section-title {
 @media (prefers-reduced-motion: reduce) {
   .merch-object,
   .merch-gallery-trigger::after,
-  .merch-gallery-dialog[open] {
+  .merch-gallery-dialog[open],
+  .product-viewer-model {
     animation: none;
     scroll-behavior: auto;
     transition: none;

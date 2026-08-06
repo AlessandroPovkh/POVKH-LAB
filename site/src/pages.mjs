@@ -545,10 +545,29 @@ const merchGalleryMarkup = ({ object, locale, route, copy }) => {
   </div>`;
 };
 
+const productViewerMarkup = ({ object, locale, route, copy }) => {
+  const prefix = assetPrefixFor(locale, route);
+  const viewer = object.viewer;
+  const hero = object.gallery[0];
+  const dataSaverCopy = copy.viewerDataSaver;
+  return `<section class="product-viewer" data-product-viewer data-viewer-kind="${escapeHtml(viewer.kind)}" data-viewer-src="${prefix}${escapeHtml(viewer.src)}" data-viewer-poster="${prefix}${escapeHtml(viewer.poster)}" data-viewer-orbit="${escapeHtml(viewer.cameraOrbit || "0deg 75deg 105%")}" data-viewer-module="${prefix}assets/product-viewer.js" data-viewer-runtime="${prefix}assets/vendor/model-viewer.min.js" data-viewer-loading="${escapeHtml(copy.viewerLoading)}" data-viewer-ready="${escapeHtml(copy.viewerReady)}" data-viewer-error="${escapeHtml(copy.viewerError)}" data-viewer-data-saver="${escapeHtml(dataSaverCopy)}" data-viewer-budget="${escapeHtml(String(viewer.budget.bytes || viewer.budget.desktopBytes || 0))}" aria-label="${escapeHtml(copy.viewerLabel)}">
+    <div class="product-viewer-stage" data-product-viewer-stage>
+      <img data-product-viewer-poster src="${prefix}${escapeHtml(hero.path)}" width="${hero.width}" height="${hero.height}" alt="${escapeHtml(viewer.alt[locale])}" loading="eager" fetchpriority="high" decoding="async">
+      <div class="product-viewer-canvas" data-product-viewer-canvas aria-hidden="true"></div>
+      <span class="product-viewer-datum" aria-hidden="true">OBJECT / ${escapeHtml(object.id.slice(-3))}</span>
+    </div>
+    <div class="product-viewer-controls">
+      <button class="button" type="button" data-product-viewer-activate>${escapeHtml(copy.viewerActivate)}</button>
+      <button class="button button-secondary" type="button" data-product-viewer-reset hidden>${escapeHtml(copy.viewerReset)}</button>
+      <p class="product-viewer-status" data-product-viewer-status role="status" aria-live="polite" aria-atomic="true"></p>
+    </div>
+    <p class="product-viewer-instructions" data-product-viewer-instructions hidden>${escapeHtml(copy.viewerInstructions)}</p>
+    <figcaption>${escapeHtml(hero.caption[locale])}</figcaption>
+  </section>`;
+};
+
 const merchDetailMarkup = ({ object, previous, next, locale, route, overview, copy }) => {
   const content = object.content[locale];
-  const hero = object.gallery[0];
-  const prefix = assetPrefixFor(locale, route);
   const adjacent = [
     previous ? `<a rel="prev" href="${hrefFor(locale, route, locale, `merch/${previous.slug}`)}"><span>${escapeHtml(copy.previousObject)}</span><strong>${escapeHtml(previous.content[locale].name)}</strong></a>` : "",
     next ? `<a rel="next" href="${hrefFor(locale, route, locale, `merch/${next.slug}`)}"><span>${escapeHtml(copy.nextObject)}</span><strong>${escapeHtml(next.content[locale].name)}</strong></a>` : ""
@@ -568,10 +587,7 @@ const merchDetailMarkup = ({ object, previous, next, locale, route, overview, co
         <p class="lede">${escapeHtml(content.lede)}</p>
         <div class="button-row"><a class="button" href="#merch-concept-gallery">${escapeHtml(copy.viewGallery)}</a></div>
       </div>
-      <figure class="merch-detail-visual">
-        <img src="${prefix}${escapeHtml(hero.path)}" width="${hero.width}" height="${hero.height}" alt="${escapeHtml(hero.alt[locale])}" loading="eager" fetchpriority="high" decoding="async">
-        <figcaption>${escapeHtml(hero.caption[locale])}</figcaption>
-      </figure>
+      ${productViewerMarkup({ object, locale, route, copy })}
     </section>
     <section class="section merch-detail-gallery-section" id="merch-concept-gallery" aria-labelledby="merch-gallery-heading">
       <div class="section-head section-rule"><div><p class="eyebrow">${escapeHtml(content.eyebrow)}</p><h2 class="section-title" id="merch-gallery-heading">${escapeHtml(copy.galleryLabel)}</h2></div><p class="body-copy">${escapeHtml(content.conceptNote)}</p></div>
