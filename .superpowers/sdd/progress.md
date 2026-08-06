@@ -4,8 +4,8 @@
 | --- | --- | --- | --- | --- |
 | 1. Governance tests | tests-only RED | passed after fixes | passed after fixes | completed / intentional RED |
 | 2. Apparel registration | implemented / tests green | passed | passed after hardening | completed |
-| 3. PHYSICAL motion | — | — | — | pending |
-| 4. 3D runtime | — | — | — | pending |
+| 3. PHYSICAL motion | implemented / tests green | passed | passed after hardening | completed |
+| 4. 3D runtime | implementation in progress | — | — | in progress |
 | 5. Cassette + hoodie POC | — | — | — | pending |
 | 6. All product viewers | — | — | — | pending |
 | 7. Interface hierarchy | — | — | — | pending |
@@ -43,3 +43,12 @@
 - `npm run test:merch-pages` — passed 1/1.
 - `npm run test:merch` — passed 10/10.
 - Full-resolution WebPs and 375×250 mobile presentations were inspected; all four retain the exact raster artwork and fabric modulation inside the locked quads.
+
+## Task 3 implementation evidence
+
+- Added a dedicated three-second PHYSICAL `scan → register → materialise → hold` family in desktop/mobile WebM and MP4, with one live page H1 and an exact compact bullet mark inside the mobile safe area.
+- Reused the shared lazy motion loader; reduced-motion and Save-Data browser gates prove zero decorative motion requests.
+- The renderer hashes every transitive input (exact logo, both fonts, HTML/CSS/JS and renderer) and records enforced Playwright, Chromium and ffmpeg pins/fingerprints.
+- Every encoded delivery passes both global normalized seam MAE ≤0.0025 and pixel-local max-channel delta ≤8/255, as well as codec, duration, frame-rate and silence probes.
+- Motion contracts passed 4/4; build and 153-page static QA passed; the prior full browser matrix passed 1050 viewport, 450 fallback-font and 300 axe checks in Chromium/WebKit.
+- Independent review passed after provenance and localized seam gates were hardened.
