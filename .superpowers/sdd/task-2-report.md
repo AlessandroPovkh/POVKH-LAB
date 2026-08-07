@@ -245,3 +245,43 @@ All stored browser checks are true: required views, zero browser errors, zero th
 ### Remaining concern
 
 No remaining concern exists for this review wave. The hoodie remains an explicit concept visualization, not a fit, construction or manufacturing reference.
+
+---
+
+## Task 6 catalog-orbit release gate — 2026-08-07
+
+Status: DONE
+
+### Decision and provenance
+
+- The release keeps the first-party hoodie concept GLB and exact reverse artwork. Horizontal azimuth remains unrestricted; polar tilt is constrained to 68–98 degrees so the product behaves as a catalog 360 viewer without exposing a steep diagnostic view of provisional hood construction.
+- GarmentCode was rejected because its required custom NVIDIA Warp simulator is non-commercial/proprietary and its documented macOS path can silently run zero physics. The only traceable MakeHuman donor was CC-BY and visibly too fitted for the approved oversized silhouette. The generic Blender cloth skill added no executable garment, UV or GLB workflow. No external asset, skill, generator, renderer or dependency entered the bundle.
+- The stable source audit is `docs/superpowers/specs/2026-08-07-garment-source-audit.md`; the governing design is `docs/superpowers/specs/2026-08-07-hoodie-catalog-orbit-design.md`.
+
+### TDD and browser evidence
+
+- RED contract cycle: 11/14 passed, with 3 expected failures for missing hoodie metadata, inert markup and runtime application.
+- Expanded strict-schema RED cycle: 11/15 passed, with 4 expected failures after adding rejection cases for partial, malformed and extra-key orbit metadata.
+- GREEN contract/runtime run: `cd site && node --test tests/merch-viewer-contract.test.mjs tests/product-viewer-runtime.test.mjs` — 15/15 passed.
+- Real Chromium run: `cd site && node --test tests/product-viewer-camera-browser.test.mjs` — 4/4 passed. A 240 px horizontal drag changed theta by more than 0.25 radians; 600 px drags in both vertical directions remained inside 68–98 degrees; Reset View returned the complete desktop profile `155deg 78deg 118%`, `24deg`, `auto 0.590m auto`.
+- `git diff --check` passed after both implementation commits.
+
+### Independent review
+
+- Task 1 review of `ef9596f..96121ef`: APPROVED, zero Critical/Important/Minor findings; fresh focused suite 15/15 and existing camera/race suite 3/3 passed.
+- Task 2 review of `96121ef..8530b8d`: APPROVED, zero Critical/Important/Minor findings; fresh real Chromium suite 4/4 passed.
+
+### Remaining concern
+
+The viewer is suitable for concept-level product exploration, not garment manufacturing. Production geometry remains gated on vendor patterns, a physical scan or a commercially licensed cloth pipeline.
+
+---
+
+## Final release verification and QA hardening
+
+Status: FULL SUITE GREEN / WHOLE-BRANCH REVIEW PENDING
+
+- `npm test` passed end-to-end on the current branch after the catalog-orbit work: 11/11 merch, 2/2 asset, 2/2 page, 7/7 social, 1/1 workflow, 9/9 apparel registration, 5 passed plus one expected toolchain skip for motion, 6/6 viewer contract, 9/9 runtime, 4/4 real camera interaction, 2/2 all-product browser, 5/5 model assets, 43/43 deterministic model builds and 4/4 interface hierarchy.
+- Build/check produced 345 exact files and validated 153 localized pages. Final browser QA passed 1,050 route/viewport checks, 450 failed-font typography checks and 300 axe scans in three languages with Chromium and WebKit coverage.
+- The long-form QA cassette drag now starts on the proven orbit surface instead of the built-in center pan target. Reset verifies model-viewer's aspect-adjusted effective FOV rather than incorrectly comparing it with the declared `19deg` attribute; diagnostics report orbit, declared/effective FOV and both aspects if settlement fails.
+- Static apparel pixel QA is now governed by pinned native `sharp 0.35.3` / libvips raw RGBA. Existing public image bytes and byte SHA-256 values did not change. Only decoder-dependent WebP pixel hashes were re-authorized, while the four source composites, masks, homographies, artwork bounds, centroids and hero-relative registrations still dry-rerender and compare exactly.

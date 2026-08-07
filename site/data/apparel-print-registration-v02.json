@@ -16,11 +16,13 @@
     "path": "tools/render-apparel-registration.mjs",
     "method": "inverse-homography bilinear RGBA composition",
     "publicEncoder": "ffmpeg/libwebp q=88 yuv420p metadata-stripped",
+    "pixelDecoder": "sharp raw RGBA",
     "pixelDeterministic": true,
     "encodedBytesDeterministic": false,
     "fingerprints": {
       "playwright": "1.61.1",
       "chromium": "149.0.7827.55",
+      "sharp": "sharp 0.35.3 / libvips 8.18.3",
       "ffmpeg": "ffmpeg version 7.0.2-tessus  https://evermeet.cx/ffmpeg/  Copyright (c) 2000-2024 the FFmpeg developers",
       "ffmpegVersionSha256": "93ef6adc04bee8764e8043f09891bac8b7a799864dc71f70ae186e69e5484f90"
     }
@@ -49,7 +51,7 @@
       "approvedHero": {
         "path": "assets/merch/t-shirt-front.webp",
         "sha256": "89cac41d6abf06cccc1952823b5c2dcdf4a063a063a98dfebb998b19c428db4e",
-        "pixelSha256": "2455ce7afdcc054e7b90eefda55dd3f4af6d3243c614b30826e4dabeec751cbf",
+        "pixelSha256": "cdde4b910cf72c08429c8ead9bcf81c89bc2df0bd4ea7027100a4789aa9f56ae",
         "assetDimensions": {
           "width": 1536,
           "height": 1024
@@ -190,7 +192,7 @@
             "changedPixels": 0
           },
           "outputSha256": "51714a5874b253208404d5a4fe5efc2b9f48db998cb46c8a0fc664e16f672c49",
-          "outputPixelSha256": "de3f70651d5261f9f06aab6d9e18a284b486e433f6b893cc293b33241581f520",
+          "outputPixelSha256": "a6b32ac1a0c45808c5b55b264933efcd66761167251769e677fe51e19ef8461b",
           "encoder": "ffmpeg/libwebp q=88 yuv420p metadata-stripped"
         },
         "on-body": {
@@ -320,7 +322,7 @@
             "changedPixels": 0
           },
           "outputSha256": "03be6aace4cc45c99f54d4e90f9f95d3afd60d8d1f9e9141b9e1e241cd0b4239",
-          "outputPixelSha256": "ba41982763d0916a3a2c0d4a81c612835fd9fa313831d9f7adbe12271482b05c",
+          "outputPixelSha256": "2c54cd0d02e09ef5a843d9ad0b01e926171a75cff789884b5b04c54cb40b81eb",
           "encoder": "ffmpeg/libwebp q=88 yuv420p metadata-stripped"
         }
       }
@@ -348,7 +350,7 @@
       "approvedHero": {
         "path": "assets/merch/hoodie-rear.webp",
         "sha256": "d46462cbac738c17c4f4aaddb1ba1fc7c35f13ebe09cc70d967377927219aefa",
-        "pixelSha256": "687c77e118bcad6c5bc7b6dbfd1292c75c6e93f52face89fa1bdcbfb4a6b1a9b",
+        "pixelSha256": "95c0396a2eb37c8339332af61d41e84dcbea72c1b3121930457e2011e9a965eb",
         "assetDimensions": {
           "width": 1536,
           "height": 1024
@@ -517,7 +519,7 @@
             "changedPixels": 0
           },
           "outputSha256": "63c3a21c90ed11286e1e34e561858038d079236aa445204fc2328277a0cea89a",
-          "outputPixelSha256": "7fe8b2a925321abd40eef699bf7156beaf7f1185cafea7270a74a0be0dd85bd1",
+          "outputPixelSha256": "a3772ae9a1a3d83cbcb3c756c9a2dd6e827dbb7d5085eaa2be25627bb062f528",
           "encoder": "ffmpeg/libwebp q=88 yuv420p metadata-stripped"
         },
         "worn-rear": {
@@ -647,7 +649,7 @@
             "changedPixels": 0
           },
           "outputSha256": "27b04d86ea1071a8ec252a337245de861aca9b2806a04287cc74e4a721059248",
-          "outputPixelSha256": "44351799f5188538fd484d19a7265daea5e9b05ab72ebbe155415ef39a50bfb9",
+          "outputPixelSha256": "a4c6d1d86d71e73413f7ba86f80baf4b495d4d26a4672c9121e2f58ac661d04d",
           "encoder": "ffmpeg/libwebp q=88 yuv420p metadata-stripped"
         }
       }

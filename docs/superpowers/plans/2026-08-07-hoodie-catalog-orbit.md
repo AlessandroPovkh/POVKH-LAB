@@ -24,6 +24,7 @@
 - Modify: `site/tests/merch-viewer-contract.test.mjs`
 - Modify: `site/tests/product-viewer-runtime.test.mjs`
 - Modify: `site/data/merch.json`
+- Modify: `site/src/merch.mjs`
 - Modify: `site/src/pages.mjs`
 - Modify: `site/assets/product-viewer.js`
 
@@ -31,7 +32,7 @@
 - Consumes: `object.viewer`, `productViewerMarkup()`, `activateModel()` and the existing desktop/mobile camera profile.
 - Produces: optional `viewer.orbitLimits: { min: string, max: string }`, inert data attributes, and `<model-viewer>` min/max camera attributes.
 
-- [ ] **Step 1: Write the failing contract and markup tests**
+- [x] **Step 1: Write the failing contract and markup tests**
 
 ```js
 const hoodie = library.objects.find(({ slug }) => slug === "hoodie");
@@ -43,13 +44,15 @@ assert.match(viewerHtml, /data-viewer-min-camera-orbit="auto 68deg auto"/);
 assert.match(viewerHtml, /data-viewer-max-camera-orbit="auto 98deg auto"/);
 ```
 
-- [ ] **Step 2: Verify RED**
+- [x] **Step 2: Verify RED**
 
 Run: `cd site && node --test tests/merch-viewer-contract.test.mjs tests/product-viewer-runtime.test.mjs`
 
 Expected: FAIL because hoodie metadata and rendered min/max attributes do not exist.
 
-- [ ] **Step 3: Add metadata and inert markup propagation**
+Actual: the first cycle passed 11/14 and failed 3/14 on missing metadata/runtime/markup. After exposing the strict schema boundary, the expanded cycle passed 11/15 and failed 4/15 on the same absent feature.
+
+- [x] **Step 3: Add metadata, strict optional schema and inert markup propagation**
 
 Add the exact `orbitLimits` object to `MRCH-006.viewer`. In `productViewerMarkup()`, render the two optional data attributes only when both values exist:
 
@@ -60,7 +63,9 @@ const orbitLimitAttributes = orbitLimits
   : "";
 ```
 
-- [ ] **Step 4: Apply limits before the model source**
+`validateViewer()` permits `orbitLimits` only on GLB viewers and rejects partial, malformed or extra-key objects.
+
+- [x] **Step 4: Apply limits before the model source**
 
 In `activateModel()` after creating `<model-viewer>` and before `model.setAttribute("src", ...)`:
 
@@ -71,7 +76,7 @@ if (root.dataset.viewerMinCameraOrbit && root.dataset.viewerMaxCameraOrbit) {
 }
 ```
 
-- [ ] **Step 5: Verify GREEN**
+- [x] **Step 5: Verify GREEN**
 
 Run: `cd site && node --test tests/merch-viewer-contract.test.mjs tests/product-viewer-runtime.test.mjs`
 
@@ -88,17 +93,17 @@ Expected: all selected tests PASS.
 - Consumes: built hoodie page and model-viewer pointer controls.
 - Produces: browser evidence that theta rotates and phi clamps, plus the final Task 6 status record.
 
-- [ ] **Step 1: Write a failing Chromium interaction test**
+- [x] **Step 1: Write a Chromium interaction acceptance test**
 
-Activate `/en/merch/hoodie/`, drag from the viewer center at least 240 CSS pixels horizontally, and assert that `getCameraOrbit().theta` changes by more than `0.25` radians. Then perform large vertical drags in both directions and assert every settled `phi` remains between `68 * Math.PI / 180 - 0.01` and `98 * Math.PI / 180 + 0.01`.
+Activate `/merch/hoodie/`, drag from the proven `.userInput` orbit surface at 40% x / 45% y by 240 CSS pixels horizontally, and assert that `getCameraOrbit().theta` changes by more than `0.25` radians. Then perform 600 px vertical drags in both directions and assert every settled `phi` remains between `68 * Math.PI / 180 - 0.01` and `98 * Math.PI / 180 + 0.01`.
 
-- [ ] **Step 2: Verify RED**
+- [x] **Step 2: Run the first acceptance diagnostic**
 
 Run: `cd site && node --test tests/product-viewer-camera-browser.test.mjs`
 
-Expected: the new test fails before runtime limits are available in the built fixture or when either vertical drag escapes the governed interval.
+Actual: the first run exposed an invalid `/en/` route assumption, then the exact geometric center hit `<model-viewer>`'s built-in pan target. Both were corrected in the test; no production defect was found and no retroactive RED result is claimed.
 
-- [ ] **Step 3: Rebuild and verify interaction GREEN**
+- [x] **Step 3: Rebuild and verify interaction GREEN**
 
 Run:
 
@@ -110,7 +115,7 @@ node --test tests/product-viewer-camera-browser.test.mjs
 
 Expected: horizontal pointer interaction changes theta, both vertical extremes remain clamped, Reset View returns to the governed profile, and existing responsive camera tests pass.
 
-- [ ] **Step 4: Run focused and full verification**
+- [x] **Step 4: Run focused and full verification**
 
 Run:
 
@@ -124,11 +129,15 @@ git diff --check
 
 Expected: zero failures, zero validator warnings and zero whitespace errors.
 
-- [ ] **Step 5: Record evidence and request independent review**
+Actual: the focused camera/runtime/contract runs passed 4/4, 9/9 and 6/6. A fresh `npm test` passed end-to-end, including 2/2 all-product browser checks and 43/43 deterministic model builds; final QA passed 1,050 route/viewport, 450 typography fallback and 300 axe checks. `git diff --check` passed.
+
+- [x] **Step 5: Record evidence and request independent review**
 
 Update the task report with the exact commands, pass counts and the honest concept limitation. Mark Task 6 complete only after the independent reviewer confirms full horizontal rotation, constrained tilt, unchanged artwork/default cameras and no bundled external donor.
 
-- [ ] **Step 6: Commit scoped changes**
+Actual: both scoped independent reviews approved the runtime and real-interaction slices with zero findings. Task 6 is complete; the whole-branch release review remains the separate Task 8 gate.
+
+- [x] **Step 6: Commit scoped changes**
 
 ```bash
 git add docs/superpowers/specs/2026-08-07-hoodie-catalog-orbit-design.md \
@@ -141,3 +150,5 @@ git add docs/superpowers/specs/2026-08-07-hoodie-catalog-orbit-design.md \
   .superpowers/sdd/task-2-report.md .superpowers/sdd/progress.md
 git commit -m "fix: constrain hoodie catalog orbit"
 ```
+
+Actual: implementation and browser proof were committed separately as `96121ef` and `8530b8d`; the research/design authority is `ef9596f`.

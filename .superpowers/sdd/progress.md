@@ -7,7 +7,7 @@
 | 3. PHYSICAL motion | implemented / tests green | passed | passed after hardening | completed |
 | 4. 3D runtime | implemented / tests green | passed | passed after hardening | completed |
 | 5. Cassette + hoodie POC | cassette complete; hoodie intentionally blocked | passed | passed | completed |
-| 6. All product viewers | eleven GLBs integrated; apparel quality rework checkpointed | passed for initial implementation | final apparel quality re-review pending | in progress |
+| 6. All product viewers | eleven GLBs integrated; hoodie shipped as governed catalog orbit | passed | passed with zero findings | completed |
 | 7. Interface hierarchy | implemented / tests green | passed | passed | completed |
 | 8. Full verification | clean immutable checkout green | passed | final release audit in progress | in progress |
 | 9. Release | — | — | — | pending |
@@ -62,6 +62,8 @@
 - The CD was reduced from 1,270,180 bytes / 12,442 triangles to 523,660 bytes / 2,842 triangles while retaining its 120 mm body, 15 mm centre hole and deterministic identity. The recorded visual comparison has worst SSIM 0.998926 and RMSE 0.956/255.
 - Primary navigation is now Home / Catalog / Merch / Artists; Menu / Index is progressive disclosure. The player keeps 60% default volume and timeline seeking, while Social Access and page status are no longer duplicated.
 - Runtime, camera, catalog browser, model governance, deterministic builds and hierarchy tests all pass. The independent model-performance reviewer reported no remaining findings.
+- The hoodie remains an explicit concept GLB with unrestricted horizontal rotation and a governed 68–98 degree polar range. The optional schema, inert markup and runtime limits passed 15/15 focused tests; a real Chromium pointer test passed 4/4 and proved horizontal theta movement, both vertical clamps and exact Reset View recovery.
+- Two independent reviews approved the catalog-orbit slice with zero Critical, Important or Minor findings. No external garment donor, simulator, renderer or dependency entered the release bundle.
 
 ## Task 8 verification evidence
 
@@ -71,6 +73,9 @@
 - A production build with the GitHub Pages base path `/POVKH-LAB` passed both static checking and 9,039 local-reference checks across 153 pages.
 - The opt-in emulated mobile benchmark passed all four governed scenarios with zero context losses and no third-party or eager 3D requests. It remains explicitly non-substitutive for physical Android validation.
 - Deferred release-quality evidence is limited to physical Android measurements and real garment geometry; neither is represented as complete.
+- A fresh current-branch `npm test` passed end-to-end after the hoodie catalog-orbit integration: merch 11/11, merch assets 2/2, merch pages 2/2, social links 7/7, workflow 1/1, apparel registration 9/9, motion 5 passed / 1 expected toolchain skip, viewer contract 6/6, viewer runtime 9/9, camera browser 4/4, catalog browser 2/2, model assets 5/5, deterministic model builds 43/43 and interface hierarchy 4/4.
+- The same run built 345 exact files, statically checked 153 localized pages and passed final browser QA across 1,050 route/viewport cases, 450 failed-font typography cases and 300 axe scans.
+- The apparel registration verifier no longer delegates static-image dimensions or raw-pixel authority to the host FFmpeg/Rosetta process. Pinned `sharp 0.35.3` / libvips owns dimensions and raw RGBA hashes; all approved image bytes remain unchanged, the four lossless composites still dry-rerender exactly and the registration suite remains 9/9.
 Task 3 correction: complete (commits db76ad7 + 7f041c1, review approved; catalog integration deferred; minor report wording/file-count correction pending integration)
 
 ## 2026-08-06 pause checkpoint
@@ -81,3 +86,10 @@ Task 3 correction: complete (commits db76ad7 + 7f041c1, review approved; catalog
 - Current uncommitted quality rework replaces generic garment geometry with unified draped shells, adds a genuinely open hoodie cavity, a real unfilled cap rear aperture with one adjustment strap/keeper, continuous UVs, and an expanded 358×520 active mobile product stage.
 - Fresh actual-page captures exist for desktop, mobile product stage, hoodie front cavity and cap rear aperture. Final visual inspection, focused tests, independent re-review, full `npm test`, final audit and release remain pending.
 - Work was intentionally paused at the user's request. Resume from final visual inspection of the latest apparel captures, then let the garment task finish and commit its scoped changes.
+
+## 2026-08-07 resume checkpoint
+
+- The prior pause checkpoint is historical. Apparel stills, collector box, tee, cap and the governed hoodie catalog interaction are now committed and independently approved.
+- Task 6 is complete. Task 8 resumes with a fresh full-suite run and final whole-branch review; Task 9 remains the GitHub Pages release.
+- The fresh full-suite run is now green. Task 8 is waiting only for the final whole-branch review; Task 9 remains the GitHub Pages release.
+- Real sewn-garment geometry remains a future production gate based on vendor patterns or scans. It is not represented as complete by the concept viewer.

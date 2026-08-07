@@ -13,6 +13,8 @@
 
 Write failing checks for exact master identity, stable artwork bounds and hero-relative center/scale. Adjust quads and rerender all four views. Create a comparison contact sheet for visual review, then run `npm run test:merch-registration`.
 
+Keep static-image QA native and deterministic: `sharp` owns dimensions and raw pixel hashes, the dry verifier rebuilds lossless source/mask artifacts, and approved lossy WebP exports retain separate byte/pixel identity checks without a decoder subprocess.
+
 ## Task 2: Add concept 3D for t-shirt, hoodie and cap
 
 **Files:**

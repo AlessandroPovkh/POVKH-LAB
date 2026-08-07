@@ -7,6 +7,7 @@ import path from "node:path";
 import test from "node:test";
 import { promisify } from "node:util";
 import { fileURLToPath, pathToFileURL } from "node:url";
+import sharp from "sharp";
 
 const siteRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const execFile = promisify(execFileCallback);
@@ -27,7 +28,7 @@ const expectedGarments = Object.freeze({
     approvedHero: {
       path: "assets/merch/t-shirt-front.webp",
       sha256: "89cac41d6abf06cccc1952823b5c2dcdf4a063a063a98dfebb998b19c428db4e",
-      pixelSha256: "2455ce7afdcc054e7b90eefda55dd3f4af6d3243c614b30826e4dabeec751cbf",
+      pixelSha256: "cdde4b910cf72c08429c8ead9bcf81c89bc2df0bd4ea7027100a4789aa9f56ae",
       assetDimensions: { width: 1536, height: 1024 },
       placementCoordinateSpace: "assetPixels",
       placement: [528, 350, 480, 180]
@@ -66,7 +67,7 @@ const expectedGarments = Object.freeze({
     approvedHero: {
       path: "assets/merch/hoodie-rear.webp",
       sha256: "d46462cbac738c17c4f4aaddb1ba1fc7c35f13ebe09cc70d967377927219aefa",
-      pixelSha256: "687c77e118bcad6c5bc7b6dbfd1292c75c6e93f52face89fa1bdcbfb4a6b1a9b",
+      pixelSha256: "95c0396a2eb37c8339332af61d41e84dcbea72c1b3121930457e2011e9a965eb",
       assetDimensions: { width: 1536, height: 1024 },
       placementCoordinateSpace: "assetPixels",
       placement: [552, 365, 432, 162]
@@ -113,11 +114,8 @@ const assertAssetReference = async (reference, label, expectedDimensions = null)
   const bytes = await readFile(file);
   assert.equal(createHash("sha256").update(bytes).digest("hex"), reference.sha256, `${label} bytes drifted from the declared hash`);
   if (expectedDimensions) {
-    const { stdout } = await execFile("ffprobe", [
-      "-v", "error", "-select_streams", "v:0", "-show_entries", "stream=width,height",
-      "-of", "csv=s=x:p=0", file
-    ]);
-    assert.equal(stdout.trim(), `${expectedDimensions.width}x${expectedDimensions.height}`, `${label} dimensions drifted`);
+    const { width, height } = await sharp(bytes).metadata();
+    assert.deepEqual({ width, height }, expectedDimensions, `${label} dimensions drifted`);
   }
 };
 
@@ -134,30 +132,31 @@ const pointInPolygon = (point, polygon) => {
 };
 
 const decodeGray = async (reference, dimensions) => {
-  const { stdout } = await execFile("ffmpeg", [
-    "-hide_banner", "-loglevel", "error", "-i", path.join(siteRoot, reference.path),
-    "-frames:v", "1", "-f", "rawvideo", "-pix_fmt", "gray", "pipe:1"
-  ], { encoding: "buffer", maxBuffer: 10 * 1024 * 1024 });
-  assert.equal(stdout.length, dimensions.width * dimensions.height, `${reference.path} decoded mask size drifted`);
-  return stdout;
+  const { data, info } = await sharp(path.join(siteRoot, reference.path))
+    .removeAlpha()
+    .greyscale()
+    .raw()
+    .toBuffer({ resolveWithObject: true });
+  assert.deepEqual({ width: info.width, height: info.height, channels: info.channels }, { ...dimensions, channels: 1 }, `${reference.path} decoded mask dimensions drifted`);
+  return data;
 };
 
 const decodeRgb = async (reference, dimensions) => {
-  const { stdout } = await execFile("ffmpeg", [
-    "-hide_banner", "-loglevel", "error", "-i", path.join(siteRoot, reference.path),
-    "-frames:v", "1", "-f", "rawvideo", "-pix_fmt", "rgb24", "pipe:1"
-  ], { encoding: "buffer", maxBuffer: 20 * 1024 * 1024 });
-  assert.equal(stdout.length, dimensions.width * dimensions.height * 3, `${reference.path} decoded RGB size drifted`);
-  return stdout;
+  const { data, info } = await sharp(path.join(siteRoot, reference.path))
+    .removeAlpha()
+    .raw()
+    .toBuffer({ resolveWithObject: true });
+  assert.deepEqual({ width: info.width, height: info.height, channels: info.channels }, { ...dimensions, channels: 3 }, `${reference.path} decoded RGB dimensions drifted`);
+  return data;
 };
 
 const decodeRgba = async (reference, dimensions) => {
-  const { stdout } = await execFile("ffmpeg", [
-    "-hide_banner", "-loglevel", "error", "-i", path.join(siteRoot, reference.path),
-    "-frames:v", "1", "-f", "rawvideo", "-pix_fmt", "rgba", "pipe:1"
-  ], { encoding: "buffer", maxBuffer: 20 * 1024 * 1024 });
-  assert.equal(stdout.length, dimensions.width * dimensions.height * 4, `${reference.path} decoded RGBA size drifted`);
-  return stdout;
+  const { data, info } = await sharp(path.join(siteRoot, reference.path))
+    .ensureAlpha()
+    .raw()
+    .toBuffer({ resolveWithObject: true });
+  assert.deepEqual({ width: info.width, height: info.height, channels: info.channels }, { ...dimensions, channels: 4 }, `${reference.path} decoded RGBA dimensions drifted`);
+  return data;
 };
 
 const pixelBounds = (pixels, dimensions, stride = 1, channel = 0, threshold = 8) => {
@@ -268,6 +267,8 @@ test("locks the canonical 1600x600 / 300x112.5 mm plane and exact artwork master
   assert.match(registration.renderer.fingerprints?.chromium || "", /\d+/);
   assert.match(registration.renderer.fingerprints?.ffmpeg || "", /^ffmpeg version /);
   assert.match(registration.renderer.fingerprints?.ffmpegVersionSha256 || "", sha256Pattern);
+  assert.equal(registration.renderer.pixelDecoder, "sharp raw RGBA");
+  assert.match(registration.renderer.fingerprints?.sharp || "", /^sharp 0\.35\.3 \/ libvips /);
   assert.deepEqual(registration.canonicalPlane, {
     width: 1600,
     height: 600,
@@ -285,11 +286,8 @@ test("locks the canonical 1600x600 / 300x112.5 mm plane and exact artwork master
     }, `${slug} must use the exact approved master`);
     const masterBytes = await readFile(path.join(siteRoot, garment.master.path));
     assert.equal(createHash("sha256").update(masterBytes).digest("hex"), expected.master.sha256, `${slug} master bytes drifted`);
-    const { stdout } = await execFile("ffprobe", [
-      "-v", "error", "-select_streams", "v:0", "-show_entries", "stream=width,height",
-      "-of", "csv=s=x:p=0", path.join(siteRoot, garment.master.path)
-    ]);
-    assert.equal(stdout.trim(), "1600x600", `${slug} master raster dimensions drifted`);
+    const { width: masterWidth, height: masterHeight } = await sharp(masterBytes).metadata();
+    assert.deepEqual({ width: masterWidth, height: masterHeight }, { width: 1600, height: 600 }, `${slug} master raster dimensions drifted`);
     assert.equal(garment.approvedHero.path, expected.approvedHero.path, `${slug} approved hero source drifted`);
     assert.equal(garment.approvedHero.placementCoordinateSpace, expected.approvedHero.placementCoordinateSpace, `${slug} approved hero placement coordinate authority drifted`);
     assert.equal(Object.hasOwn(garment.approvedHero, "canvas"), false, `${slug} approved hero must use its decoded asset dimensions without a virtual canvas`);

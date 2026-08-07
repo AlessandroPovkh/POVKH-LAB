@@ -37,6 +37,8 @@ The deterministic registration renderer owns the fixes for:
 
 The master art is placed once per view using a perspective quad. The corrected quads must preserve the hero's perceived centered composition and the exact relative relationship between the ASCII bullet, red rule, and `POVKH_LAB::SIGNAL` line. Visual QA includes a contact sheet that shows hero, detail, and worn view at the same time.
 
+Static-image dimensions and decoded pixel hashes use the pinned native `sharp 0.35.3` / libvips raw-RGBA path. File SHA-256 remains the byte-identity authority. Dry verification re-renders the lossless source/mask bundle and compares it pixel-for-pixel; the already-approved lossy public WebP exports are copied into the temporary verification bundle and checked independently by both byte and decoder-governed pixel hashes. This avoids making verification depend on a platform-specific FFmpeg decoder while leaving the approved WebP files unchanged.
+
 ## Apparel and cap 3D
 
 The three missing models are authored locally as lightweight concept meshes:

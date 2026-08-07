@@ -50,7 +50,7 @@ const garments = Object.freeze({
     approvedHero: Object.freeze({
       path: "assets/merch/t-shirt-front.webp",
       sha256: "89cac41d6abf06cccc1952823b5c2dcdf4a063a063a98dfebb998b19c428db4e",
-      pixelSha256: "2455ce7afdcc054e7b90eefda55dd3f4af6d3243c614b30826e4dabeec751cbf",
+      pixelSha256: "cdde4b910cf72c08429c8ead9bcf81c89bc2df0bd4ea7027100a4789aa9f56ae",
       assetDimensions: Object.freeze({ width: 1536, height: 1024 }),
       placementCoordinateSpace: "assetPixels",
       placement: Object.freeze({ x: 528, y: 350, width: 480, height: 180 })
@@ -105,7 +105,7 @@ const garments = Object.freeze({
     approvedHero: Object.freeze({
       path: "assets/merch/hoodie-rear.webp",
       sha256: "d46462cbac738c17c4f4aaddb1ba1fc7c35f13ebe09cc70d967377927219aefa",
-      pixelSha256: "687c77e118bcad6c5bc7b6dbfd1292c75c6e93f52face89fa1bdcbfb4a6b1a9b",
+      pixelSha256: "95c0396a2eb37c8339332af61d41e84dcbea72c1b3121930457e2011e9a965eb",
       assetDimensions: Object.freeze({ width: 1536, height: 1024 }),
       placementCoordinateSpace: "assetPixels",
       placement: Object.freeze({ x: 552, y: 365, width: 432, height: 162 })
@@ -163,13 +163,9 @@ const sha256 = (bytes) => createHash("sha256").update(bytes).digest("hex");
 const fileSha256 = async (file) => sha256(await readFile(file));
 
 const dimensions = async (file) => {
-  const { stdout } = await execFile("ffprobe", [
-    "-v", "error", "-select_streams", "v:0", "-show_entries", "stream=width,height",
-    "-of", "csv=s=x:p=0", file
-  ]);
-  const match = stdout.trim().match(/^(\d+)x(\d+)$/);
-  if (!match) throw new Error(`cannot read dimensions for ${file}`);
-  return { width: Number(match[1]), height: Number(match[2]) };
+  const { width, height } = await sharp(file).metadata();
+  if (!Number.isInteger(width) || !Number.isInteger(height)) throw new Error(`cannot read dimensions for ${file}`);
+  return { width, height };
 };
 
 const assertAssetAtRoot = async (root, reference, expectedDimensions) => {
@@ -185,11 +181,7 @@ const assertAssetAtRoot = async (root, reference, expectedDimensions) => {
 const assertAsset = async (reference, expectedDimensions) => assertAssetAtRoot(siteRoot, reference, expectedDimensions);
 
 const decodedRgba = async (file) => {
-  const { stdout } = await execFile("ffmpeg", [
-    "-hide_banner", "-loglevel", "error", "-i", file,
-    "-frames:v", "1", "-f", "rawvideo", "-pix_fmt", "rgba", "pipe:1"
-  ], { encoding: "buffer", maxBuffer: 16 * 1024 * 1024 });
-  return stdout;
+  return sharp(file).ensureAlpha().raw().toBuffer();
 };
 
 const decodedRgbaSha256 = async (file) => sha256(await decodedRgba(file));
@@ -320,6 +312,7 @@ const toolFingerprints = async (browser) => {
   return {
     playwright: require("playwright/package.json").version,
     chromium: browser.version(),
+    sharp: `sharp ${sharp.versions.sharp} / libvips ${sharp.versions.vips}`,
     ffmpeg: ffmpegVersion.split("\n")[0],
     ffmpegVersionSha256: sha256(Buffer.from(ffmpegVersion, "utf8"))
   };
@@ -667,7 +660,11 @@ const validateGovernedInputs = async () => {
   }
 };
 
-const buildStagedBundle = async (stageRoot) => {
+const buildStagedBundle = async (stageRoot, {
+  publicExports = "encode",
+  fingerprintsOverride = null
+} = {}) => {
+  if (!["encode", "copy"].includes(publicExports)) throw new Error(`unsupported public export mode: ${publicExports}`);
   await validateGovernedInputs();
 
   const { chromium } = await import("playwright");
@@ -685,7 +682,7 @@ const buildStagedBundle = async (stageRoot) => {
   };
   let fingerprints;
   try {
-    fingerprints = await toolFingerprints(browser);
+    fingerprints = fingerprintsOverride ?? await toolFingerprints(browser);
     const page = await browser.newPage({ viewport: output });
     for (const [slug, garment] of Object.entries(garments)) {
       const masterBytes = await readFile(path.join(siteRoot, garment.master.path));
@@ -736,7 +733,12 @@ const buildStagedBundle = async (stageRoot) => {
         await writeAtomic(sourceRenderFile, renderBytes);
         await writeAtomic(garmentMaskFile, garmentMaskBytes);
         await writeAtomic(artworkMaskFile, artworkMaskBytes);
-        await encodeWebp(sourceRenderFile, publicFile);
+        if (publicExports === "copy") {
+          await mkdir(path.dirname(publicFile), { recursive: true });
+          await copyFile(path.join(siteRoot, view.publicPath), publicFile);
+        } else {
+          await encodeWebp(sourceRenderFile, publicFile);
+        }
 
         records[slug].views[role] = {
           publicPath: view.publicPath,
@@ -801,6 +803,7 @@ const buildStagedBundle = async (stageRoot) => {
       path: "tools/render-apparel-registration.mjs",
       method: "inverse-homography bilinear RGBA composition",
       publicEncoder: encoder,
+      pixelDecoder: "sharp raw RGBA",
       pixelDeterministic: true,
       encodedBytesDeterministic: false,
       fingerprints
@@ -828,7 +831,12 @@ const assertRegistrationContract = (registration) => {
     throw new Error("renderer must not claim cross-platform encoded byte determinism");
   }
   const fingerprints = registration.renderer?.fingerprints;
-  if (!fingerprints?.playwright || !fingerprints.chromium || !fingerprints.ffmpeg || !fingerprints.ffmpegVersionSha256) {
+  if (registration.renderer?.pixelDecoder !== "sharp raw RGBA"
+    || !fingerprints?.playwright
+    || !fingerprints.chromium
+    || !fingerprints.sharp
+    || !fingerprints.ffmpeg
+    || !fingerprints.ffmpegVersionSha256) {
     throw new Error("renderer fingerprints are incomplete");
   }
   const repairViews = [];
@@ -1017,7 +1025,10 @@ export const verifyApparelRegistration = async ({ registrationFile = registratio
   const committedRegistration = JSON.parse(await readFile(registrationFile, "utf8"));
   const stageRoot = await mkdtemp(path.join(siteRoot, ".apparel-registration-verify-"));
   try {
-    const stagedBundle = await buildStagedBundle(stageRoot);
+    const stagedBundle = await buildStagedBundle(stageRoot, {
+      publicExports: "copy",
+      fingerprintsOverride: committedRegistration.renderer.fingerprints
+    });
     await validateStagedBundle(stagedBundle);
     assertRegistrationContract(committedRegistration);
     const committedContactSheet = committedRegistration.visualQa.contactSheet;

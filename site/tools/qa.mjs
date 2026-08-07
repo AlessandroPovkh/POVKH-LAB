@@ -2654,7 +2654,7 @@ try {
     const modelBox = await readyViewerPage.locator("model-viewer").boundingBox();
     const initialTheta = await readyViewerPage.locator("model-viewer").evaluate((model) => model.getCameraOrbit().theta);
     if (modelBox) {
-      await readyViewerPage.mouse.move(modelBox.x + modelBox.width * 0.5, modelBox.y + modelBox.height * 0.5);
+      await readyViewerPage.mouse.move(modelBox.x + modelBox.width * 0.4, modelBox.y + modelBox.height * 0.45);
       await readyViewerPage.mouse.down();
       await readyViewerPage.mouse.move(modelBox.x + modelBox.width * 0.72, modelBox.y + modelBox.height * 0.58, { steps: 12 });
       await readyViewerPage.mouse.up();
@@ -2665,16 +2665,36 @@ try {
       pointerOrbit = await readyViewerPage.locator("model-viewer").evaluate((model) => model.getCameraOrbit().theta);
     }
     await readyViewerPage.locator("[data-product-viewer-reset]").click();
-    await readyViewerPage.waitForFunction(() => {
-      const model = document.querySelector("model-viewer");
-      return model?.getAttribute("camera-orbit") === "14deg 72deg 105%"
-        && Math.abs(model.getCameraOrbit().theta - 14 * Math.PI / 180) < 0.002
-        && Math.abs(model.getFieldOfView() - 19) < 0.02;
-    });
+    try {
+      await readyViewerPage.waitForFunction(() => {
+        const model = document.querySelector("model-viewer");
+        if (!model) return false;
+        const renderedAspect = model.clientWidth / model.clientHeight;
+        const verticalFov = Math.tan(19 * Math.PI / 360)
+          * Math.max(1, model.getIdealAspect() / renderedAspect);
+        const expectedFieldOfView = Math.atan(verticalFov) * 360 / Math.PI;
+        return model?.getAttribute("camera-orbit") === "14deg 72deg 105%"
+          && Math.abs(model.getCameraOrbit().theta - 14 * Math.PI / 180) < 0.002
+          && Math.abs(model.getFieldOfView() - expectedFieldOfView) < 0.02;
+      });
+    } catch (error) {
+      const resetState = await readyViewerPage.locator("model-viewer").evaluate((model) => ({
+        orbitAttribute: model.getAttribute("camera-orbit"),
+        orbit: model.getCameraOrbit(),
+        fieldOfViewAttribute: model.getAttribute("field-of-view"),
+        fieldOfView: model.getFieldOfView(),
+        idealAspect: model.getIdealAspect(),
+        renderedAspect: model.clientWidth / model.clientHeight
+      })).catch(() => null);
+      throw new Error(`Ready viewer reset did not settle: ${JSON.stringify(resetState)}`, { cause: error });
+    }
   }
   const resetCamera = await readyViewerPage.locator("model-viewer").evaluate((model) => {
     const orbit = model.getCameraOrbit();
     const target = model.getCameraTarget();
+    const idealAspect = model.getIdealAspect();
+    const renderedAspect = model.clientWidth / model.clientHeight;
+    const verticalFov = Math.tan(19 * Math.PI / 360) * Math.max(1, idealAspect / renderedAspect);
     return {
       attributes: {
         orbit: model.getAttribute("camera-orbit"),
@@ -2683,6 +2703,7 @@ try {
       },
       orbit: { theta: orbit.theta, phi: orbit.phi, radius: orbit.radius },
       fieldOfView: model.getFieldOfView(),
+      expectedFieldOfView: Math.atan(verticalFov) * 360 / Math.PI,
       target: { x: target.x, y: target.y, z: target.z }
     };
   }).catch(() => null);
@@ -2711,7 +2732,7 @@ try {
     || Math.abs(resetCamera?.orbit.phi - 72 * Math.PI / 180) > 0.002
     || !Number.isFinite(resetCamera?.orbit.radius)
     || !Number.isFinite(resetCamera?.fieldOfView)
-    || Math.abs(resetCamera?.fieldOfView - 19) > 0.02
+    || Math.abs(resetCamera?.fieldOfView - resetCamera?.expectedFieldOfView) > 0.02
     || !Number.isFinite(resetCamera?.target.y)
     || Math.abs(resetCamera?.target.y - 0.078) > 0.002
     || readyViewerContract.cspViolations.length
