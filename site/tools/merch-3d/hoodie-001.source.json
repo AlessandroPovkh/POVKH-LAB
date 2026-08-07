@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "assetKey": "hoodie-001",
+  "productId": "MRCH-006",
+  "coordinateSystem": { "unit": "metre", "up": "+Y", "front": "+Z", "pivot": "centred-garment", "groundY": 0 },
+  "truthBoundary": {
+    "status": "concept-visualization",
+    "manufacturingReference": false,
+    "vendorFitClaim": false,
+    "fabricSimulationClaim": false,
+    "constructionAccuracyClaim": false,
+    "productionDimensionsClaim": false
+  },
+  "dimensions": {
+    "authority": "provisional-viewer-envelope-not-production-dimensions",
+    "viewerEnvelopeMm": [1180, 1076, 272],
+    "replacementGate": "selected vendor blank, measured approved sample and size-specific tech pack"
+  },
+  "geometry": {
+    "scene": "Hoodie_001_Concept_Visualization",
+    "pivot": "Hoodie_001_Centred_Grounded_Pivot",
+    "requiredNodes": ["Hoodie_Draped_Shell", "Hoodie_Shaped_Cuffs", "Hoodie_Waistband", "Hoodie_Open_Hood_Shell", "Hoodie_Hood_Interior_Cavity", "Hoodie_Hood_Centre_Seam", "Hoodie_Back_Artwork"],
+    "features": ["tailored tubular torso with cut armholes and eight progressive upper-arm transition rings stitched to matching shared long-sleeve roots", "single indexed garment shell with area-weighted relaxed armhole normals and coherent global garment-space UVs", "conforming open rib cuffs and waistband", "attached two-panel hood down with two upper-back fabric lobes and a solid rearmost exterior", "filled back-draped pouch surface outside the aperture merging into one partial irregular front-and-side face edge with area-weighted cloth normals", "forward-pitched material-backed uncapped interior descending into a deep throat", "rear torso neckline and rounded arch endpoints tucked below the hood overlap", "rear centre seam terminating below the opening", "readable front and back", "exact back artwork surface"]
+  },
+  "artwork": {
+    "path": "sources/hoodie-001/PVKH_ASCII_REVERSE_EXACT_1600x600_v01.png",
+    "canonicalPath": "production/physical-merch/concepts/drop-001/explorations/ascii-bullet/revised-capsule/source/PVKH_ASCII_REVERSE_EXACT_1600x600_v01.png",
+    "authorityPath": "data/apparel-print-registration-v02.json#/garments/hoodie/master",
+    "authoritySha256": "75a20bc9682937274d4fedc6c11a090b646561bd8961082fa9fdf843030ad935",
+    "sha256": "284e69cfb0e6e7fef2a993f44289577efabd1fae576c9280bab4d4e2f59b398f",
+    "resolutionPx": [1600, 600],
+    "registration": { "surfaceMm": [300, 112.5], "aspectRatio": "8:3", "side": "back", "sourceUse": "full-image-no-crop-no-redraw" }
+  },
+  "materials": {
+    "fabric": { "name": "MAT_HOODIE_VOID_FABRIC", "baseColor": [0.024, 0.026, 0.032, 1], "metallic": 0, "roughness": 0.94, "surface": "washed-fleece-void" },
+    "rib": { "name": "MAT_HOODIE_VOID_RIB", "baseColor": [0.018, 0.020, 0.025, 1], "metallic": 0, "roughness": 0.98, "surface": "rib-knit-void" },
+    "hoodInterior": { "name": "MAT_HOODIE_HOOD_INTERIOR", "baseColor": [0.010, 0.011, 0.014, 1], "metallic": 0, "roughness": 1, "surface": "washed-fleece-void" },
+    "artwork": { "name": "MAT_HOODIE_ASCII_REVERSE_EXACT", "baseColor": [1, 1, 1, 1], "metallic": 0, "roughness": 0.9 }
+  },
+  "poster": { "path": "assets/merch/hoodie-rear.webp", "sha256": "d46462cbac738c17c4f4aaddb1ba1fc7c35f13ebe09cc70d967377927219aefa", "role": "approved-concept-poster-not-texture" },
+  "camera": {
+    "poster": "assets/merch/hoodie-rear.webp",
+    "desktop": {
+      "default": { "orbit": "155deg 78deg 118%", "target": "auto 0.590m auto", "fieldOfView": "24deg" },
+      "front": { "orbit": "0deg 42deg 50%", "target": "auto 0.955m auto", "fieldOfView": "22deg" },
+      "rear": { "orbit": "180deg 82deg 116%", "target": "auto 0.590m auto", "fieldOfView": "23deg" }
+    },
+    "mobile": {
+      "default": { "orbit": "162deg 80deg 110%", "target": "auto 0.630m auto", "fieldOfView": "20deg" },
+      "front": { "orbit": "0deg 83deg 108%", "target": "auto 0.630m auto", "fieldOfView": "20deg" },
+      "rear": { "orbit": "180deg 83deg 108%", "target": "auto 0.630m auto", "fieldOfView": "20deg" }
+    }
+  },
+  "budgets": { "maxBytes": 4000000, "maxTriangles": 80000, "maxDrawCalls": 20 },
+  "toolchain": { "gltfTransform": "4.4.2", "gltfValidator": "2.0.0-dev.3.10", "sharp": "0.35.3" }
+}

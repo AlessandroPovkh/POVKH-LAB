@@ -1,8 +1,11 @@
 import assert from "node:assert/strict";
-import { access, readFile, stat } from "node:fs/promises";
+import { createHash } from "node:crypto";
+import { readFile, stat } from "node:fs/promises";
 import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
+
+import { NodeIO } from "@gltf-transform/core";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const siteRoot = path.resolve(here, "..");
@@ -14,6 +17,7 @@ test("pins the audited local model build and validation toolchain", async () => 
   assert.equal(packageJson.devDependencies?.["@gltf-transform/functions"], "4.4.2");
   assert.equal(packageJson.devDependencies?.["gltf-validator"], "2.0.0-dev.3.10");
   assert.equal(packageJson.devDependencies?.sharp, "0.35.3");
+  assert.equal(packageJson.engines?.node, ">=22");
   assert.equal(
     packageJson.scripts?.["test:merch-model-builds"],
     "node --test tools/merch-3d/*.test.mjs"
@@ -80,7 +84,10 @@ test("binds released rigid and flat viewers to their governed build records", as
     ["poster", "print-001", "flat"],
     ["sticker-pack", "signal-kit-001", "flat"],
     ["zine-booklet", "zine-001", "flat"],
-    ["collector-box-set", "collector-box-001", "nested"]
+    ["collector-box-set", "collector-box-001", "nested"],
+    ["t-shirt", "t-shirt-001", "nested"],
+    ["hoodie", "hoodie-001", "nested"],
+    ["cap", "cap-001", "nested"]
   ];
 
   for (const [slug, assetKey, cameraShape] of records) {
@@ -118,24 +125,29 @@ test("makes data-key and collector captures reject production default-camera dri
   }
 });
 
-test("records an evidence-based hoodie GLB or honest physical-sample fallback", async () => {
-  const decision = await readJson("tools/merch-3d/hoodie-001.decision.json");
-  assert.equal(decision.assetKey, "hoodie-001");
-  assert.ok(["verified-glb", "physical-sample-spin", "source-blocked"].includes(decision.outcome));
-  assert.equal(decision.syntheticSpinFromGallery, false);
-
-  if (decision.outcome === "verified-glb") {
-    await access(path.join(siteRoot, "assets/merch-3d/hoodie-001.glb"));
-    assert.equal(decision.gates.authoritativeMesh, true);
-    assert.equal(decision.gates.silhouetteIou >= 0.95, true);
-    assert.equal(decision.gates.maxLandmarkErrorPercent <= 2, true);
-    assert.equal(decision.gates.printRegistrationErrorPercent <= 1, true);
-  } else if (decision.outcome === "physical-sample-spin") {
-    assert.equal(decision.gates.approvedPhysicalSample, true);
-    assert.equal(decision.frameCount >= 24, true);
-  } else {
-    assert.equal(decision.gates.authoritativeMesh, false);
-    assert.equal(decision.gates.approvedPhysicalSample, false);
-    assert.match(decision.reason, /authoritative|physical sample/i);
+test("governs apparel GLBs as concept geometry without manufacturing claims", async () => {
+  for (const [assetKey, productId] of [["t-shirt-001", "MRCH-005"], ["hoodie-001", "MRCH-006"], ["cap-001", "MRCH-007"]]) {
+    const [source, report, bytes] = await Promise.all([
+      readJson(`tools/merch-3d/${assetKey}.source.json`),
+      readJson(`tools/merch-3d/reports/${assetKey}.report.json`),
+      readFile(path.join(siteRoot, `assets/merch-3d/${assetKey}.glb`))
+    ]);
+    const doc = await new NodeIO().readBinary(bytes);
+    const scene = doc.getRoot().getDefaultScene();
+    assert.equal(source.productId, productId);
+    assert.deepEqual(source.truthBoundary, {
+      status: "concept-visualization",
+      manufacturingReference: false,
+      vendorFitClaim: false,
+      fabricSimulationClaim: false,
+      constructionAccuracyClaim: false,
+      productionDimensionsClaim: false
+    });
+    assert.deepEqual(scene.getExtras().truthBoundary, source.truthBoundary);
+    assert.deepEqual(report.governedBuildRecord.truthBoundary, source.truthBoundary);
+    assert.equal(report.output.sha256, createHash("sha256").update(bytes).digest("hex"));
+    assert.equal(report.validation.errors, 0);
+    assert.equal(report.validation.warnings, 0);
+    assert.ok(doc.getRoot().listTextures().some((texture) => texture.getExtras().canonicalSourceSha256 === source.artwork.sha256));
   }
 });

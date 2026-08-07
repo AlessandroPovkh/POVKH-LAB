@@ -1,0 +1,242 @@
+{
+  "schemaVersion": 2,
+  "assetKey": "hoodie-001",
+  "renderer": "@google/model-viewer",
+  "capturePolicy": "built-product-page before/after activation at 390x844 plus isolated desktop/mobile/rear views and a deliberately tight elevated hood-cavity detail; await loaded visible dimensions and rendered pixels",
+  "hashPolicy": "snapshot integrity only; semantic gates and human visual review govern acceptance",
+  "views": [
+    {
+      "view": "desktop-default",
+      "surface": "isolated-model-viewer",
+      "path": "tools/merch-3d/reports/screenshots/hoodie-001-desktop-default.png",
+      "sha256": "7b17a8424b96ff541b9bb0c035ee2ab383a35129748ecaf075b6c83225e290ab",
+      "viewportPx": [
+        900,
+        900
+      ],
+      "camera": {
+        "orbit": "155deg 78deg 118%",
+        "target": "auto 0.590m auto",
+        "fieldOfView": "24deg"
+      },
+      "errors": [],
+      "loaded": true,
+      "modelIsVisible": true,
+      "dimensionsM": [
+        1.179165244102478,
+        1.065000057220459,
+        0.27124982327222824
+      ],
+      "centreM": [
+        0,
+        0.5325000286102295,
+        -0.03937508538365364
+      ],
+      "cameraOrbit": {
+        "theta": 2.705260340591211,
+        "phi": 1.361356816555577,
+        "radius": 3.487467707180774
+      },
+      "fieldOfViewDeg": 24.000000000000004,
+      "foregroundPixels": 323991,
+      "foregroundBoundsPx": [
+        101,
+        155,
+        738,
+        813
+      ],
+      "visualMarginsPx": [
+        101,
+        155,
+        161,
+        86
+      ]
+    },
+    {
+      "view": "mobile-default",
+      "surface": "isolated-model-viewer",
+      "path": "tools/merch-3d/reports/screenshots/hoodie-001-mobile-default.png",
+      "sha256": "26953e600896a4c9dc7105558158e5c637a9ac8922fc9841335be26cdcd6b4d6",
+      "viewportPx": [
+        390,
+        600
+      ],
+      "camera": {
+        "orbit": "162deg 80deg 110%",
+        "target": "auto 0.630m auto",
+        "fieldOfView": "20deg"
+      },
+      "errors": [],
+      "loaded": true,
+      "modelIsVisible": true,
+      "dimensionsM": [
+        1.179165244102478,
+        1.065000057220459,
+        0.27124982327222824
+      ],
+      "centreM": [
+        0,
+        0.5325000286102295,
+        -0.03937508538365364
+      ],
+      "cameraOrbit": {
+        "theta": 2.827433388230814,
+        "phi": 1.3962634015954636,
+        "radius": 4.305744979268594
+      },
+      "fieldOfViewDeg": 27.5837361447047,
+      "foregroundPixels": 73916,
+      "foregroundBoundsPx": [
+        29,
+        174,
+        341,
+        478
+      ],
+      "visualMarginsPx": [
+        29,
+        174,
+        48,
+        121
+      ]
+    },
+    {
+      "view": "desktop-elevated-cavity",
+      "surface": "isolated-model-viewer",
+      "path": "tools/merch-3d/reports/screenshots/hoodie-001-desktop-elevated-cavity.png",
+      "sha256": "4fac35529e54c79be8d7238c90268f5e90a0fb96cd3685c2362358280cb5ef43",
+      "viewportPx": [
+        900,
+        900
+      ],
+      "camera": {
+        "orbit": "0deg 42deg 50%",
+        "target": "auto 0.955m auto",
+        "fieldOfView": "22deg"
+      },
+      "errors": [],
+      "loaded": true,
+      "modelIsVisible": true,
+      "dimensionsM": [
+        1.179165244102478,
+        1.065000057220459,
+        0.27124982327222824
+      ],
+      "centreM": [
+        0,
+        0.5325000286102295,
+        -0.03937508538365364
+      ],
+      "cameraOrbit": {
+        "theta": 0,
+        "phi": 0.7330382858376184,
+        "radius": 2.6454584808599773
+      },
+      "fieldOfViewDeg": 21.999999999999993,
+      "foregroundPixels": 408008,
+      "foregroundBoundsPx": [
+        0,
+        326,
+        899,
+        899
+      ],
+      "visualMarginsPx": [
+        0,
+        326,
+        0,
+        0
+      ]
+    },
+    {
+      "view": "mobile-product-poster",
+      "surface": "built-product-page",
+      "activated": false,
+      "path": "tools/merch-3d/reports/screenshots/hoodie-001-mobile-product-poster.png",
+      "sha256": "dd4fb7bc5808a1c59bda7cc83836a639da469602fb5618b6eb2322dc7a5b3019",
+      "browserViewportPx": [
+        390,
+        844
+      ],
+      "viewportPx": [
+        358,
+        240
+      ],
+      "errors": [],
+      "thirdPartyRequests": []
+    },
+    {
+      "view": "mobile-product-stage",
+      "surface": "built-product-page",
+      "activated": true,
+      "path": "tools/merch-3d/reports/screenshots/hoodie-001-mobile-product-stage.png",
+      "sha256": "23c4f46ed3d5c2176ef232722d0686b8331a995d859957daafcf3d412ec54488",
+      "browserViewportPx": [
+        390,
+        844
+      ],
+      "viewportPx": [
+        358,
+        521
+      ],
+      "camera": {
+        "orbit": "162deg 80deg 110%",
+        "target": "auto 0.630m auto",
+        "fieldOfView": "20deg"
+      },
+      "errors": [],
+      "thirdPartyRequests": [],
+      "overflowPx": 0,
+      "interaction": {
+        "pointerOrbitChanged": true,
+        "resetRestored": true
+      },
+      "loaded": true,
+      "modelIsVisible": true,
+      "dimensionsM": [
+        1.179165244102478,
+        1.065000057220459,
+        0.27124982327222824
+      ],
+      "centreM": [
+        0,
+        0.5325000286102295,
+        -0.03937508538365364
+      ],
+      "cameraOrbit": {
+        "theta": 2.827433388230814,
+        "phi": 1.3962634015954636,
+        "radius": 4.305744979268594
+      },
+      "fieldOfViewDeg": 26.1410566645921,
+      "canvasPx": [
+        356,
+        518
+      ],
+      "foregroundPixels": 65740,
+      "artworkContrastPixels": 7051,
+      "foregroundBoundsPx": [
+        17,
+        144,
+        318,
+        436
+      ],
+      "visualMarginsPx": [
+        17,
+        144,
+        37,
+        81
+      ]
+    }
+  ],
+  "checks": {
+    "requiredViews": true,
+    "noBrowserErrors": true,
+    "noThirdPartyRequests": true,
+    "modelLoaded": true,
+    "nonBlankFrames": true,
+    "breathingRoom": true,
+    "builtPageBeforeAfter": true,
+    "expandedMobileInspectionStage": true,
+    "interactionAndReset": true,
+    "noLayoutOverflow": true
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "assetKey": "cap-001",
+  "productId": "MRCH-007",
+  "coordinateSystem": { "unit": "metre", "up": "+Y", "front": "+Z", "pivot": "centred-cap", "groundY": 0 },
+  "truthBoundary": {
+    "status": "concept-visualization",
+    "manufacturingReference": false,
+    "vendorFitClaim": false,
+    "fabricSimulationClaim": false,
+    "constructionAccuracyClaim": false,
+    "productionDimensionsClaim": false
+  },
+  "dimensions": {
+    "authority": "provisional-viewer-envelope-not-production-dimensions",
+    "viewerEnvelopeMm": [270, 266, 384],
+    "replacementGate": "selected cap blank, woven-label vendor proof and measured approved sample"
+  },
+  "geometry": {
+    "scene": "Cap_001_Concept_Visualization",
+    "pivot": "Cap_001_Centred_Grounded_Pivot",
+    "requiredNodes": ["Cap_Panel_01", "Cap_Panel_02", "Cap_Panel_03", "Cap_Panel_04", "Cap_Panel_05", "Cap_Panel_06", "Cap_Crown_Seams", "Cap_Crown_Creases", "Cap_Eyelets", "Cap_Curved_Brim", "Cap_Bill_Edge_Stitching", "Cap_Crown_Bill_Transition", "Cap_Top_Button", "Cap_Rear_Aperture_Rim", "Cap_Adjustment_Strap", "Cap_Adjustment_Keeper", "Cap_Front_Patch", "Cap_Patch_Border", "Cap_Patch_Mark"],
+    "features": ["six shaped crown panels with raised seam topology and subtle creases", "four embroidered eyelets", "doubly curved dimensional brim with two tonal stitch rows", "crown-to-bill transition", "top button", "unfilled anatomical rear through-aperture", "single bridging adjustment strap with keeper", "conformed bone front patch with integrated border", "exact compact mark"]
+  },
+  "artwork": {
+    "path": "sources/cap-001/PVKH_COMPACT_DARK_KNOCKOUT_EXACT_1000x1000_v01.png",
+    "canonicalPath": "production/physical-merch/concepts/drop-001/explorations/ascii-bullet/revised-capsule/cap-field-issue/source/PVKH_COMPACT_DARK_KNOCKOUT_EXACT_1000x1000_v01.png",
+    "authorityPath": "production/physical-merch/concepts/drop-001/explorations/ascii-bullet/revised-capsule/cap-field-issue/provenance.json#/identity/raster",
+    "authoritySha256": "19fc96d537894d187e9273271b6e3681edc965a673420c2058cc1edf601acc12",
+    "sha256": "a42fca876265d2c1b1a9c1e169e24cd80da2c626ed1ff8e4632d1893afcac782",
+    "resolutionPx": [1000, 1000],
+    "registration": { "surfaceMm": [20, 20], "patchMm": [55, 28], "aspectRatio": "1:1", "side": "front-patch", "sourceUse": "full-image-no-crop-no-redraw" }
+  },
+  "materials": {
+    "crown": { "name": "MAT_CAP_WASHED_VOID_TWILL", "baseColor": [0.028, 0.030, 0.034, 1], "metallic": 0, "roughness": 0.95, "surface": "washed-twill-void", "doubleSided": false },
+    "seam": { "name": "MAT_CAP_TONAL_SEAM", "baseColor": [0.018, 0.020, 0.023, 1], "metallic": 0, "roughness": 0.98, "surface": "woven-seam-void", "doubleSided": false },
+    "patch": { "name": "MAT_CAP_BONE_PATCH", "baseColor": [0.82, 0.79, 0.71, 1], "metallic": 0, "roughness": 0.98, "surface": "woven-patch-bone", "doubleSided": false },
+    "opening": { "name": "MAT_CAP_REAR_OPENING", "baseColor": [0.001, 0.001, 0.002, 1], "metallic": 0, "roughness": 1 },
+    "hardware": { "name": "MAT_CAP_MATTE_HARDWARE", "baseColor": [0.04, 0.045, 0.05, 1], "metallic": 0.72, "roughness": 0.42 },
+    "artwork": { "name": "MAT_CAP_COMPACT_DARK_EXACT", "baseColor": [1, 1, 1, 1], "metallic": 0, "roughness": 0.9, "doubleSided": false }
+  },
+  "poster": { "path": "assets/merch/cap-front.webp", "sha256": "89a7eb03898676f0c0e7c63f551380ec42fea52e677282c938d648a41029d45b", "role": "approved-concept-poster-not-texture" },
+  "camera": {
+    "poster": "assets/merch/cap-front.webp",
+    "desktop": {
+      "default": { "orbit": "25deg 72deg 115%", "target": "auto 0.160m auto", "fieldOfView": "24deg" },
+      "front": { "orbit": "0deg 76deg 112%", "target": "auto 0.160m auto", "fieldOfView": "23deg" },
+      "rear": { "orbit": "180deg 88deg 108%", "target": "auto 0.140m auto", "fieldOfView": "23deg" }
+    },
+    "mobile": {
+      "default": { "orbit": "18deg 75deg 108%", "target": "auto 0.150m auto", "fieldOfView": "20deg" },
+      "front": { "orbit": "0deg 78deg 106%", "target": "auto 0.150m auto", "fieldOfView": "20deg" },
+      "rear": { "orbit": "180deg 88deg 108%", "target": "auto 0.140m auto", "fieldOfView": "20deg" }
+    }
+  },
+  "budgets": { "maxBytes": 1250000, "maxTriangles": 30000, "maxDrawCalls": 20 },
+  "toolchain": { "gltfTransform": "4.4.2", "gltfValidator": "2.0.0-dev.3.10", "sharp": "0.35.3" }
+}

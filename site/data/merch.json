@@ -437,16 +437,19 @@
       ],
       "specifications": [],
       "viewer": {
-        "kind": "spin",
-        "availability": "sourceBlocked",
+        "kind": "glb",
         "poster": "assets/merch/t-shirt-front.webp",
-        "src": "assets/merch-360/t-shirt/manifest.json",
+        "src": "assets/merch-3d/t-shirt-001.glb",
+        "cameraOrbit": { "desktop": "8deg 78deg 113%", "mobile": "6deg 80deg 107%" },
+        "fieldOfView": { "desktop": "23deg", "mobile": "20deg" },
+        "cameraTarget": { "desktop": "auto 0.550m auto", "mobile": "auto 0.530m auto" },
         "alt": {
-          "en": "Approved front concept image of the bone T-shirt with the registered POVKH LAB ASCII print.",
-          "it": "Immagine concept frontale approvata della T-shirt bone con stampa ASCII POVKH LAB registrata.",
-          "ru": "Утверждённый фронтальный концепт светлой футболки с выверенным ASCII-принтом POVKH LAB."
+          "en": "3D concept visualization of a relaxed bone T-shirt with exact front artwork; not a manufacturing reference.",
+          "it": "Visualizzazione 3D concept di una T-shirt bone rilassata con grafica frontale esatta; non è un riferimento per la produzione.",
+          "ru": "Концептуальная 3D-визуализация светлой футболки с точной графикой спереди; не является производственным эталоном."
         },
-        "budget": { "mobileBytes": 2300000, "desktopBytes": 3800000, "mobileFrames": 24, "desktopFrames": 36 }
+        "budget": { "bytes": 4000000, "triangles": 80000, "drawCalls": 20 },
+        "decoderPolicy": "uncompressed-only"
       },
       "releaseGate": {
         "state": "requiredBeforeProduction",
@@ -506,16 +509,20 @@
       ],
       "specifications": [],
       "viewer": {
-        "kind": "spin",
-        "availability": "sourceBlocked",
+        "kind": "glb",
         "poster": "assets/merch/hoodie-rear.webp",
-        "src": "assets/merch-360/hoodie/manifest.json",
+        "src": "assets/merch-3d/hoodie-001.glb",
+        "cameraOrbit": { "desktop": "155deg 78deg 118%", "mobile": "162deg 80deg 110%" },
+        "fieldOfView": { "desktop": "24deg", "mobile": "20deg" },
+        "cameraTarget": { "desktop": "auto 0.590m auto", "mobile": "auto 0.630m auto" },
+        "orbitLimits": { "min": "auto 68deg auto", "max": "auto 98deg auto" },
         "alt": {
-          "en": "Approved rear concept image of the black hoodie with the registered POVKH LAB ASCII print.",
-          "it": "Immagine concept posteriore approvata della felpa nera con stampa ASCII POVKH LAB registrata.",
-          "ru": "Утверждённый задний концепт чёрного худи с выверенным ASCII-принтом POVKH LAB."
+          "en": "3D concept visualization of a black hoodie with exact reverse artwork; not a manufacturing reference.",
+          "it": "Visualizzazione 3D concept di una felpa nera con grafica posteriore esatta; non è un riferimento per la produzione.",
+          "ru": "Концептуальная 3D-визуализация чёрного худи с точной графикой сзади; не является производственным эталоном."
         },
-        "budget": { "mobileBytes": 2300000, "desktopBytes": 3800000, "mobileFrames": 24, "desktopFrames": 36 }
+        "budget": { "bytes": 4000000, "triangles": 80000, "drawCalls": 20 },
+        "decoderPolicy": "uncompressed-only"
       },
       "releaseGate": {
         "state": "requiredBeforeProduction",
@@ -575,16 +582,19 @@
       ],
       "specifications": [],
       "viewer": {
-        "kind": "spin",
-        "availability": "sourceBlocked",
+        "kind": "glb",
         "poster": "assets/merch/cap-front.webp",
-        "src": "assets/merch-360/cap/manifest.json",
+        "src": "assets/merch-3d/cap-001.glb",
+        "cameraOrbit": { "desktop": "25deg 72deg 115%", "mobile": "18deg 75deg 108%" },
+        "fieldOfView": { "desktop": "24deg", "mobile": "20deg" },
+        "cameraTarget": { "desktop": "auto 0.160m auto", "mobile": "auto 0.150m auto" },
         "alt": {
-          "en": "Approved front concept image of the black POVKH LAB cap with its woven patch.",
-          "it": "Immagine concept frontale approvata del cappellino nero POVKH LAB con patch tessuta.",
-          "ru": "Утверждённый фронтальный концепт чёрной кепки POVKH LAB с тканым патчем."
+          "en": "3D concept visualization of a washed-black cap with exact patch mark; not a manufacturing reference.",
+          "it": "Visualizzazione 3D concept di un cappellino nero slavato con marchio esatto sulla patch; non è un riferimento per la produzione.",
+          "ru": "Концептуальная 3D-визуализация чёрной кепки с точным знаком на нашивке; не является производственным эталоном."
         },
-        "budget": { "mobileBytes": 2300000, "desktopBytes": 3800000, "mobileFrames": 24, "desktopFrames": 36 }
+        "budget": { "bytes": 1250000, "triangles": 30000, "drawCalls": 20 },
+        "decoderPolicy": "uncompressed-only"
       },
       "releaseGate": {
         "state": "requiredBeforeProduction",
@@ -912,21 +922,21 @@
         "poster": "assets/merch/collector-box-set-closed.webp",
         "src": "assets/merch-3d/collector-box-001.glb",
         "cameraOrbit": {
-          "desktop": "30deg 65deg 115%",
-          "mobile": "30deg 68deg 133%"
+          "desktop": "25deg 56deg 135%",
+          "mobile": "25deg 58deg 145%"
         },
         "fieldOfView": {
-          "desktop": "24deg",
+          "desktop": "29deg",
           "mobile": "30deg"
         },
         "cameraTarget": {
-          "desktop": "auto 0.1575m auto",
-          "mobile": "auto 0.1575m auto"
+          "desktop": "auto 0.075m auto",
+          "mobile": "auto 0.075m auto"
         },
         "alt": {
-          "en": "Interactive 3D view of the closed POVKH LAB Archive clamshell box with a lid seam and red pull tab.",
-          "it": "Vista 3D interattiva del box archivio POVKH LAB chiuso a conchiglia, con giunto del coperchio e linguetta rossa.",
-          "ru": "Интерактивный 3D-вид закрытого архивного бокса POVKH LAB: линия крышки и красный язычок."
+          "en": "Interactive 3D concept view of the open POVKH LAB archive box with lined lid, modular tray and named media contents.",
+          "it": "Vista 3D concettuale interattiva del box archivio POVKH LAB aperto, con coperchio foderato, vassoio modulare e contenuti multimediali.",
+          "ru": "Интерактивный 3D-концепт открытого архивного бокса POVKH LAB с отделкой крышки, модульным лотком и медиакомпонентами."
         },
         "budget": { "bytes": 2100000, "triangles": 40000, "drawCalls": 10 }
       },

@@ -30,6 +30,30 @@ const fragment = (html, pattern, label) => {
 };
 const count = (html, pattern) => [...html.matchAll(pattern)].length;
 
+test("accepts only an exact optional min/max orbit-limit pair", async () => {
+  const valid = structuredClone(registry);
+  valid.objects.find(({ slug }) => slug === "hoodie").viewer.orbitLimits = {
+    min: "auto 68deg auto",
+    max: "auto 98deg auto"
+  };
+  await assert.doesNotReject(validateMerchLibrary(valid, copyAuthority, { readAsset }));
+
+  for (const orbitLimits of [
+    { min: "auto 68deg auto" },
+    { min: "auto 68deg auto", max: "auto 98deg auto", extra: "auto" },
+    { min: "68", max: "auto 98deg auto" },
+    { min: "auto 98deg auto", max: "auto 68deg auto" },
+    { min: "auto 68deg 100%", max: "auto 98deg 1m" }
+  ]) {
+    const invalid = structuredClone(registry);
+    invalid.objects.find(({ slug }) => slug === "hoodie").viewer.orbitLimits = orbitLimits;
+    await assert.rejects(
+      validateMerchLibrary(invalid, copyAuthority, { readAsset }),
+      /viewer orbit limits/i
+    );
+  }
+});
+
 test("pins and vendors one first-party model-viewer runtime with its Apache notice", async () => {
   assert.equal(packageJson.devDependencies?.["@google/model-viewer"], "4.3.1");
   const runtime = path.join(siteRoot, "assets", "vendor", "model-viewer.min.js");
@@ -66,6 +90,12 @@ test("renders every localized product as an inert poster-first viewer shell", ()
         assert.match(viewer, new RegExp(`data-viewer-field-of-view-mobile="${object.viewer.fieldOfView.mobile}"`));
         assert.match(viewer, new RegExp(`data-viewer-camera-target-desktop="${object.viewer.cameraTarget.desktop}"`));
         assert.match(viewer, new RegExp(`data-viewer-camera-target-mobile="${object.viewer.cameraTarget.mobile}"`));
+      }
+      if (object.viewer.orbitLimits) {
+        assert.match(viewer, new RegExp(`data-viewer-min-camera-orbit="${object.viewer.orbitLimits.min}"`));
+        assert.match(viewer, new RegExp(`data-viewer-max-camera-orbit="${object.viewer.orbitLimits.max}"`));
+      } else {
+        assert.doesNotMatch(viewer, /data-viewer-(?:min|max)-camera-orbit=/);
       }
       assert.doesNotMatch(viewer, /<model-viewer\b/i, `${locale}/${object.slug} must not instantiate WebGL before activation`);
       assert.doesNotMatch(viewer, /<script\b/i, `${locale}/${object.slug} viewer shell must stay inert at parse time`);
@@ -111,7 +141,28 @@ test("keeps the viewer launcher local, explicit, recoverable and route-disposabl
   assert.match(viewerSource, /source\s*===\s*["']user-interaction["']/, "responsive switching must preserve a user-adjusted orbit");
   assert.match(viewerSource, /setAttribute\(["']field-of-view["']/, "runtime must apply the profile field of view");
   assert.match(viewerSource, /setAttribute\(["']camera-target["']/, "runtime must apply the profile camera target");
+  assert.match(viewerSource, /dataset\.viewerMinCameraOrbit/);
+  assert.match(viewerSource, /dataset\.viewerMaxCameraOrbit/);
+  assert.match(viewerSource, /setAttribute\(["']min-camera-orbit["']/);
+  assert.match(viewerSource, /setAttribute\(["']max-camera-orbit["']/);
+  assert.ok(
+    viewerSource.indexOf('model.setAttribute("min-camera-orbit"') < viewerSource.indexOf('model.setAttribute("src"'),
+    "runtime must apply the minimum orbit before assigning the model source"
+  );
+  assert.ok(
+    viewerSource.indexOf('model.setAttribute("max-camera-orbit"') < viewerSource.indexOf('model.setAttribute("src"'),
+    "runtime must apply the maximum orbit before assigning the model source"
+  );
   assert.doesNotMatch(viewerSource, /https?:\/\//i, "runtime must not call a cloud converter, CDN or remote decoder");
+});
+
+test("renders the governed hoodie orbit limits identically in every locale", () => {
+  for (const locale of locales) {
+    const html = pages.get(outputFor(locale, "hoodie")).toString();
+    const viewer = fragment(html, /<section class="product-viewer"[\s\S]*?<\/section>/, `${locale}/hoodie product viewer`);
+    assert.match(viewer, /data-viewer-min-camera-orbit="auto 68deg auto"/);
+    assert.match(viewer, /data-viewer-max-camera-orbit="auto 98deg auto"/);
+  }
 });
 
 test("renders the governed cassette camera profiles identically in every locale", () => {

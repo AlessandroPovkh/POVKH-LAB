@@ -1,0 +1,291 @@
+{
+  "schemaVersion": 1,
+  "assetKey": "t-shirt-001",
+  "optimized": {
+    "scenes": {
+      "properties": [
+        {
+          "name": "T_Shirt_001_Concept_Visualization",
+          "rootName": "T_Shirt_001_Centred_Grounded_Pivot",
+          "bboxMin": [
+            -0.56843,
+            0,
+            -0.08
+          ],
+          "bboxMax": [
+            0.56843,
+            1.041,
+            0.085
+          ],
+          "renderVertexCount": 9384,
+          "uploadVertexCount": 3136,
+          "uploadNaiveVertexCount": 3136
+        }
+      ]
+    },
+    "meshes": {
+      "properties": [
+        {
+          "name": "T_Shirt_Draped_Shell_Mesh",
+          "mode": [
+            "TRIANGLES"
+          ],
+          "meshPrimitives": 1,
+          "glPrimitives": 2160,
+          "vertices": 1200,
+          "indices": [
+            "u32"
+          ],
+          "attributes": [
+            "NORMAL:f32",
+            "POSITION:f32",
+            "TANGENT:f32",
+            "TEXCOORD_0:f32"
+          ],
+          "instances": 1,
+          "size": 83520
+        },
+        {
+          "name": "T_Shirt_Collar_Mesh",
+          "mode": [
+            "TRIANGLES"
+          ],
+          "meshPrimitives": 1,
+          "glPrimitives": 288,
+          "vertices": 576,
+          "indices": [
+            "u32"
+          ],
+          "attributes": [
+            "NORMAL:f32",
+            "POSITION:f32",
+            "TANGENT:f32",
+            "TEXCOORD_0:f32"
+          ],
+          "instances": 1,
+          "size": 31104
+        },
+        {
+          "name": "T_Shirt_Collar_Interior_Mesh",
+          "mode": [
+            "TRIANGLES"
+          ],
+          "meshPrimitives": 1,
+          "glPrimitives": 288,
+          "vertices": 576,
+          "indices": [
+            "u32"
+          ],
+          "attributes": [
+            "NORMAL:f32",
+            "POSITION:f32",
+            "TANGENT:f32",
+            "TEXCOORD_0:f32"
+          ],
+          "instances": 1,
+          "size": 31104
+        },
+        {
+          "name": "T_Shirt_Sleeve_Hems_Mesh",
+          "mode": [
+            "TRIANGLES"
+          ],
+          "meshPrimitives": 1,
+          "glPrimitives": 224,
+          "vertices": 448,
+          "indices": [
+            "u32"
+          ],
+          "attributes": [
+            "NORMAL:f32",
+            "POSITION:f32",
+            "TANGENT:f32",
+            "TEXCOORD_0:f32"
+          ],
+          "instances": 1,
+          "size": 24192
+        },
+        {
+          "name": "T_Shirt_Curved_Hem_Mesh",
+          "mode": [
+            "TRIANGLES"
+          ],
+          "meshPrimitives": 1,
+          "glPrimitives": 72,
+          "vertices": 144,
+          "indices": [
+            "u32"
+          ],
+          "attributes": [
+            "NORMAL:f32",
+            "POSITION:f32",
+            "TANGENT:f32",
+            "TEXCOORD_0:f32"
+          ],
+          "instances": 1,
+          "size": 7776
+        },
+        {
+          "name": "T_Shirt_Front_Artwork_Mesh",
+          "mode": [
+            "TRIANGLES"
+          ],
+          "meshPrimitives": 1,
+          "glPrimitives": 96,
+          "vertices": 192,
+          "indices": [
+            "u32"
+          ],
+          "attributes": [
+            "NORMAL:f32",
+            "POSITION:f32",
+            "TEXCOORD_0:f32"
+          ],
+          "instances": 1,
+          "size": 7296
+        }
+      ]
+    },
+    "materials": {
+      "properties": [
+        {
+          "name": "MAT_T_SHIRT_ASCII_DARK_EXACT",
+          "instances": 1,
+          "textures": [
+            "baseColorTexture"
+          ],
+          "alphaMode": "BLEND",
+          "doubleSided": true
+        },
+        {
+          "name": "MAT_T_SHIRT_BONE_FABRIC",
+          "instances": 1,
+          "textures": [
+            "normalTexture",
+            "metallicRoughnessTexture"
+          ],
+          "alphaMode": "OPAQUE",
+          "doubleSided": true
+        },
+        {
+          "name": "MAT_T_SHIRT_BONE_RIB",
+          "instances": 3,
+          "textures": [
+            "normalTexture",
+            "metallicRoughnessTexture"
+          ],
+          "alphaMode": "OPAQUE",
+          "doubleSided": true
+        },
+        {
+          "name": "MAT_T_SHIRT_NECK_INTERIOR",
+          "instances": 1,
+          "textures": [
+            "normalTexture",
+            "metallicRoughnessTexture"
+          ],
+          "alphaMode": "OPAQUE",
+          "doubleSided": true
+        }
+      ]
+    },
+    "textures": {
+      "properties": [
+        {
+          "name": "t-shirt-001_Exact_Artwork_Texture",
+          "uri": "",
+          "slots": [
+            "baseColorTexture"
+          ],
+          "instances": 1,
+          "mimeType": "image/png",
+          "compression": "",
+          "resolution": "1600x600",
+          "size": 137134,
+          "gpuSize": 5119556
+        },
+        {
+          "name": "MAT_T_SHIRT_BONE_FABRIC_Woven_Normal",
+          "uri": "",
+          "slots": [
+            "normalTexture"
+          ],
+          "instances": 1,
+          "mimeType": "image/png",
+          "compression": "",
+          "resolution": "64x64",
+          "size": 3838,
+          "gpuSize": 21844
+        },
+        {
+          "name": "MAT_T_SHIRT_BONE_FABRIC_Woven_Roughness",
+          "uri": "",
+          "slots": [
+            "metallicRoughnessTexture"
+          ],
+          "instances": 1,
+          "mimeType": "image/png",
+          "compression": "",
+          "resolution": "64x64",
+          "size": 2684,
+          "gpuSize": 21844
+        },
+        {
+          "name": "MAT_T_SHIRT_BONE_RIB_Woven_Normal",
+          "uri": "",
+          "slots": [
+            "normalTexture"
+          ],
+          "instances": 1,
+          "mimeType": "image/png",
+          "compression": "",
+          "resolution": "64x64",
+          "size": 3701,
+          "gpuSize": 21844
+        },
+        {
+          "name": "MAT_T_SHIRT_BONE_RIB_Woven_Roughness",
+          "uri": "",
+          "slots": [
+            "metallicRoughnessTexture"
+          ],
+          "instances": 1,
+          "mimeType": "image/png",
+          "compression": "",
+          "resolution": "64x64",
+          "size": 2637,
+          "gpuSize": 21844
+        },
+        {
+          "name": "MAT_T_SHIRT_NECK_INTERIOR_Woven_Normal",
+          "uri": "",
+          "slots": [
+            "normalTexture"
+          ],
+          "instances": 1,
+          "mimeType": "image/png",
+          "compression": "",
+          "resolution": "64x64",
+          "size": 3692,
+          "gpuSize": 21844
+        },
+        {
+          "name": "MAT_T_SHIRT_NECK_INTERIOR_Woven_Roughness",
+          "uri": "",
+          "slots": [
+            "metallicRoughnessTexture"
+          ],
+          "instances": 1,
+          "mimeType": "image/png",
+          "compression": "",
+          "resolution": "64x64",
+          "size": 2677,
+          "gpuSize": 21844
+        }
+      ]
+    },
+    "animations": {
+      "properties": []
+    }
+  }
+}

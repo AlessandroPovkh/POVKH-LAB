@@ -5,7 +5,7 @@
   "type": "module",
   "description": "Static site for POVKH LAB",
   "engines": {
-    "node": ">=18"
+    "node": ">=22"
   },
   "scripts": {
     "build": "node tools/build.mjs",

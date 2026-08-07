@@ -2,10 +2,10 @@
   "schemaVersion": 1,
   "assetKey": "collector-box-001",
   "sourceIntegrity": {
-    "lid": {
+    "artwork": {
       "path": "sources/collector-box-001/PVKH_ASCII_REVERSE_EXACT_1600x600_v01.png",
       "sha256": "284e69cfb0e6e7fef2a993f44289577efabd1fae576c9280bab4d4e2f59b398f",
-      "application": "exact-horizontal-lower-lid",
+      "application": "exact-raster-reused-with-placement-specific-full-image-uvs",
       "bytes": 159393
     },
     "geometryAuthority": {
@@ -39,7 +39,7 @@
       "fixtureSha256": "c9d7819b003560e5d09f4dbdcc71fe83cbf23c6c6ce9a0882971b89fb7f6f0f0",
       "canonicalPath": "production/physical-merch/concepts/drop-001/renders/archive-objects/collector-box-001/source/final-contents-geometry-v04.json",
       "canonicalSha256": "7ba671184f982ba03f24f6281f6d3685c78cd4cd0f4c6cfd7fc03fd01b32313a",
-      "application": "uncertainty-record-only-not-modeled"
+      "application": "concept-composition-reference-only-not-machinable"
     }
   },
   "derivedMaterialIntegrity": {
@@ -53,56 +53,128 @@
   "derivedMaterialSha256": {
     "bookclothNormal": "8b04ece8038f37ecf6fe1379615e2e0a6deac983e3ad55baf1167aef74eec373"
   },
+  "identityEvidence": {
+    "canonicalArtwork": {
+      "path": "sources/collector-box-001/PVKH_ASCII_REVERSE_EXACT_1600x600_v01.png",
+      "sha256": "284e69cfb0e6e7fef2a993f44289577efabd1fae576c9280bab4d4e2f59b398f",
+      "authority": "canonical-governed-exact-raster"
+    },
+    "conceptDerivedPlacements": {
+      "lidPanel": {
+        "node": "Collector_Box_Lid_Identity",
+        "coordinateSpace": "provisional-lid-local-mm",
+        "centreMm": [
+          -12,
+          8.2,
+          -103
+        ],
+        "surfaceMm": [
+          120,
+          45
+        ],
+        "uvBounds": [
+          0,
+          0,
+          1,
+          1
+        ],
+        "rotationDeg": 0,
+        "canonicalArtworkSha256": "284e69cfb0e6e7fef2a993f44289577efabd1fae576c9280bab4d4e2f59b398f",
+        "placementAuthority": "concept-derived-viewer-placement-not-production-registration",
+        "sourceUse": "full-image-no-crop-no-redraw"
+      },
+      "zineCover": {
+        "node": "Collector_Box_Zine_Identity_Exact",
+        "coordinateSpace": "open-scene-world-mm",
+        "centreMm": [
+          -50,
+          57.8,
+          -15
+        ],
+        "surfaceMm": [
+          78,
+          29.25
+        ],
+        "uvBounds": [
+          0,
+          0,
+          1,
+          1
+        ],
+        "rotationDeg": 0,
+        "canonicalArtworkSha256": "284e69cfb0e6e7fef2a993f44289577efabd1fae576c9280bab4d4e2f59b398f",
+        "placementAuthority": "concept-derived-viewer-placement-not-production-registration",
+        "sourceUse": "full-image-no-crop-no-redraw"
+      },
+      "stickerInsert": {
+        "node": "Collector_Box_Sticker_Identity_Insert",
+        "coordinateSpace": "provisional-lid-local-mm",
+        "centreMm": [
+          65,
+          8.2,
+          -56
+        ],
+        "surfaceMm": [
+          75,
+          28.125
+        ],
+        "uvBounds": [
+          0,
+          0,
+          1,
+          1
+        ],
+        "rotationDeg": 0,
+        "canonicalArtworkSha256": "284e69cfb0e6e7fef2a993f44289577efabd1fae576c9280bab4d4e2f59b398f",
+        "placementAuthority": "concept-derived-viewer-placement-not-production-registration",
+        "sourceUse": "full-image-no-crop-no-redraw"
+      }
+    }
+  },
   "physicalEvidence": {
-    "method": "reopened-glb-accessor-bounds",
-    "viewerEnvelopeMm": [
+    "method": "reopened-glb-scene-bounds-and-node-instanced-primitive-count",
+    "provisionalClosedEnvelopeMm": [
       250,
       315,
       55
     ],
-    "dimensionAuthority": "provisional-viewer-envelope-not-machinable",
-    "state": "closed-only",
-    "selectedForm": "01 / ARCHIVE CLAMSHELL",
-    "lidUvRecord": {
-      "sourcePx": [
-        1600,
-        600
-      ],
-      "sourceRegistrationPx": {
-        "canvas": [
-          1536,
-          1024
-        ],
-        "origin": [
-          490,
-          395
-        ],
-        "size": [
-          620,
-          233
-        ]
-      },
-      "surfaceMm": {
-        "width": 202,
-        "height": 75.75,
-        "centreX": 4,
-        "centreY": 152
-      },
-      "uvBounds": [
+    "actualOpenSceneBoundsMm": {
+      "min": [
+        -125,
         0,
-        0,
-        1,
-        1
+        -119.971
       ],
-      "rotationDeg": 0,
-      "warped": false
+      "max": [
+        125,
+        221.079,
+        125
+      ],
+      "size": [
+        250,
+        221.079,
+        244.971
+      ]
     },
+    "dimensionAuthority": "provisional-closed-envelope-not-open-scene-not-machinable",
+    "boundsRelationship": "measured open scene differs from provisional closed envelope; neither is machinable",
+    "state": "default-open-archive-set",
+    "selectedForm": "01 / ARCHIVE CLAMSHELL",
+    "openAngleDeg": 105,
+    "modeled": [
+      "open base and lid",
+      "bone lid lining",
+      "modular tray and recesses",
+      "zine",
+      "cassette",
+      "cd",
+      "data-key",
+      "vinyl-archive-sleeve",
+      "sticker-identity"
+    ],
     "excluded": [
-      "drawer",
-      "open state",
-      "interior",
-      "contents",
       "working hinge",
+      "vendor dieline",
+      "manufacturing internals",
       "machinability claim"
     ]
   },
@@ -110,35 +182,35 @@
     "poster": "assets/merch/collector-box-set-closed.webp",
     "desktop": {
       "default": {
-        "orbit": "30deg 65deg 115%",
-        "target": "auto 0.1575m auto",
-        "fieldOfView": "24deg"
+        "orbit": "25deg 56deg 135%",
+        "target": "auto 0.075m auto",
+        "fieldOfView": "29deg"
       },
       "front": {
-        "orbit": "0deg 65deg 110%",
-        "target": "auto 0.1575m auto",
-        "fieldOfView": "23deg"
+        "orbit": "0deg 54deg 138%",
+        "target": "auto 0.075m auto",
+        "fieldOfView": "29deg"
       },
       "rear": {
-        "orbit": "180deg 65deg 112%",
-        "target": "auto 0.1575m auto",
-        "fieldOfView": "23deg"
+        "orbit": "180deg 57deg 140%",
+        "target": "auto 0.075m auto",
+        "fieldOfView": "30deg"
       }
     },
     "mobile": {
       "default": {
-        "orbit": "30deg 68deg 133%",
-        "target": "auto 0.1575m auto",
+        "orbit": "25deg 58deg 145%",
+        "target": "auto 0.075m auto",
         "fieldOfView": "30deg"
       },
       "front": {
-        "orbit": "0deg 68deg 132%",
-        "target": "auto 0.1575m auto",
+        "orbit": "0deg 56deg 145%",
+        "target": "auto 0.075m auto",
         "fieldOfView": "30deg"
       },
       "rear": {
-        "orbit": "180deg 68deg 132%",
-        "target": "auto 0.1575m auto",
+        "orbit": "180deg 58deg 148%",
+        "target": "auto 0.075m auto",
         "fieldOfView": "30deg"
       }
     }
@@ -150,9 +222,10 @@
     "hints": 0
   },
   "budget": {
-    "triangles": 686,
-    "drawCalls": 5,
-    "bytes": 253200,
+    "triangles": 934,
+    "drawCalls": 9,
+    "uniqueMeshPrimitives": 9,
+    "bytes": 271352,
     "ceilings": {
       "maxBytes": 2100000,
       "maxTriangles": 40000,
@@ -164,14 +237,14 @@
   },
   "output": {
     "path": "assets/merch-3d/collector-box-001.glb",
-    "sha256": "081126a858787d8b5717a10f5b6e2f0cf7d3083adac3d128ed9e928c2dc273e7"
+    "sha256": "886f26820f6dcd5f6d4e2cc32d8a4840db2761d6d499191dae12b441c3b230e2"
   },
   "deterministic": {
     "verifiedBySecondInMemoryBuild": true
   },
   "visualComparison": {
     "canonicalSelected": [
-      "production/physical-merch/concepts/drop-001/renders/archive-objects/collector-box-001/renders/selected/PVKH_DROP001_COLLECTOR_BOX_001_CLOSED_HERO_CONCEPT_v02.png"
+      "assets/merch/collector-box-set-open.webp"
     ],
     "reviewStatus": "captured-six-views-readability-source-compare",
     "browserQa": "tools/merch-3d/reports/collector-box-001.browser-qa.json"

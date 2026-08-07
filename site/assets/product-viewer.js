@@ -66,6 +66,7 @@ const showFailure = (root, { poster, activate, reset, status, instructions }) =>
   root.dataset.viewerState = "error";
   root.setAttribute("aria-busy", "false");
   root.classList.remove("is-viewer-ready");
+  root.classList.remove("product-viewer--active");
   poster.hidden = false;
   activate.hidden = false;
   activate.disabled = root.dataset.viewerAvailability === "sourceBlocked";
@@ -206,6 +207,9 @@ const activateModel = async (root, elements, routeSignal) => {
   const model = document.createElement("model-viewer");
   const mobileCamera = window.matchMedia("(max-width: 640px)");
   let userAdjustedOrbit = false;
+  let applyingCameraRevision = 0;
+  let cameraProfileRevision = 0;
+  let latestCameraSettlement = Promise.resolve({ status: "superseded", revision: 0 });
   const applyCameraProfile = ({ preserveUserOrbit = false, jump = true } = {}) => {
     const preservedOrbit = preserveUserOrbit ? model.getCameraOrbit?.() : null;
     const profile = cameraProfileFor(root, mobileCamera.matches);
@@ -219,15 +223,56 @@ const activateModel = async (root, elements, routeSignal) => {
     }
     if (jump) model.jumpCameraToGoal?.();
   };
+  const nextFrame = () => new Promise((resolve) => requestAnimationFrame(resolve));
+  const settleCameraProfile = ({ preserveUserOrbit = false } = {}) => {
+    const revision = ++cameraProfileRevision;
+    const settlement = (async () => {
+      await nextFrame();
+      await nextFrame();
+      if (signal.aborted || !model.isConnected) return { status: "aborted", revision };
+      if (revision !== cameraProfileRevision) return { status: "superseded", revision };
+
+      applyingCameraRevision = revision;
+      applyCameraProfile({ preserveUserOrbit });
+      await model.updateComplete;
+      model.jumpCameraToGoal?.();
+      await model.updateComplete;
+      await nextFrame();
+      const status = signal.aborted || !model.isConnected
+        ? "aborted"
+        : revision !== cameraProfileRevision
+          ? "superseded"
+          : "settled";
+      if (applyingCameraRevision === revision) applyingCameraRevision = 0;
+      return { status, revision };
+    })();
+    latestCameraSettlement = settlement;
+    return settlement;
+  };
+  const waitForLatestCameraSettlement = async (initialSettlement) => {
+    let pending = initialSettlement;
+    while (true) {
+      const outcome = await pending;
+      if (outcome.status === "aborted" || signal.aborted || !model.isConnected) return { status: "aborted", revision: outcome.revision };
+      if (outcome.status === "settled"
+        && outcome.revision === cameraProfileRevision
+        && pending === latestCameraSettlement) return outcome;
+      pending = latestCameraSettlement;
+    }
+  };
   model.className = "product-viewer-model";
   model.setAttribute("camera-controls", "");
+  if (root.dataset.viewerMinCameraOrbit && root.dataset.viewerMaxCameraOrbit) {
+    model.setAttribute("min-camera-orbit", root.dataset.viewerMinCameraOrbit);
+    model.setAttribute("max-camera-orbit", root.dataset.viewerMaxCameraOrbit);
+  }
   model.setAttribute("touch-action", "pan-y");
   model.setAttribute("interaction-prompt", "none");
   model.setAttribute("loading", "eager");
   model.setAttribute("reveal", "auto");
-  model.setAttribute("shadow-intensity", "0.7");
-  model.setAttribute("shadow-softness", "0.85");
-  model.setAttribute("exposure", "0.9");
+  model.setAttribute("shadow-intensity", "0.55");
+  model.setAttribute("shadow-softness", "1");
+  model.setAttribute("exposure", "1.05");
   applyCameraProfile({ jump: false });
   model.setAttribute("alt", elements.poster.alt);
   model.setAttribute("aria-describedby", elements.instructions.id);
@@ -250,12 +295,17 @@ const activateModel = async (root, elements, routeSignal) => {
     const suffix = Number.isFinite(progress) ? ` ${Math.round(progress * 100)}%` : "";
     elements.status.textContent = `${stateCopy(root, "viewerLoading", "Loading object")}${suffix}`;
   }, { signal });
-  model.addEventListener("load", () => {
+  model.addEventListener("load", async () => {
     if (signal.aborted) return;
     if (!hasRenderableBounds(model)) {
       fail();
       return;
     }
+    const settlement = await waitForLatestCameraSettlement(settleCameraProfile());
+    if (settlement.status !== "settled"
+      || settlement.revision !== cameraProfileRevision
+      || signal.aborted
+      || !model.isConnected) return;
     showReady(root, elements);
     const input = model.shadowRoot?.querySelector(".userInput");
     input?.setAttribute("aria-describedby", elements.instructions.id);
@@ -264,14 +314,14 @@ const activateModel = async (root, elements, routeSignal) => {
   }, { signal });
   model.addEventListener("error", fail, { signal });
   model.addEventListener("camera-change", (event) => {
-    if (event.detail?.source === "user-interaction") userAdjustedOrbit = true;
+    if (applyingCameraRevision === 0 && event.detail?.source === "user-interaction") userAdjustedOrbit = true;
   }, { signal });
   mobileCamera.addEventListener("change", () => {
-    applyCameraProfile({ preserveUserOrbit: userAdjustedOrbit });
+    settleCameraProfile({ preserveUserOrbit: userAdjustedOrbit });
   }, { signal });
   elements.reset.addEventListener("click", () => {
     userAdjustedOrbit = false;
-    applyCameraProfile();
+    settleCameraProfile();
     (model.shadowRoot?.querySelector(".userInput") || model).focus({ preventScroll: true });
   }, { signal });
 
@@ -298,6 +348,7 @@ export const activateProductViewer = async (root, { signal: routeSignal } = {}) 
   }
 
   root.dataset.viewerState = "loading";
+  root.classList.add("product-viewer--active");
   root.setAttribute("aria-busy", "true");
   elements.status.textContent = stateCopy(root, "viewerLoading", "Loading object");
   if (root.dataset.viewerKind === "spin") return activateSpin(root, elements, routeSignal);

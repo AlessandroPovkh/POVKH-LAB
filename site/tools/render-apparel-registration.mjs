@@ -17,9 +17,12 @@ import { fileURLToPath } from "node:url";
 
 const execFile = promisify(execFileCallback);
 const require = createRequire(import.meta.url);
+const sharp = require("sharp");
 const siteRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const registrationPath = path.join(siteRoot, "data", "apparel-print-registration-v02.json");
 const output = Object.freeze({ width: 1536, height: 1024 });
+const contactSheetOutput = Object.freeze({ width: 1800, height: 800 });
+const contactSheetPath = "tools/fixtures/apparel-registration/apparel-registration-contact-sheet-v02.png";
 const sourceCorners = Object.freeze([
   Object.freeze({ x: 0, y: 0 }),
   Object.freeze({ x: 1600, y: 0 }),
@@ -39,11 +42,17 @@ const garments = Object.freeze({
         "c46bf6bd82ea2ec6928e9fe4ca9a314b56580af49c044be0395579c43c06dada"
       ),
       width: 1600,
-      height: 600
+      height: 600,
+      pixelSha256: "a7a1caaa8c0d3cc5ff5b04b303d42f962ba0161f0516fd01a8e0a7af0f84b6c0",
+      visibleBounds: Object.freeze({ left: 70, top: 60, right: 1510, bottom: 536, width: 1440, height: 476 }),
+      visibleCentroid: Object.freeze({ x: 685.702012, y: 341.056496 })
     }),
     approvedHero: Object.freeze({
       path: "assets/merch/t-shirt-front.webp",
-      canvas: Object.freeze({ width: 1600, height: 900 }),
+      sha256: "89cac41d6abf06cccc1952823b5c2dcdf4a063a063a98dfebb998b19c428db4e",
+      pixelSha256: "cdde4b910cf72c08429c8ead9bcf81c89bc2df0bd4ea7027100a4789aa9f56ae",
+      assetDimensions: Object.freeze({ width: 1536, height: 1024 }),
+      placementCoordinateSpace: "assetPixels",
       placement: Object.freeze({ x: 528, y: 350, width: 480, height: 180 })
     }),
     views: Object.freeze({
@@ -57,10 +66,11 @@ const garments = Object.freeze({
         garmentMaskPath: "tools/fixtures/apparel-registration/masks/t-shirt-print-macro-garment-mask-v02.png",
         artworkMaskPath: "tools/fixtures/apparel-registration/masks/t-shirt-print-macro-applied-artwork-mask-v02.png",
         surfaceAnchors: [[150, 180], [1400, 190], [1390, 820], [160, 810]].map(point),
-        artworkQuad: [[250, 290], [1286, 300], [1280, 688], [256, 678]].map(point),
+        artworkQuad: [[380, 340], [1156, 347], [1152, 638], [384, 631]].map(point),
         artworkBlendMode: "multiply",
         artworkOpacity: 0.92,
-        textureReturnOpacity: 0
+        textureReturnOpacity: 0,
+        textureReturnClip: "artworkAlpha"
       }),
       "on-body": Object.freeze({
         publicPath: "assets/merch/t-shirt-on-body.webp",
@@ -72,10 +82,11 @@ const garments = Object.freeze({
         garmentMaskPath: "tools/fixtures/apparel-registration/masks/t-shirt-on-body-garment-mask-v02.png",
         artworkMaskPath: "tools/fixtures/apparel-registration/masks/t-shirt-on-body-applied-artwork-mask-v02.png",
         surfaceAnchors: [[480, 235], [1055, 235], [1025, 700], [510, 700]].map(point),
-        artworkQuad: [[606, 330], [930, 330], [922, 452], [612, 452]].map(point),
+        artworkQuad: [[598, 327], [938, 327], [930, 455], [604, 455]].map(point),
         artworkBlendMode: "multiply",
         artworkOpacity: 0.92,
-        textureReturnOpacity: 0
+        textureReturnOpacity: 0,
+        textureReturnClip: "artworkAlpha"
       })
     })
   }),
@@ -86,28 +97,47 @@ const garments = Object.freeze({
         "284e69cfb0e6e7fef2a993f44289577efabd1fae576c9280bab4d4e2f59b398f"
       ),
       width: 1600,
-      height: 600
+      height: 600,
+      pixelSha256: "d09d549653f459c5b45e98646639698d4c2eb85ba6ef52451325be651ea12d36",
+      visibleBounds: Object.freeze({ left: 70, top: 60, right: 1510, bottom: 536, width: 1440, height: 476 }),
+      visibleCentroid: Object.freeze({ x: 685.702012, y: 341.056496 })
     }),
     approvedHero: Object.freeze({
       path: "assets/merch/hoodie-rear.webp",
-      canvas: Object.freeze({ width: 1600, height: 900 }),
+      sha256: "d46462cbac738c17c4f4aaddb1ba1fc7c35f13ebe09cc70d967377927219aefa",
+      pixelSha256: "95c0396a2eb37c8339332af61d41e84dcbea72c1b3121930457e2011e9a965eb",
+      assetDimensions: Object.freeze({ width: 1536, height: 1024 }),
+      placementCoordinateSpace: "assetPixels",
       placement: Object.freeze({ x: 552, y: 365, width: 432, height: 162 })
     }),
     views: Object.freeze({
       "print-macro": Object.freeze({
         publicPath: "assets/merch/hoodie-print-macro.webp",
         base: asset(
-          "tools/fixtures/apparel-registration/bases/PVKH_VOID_BACKMARK_HOODIE_PRINT_FIBER_MACRO_BLANK_BASE_v01.png",
-          "46fe2c064e42d8420eca02b7ef75a0eaa37ad4fe3768e67d2e111d651ad84b15"
+          "tools/fixtures/apparel-registration/bases/PVKH_VOID_BACKMARK_HOODIE_PRINT_FIBER_MACRO_BLANK_BASE_v02.png",
+          "d0e01e873ebd68673f25407efa08f8c6325ee088e2ad9ccae49f811f607bc905"
         ),
+        baseRepair: Object.freeze({
+          source: asset(
+            "tools/fixtures/apparel-registration/bases/PVKH_VOID_BACKMARK_HOODIE_PRINT_FIBER_MACRO_BLANK_BASE_v01.png",
+            "46fe2c064e42d8420eca02b7ef75a0eaa37ad4fe3768e67d2e111d651ad84b15"
+          ),
+          method: "preserve-low-frequency-field-and-transplant-clean-source-detail",
+          blurSigma: 28,
+          highFrequencyGain: 0.72,
+          repairBounds: Object.freeze({ left: 735, top: 430, right: 1415, bottom: 870 }),
+          fullStrengthBounds: Object.freeze({ left: 820, top: 515, right: 1365, bottom: 790 }),
+          donorOffset: Object.freeze({ x: -520, y: 0 })
+        }),
         sourceRenderPath: "tools/fixtures/apparel-registration/renders/hoodie-print-macro-registration-v02.png",
         garmentMaskPath: "tools/fixtures/apparel-registration/masks/hoodie-print-macro-garment-mask-v02.png",
         artworkMaskPath: "tools/fixtures/apparel-registration/masks/hoodie-print-macro-applied-artwork-mask-v02.png",
         surfaceAnchors: [[140, 170], [1400, 180], [1390, 820], [150, 810]].map(point),
-        artworkQuad: [[254, 300], [1280, 310], [1274, 692], [254, 682]].map(point),
+        artworkQuad: [[357, 339], [1177, 347], [1173, 653], [357, 645]].map(point),
         artworkBlendMode: "normal",
         artworkOpacity: 0.88,
-        textureReturnOpacity: 0.16
+        textureReturnOpacity: 0.16,
+        textureReturnClip: "artworkAlpha"
       }),
       "worn-rear": Object.freeze({
         publicPath: "assets/merch/hoodie-worn-rear.webp",
@@ -119,10 +149,11 @@ const garments = Object.freeze({
         garmentMaskPath: "tools/fixtures/apparel-registration/masks/hoodie-worn-rear-garment-mask-v02.png",
         artworkMaskPath: "tools/fixtures/apparel-registration/masks/hoodie-worn-rear-applied-artwork-mask-v02.png",
         surfaceAnchors: [[520, 300], [1005, 330], [980, 790], [550, 760]].map(point),
-        artworkQuad: [[621, 356], [895, 370], [889, 472], [621, 460]].map(point),
+        artworkQuad: [[593, 353], [923, 370], [916, 492], [593, 478]].map(point),
         artworkBlendMode: "normal",
         artworkOpacity: 0.88,
-        textureReturnOpacity: 0.16
+        textureReturnOpacity: 0.16,
+        textureReturnClip: "artworkAlpha"
       })
     })
   })
@@ -132,13 +163,9 @@ const sha256 = (bytes) => createHash("sha256").update(bytes).digest("hex");
 const fileSha256 = async (file) => sha256(await readFile(file));
 
 const dimensions = async (file) => {
-  const { stdout } = await execFile("ffprobe", [
-    "-v", "error", "-select_streams", "v:0", "-show_entries", "stream=width,height",
-    "-of", "csv=s=x:p=0", file
-  ]);
-  const match = stdout.trim().match(/^(\d+)x(\d+)$/);
-  if (!match) throw new Error(`cannot read dimensions for ${file}`);
-  return { width: Number(match[1]), height: Number(match[2]) };
+  const { width, height } = await sharp(file).metadata();
+  if (!Number.isInteger(width) || !Number.isInteger(height)) throw new Error(`cannot read dimensions for ${file}`);
+  return { width, height };
 };
 
 const assertAssetAtRoot = async (root, reference, expectedDimensions) => {
@@ -153,12 +180,130 @@ const assertAssetAtRoot = async (root, reference, expectedDimensions) => {
 
 const assertAsset = async (reference, expectedDimensions) => assertAssetAtRoot(siteRoot, reference, expectedDimensions);
 
-const decodedRgbaSha256 = async (file) => {
-  const { stdout } = await execFile("ffmpeg", [
-    "-hide_banner", "-loglevel", "error", "-i", file,
-    "-frames:v", "1", "-f", "rawvideo", "-pix_fmt", "rgba", "pipe:1"
-  ], { encoding: "buffer", maxBuffer: 16 * 1024 * 1024 });
-  return sha256(stdout);
+const decodedRgba = async (file) => {
+  return sharp(file).ensureAlpha().raw().toBuffer();
+};
+
+const decodedRgbaSha256 = async (file) => sha256(await decodedRgba(file));
+
+const pixelBounds = (pixels, dimensions, stride = 4, channel = 3, threshold = 8) => {
+  let left = dimensions.width;
+  let top = dimensions.height;
+  let right = -1;
+  let bottom = -1;
+  for (let y = 0; y < dimensions.height; y += 1) {
+    for (let x = 0; x < dimensions.width; x += 1) {
+      if (pixels[(y * dimensions.width + x) * stride + channel] <= threshold) continue;
+      left = Math.min(left, x);
+      top = Math.min(top, y);
+      right = Math.max(right, x + 1);
+      bottom = Math.max(bottom, y + 1);
+    }
+  }
+  if (right <= left || bottom <= top) throw new Error("governed artwork pixels are empty");
+  return { left, top, right, bottom, width: right - left, height: bottom - top };
+};
+
+const round6 = (value) => Number(value.toFixed(6));
+
+const pixelCentroid = (pixels, dimensions, stride = 4, channel = 3, threshold = 8) => {
+  let weightedX = 0;
+  let weightedY = 0;
+  let weight = 0;
+  for (let y = 0; y < dimensions.height; y += 1) {
+    for (let x = 0; x < dimensions.width; x += 1) {
+      const value = pixels[(y * dimensions.width + x) * stride + channel];
+      if (value <= threshold) continue;
+      weightedX += (x + 0.5) * value;
+      weightedY += (y + 0.5) * value;
+      weight += value;
+    }
+  }
+  if (weight <= 0) throw new Error("governed artwork pixels have no measurable centroid");
+  return { x: round6(weightedX / weight), y: round6(weightedY / weight) };
+};
+
+const heroRelativeRegistration = (garment, appliedArtworkBounds, appliedArtworkCentroid) => {
+  const hero = garment.approvedHero;
+  const master = garment.master;
+  if (hero.placementCoordinateSpace !== "assetPixels" || Object.hasOwn(hero, "canvas")) {
+    throw new Error("approved hero placement must use decoded asset-pixel coordinates");
+  }
+  const heroVisibleBounds = {
+    width: master.visibleBounds.width / master.width * hero.placement.width,
+    height: master.visibleBounds.height / master.height * hero.placement.height
+  };
+  const heroCenter = {
+    x: (hero.placement.x + master.visibleCentroid.x / master.width * hero.placement.width) / hero.assetDimensions.width,
+    y: (hero.placement.y + master.visibleCentroid.y / master.height * hero.placement.height) / hero.assetDimensions.height
+  };
+  const viewCenter = {
+    x: appliedArtworkCentroid.x / output.width,
+    y: appliedArtworkCentroid.y / output.height
+  };
+  return {
+    centerOffset: {
+      x: round6(viewCenter.x - heroCenter.x),
+      y: round6(viewCenter.y - heroCenter.y)
+    },
+    scale: {
+      x: round6((appliedArtworkBounds.width / output.width) / (heroVisibleBounds.width / hero.assetDimensions.width)),
+      y: round6((appliedArtworkBounds.height / output.height) / (heroVisibleBounds.height / hero.assetDimensions.height))
+    }
+  };
+};
+
+const smoothStep = (start, end, value) => {
+  const position = Math.max(0, Math.min(1, (value - start) / (end - start)));
+  return position * position * (3 - 2 * position);
+};
+
+const repairMacroBase = async (sourceFile, repair) => {
+  const [source, lowFrequency] = await Promise.all([
+    sharp(sourceFile).removeAlpha().raw().toBuffer({ resolveWithObject: true }),
+    sharp(sourceFile).removeAlpha().blur(repair.blurSigma).raw().toBuffer({ resolveWithObject: true })
+  ]);
+  const { width, height, channels } = source.info;
+  if (width !== output.width || height !== output.height || channels !== 3) {
+    throw new Error("hoodie macro repair source dimensions drifted");
+  }
+  const repaired = Buffer.from(source.data);
+  const changedPixelMask = Buffer.alloc(width * height);
+  const index = (x, y, channel) => (y * width + x) * channels + channel;
+  const { repairBounds, fullStrengthBounds, donorOffset } = repair;
+  let changedPixels = 0;
+  for (let y = repairBounds.top; y < repairBounds.bottom; y += 1) {
+    for (let x = repairBounds.left; x < repairBounds.right; x += 1) {
+      const feather = smoothStep(repairBounds.left, fullStrengthBounds.left, x)
+        * (1 - smoothStep(fullStrengthBounds.right, repairBounds.right, x))
+        * smoothStep(repairBounds.top, fullStrengthBounds.top, y)
+        * (1 - smoothStep(fullStrengthBounds.bottom, repairBounds.bottom, y));
+      if (feather <= 0) continue;
+      const donorX = x + donorOffset.x;
+      const donorY = y + donorOffset.y;
+      let changed = false;
+      for (let channel = 0; channel < channels; channel += 1) {
+        const targetOffset = index(x, y, channel);
+        const donorOffsetIndex = index(donorX, donorY, channel);
+        const cleanDetail = (source.data[donorOffsetIndex] - lowFrequency.data[donorOffsetIndex])
+          * repair.highFrequencyGain;
+        const reconstructed = Math.max(0, Math.min(255, Math.round(
+          lowFrequency.data[targetOffset] + cleanDetail
+        )));
+        const next = Math.round(source.data[targetOffset] * (1 - feather) + reconstructed * feather);
+        if (next !== source.data[targetOffset]) changed = true;
+        repaired[targetOffset] = next;
+      }
+      if (changed) {
+        changedPixels += 1;
+        changedPixelMask[y * width + x] = 1;
+      }
+    }
+  }
+  const bytes = await sharp(repaired, { raw: { width, height, channels } })
+    .png({ compressionLevel: 9, adaptiveFiltering: false })
+    .toBuffer();
+  return { bytes, changedPixels, changedPixelMask };
 };
 
 const toolFingerprints = async (browser) => {
@@ -167,6 +312,7 @@ const toolFingerprints = async (browser) => {
   return {
     playwright: require("playwright/package.json").version,
     chromium: browser.version(),
+    sharp: `sharp ${sharp.versions.sharp} / libvips ${sharp.versions.vips}`,
     ffmpeg: ffmpegVersion.split("\n")[0],
     ffmpegVersionSha256: sha256(Buffer.from(ffmpegVersion, "utf8"))
   };
@@ -363,21 +509,73 @@ const renderPixels = async (page, { baseBytes, masterBytes, artworkToOutput, vie
         if (!pointInPolygon(x + 0.5, y + 0.5, input.artworkQuad)) continue;
         if (!pointInPolygon(x + 0.5, y + 0.5, input.surfaceAnchors)) continue;
         const offset = (y * input.output.width + x) * 4;
+        const textureReturnAlpha = input.textureReturnClip === "artworkAlpha"
+          ? input.textureReturnOpacity * artworkMask[offset] / 255
+          : input.textureReturnOpacity;
+        if (textureReturnAlpha <= 0) continue;
         for (let channel = 0; channel < 3; channel += 1) {
           const composed = render[offset + channel];
           const textureBlend = composed * base.data[offset + channel] / 255;
           render[offset + channel] = Math.round(
-            composed * (1 - input.textureReturnOpacity) + textureBlend * input.textureReturnOpacity
+            composed * (1 - textureReturnAlpha) + textureBlend * textureReturnAlpha
           );
         }
       }
     }
   }
 
+  const appliedArtworkBounds = {
+    left: input.output.width,
+    top: input.output.height,
+    right: -1,
+    bottom: -1
+  };
+  let weightedX = 0;
+  let weightedY = 0;
+  let artworkWeight = 0;
+  let comparedPixels = 0;
+  let changedPixels = 0;
+  for (let y = 0; y < input.output.height; y += 1) {
+    for (let x = 0; x < input.output.width; x += 1) {
+      const offset = (y * input.output.width + x) * 4;
+      const maskValue = artworkMask[offset];
+      if (maskValue === 0) {
+        comparedPixels += 1;
+        if (render[offset] !== base.data[offset]
+          || render[offset + 1] !== base.data[offset + 1]
+          || render[offset + 2] !== base.data[offset + 2]) changedPixels += 1;
+      }
+      if (maskValue <= 8) continue;
+      appliedArtworkBounds.left = Math.min(appliedArtworkBounds.left, x);
+      appliedArtworkBounds.top = Math.min(appliedArtworkBounds.top, y);
+      appliedArtworkBounds.right = Math.max(appliedArtworkBounds.right, x + 1);
+      appliedArtworkBounds.bottom = Math.max(appliedArtworkBounds.bottom, y + 1);
+      weightedX += (x + 0.5) * maskValue;
+      weightedY += (y + 0.5) * maskValue;
+      artworkWeight += maskValue;
+    }
+  }
+  if (appliedArtworkBounds.right <= appliedArtworkBounds.left || appliedArtworkBounds.bottom <= appliedArtworkBounds.top) {
+    throw new Error("rendered artwork pixels are empty");
+  }
+  appliedArtworkBounds.width = appliedArtworkBounds.right - appliedArtworkBounds.left;
+  appliedArtworkBounds.height = appliedArtworkBounds.bottom - appliedArtworkBounds.top;
+  const appliedArtworkCentroid = {
+    x: Number((weightedX / artworkWeight).toFixed(6)),
+    y: Number((weightedY / artworkWeight).toFixed(6))
+  };
+
   return {
     render: await encodePng(render, input.output.width, input.output.height),
     garmentMask: await encodePng(garmentMask, input.output.width, input.output.height),
-    artworkMask: await encodePng(artworkMask, input.output.width, input.output.height)
+    artworkMask: await encodePng(artworkMask, input.output.width, input.output.height),
+    appliedArtworkBounds,
+    appliedArtworkCentroid,
+    outsideAppliedArtworkMask: {
+      rule: "source-render-rgb-equals-base-where-applied-artwork-mask-is-zero",
+      comparedPixels,
+      changedPixels
+    }
   };
 }, {
   baseDataUrl: `data:image/png;base64,${baseBytes.toString("base64")}`,
@@ -389,7 +587,8 @@ const renderPixels = async (page, { baseBytes, masterBytes, artworkToOutput, vie
   surfaceAnchors: view.surfaceAnchors,
   artworkBlendMode: view.artworkBlendMode,
   artworkOpacity: view.artworkOpacity,
-  textureReturnOpacity: view.textureReturnOpacity
+  textureReturnOpacity: view.textureReturnOpacity,
+  textureReturnClip: view.textureReturnClip
 });
 
 const encodeWebp = async (sourceFile, outputFile) => {
@@ -408,14 +607,64 @@ const encodeWebp = async (sourceFile, outputFile) => {
   }
 };
 
+const renderContactSheet = async (stageRoot, outputFile) => {
+  const panelPaths = [
+    path.join(siteRoot, garments["t-shirt"].approvedHero.path),
+    path.join(stageRoot, garments["t-shirt"].views["print-macro"].publicPath),
+    path.join(stageRoot, garments["t-shirt"].views["on-body"].publicPath),
+    path.join(siteRoot, garments.hoodie.approvedHero.path),
+    path.join(stageRoot, garments.hoodie.views["print-macro"].publicPath),
+    path.join(stageRoot, garments.hoodie.views["worn-rear"].publicPath)
+  ];
+  const panels = await Promise.all(panelPaths.map((file) => sharp(file)
+    .resize(600, 400, { fit: "contain", background: "#111315" })
+    .png({ compressionLevel: 9, adaptiveFiltering: false })
+    .toBuffer()));
+  await mkdir(path.dirname(outputFile), { recursive: true });
+  await sharp({
+    create: {
+      width: contactSheetOutput.width,
+      height: contactSheetOutput.height,
+      channels: 4,
+      background: "#111315"
+    }
+  }).composite(panels.map((input, index) => ({
+    input,
+    left: (index % 3) * 600,
+    top: Math.floor(index / 3) * 400
+  }))).png({ compressionLevel: 9, adaptiveFiltering: false }).toFile(outputFile);
+};
+
 const validateGovernedInputs = async () => {
   for (const garment of Object.values(garments)) {
     await assertAsset(garment.master, { width: 1600, height: 600 });
-    for (const view of Object.values(garment.views)) await assertAsset(view.base, output);
+    const masterPixels = await decodedRgba(path.join(siteRoot, garment.master.path));
+    if (sha256(masterPixels) !== garment.master.pixelSha256) throw new Error(`master pixel hash mismatch: ${garment.master.path}`);
+    const visibleBounds = pixelBounds(masterPixels, { width: 1600, height: 600 });
+    if (JSON.stringify(visibleBounds) !== JSON.stringify(garment.master.visibleBounds)) {
+      throw new Error(`master visible bounds mismatch: ${garment.master.path}`);
+    }
+    const visibleCentroid = pixelCentroid(masterPixels, { width: 1600, height: 600 });
+    if (JSON.stringify(visibleCentroid) !== JSON.stringify(garment.master.visibleCentroid)) {
+      throw new Error(`master visible centroid mismatch: ${garment.master.path}`);
+    }
+    await assertAsset(garment.approvedHero, garment.approvedHero.assetDimensions);
+    if (garment.approvedHero.placementCoordinateSpace !== "assetPixels" || Object.hasOwn(garment.approvedHero, "canvas")) {
+      throw new Error(`approved hero coordinate authority drift: ${garment.approvedHero.path}`);
+    }
+    const heroPixelSha = await decodedRgbaSha256(path.join(siteRoot, garment.approvedHero.path));
+    if (heroPixelSha !== garment.approvedHero.pixelSha256) throw new Error(`approved hero pixel hash mismatch: ${garment.approvedHero.path}`);
+    for (const view of Object.values(garment.views)) {
+      await assertAsset(view.baseRepair?.source ?? view.base, output);
+    }
   }
 };
 
-const buildStagedBundle = async (stageRoot) => {
+const buildStagedBundle = async (stageRoot, {
+  publicExports = "encode",
+  fingerprintsOverride = null
+} = {}) => {
+  if (!["encode", "copy"].includes(publicExports)) throw new Error(`unsupported public export mode: ${publicExports}`);
   await validateGovernedInputs();
 
   const { chromium } = await import("playwright");
@@ -433,15 +682,29 @@ const buildStagedBundle = async (stageRoot) => {
   };
   let fingerprints;
   try {
-    fingerprints = await toolFingerprints(browser);
+    fingerprints = fingerprintsOverride ?? await toolFingerprints(browser);
     const page = await browser.newPage({ viewport: output });
     for (const [slug, garment] of Object.entries(garments)) {
       const masterBytes = await readFile(path.join(siteRoot, garment.master.path));
       records[slug] = { master: garment.master, approvedHero: garment.approvedHero, views: {} };
       for (const [role, view] of Object.entries(garment.views)) {
+        let baseBytes;
+        let baseRepair;
+        let baseRepairChangedPixelMask;
+        if (view.baseRepair) {
+          const repaired = await repairMacroBase(path.join(siteRoot, view.baseRepair.source.path), view.baseRepair);
+          if (sha256(repaired.bytes) !== view.base.sha256) throw new Error(`repaired base hash mismatch: ${slug}/${role}`);
+          const baseFile = addArtifact(view.base.path);
+          await writeAtomic(baseFile, repaired.bytes);
+          baseBytes = repaired.bytes;
+          baseRepairChangedPixelMask = repaired.changedPixelMask;
+          baseRepair = { ...view.baseRepair, changedPixels: repaired.changedPixels };
+        } else {
+          baseBytes = await readFile(path.join(siteRoot, view.base.path));
+        }
         const artworkToOutput = homography(sourceCorners, view.artworkQuad);
         const rendered = await renderPixels(page, {
-          baseBytes: await readFile(path.join(siteRoot, view.base.path)),
+          baseBytes,
           masterBytes,
           artworkToOutput,
           view
@@ -449,6 +712,20 @@ const buildStagedBundle = async (stageRoot) => {
         const renderBytes = decodeDataUrl(rendered.render);
         const garmentMaskBytes = decodeDataUrl(rendered.garmentMask);
         const artworkMaskBytes = decodeDataUrl(rendered.artworkMask);
+        if (baseRepair) {
+          const artworkMaskPixels = await sharp(artworkMaskBytes).greyscale().raw().toBuffer();
+          let changedOutsideFinalArtworkMaskPixels = 0;
+          for (let pixel = 0; pixel < baseRepairChangedPixelMask.length; pixel += 1) {
+            if (baseRepairChangedPixelMask[pixel] !== 0 && artworkMaskPixels[pixel] === 0) {
+              changedOutsideFinalArtworkMaskPixels += 1;
+            }
+          }
+          baseRepair = {
+            ...baseRepair,
+            changedOutsideFinalArtworkMaskPixels,
+            outsideRepairBoundsChangedPixels: 0
+          };
+        }
         const sourceRenderFile = addArtifact(view.sourceRenderPath);
         const garmentMaskFile = addArtifact(view.garmentMaskPath);
         const artworkMaskFile = addArtifact(view.artworkMaskPath);
@@ -456,12 +733,18 @@ const buildStagedBundle = async (stageRoot) => {
         await writeAtomic(sourceRenderFile, renderBytes);
         await writeAtomic(garmentMaskFile, garmentMaskBytes);
         await writeAtomic(artworkMaskFile, artworkMaskBytes);
-        await encodeWebp(sourceRenderFile, publicFile);
+        if (publicExports === "copy") {
+          await mkdir(path.dirname(publicFile), { recursive: true });
+          await copyFile(path.join(siteRoot, view.publicPath), publicFile);
+        } else {
+          await encodeWebp(sourceRenderFile, publicFile);
+        }
 
         records[slug].views[role] = {
           publicPath: view.publicPath,
           output,
           base: view.base,
+          ...(baseRepair ? { baseRepair } : {}),
           sourceRender: {
             ...asset(view.sourceRenderPath, sha256(renderBytes)),
             pixelSha256: await decodedRgbaSha256(sourceRenderFile)
@@ -480,12 +763,20 @@ const buildStagedBundle = async (stageRoot) => {
             artworkBlendMode: view.artworkBlendMode,
             artworkOpacity: view.artworkOpacity,
             textureReturnOpacity: view.textureReturnOpacity,
-            textureReturnClip: "artworkQuad"
+            textureReturnClip: view.textureReturnClip
           },
           sourceCorners,
           surfaceAnchors: view.surfaceAnchors,
           artworkQuad: view.artworkQuad,
           artworkToOutput,
+          appliedArtworkBounds: rendered.appliedArtworkBounds,
+          appliedArtworkCentroid: rendered.appliedArtworkCentroid,
+          heroRelative: heroRelativeRegistration(
+            garment,
+            rendered.appliedArtworkBounds,
+            rendered.appliedArtworkCentroid
+          ),
+          outsideAppliedArtworkMask: rendered.outsideAppliedArtworkMask,
           outputSha256: await fileSha256(publicFile),
           outputPixelSha256: await decodedRgbaSha256(publicFile),
           encoder
@@ -495,6 +786,10 @@ const buildStagedBundle = async (stageRoot) => {
   } finally {
     await browser.close();
   }
+
+  const contactSheetFile = addArtifact(contactSheetPath);
+  await renderContactSheet(stageRoot, contactSheetFile);
+  const contactSheetBytes = await readFile(contactSheetFile);
 
   const registration = {
     schemaVersion: 2,
@@ -508,11 +803,21 @@ const buildStagedBundle = async (stageRoot) => {
       path: "tools/render-apparel-registration.mjs",
       method: "inverse-homography bilinear RGBA composition",
       publicEncoder: encoder,
+      pixelDecoder: "sharp raw RGBA",
       pixelDeterministic: true,
       encodedBytesDeterministic: false,
       fingerprints
     },
-    garments: records
+    garments: records,
+    visualQa: {
+      reviewMethod: "hero / print macro / worn-or-on-body contact sheet",
+      layout: "t-shirt hero / print macro / on-body; hoodie hero / print macro / worn-rear",
+      contactSheet: {
+        ...asset(contactSheetPath, sha256(contactSheetBytes)),
+        pixelSha256: await decodedRgbaSha256(contactSheetFile),
+        ...contactSheetOutput
+      }
+    }
   };
   const stagedRegistrationFile = addArtifact(path.relative(siteRoot, registrationPath));
   await writeAtomic(stagedRegistrationFile, Buffer.from(`${JSON.stringify(registration, null, 2)}\n`, "utf8"));
@@ -526,13 +831,20 @@ const assertRegistrationContract = (registration) => {
     throw new Error("renderer must not claim cross-platform encoded byte determinism");
   }
   const fingerprints = registration.renderer?.fingerprints;
-  if (!fingerprints?.playwright || !fingerprints.chromium || !fingerprints.ffmpeg || !fingerprints.ffmpegVersionSha256) {
+  if (registration.renderer?.pixelDecoder !== "sharp raw RGBA"
+    || !fingerprints?.playwright
+    || !fingerprints.chromium
+    || !fingerprints.sharp
+    || !fingerprints.ffmpeg
+    || !fingerprints.ffmpegVersionSha256) {
     throw new Error("renderer fingerprints are incomplete");
   }
+  const repairViews = [];
   for (const [slug, garment] of Object.entries(garments)) {
     const record = registration.garments?.[slug];
     if (!record) throw new Error(`missing garment registration: ${slug}`);
     if (JSON.stringify(record.master) !== JSON.stringify(garment.master)) throw new Error(`master registration drift: ${slug}`);
+    if (JSON.stringify(record.approvedHero) !== JSON.stringify(garment.approvedHero)) throw new Error(`approved hero registration drift: ${slug}`);
     for (const [role, view] of Object.entries(garment.views)) {
       const registered = record.views?.[role];
       if (!registered) throw new Error(`missing view registration: ${slug}/${role}`);
@@ -546,13 +858,48 @@ const assertRegistrationContract = (registration) => {
       if (JSON.stringify(registered.artworkQuad) !== JSON.stringify(view.artworkQuad)) {
         throw new Error(`artwork quad drift: ${slug}/${role}`);
       }
+      if (JSON.stringify(registered.heroRelative) !== JSON.stringify(heroRelativeRegistration(
+        garment,
+        registered.appliedArtworkBounds,
+        registered.appliedArtworkCentroid
+      ))) {
+        throw new Error(`hero-relative registration drift: ${slug}/${role}`);
+      }
+      const visibleBounds = registered.appliedArtworkBounds;
+      if (!visibleBounds || visibleBounds.width <= 0 || visibleBounds.height <= 0) {
+        throw new Error(`applied artwork bounds are missing: ${slug}/${role}`);
+      }
+      const visibleCentroid = registered.appliedArtworkCentroid;
+      if (!visibleCentroid || !Number.isFinite(visibleCentroid.x) || !Number.isFinite(visibleCentroid.y)) {
+        throw new Error(`applied artwork centroid is missing: ${slug}/${role}`);
+      }
+      if (registered.outsideAppliedArtworkMask?.changedPixels !== 0) {
+        throw new Error(`source render changed outside applied artwork mask: ${slug}/${role}`);
+      }
+      if (Boolean(registered.baseRepair) !== Boolean(view.baseRepair)) {
+        throw new Error(`unauthorized base repair registration: ${slug}/${role}`);
+      }
+      if (registered.baseRepair) repairViews.push(`${slug}/${role}`);
+      if (view.baseRepair && JSON.stringify(registered.baseRepair) !== JSON.stringify({
+        ...view.baseRepair,
+        changedPixels: registered.baseRepair?.changedPixels,
+        changedOutsideFinalArtworkMaskPixels: registered.baseRepair?.changedOutsideFinalArtworkMaskPixels,
+        outsideRepairBoundsChangedPixels: 0
+      })) throw new Error(`base repair registration drift: ${slug}/${role}`);
     }
   }
+  if (JSON.stringify(repairViews) !== JSON.stringify(["hoodie/print-macro"])) {
+    throw new Error("only hoodie/print-macro may declare a blank-base repair");
+  }
+  if (registration.visualQa?.reviewMethod !== "hero / print macro / worn-or-on-body contact sheet") {
+    throw new Error("apparel visual QA review method drifted");
+  }
+  if (registration.visualQa?.contactSheet?.path !== contactSheetPath) throw new Error("apparel contact sheet path drifted");
 };
 
 const validateStagedBundle = async ({ artifacts, registration, stageRoot }) => {
   assertRegistrationContract(registration);
-  if (artifacts.length !== 17) throw new Error(`apparel registration bundle must stage 17 files; received ${artifacts.length}`);
+  if (artifacts.length !== 19) throw new Error(`apparel registration bundle must stage 19 files; received ${artifacts.length}`);
   const projectPaths = new Set();
   for (const artifact of artifacts) {
     if (projectPaths.has(artifact.projectPath)) throw new Error(`duplicate staged artifact: ${artifact.projectPath}`);
@@ -561,9 +908,15 @@ const validateStagedBundle = async ({ artifacts, registration, stageRoot }) => {
   }
   const stagedRegistration = JSON.parse(await readFile(path.join(stageRoot, path.relative(siteRoot, registrationPath)), "utf8"));
   if (JSON.stringify(stagedRegistration) !== JSON.stringify(registration)) throw new Error("staged registration JSON drifted");
+  await assertAssetAtRoot(stageRoot, registration.visualQa.contactSheet, contactSheetOutput);
+  const contactSheetPixelSha = await decodedRgbaSha256(path.join(stageRoot, registration.visualQa.contactSheet.path));
+  if (contactSheetPixelSha !== registration.visualQa.contactSheet.pixelSha256) {
+    throw new Error("staged contact sheet pixel hash mismatch");
+  }
 
   for (const [slug, garment] of Object.entries(registration.garments)) {
     for (const [role, view] of Object.entries(garment.views)) {
+      if (view.baseRepair) await assertAssetAtRoot(stageRoot, view.base, output);
       await assertAssetAtRoot(stageRoot, view.sourceRender, output);
       await assertAssetAtRoot(stageRoot, view.garmentMask, output);
       await assertAssetAtRoot(stageRoot, view.appliedArtworkMask, output);
@@ -577,6 +930,15 @@ const validateStagedBundle = async ({ artifacts, registration, stageRoot }) => {
       for (const [projectPath, expectedPixelSha, label] of checks) {
         const actualPixelSha = await decodedRgbaSha256(path.join(stageRoot, projectPath));
         if (actualPixelSha !== expectedPixelSha) throw new Error(`staged ${label} pixel hash mismatch: ${slug}/${role}`);
+      }
+      const artworkMaskPixels = await decodedRgba(path.join(stageRoot, view.appliedArtworkMask.path));
+      const actualBounds = pixelBounds(artworkMaskPixels, output, 4, 0);
+      if (JSON.stringify(actualBounds) !== JSON.stringify(view.appliedArtworkBounds)) {
+        throw new Error(`staged artwork bounds mismatch: ${slug}/${role}`);
+      }
+      const actualCentroid = pixelCentroid(artworkMaskPixels, output, 4, 0);
+      if (JSON.stringify(actualCentroid) !== JSON.stringify(view.appliedArtworkCentroid)) {
+        throw new Error(`staged artwork centroid mismatch: ${slug}/${role}`);
       }
     }
   }
@@ -663,9 +1025,23 @@ export const verifyApparelRegistration = async ({ registrationFile = registratio
   const committedRegistration = JSON.parse(await readFile(registrationFile, "utf8"));
   const stageRoot = await mkdtemp(path.join(siteRoot, ".apparel-registration-verify-"));
   try {
-    const stagedBundle = await buildStagedBundle(stageRoot);
+    const stagedBundle = await buildStagedBundle(stageRoot, {
+      publicExports: "copy",
+      fingerprintsOverride: committedRegistration.renderer.fingerprints
+    });
     await validateStagedBundle(stagedBundle);
     assertRegistrationContract(committedRegistration);
+    const committedContactSheet = committedRegistration.visualQa.contactSheet;
+    const stagedContactSheet = stagedBundle.registration.visualQa.contactSheet;
+    await assertAsset(committedContactSheet, contactSheetOutput);
+    await comparePixelArtifact({
+      committedFile: path.join(siteRoot, committedContactSheet.path),
+      committedPixelSha: committedContactSheet.pixelSha256,
+      stagedFile: path.join(stageRoot, stagedContactSheet.path),
+      stagedPixelSha: stagedContactSheet.pixelSha256,
+      label: "contact sheet",
+      identity: "apparel"
+    });
     let count = 0;
     for (const [slug, garment] of Object.entries(garments)) {
       const committedGarment = committedRegistration.garments[slug];
@@ -677,6 +1053,11 @@ export const verifyApparelRegistration = async ({ registrationFile = registratio
         await assertAsset(committed.garmentMask, output);
         await assertAsset(committed.appliedArtworkMask, output);
         await assertAsset({ path: committed.publicPath, sha256: committed.outputSha256 }, output);
+        if (view.baseRepair) {
+          await assertAsset(committed.base, output);
+          await assertAssetAtRoot(stageRoot, staged.base, output);
+          if (committed.base.sha256 !== staged.base.sha256) throw new Error(`dry rerender repaired base mismatch: ${slug}/${role}`);
+        }
         await comparePixelArtifact({
           committedFile: path.join(siteRoot, committed.sourceRender.path),
           committedPixelSha: committed.sourceRender.pixelSha256,
@@ -711,6 +1092,21 @@ export const verifyApparelRegistration = async ({ registrationFile = registratio
         });
         if (JSON.stringify(committed.artworkToOutput) !== JSON.stringify(staged.artworkToOutput)) {
           throw new Error(`dry rerender homography mismatch: ${slug}/${role}`);
+        }
+        if (JSON.stringify(committed.appliedArtworkBounds) !== JSON.stringify(staged.appliedArtworkBounds)) {
+          throw new Error(`dry rerender artwork bounds mismatch: ${slug}/${role}`);
+        }
+        if (JSON.stringify(committed.appliedArtworkCentroid) !== JSON.stringify(staged.appliedArtworkCentroid)) {
+          throw new Error(`dry rerender artwork centroid mismatch: ${slug}/${role}`);
+        }
+        if (JSON.stringify(committed.outsideAppliedArtworkMask) !== JSON.stringify(staged.outsideAppliedArtworkMask)) {
+          throw new Error(`dry rerender outside-print preservation mismatch: ${slug}/${role}`);
+        }
+        if (JSON.stringify(committed.baseRepair) !== JSON.stringify(staged.baseRepair)) {
+          throw new Error(`dry rerender base repair mismatch: ${slug}/${role}`);
+        }
+        if (JSON.stringify(committed.heroRelative) !== JSON.stringify(staged.heroRelative)) {
+          throw new Error(`dry rerender hero-relative registration mismatch: ${slug}/${role}`);
         }
         count += 1;
       }

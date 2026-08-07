@@ -10,11 +10,16 @@ const safeProjectPath = /^(?!\/)(?!.*(?:^|\/)\.\.(?:\/|$))(?![a-z][a-z0-9+.-]*:)
 const orbit = /^-?\d+(?:\.\d+)?deg \d+(?:\.\d+)?deg \d+(?:\.\d+)?%$/;
 const fieldOfView = /^(?:auto|\d+(?:\.\d+)?deg)$/;
 const cameraTarget = /^(?:auto|-?\d+(?:\.\d+)?m) (?:auto|-?\d+(?:\.\d+)?m) (?:auto|-?\d+(?:\.\d+)?m)$/;
-const sourceBlocked = new Map([
-  ["t-shirt", "assets/merch-360/t-shirt/manifest.json"],
-  ["hoodie", "assets/merch-360/hoodie/manifest.json"],
-  ["cap", "assets/merch-360/cap/manifest.json"]
+const apparelConceptModels = new Map([
+  ["t-shirt", "assets/merch-3d/t-shirt-001.glb"],
+  ["hoodie", "assets/merch-3d/hoodie-001.glb"],
+  ["cap", "assets/merch-3d/cap-001.glb"]
 ]);
+const conceptDisclosure = {
+  en: [/3D concept visualization/i, /not a manufacturing reference/i],
+  it: [/visualizzazione 3D concept/i, /non è un riferimento per la produzione/i],
+  ru: [/3D-визуализаци/i, /не является производственным эталоном/i]
+};
 
 const limitsFor = (slug) => {
   if (apparel.has(slug)) return { bytes: 4_000_000, triangles: 80_000, drawCalls: 20 };
@@ -29,23 +34,19 @@ const requireViewer = (object) => {
 
 test("declares one poster-first interactive viewer for every DROP 001 object", () => {
   assert.equal(library.objects.length, 11);
+  assert.equal(library.objects.filter(({ viewer }) => viewer.kind === "glb").length, 11, "DROP 001 must expose 11 GLB viewers");
+  assert.deepEqual(library.objects.filter(({ viewer }) => viewer.availability === "sourceBlocked"), [], "DROP 001 must expose zero blocked viewers");
   const sources = new Set();
   for (const object of library.objects) {
     const viewer = requireViewer(object);
-    assert.ok(["glb", "spin"].includes(viewer.kind), `${object.id}.viewer.kind must be glb or spin`);
+    assert.equal(viewer.kind, "glb", `${object.id}.viewer.kind must be glb`);
     assert.equal(viewer.poster, object.gallery[0].path, `${object.id} must reuse its approved hero as the no-JS poster`);
     assert.match(viewer.poster || "", safeProjectPath, `${object.id}.viewer.poster must be base-safe`);
     assert.match(viewer.src || "", safeProjectPath, `${object.id}.viewer.src must be base-safe`);
     assert.ok(!sources.has(viewer.src), `${object.id}.viewer.src must be unique`);
     sources.add(viewer.src);
 
-    if (sourceBlocked.has(object.slug)) {
-      assert.equal(viewer.availability, "sourceBlocked", `${object.id} must state that authoritative source evidence is blocked`);
-      assert.equal(viewer.kind, "spin", `${object.id} must reserve the honest physical-sample spin path`);
-      assert.equal(viewer.src, sourceBlocked.get(object.slug), `${object.id} must use the approved future spin asset key`);
-    } else {
-      assert.notEqual(viewer.availability, "sourceBlocked", `${object.id} must not inherit an apparel source block`);
-    }
+    assert.equal(viewer.availability, undefined, `${object.id} must not retain a source block`);
 
     if (viewer.kind === "glb") {
       assert.match(viewer.src, /^assets\/merch-3d\/[a-z0-9-]+\.glb$/);
@@ -58,9 +59,6 @@ test("declares one poster-first interactive viewer for every DROP 001 object", (
         assert.match(viewer.cameraTarget[profile] || "", cameraTarget, `${object.id} needs a deterministic ${profile} camera target`);
       }
       assert.equal(viewer.decoderPolicy, "uncompressed-only", `${object.id} must prohibit remote-decoder GLB extensions`);
-    } else {
-      assert.ok(apparel.has(object.slug), `${object.id} may use spin360 only for apparel`);
-      assert.match(viewer.src, /^assets\/merch-360\/[a-z0-9-]+\/manifest\.json$/);
     }
   }
 });
@@ -75,6 +73,14 @@ test("binds the cassette viewer camera metadata to its governed desktop and mobi
   assert.deepEqual(cassette.viewer.cameraTarget, {
     desktop: "auto auto auto",
     mobile: "auto 0.078m auto"
+  });
+});
+
+test("limits the hoodie viewer to the approved catalog orbit", () => {
+  const hoodie = library.objects.find(({ slug }) => slug === "hoodie");
+  assert.deepEqual(hoodie.viewer.orbitLimits, {
+    min: "auto 68deg auto",
+    max: "auto 98deg auto"
   });
 });
 
@@ -112,11 +118,15 @@ test("keeps declared viewer budgets inside the approved product-class ceilings",
   }
 });
 
-test("never publishes synthetic apparel spin evidence while physical sources are blocked", () => {
-  for (const object of library.objects.filter(({ slug }) => sourceBlocked.has(slug))) {
-    assert.equal(object.viewer.availability, "sourceBlocked");
-    assert.equal(object.viewer.kind, "spin");
-    assert.equal(object.viewer.budget.mobileFrames, 24);
-    assert.equal(object.viewer.budget.desktopFrames, 36);
+test("discloses all three apparel GLBs as concept visualizations rather than manufacturing references", () => {
+  assert.equal(apparelConceptModels.size, 3);
+  for (const [slug, src] of apparelConceptModels) {
+    const object = library.objects.find((entry) => entry.slug === slug);
+    assert.equal(object.viewer.kind, "glb");
+    assert.equal(object.viewer.src, src);
+    assert.equal(object.viewer.availability, undefined);
+    for (const locale of locales) {
+      for (const pattern of conceptDisclosure[locale]) assert.match(object.viewer.alt[locale], pattern, `${slug} ${locale} concept disclosure`);
+    }
   }
 });
