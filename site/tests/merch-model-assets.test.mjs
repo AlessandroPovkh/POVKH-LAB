@@ -17,6 +17,7 @@ test("pins the audited local model build and validation toolchain", async () => 
   assert.equal(packageJson.devDependencies?.["@gltf-transform/functions"], "4.4.2");
   assert.equal(packageJson.devDependencies?.["gltf-validator"], "2.0.0-dev.3.10");
   assert.equal(packageJson.devDependencies?.sharp, "0.35.3");
+  assert.equal(packageJson.engines?.node, ">=22");
   assert.equal(
     packageJson.scripts?.["test:merch-model-builds"],
     "node --test tools/merch-3d/*.test.mjs"

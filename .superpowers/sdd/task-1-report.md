@@ -67,7 +67,7 @@ The existing apparel renderer regenerated four public WebPs, four governed sourc
 
 Fresh final run:
 
-- `npm run test:merch-registration` — 9/9 passed; includes a full dry rerender and pixel comparison of all four public images, source renders, masks, bounds, homographies, and the contact sheet.
+- `npm run test:merch-registration` — 9/9 passed; dry-rerenders and pixel-compares the lossless source composites, masks and contact sheet, while each approved public WebP is copied into an isolated verification stage and checked against independently pinned encoded-byte and decoded-pixel hashes.
 - `npm run test:merch-assets` — 2/2 passed.
 - `npm run test:merch-pages` — 2/2 passed.
 - `npm run test:merch` — 11/11 passed.

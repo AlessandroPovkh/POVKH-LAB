@@ -37,6 +37,7 @@ const coverage = [
   { slug: "vinyl", assetKey: "vinyl-001", route: "/merch/vinyl/", modelPath: "assets/merch-3d/vinyl-001.glb" },
   { slug: "cd", assetKey: "disc-004", route: "/merch/cd/", modelPath: "assets/merch-3d/disc-004.glb" },
   { slug: "cassette", assetKey: "cassette-002", route: "/merch/cassette/", modelPath: "assets/merch-3d/cassette-002.glb" },
+  { slug: "cap", assetKey: "cap-001", route: "/merch/cap/", modelPath: "assets/merch-3d/cap-001.glb" },
   { slug: "zine-booklet", assetKey: "zine-001", route: "/merch/zine-booklet/", modelPath: "assets/merch-3d/zine-001.glb" }
 ];
 const recommendedCiGates = {
@@ -76,6 +77,18 @@ const recommendedCiGates = {
       maxDragP95FrameIntervalMs: 75,
       maxDragLongTaskCount: 5,
       maxDragLongTaskTotalMs: 250,
+      minOrbitDeltaRad: 0.1
+    },
+    cap: {
+      maxColdClickToReadyMs: 8_000,
+      maxFirstPartyTransferredBytes: 2_500_000,
+      minVisiblePixels: 50_000,
+      maxActivationLongTaskCount: 5,
+      maxActivationLongTaskTotalMs: 2_500,
+      minDragFramesPerSecond: 24,
+      maxDragP95FrameIntervalMs: 90,
+      maxDragLongTaskCount: 12,
+      maxDragLongTaskTotalMs: 700,
       minOrbitDeltaRad: 0.1
     },
     "zine-booklet": {
@@ -574,7 +587,10 @@ const runBenchmark = async () => {
   const largestReviewedAsset = assetCoverage.reduce((largest, asset) => asset.modelBytes > largest.modelBytes ? asset : largest);
   const smallestReviewedFlatAsset = assetCoverage.find(({ slug }) => slug === "zine-booklet");
   assert.ok(smallestReviewedFlatAsset, "zine performance sentinel is missing");
-  const sampled = [largestReviewedAsset, smallestReviewedFlatAsset];
+  const apparelSentinel = assetCoverage.find(({ slug }) => slug === "cap");
+  assert.ok(apparelSentinel, "cap apparel performance sentinel is missing");
+  const sampled = [largestReviewedAsset, apparelSentinel, smallestReviewedFlatAsset]
+    .filter((asset, index, assets) => assets.findIndex(({ slug }) => slug === asset.slug) === index);
   const preactivationChecks = [];
   for (const asset of coverage) preactivationChecks.push(await posterOnlyCheck(asset));
   const policyChecks = {
@@ -591,7 +607,11 @@ const runBenchmark = async () => {
       assetKey: asset.assetKey,
       modelPath: asset.modelPath,
       modelBytes,
-      sampleRole: asset.slug === largestReviewedAsset.slug ? "largest-reviewed-model" : "smallest-reviewed-flat-model",
+      sampleRole: asset.slug === largestReviewedAsset.slug
+        ? "largest-reviewed-model"
+        : asset.slug === apparelSentinel.slug
+          ? "apparel-sentinel"
+          : "smallest-reviewed-flat-model",
       samples,
       summary: summarize(samples)
     });
@@ -646,13 +666,13 @@ const assertReportShape = (report) => {
   assert.equal(report.environment.emulation.cpuSlowdownMultiplier, 4);
   assert.match(report.environment.caveat, /emulation.*physical Android/i);
   assert.deepEqual(Object.keys(report.policyChecks).sort(), ["reducedMotion", "saveData"]);
-  assert.equal(report.assetCoverage.length, 4);
-  assert.equal(report.preactivationChecks.length, 4);
-  assert.equal(report.assets.length, 2);
+  assert.equal(report.assetCoverage.length, 5);
+  assert.equal(report.preactivationChecks.length, 5);
+  assert.equal(report.assets.length, 3);
 
   for (const asset of report.assets) {
     const largest = report.assetCoverage.reduce((current, candidate) => candidate.modelBytes > current.modelBytes ? candidate : current);
-    assert.ok([largest.slug, "zine-booklet"].includes(asset.slug));
+    assert.ok([largest.slug, "cap", "zine-booklet"].includes(asset.slug));
     assert.equal(asset.samples.length >= 3, true);
     assert.ok(finite(asset.modelBytes) && asset.modelBytes > 0);
     for (const sample of asset.samples) {

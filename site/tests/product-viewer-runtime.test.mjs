@@ -41,7 +41,9 @@ test("accepts only an exact optional min/max orbit-limit pair", async () => {
   for (const orbitLimits of [
     { min: "auto 68deg auto" },
     { min: "auto 68deg auto", max: "auto 98deg auto", extra: "auto" },
-    { min: "68", max: "auto 98deg auto" }
+    { min: "68", max: "auto 98deg auto" },
+    { min: "auto 98deg auto", max: "auto 68deg auto" },
+    { min: "auto 68deg 100%", max: "auto 98deg 1m" }
   ]) {
     const invalid = structuredClone(registry);
     invalid.objects.find(({ slug }) => slug === "hoodie").viewer.orbitLimits = orbitLimits;

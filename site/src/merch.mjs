@@ -60,6 +60,13 @@ const exactKeySet = (value, keys) => JSON.stringify(Object.keys(value || {}).sor
 const CAMERA_PROFILES = ["desktop", "mobile"];
 const cameraOrbit = (value) => /^-?\d+(?:\.\d+)?deg \d+(?:\.\d+)?deg \d+(?:\.\d+)?%$/.test(value || "");
 const cameraOrbitLimit = (value) => /^(?:auto|-?\d+(?:\.\d+)?deg) (?:auto|\d+(?:\.\d+)?deg) (?:auto|\d+(?:\.\d+)?(?:%|m))$/.test(value || "");
+const comparableOrbitLimits = (minimum, maximum) => minimum.split(" ").every((minimumToken, axis) => {
+  const maximumToken = maximum.split(" ")[axis];
+  if (minimumToken === "auto" || maximumToken === "auto") return true;
+  const minimumValue = minimumToken.match(/^(-?\d+(?:\.\d+)?)(deg|%|m)$/);
+  const maximumValue = maximumToken.match(/^(-?\d+(?:\.\d+)?)(deg|%|m)$/);
+  return minimumValue?.[2] === maximumValue?.[2] && Number(minimumValue[1]) <= Number(maximumValue[1]);
+});
 const fieldOfView = (value) => /^(?:auto|\d+(?:\.\d+)?deg)$/.test(value || "");
 const cameraTarget = (value) => /^(?:auto|-?\d+(?:\.\d+)?m) (?:auto|-?\d+(?:\.\d+)?m) (?:auto|-?\d+(?:\.\d+)?m)$/.test(value || "");
 
@@ -109,7 +116,8 @@ const validateViewer = (object) => {
     if (viewer.orbitLimits !== undefined
       && (!exactKeySet(viewer.orbitLimits, ["min", "max"])
         || !cameraOrbitLimit(viewer.orbitLimits.min)
-        || !cameraOrbitLimit(viewer.orbitLimits.max))) {
+        || !cameraOrbitLimit(viewer.orbitLimits.max)
+        || !comparableOrbitLimits(viewer.orbitLimits.min, viewer.orbitLimits.max))) {
       throw new Error(`${object.id} viewer orbit limits must use exact min max camera-orbit syntax`);
     }
     if (!exactKeySet(viewer.budget, ["bytes", "triangles", "drawCalls"])

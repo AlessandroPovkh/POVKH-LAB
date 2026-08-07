@@ -346,18 +346,18 @@
     "hints": 0
   },
   "budget": {
-    "triangles": 38090,
+    "triangles": 13230,
     "drawCalls": 19,
-    "bytes": 3565776,
+    "bytes": 832856,
     "ceilings": {
-      "maxBytes": 4000000,
-      "maxTriangles": 80000,
+      "maxBytes": 1250000,
+      "maxTriangles": 30000,
       "maxDrawCalls": 20
     }
   },
   "output": {
     "path": "assets/merch-3d/cap-001.glb",
-    "sha256": "2c52d94ecff7fa083f22afc0d7fb06db6bda764ede10b075fed2c23621fd84a3"
+    "sha256": "d0a2b9c535ffaa9f9d4b236b2a07b0447fb20ae93bebf72baf1eaae05aa213f4"
   },
   "deterministic": {
     "verifiedBySecondInMemoryBuild": true

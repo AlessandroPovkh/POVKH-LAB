@@ -35,7 +35,7 @@
 
 - Copied only the two locked 1600×600 artwork masters and four 1536×1024 blank apparel bases into the governed registration fixture; all six source SHA-256 values match the read-only authority.
 - `npm run assets:apparel-registration` stages and validates all four source PNGs, eight masks, four q88 metadata-stripped public WebPs and the JSON registration before backup-backed atomic publication.
-- `--verify` now performs a real dry rerender and compares decoded RGBA pixel hashes for all PNGs, masks and regenerated q88 WebPs; encoded-byte reproducibility is explicitly not claimed across toolchains.
+- `--verify` dry-rerenders the lossless source composites, masks and contact sheet, then copies each approved q88 WebP into an isolated verification stage and independently checks both its pinned encoded-byte hash and its pinned `sharp`-decoded RGBA pixel hash; cross-toolchain WebP re-encoding reproducibility is explicitly not claimed.
 - Provenance records the actual Playwright, Chromium and ffmpeg fingerprints used for the governed bundle.
 - A second complete render plus dry verification passed without changing any governed image bytes.
 - `npm run test:merch-registration` — passed 7/7, including stale-pixel rejection and injected rename-failure rollback.
@@ -72,6 +72,8 @@
 - Full QA covered 1,050 route/viewport cases, 450 failed-font typography cases, 300 axe checks, three languages, Chromium and WebKit, keyboard/touch/no-JS, audio/video ranges, reduced motion, Save-Data, print, redirects, localized 404s and security headers.
 - A production build with the GitHub Pages base path `/POVKH-LAB` passed both static checking and 9,039 local-reference checks across 153 pages.
 - The opt-in emulated mobile benchmark passed all four governed scenarios with zero context losses and no third-party or eager 3D requests. It remains explicitly non-substitutive for physical Android validation.
+- The cap sentinel is now represented by three cold Fast-4G / 4x-CPU browser samples. Its shared indexed crown reduced the release GLB from 3,565,776 bytes / 38,090 triangles to 832,856 bytes / 13,230 triangles while preserving the six-panel silhouette and open rear topology in regenerated browser evidence.
+- The uncompressed local-server emulation still does not satisfy the 2.5 s / 50 fps / zero-drag-long-task production target (nor does the lightweight zine sentinel), so the report retains an explicit emulation-fail status until CDN-delivery and physical-Android measurements exist; no release-pass claim is inferred from the diagnostic suite.
 - Deferred release-quality evidence is limited to physical Android measurements and real garment geometry; neither is represented as complete.
 - A fresh current-branch `npm test` passed end-to-end after the hoodie catalog-orbit integration: merch 11/11, merch assets 2/2, merch pages 2/2, social links 7/7, workflow 1/1, apparel registration 9/9, motion 5 passed / 1 expected toolchain skip, viewer contract 6/6, viewer runtime 9/9, camera browser 4/4, catalog browser 2/2, model assets 5/5, deterministic model builds 43/43 and interface hierarchy 4/4.
 - The same run built 345 exact files, statically checked 153 localized pages and passed final browser QA across 1,050 route/viewport cases, 450 failed-font typography cases and 300 axe scans.

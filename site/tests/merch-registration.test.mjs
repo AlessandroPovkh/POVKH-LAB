@@ -36,6 +36,8 @@ const expectedGarments = Object.freeze({
     views: {
       "print-macro": {
         publicPath: "assets/merch/t-shirt-print-macro.webp",
+        outputSha256: "51714a5874b253208404d5a4fe5efc2b9f48db998cb46c8a0fc664e16f672c49",
+        outputPixelSha256: "a6b32ac1a0c45808c5b55b264933efcd66761167251769e677fe51e19ef8461b",
         artworkQuad: [[380, 340], [1156, 347], [1152, 638], [384, 631]],
         surfaceAnchors: [[150, 180], [1400, 190], [1390, 820], [160, 810]],
         heroRelative: {
@@ -46,6 +48,8 @@ const expectedGarments = Object.freeze({
       },
       "on-body": {
         publicPath: "assets/merch/t-shirt-on-body.webp",
+        outputSha256: "03be6aace4cc45c99f54d4e90f9f95d3afd60d8d1f9e9141b9e1e241cd0b4239",
+        outputPixelSha256: "2c54cd0d02e09ef5a843d9ad0b01e926171a75cff789884b5b04c54cb40b81eb",
         artworkQuad: [[598, 327], [938, 327], [930, 455], [604, 455]],
         surfaceAnchors: [[480, 235], [1055, 235], [1025, 700], [510, 700]],
         heroRelative: {
@@ -75,6 +79,8 @@ const expectedGarments = Object.freeze({
     views: {
       "print-macro": {
         publicPath: "assets/merch/hoodie-print-macro.webp",
+        outputSha256: "63c3a21c90ed11286e1e34e561858038d079236aa445204fc2328277a0cea89a",
+        outputPixelSha256: "a3772ae9a1a3d83cbcb3c756c9a2dd6e827dbb7d5085eaa2be25627bb062f528",
         artworkQuad: [[357, 339], [1177, 347], [1173, 653], [357, 645]],
         surfaceAnchors: [[140, 170], [1400, 180], [1390, 820], [150, 810]],
         heroRelative: {
@@ -85,6 +91,8 @@ const expectedGarments = Object.freeze({
       },
       "worn-rear": {
         publicPath: "assets/merch/hoodie-worn-rear.webp",
+        outputSha256: "27b04d86ea1071a8ec252a337245de861aca9b2806a04287cc74e4a721059248",
+        outputPixelSha256: "a4c6d1d86d71e73413f7ba86f80baf4b495d4d26a4672c9121e2f58ac661d04d",
         artworkQuad: [[593, 353], [923, 370], [916, 492], [593, 478]],
         surfaceAnchors: [[520, 300], [1005, 330], [980, 790], [550, 760]],
         heroRelative: {
@@ -354,6 +362,8 @@ test("declares an auditable surface quad, homography, garment mask and fabric la
     for (const [role, expectedView] of Object.entries(expected.views)) {
       const view = views[role];
       assert.equal(view.publicPath, expectedView.publicPath);
+      assert.equal(view.outputSha256, expectedView.outputSha256, `${slug}.${role} approved WebP bytes drifted from independent authority`);
+      assert.equal(view.outputPixelSha256, expectedView.outputPixelSha256, `${slug}.${role} approved decoded WebP pixels drifted from independent authority`);
       assert.deepEqual(view.output, { width: 1536, height: 1024 });
       await assertAssetReference(view.base, `${slug}.${role}.base`, view.output);
       await assertAssetReference(view.sourceRender, `${slug}.${role}.sourceRender`, view.output);
@@ -361,6 +371,8 @@ test("declares an auditable surface quad, homography, garment mask and fabric la
       await assertAssetReference(view.appliedArtworkMask, `${slug}.${role}.appliedArtworkMask`, view.output);
       await assertAssetReference(view.fabricModulation, `${slug}.${role}.fabricModulation`, view.output);
       await assertAssetReference({ path: view.publicPath, sha256: view.outputSha256 }, `${slug}.${role}.publicOutput`, view.output);
+      const approvedPublicPixels = await decodeRgba({ path: view.publicPath }, view.output);
+      assert.equal(createHash("sha256").update(approvedPublicPixels).digest("hex"), expectedView.outputPixelSha256, `${slug}.${role} approved decoded WebP pixels drifted from independent authority`);
       assert.match(view.sourceRender.pixelSha256 || "", sha256Pattern, `${slug}.${role}.sourceRender needs a decoded RGBA hash`);
       assert.match(view.garmentMask.pixelSha256 || "", sha256Pattern, `${slug}.${role}.garmentMask needs a decoded RGBA hash`);
       assert.match(view.appliedArtworkMask.pixelSha256 || "", sha256Pattern, `${slug}.${role}.appliedArtworkMask needs a decoded RGBA hash`);

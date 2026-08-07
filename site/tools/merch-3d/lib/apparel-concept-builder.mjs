@@ -1017,7 +1017,7 @@ const cylinderY = ({ centre, radius, height, segments = 24 }) => {
   return geometry;
 };
 
-const crownPanel = (panelIndex, { panels = 6, azimuthSegments = 60, verticalSegments = 48 } = {}) => {
+const crownPanel = (panelIndex, { panels = 6, azimuthSegments = 30, verticalSegments = 24 } = {}) => {
   const geometry = new Geometry();
   const radiusX = 0.125;
   const radiusZ = 0.120;
@@ -1033,28 +1033,38 @@ const crownPanel = (panelIndex, { panels = 6, azimuthSegments = 60, verticalSegm
   };
   const pointNormal = ([x, y, z]) => normalise([x / radiusX ** 2, (y - baseY) / height ** 2, z / radiusZ ** 2]);
   const topElevation = Math.PI / 2 * 0.94;
+  const vertices = Array.from({ length: verticalSegments + 1 }, (_, row) => {
+    const elevation = row / verticalSegments * topElevation;
+    return Array.from({ length: azimuthSegments + 1 }, (_, column) => {
+      const azimuth = start + (end - start) * column / azimuthSegments;
+      const position = point(azimuth, elevation);
+      return geometry.vertex(position, pointNormal(position), [column, row]);
+    });
+  });
   for (let row = 0; row < verticalSegments; row += 1) {
-    const e0 = row / verticalSegments * topElevation;
-    const e1 = (row + 1) / verticalSegments * topElevation;
     for (let column = 0; column < azimuthSegments; column += 1) {
-      const a0 = start + (end - start) * column / azimuthSegments;
-      const a1 = start + (end - start) * (column + 1) / azimuthSegments;
-      const points = [point(a0, e0), point(a1, e0), point(a1, e1), point(a0, e1)];
+      const points = [
+        geometry.position(vertices[row][column]),
+        geometry.position(vertices[row][column + 1]),
+        geometry.position(vertices[row + 1][column + 1]),
+        geometry.position(vertices[row + 1][column])
+      ];
       const triangleCentroids = [[0, 1, 2], [0, 2, 3]].map((corners) => corners.reduce((result, pointIndex) => result.map((value, axis) => value + points[pointIndex][axis] / 3), [0, 0, 0]));
       const rearAperture = triangleCentroids.some((sample) => sample[2] < -0.060
         && (sample[0] / 0.060) ** 2 + ((sample[1] - 0.115) / 0.052) ** 2 < 1);
       if (rearAperture) continue;
-      const vertices = points.map((entry, index) => geometry.vertex(entry, pointNormal(entry), [[0, 0], [1, 0], [1, 1], [0, 1]][index]));
-      geometry.indices.push(vertices[0], vertices[1], vertices[2], vertices[0], vertices[2], vertices[3]);
+      geometry.indexedQuad([
+        vertices[row][column],
+        vertices[row][column + 1],
+        vertices[row + 1][column + 1],
+        vertices[row + 1][column]
+      ]);
     }
   }
   const top = [0, baseY + height, 0];
+  const topVertex = geometry.vertex(top, [0, 1, 0], [azimuthSegments / 2, verticalSegments + 1]);
   for (let column = 0; column < azimuthSegments; column += 1) {
-    const a0 = start + (end - start) * column / azimuthSegments;
-    const a1 = start + (end - start) * (column + 1) / azimuthSegments;
-    const p0 = point(a0, topElevation);
-    const p1 = point(a1, topElevation);
-    geometry.triangle([p0, p1, top], [pointNormal(p0), pointNormal(p1), [0, 1, 0]]);
+    geometry.indexedTriangle([vertices[verticalSegments][column], vertices[verticalSegments][column + 1], topVertex]);
   }
   return geometry;
 };

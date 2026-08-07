@@ -593,7 +593,7 @@
           "it": "Visualizzazione 3D concept di un cappellino nero slavato con marchio esatto sulla patch; non è un riferimento per la produzione.",
           "ru": "Концептуальная 3D-визуализация чёрной кепки с точным знаком на нашивке; не является производственным эталоном."
         },
-        "budget": { "bytes": 4000000, "triangles": 80000, "drawCalls": 20 },
+        "budget": { "bytes": 1250000, "triangles": 30000, "drawCalls": 20 },
         "decoderPolicy": "uncompressed-only"
       },
       "releaseGate": {

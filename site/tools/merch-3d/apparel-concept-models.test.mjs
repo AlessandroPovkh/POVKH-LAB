@@ -523,6 +523,7 @@ for (const record of records) {
       for (const name of ["Hoodie_Draped_Shell", "Hoodie_Open_Hood_Shell"]) assert.equal(faceNormalAgreement(nodes.get(name)), 0, `${name} winding must agree with its vertex normals`);
     }
     if (record.assetKey === "cap-001") {
+      assert.ok(bytes.byteLength <= 1_250_000, `cap-001 must stay within the 1.25 MB Fast-4G delivery budget; got ${bytes.byteLength} bytes`);
       assert.equal(faceNormalAgreement(nodes.get("Cap_Curved_Brim")), 0, "cap brim winding must agree with its vertex normals");
       assert.equal(faceNormalAgreement(nodes.get("Cap_Top_Button")), 0, "cap button winding must agree with its vertex normals");
       assert.ok(distinctAxisValues(nodes.get("Cap_Panel_01"), 1) >= 9, "cap crown must have enough vertical sections for a smooth low-profile silhouette");

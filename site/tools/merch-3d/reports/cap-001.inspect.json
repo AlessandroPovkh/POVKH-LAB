@@ -17,9 +17,9 @@
             0.266,
             0.255
           ],
-          "renderVertexCount": 114270,
-          "uploadVertexCount": 76588,
-          "uploadNaiveVertexCount": 76588
+          "renderVertexCount": 39690,
+          "uploadVertexCount": 14368,
+          "uploadNaiveVertexCount": 14368
         }
       ]
     },
@@ -31,8 +31,8 @@
             "TRIANGLES"
           ],
           "meshPrimitives": 1,
-          "glPrimitives": 5820,
-          "vertices": 11700,
+          "glPrimitives": 1470,
+          "vertices": 776,
           "indices": [
             "u32"
           ],
@@ -43,7 +43,7 @@
             "TEXCOORD_0:f32"
           ],
           "instances": 1,
-          "size": 631440
+          "size": 54888
         },
         {
           "name": "Cap_Panel_02_Mesh",
@@ -51,8 +51,8 @@
             "TRIANGLES"
           ],
           "meshPrimitives": 1,
-          "glPrimitives": 5820,
-          "vertices": 11700,
+          "glPrimitives": 1470,
+          "vertices": 776,
           "indices": [
             "u32"
           ],
@@ -63,7 +63,7 @@
             "TEXCOORD_0:f32"
           ],
           "instances": 1,
-          "size": 631440
+          "size": 54888
         },
         {
           "name": "Cap_Panel_03_Mesh",
@@ -71,8 +71,8 @@
             "TRIANGLES"
           ],
           "meshPrimitives": 1,
-          "glPrimitives": 5820,
-          "vertices": 11700,
+          "glPrimitives": 1470,
+          "vertices": 776,
           "indices": [
             "u32"
           ],
@@ -83,7 +83,7 @@
             "TEXCOORD_0:f32"
           ],
           "instances": 1,
-          "size": 631440
+          "size": 54888
         },
         {
           "name": "Cap_Panel_04_Mesh",
@@ -91,8 +91,8 @@
             "TRIANGLES"
           ],
           "meshPrimitives": 1,
-          "glPrimitives": 4158,
-          "vertices": 8376,
+          "glPrimitives": 1048,
+          "vertices": 776,
           "indices": [
             "u32"
           ],
@@ -103,7 +103,7 @@
             "TEXCOORD_0:f32"
           ],
           "instances": 1,
-          "size": 451944
+          "size": 49824
         },
         {
           "name": "Cap_Panel_05_Mesh",
@@ -111,8 +111,8 @@
             "TRIANGLES"
           ],
           "meshPrimitives": 1,
-          "glPrimitives": 5820,
-          "vertices": 11700,
+          "glPrimitives": 1470,
+          "vertices": 776,
           "indices": [
             "u32"
           ],
@@ -123,7 +123,7 @@
             "TEXCOORD_0:f32"
           ],
           "instances": 1,
-          "size": 631440
+          "size": 54888
         },
         {
           "name": "Cap_Panel_06_Mesh",
@@ -131,8 +131,8 @@
             "TRIANGLES"
           ],
           "meshPrimitives": 1,
-          "glPrimitives": 5820,
-          "vertices": 11700,
+          "glPrimitives": 1470,
+          "vertices": 776,
           "indices": [
             "u32"
           ],
@@ -143,7 +143,7 @@
             "TEXCOORD_0:f32"
           ],
           "instances": 1,
-          "size": 631440
+          "size": 54888
         },
         {
           "name": "Cap_Crown_Seams_Mesh",

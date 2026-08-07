@@ -53,6 +53,6 @@
       "rear": { "orbit": "180deg 88deg 108%", "target": "auto 0.140m auto", "fieldOfView": "20deg" }
     }
   },
-  "budgets": { "maxBytes": 4000000, "maxTriangles": 80000, "maxDrawCalls": 20 },
+  "budgets": { "maxBytes": 1250000, "maxTriangles": 30000, "maxDrawCalls": 20 },
   "toolchain": { "gltfTransform": "4.4.2", "gltfValidator": "2.0.0-dev.3.10", "sharp": "0.35.3" }
 }
