@@ -1464,6 +1464,51 @@ const inventoryFor = (doc) => ({
   extensionsUsed: doc.getRoot().listExtensionsUsed().map((extension) => extension.extensionName)
 });
 
+const artifactDeltaFor = async (existingBytes, generatedBytes) => {
+  const io = new NodeIO();
+  const [existing, generated] = await Promise.all([
+    io.readBinary(existingBytes),
+    io.readBinary(generatedBytes)
+  ]);
+  const existingAccessors = new Map(existing.getRoot().listAccessors().map((accessor) => [accessor.getName(), accessor]));
+  const accessors = generated.getRoot().listAccessors().flatMap((accessor) => {
+    const prior = existingAccessors.get(accessor.getName());
+    if (!prior) return [{ name: accessor.getName(), state: "missing-from-checked-in" }];
+    const priorArray = prior.getArray();
+    const generatedArray = accessor.getArray();
+    const priorHash = sha256(Buffer.from(priorArray.buffer, priorArray.byteOffset, priorArray.byteLength));
+    const generatedHash = sha256(Buffer.from(generatedArray.buffer, generatedArray.byteOffset, generatedArray.byteLength));
+    if (priorHash === generatedHash) return [];
+    let changedElements = 0;
+    let maximumAbsoluteDelta = 0;
+    let firstDifference = null;
+    for (let index = 0; index < Math.min(priorArray.length, generatedArray.length); index += 1) {
+      if (Object.is(priorArray[index], generatedArray[index])) continue;
+      changedElements += 1;
+      maximumAbsoluteDelta = Math.max(maximumAbsoluteDelta, Math.abs(priorArray[index] - generatedArray[index]));
+      firstDifference ||= { index, checkedIn: priorArray[index], generated: generatedArray[index] };
+    }
+    return [{
+      name: accessor.getName(),
+      checkedInSha256: priorHash,
+      generatedSha256: generatedHash,
+      checkedInLength: priorArray.length,
+      generatedLength: generatedArray.length,
+      changedElements,
+      maximumAbsoluteDelta,
+      firstDifference
+    }];
+  });
+  const existingTextures = new Map(existing.getRoot().listTextures().map((texture) => [texture.getName(), texture]));
+  const textures = generated.getRoot().listTextures().flatMap((texture) => {
+    const prior = existingTextures.get(texture.getName());
+    const checkedInSha256 = prior?.getImage() ? sha256(prior.getImage()) : null;
+    const generatedSha256 = texture.getImage() ? sha256(texture.getImage()) : null;
+    return checkedInSha256 === generatedSha256 ? [] : [{ name: texture.getName(), checkedInSha256, generatedSha256 }];
+  });
+  return { accessors, textures };
+};
+
 const buildArtifact = async (assetKey) => {
   const sourcePath = path.join(toolsRoot, `${assetKey}.source.json`);
   const source = JSON.parse(await readFile(sourcePath, "utf8"));
@@ -1583,7 +1628,12 @@ export const runApparelConceptBuild = async (assetKey, { verifyOnly = process.ar
       readFile(validatorPath, "utf8").then(JSON.parse),
       readFile(inspectPath, "utf8").then(JSON.parse)
     ]);
-    assert.equal(sha256(existingBytes), sha256(artifact.bytes), `checked-in ${assetKey} GLB is stale`);
+    const existingSha256 = sha256(existingBytes);
+    const generatedSha256 = sha256(artifact.bytes);
+    if (existingSha256 !== generatedSha256) {
+      process.stderr.write(`${assetKey} cross-platform artifact delta: ${JSON.stringify(await artifactDeltaFor(existingBytes, artifact.bytes))}\n`);
+    }
+    assert.equal(existingSha256, generatedSha256, `checked-in ${assetKey} GLB is stale`);
     assert.deepEqual(existingReport, artifact.report, `checked-in ${assetKey} report is stale`);
     assert.deepEqual(existingValidator, artifact.validation, `checked-in ${assetKey} validator report is stale`);
     assert.deepEqual(existingInspection, artifact.inspection, `checked-in ${assetKey} inspection report is stale`);
