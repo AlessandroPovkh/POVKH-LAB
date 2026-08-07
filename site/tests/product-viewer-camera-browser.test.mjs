@@ -35,6 +35,18 @@ const governed = {
     target: "auto 0.078m auto"
   }
 };
+const governedHoodie = {
+  desktop: {
+    orbit: "155deg 78deg 118%",
+    theta: deg(155),
+    phi: deg(78),
+    fieldOfView: "24deg",
+    fieldOfViewNumber: 24,
+    target: "auto 0.590m auto"
+  },
+  minPhi: deg(68),
+  maxPhi: deg(98)
+};
 
 let app;
 let baseUrl;
@@ -148,6 +160,77 @@ const activateCassette = async (context, viewport) => {
   assert.equal(activationRequests.some((url) => new URL(url).origin !== baseUrl), false, "activation made a third-party request");
   return page;
 };
+
+const activateHoodie = async (context, viewport) => {
+  const page = await context.newPage();
+  await page.setViewportSize(viewport);
+  await page.goto(`${baseUrl}/merch/hoodie/`, { waitUntil: "load" });
+  await page.locator("[data-product-viewer-activate]").click();
+  await page.waitForFunction(() => document.querySelector("[data-product-viewer]")?.dataset.viewerState === "ready");
+  return page;
+};
+
+test("keeps hoodie horizontal orbit free, clamps vertical orbit, and resets the governed desktop profile", { timeout: 60_000 }, async () => {
+  const context = await browser.newContext({ reducedMotion: "no-preference" });
+  const page = await activateHoodie(context, { width: 1440, height: 1000 });
+  const viewer = page.locator("model-viewer");
+  assertCamera(await cameraState(page), governedHoodie.desktop);
+
+  const box = await viewer.boundingBox();
+  assert.ok(box && box.width > 480, "hoodie viewer must provide room for a 240px catalog drag");
+  const orbitStart = {
+    x: box.x + box.width * 0.4,
+    y: box.y + box.height * 0.45
+  };
+  const orbitHit = await viewer.evaluate((model, point) => {
+    const hit = model.shadowRoot?.elementFromPoint(point.x, point.y);
+    return {
+      id: hit?.id || "",
+      className: hit?.className || "",
+      reachesUserInput: Boolean(model.shadowRoot?.querySelector(".userInput")?.contains(hit))
+    };
+  }, orbitStart);
+  assert.equal(orbitHit.reachesUserInput, true, `hoodie drag must reach the orbit input surface: ${JSON.stringify(orbitHit)}`);
+  assert.notEqual(orbitHit.id, "default-pan-target", `hoodie drag must not hit the pan target: ${JSON.stringify(orbitHit)}`);
+  const initialTheta = (await cameraState(page)).orbit.theta;
+  await page.mouse.move(orbitStart.x, orbitStart.y);
+  await page.mouse.down();
+  await page.mouse.move(orbitStart.x + 240, orbitStart.y, { steps: 20 });
+  await page.mouse.up();
+  await waitForCameraIdle(page);
+  const horizontal = await cameraState(page);
+  const thetaDelta = Math.abs(Math.atan2(
+    Math.sin(horizontal.orbit.theta - initialTheta),
+    Math.cos(horizontal.orbit.theta - initialTheta)
+  ));
+  assert.ok(thetaDelta > 0.25, `240px horizontal drag must change theta by more than 0.25 rad; received ${thetaDelta}`);
+
+  const settledPhi = [];
+  for (const verticalDelta of [-600, 600]) {
+    await page.mouse.move(orbitStart.x, orbitStart.y);
+    await page.mouse.down();
+    await page.mouse.move(orbitStart.x, orbitStart.y + verticalDelta, { steps: 30 });
+    await page.mouse.up();
+    await waitForCameraIdle(page);
+    settledPhi.push((await cameraState(page)).orbit.phi);
+  }
+  for (const phi of settledPhi) {
+    assert.ok(
+      phi >= governedHoodie.minPhi - 0.01 && phi <= governedHoodie.maxPhi + 0.01,
+      `hoodie phi must settle inside 68deg-98deg; received ${phi}`
+    );
+  }
+
+  await page.locator("[data-product-viewer-reset]").click();
+  await page.waitForFunction((profile) => {
+    const model = document.querySelector("model-viewer");
+    return model?.getAttribute("camera-orbit") === profile.orbit
+      && Math.abs(model.getCameraOrbit().theta - profile.theta) < 0.002
+      && Math.abs(model.getCameraOrbit().phi - profile.phi) < 0.002;
+  }, governedHoodie.desktop);
+  assertCamera(await cameraState(page), governedHoodie.desktop);
+  await context.close();
+});
 
 test("applies governed desktop metadata, preserves pointer orbit on mobile switch, and resets the current profile", { timeout: 60_000 }, async () => {
   const context = await browser.newContext({ reducedMotion: "no-preference" });
