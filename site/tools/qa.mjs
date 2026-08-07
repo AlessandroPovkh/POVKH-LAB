@@ -1521,7 +1521,10 @@ try {
   await audioPage.keyboard.press("Escape");
   await audioPage.locator("[data-player-toggle]").click();
   await audioPage.waitForFunction(() => document.querySelector("[data-audio-player]")?.dataset.playing === "true");
-  await audioPage.waitForTimeout(350);
+  await audioPage.waitForFunction(() => {
+    const audio = document.querySelector("[data-audio-engine]");
+    return audio && !audio.paused && audio.currentTime > 0;
+  }, null, { timeout: 5_000 });
   const playingAudio = await audioPage.evaluate(() => ({
     paused: document.querySelector("[data-audio-engine]")?.paused,
     currentTime: document.querySelector("[data-audio-engine]")?.currentTime,
