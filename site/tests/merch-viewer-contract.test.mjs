@@ -76,6 +76,14 @@ test("binds the cassette viewer camera metadata to its governed desktop and mobi
   });
 });
 
+test("limits the hoodie viewer to the approved catalog orbit", () => {
+  const hoodie = library.objects.find(({ slug }) => slug === "hoodie");
+  assert.deepEqual(hoodie.viewer.orbitLimits, {
+    min: "auto 68deg auto",
+    max: "auto 98deg auto"
+  });
+});
+
 test("provides concise EN / IT / RU alternative text for every viewer", () => {
   for (const object of library.objects) {
     const viewer = requireViewer(object);

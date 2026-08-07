@@ -59,6 +59,7 @@ const exactKeys = (value, keys) => JSON.stringify(Object.keys(value || {})) === 
 const exactKeySet = (value, keys) => JSON.stringify(Object.keys(value || {}).sort()) === JSON.stringify([...keys].sort());
 const CAMERA_PROFILES = ["desktop", "mobile"];
 const cameraOrbit = (value) => /^-?\d+(?:\.\d+)?deg \d+(?:\.\d+)?deg \d+(?:\.\d+)?%$/.test(value || "");
+const cameraOrbitLimit = (value) => /^(?:auto|-?\d+(?:\.\d+)?deg) (?:auto|\d+(?:\.\d+)?deg) (?:auto|\d+(?:\.\d+)?(?:%|m))$/.test(value || "");
 const fieldOfView = (value) => /^(?:auto|\d+(?:\.\d+)?deg)$/.test(value || "");
 const cameraTarget = (value) => /^(?:auto|-?\d+(?:\.\d+)?m) (?:auto|-?\d+(?:\.\d+)?m) (?:auto|-?\d+(?:\.\d+)?m)$/.test(value || "");
 
@@ -88,7 +89,7 @@ const validateViewer = (object) => {
     throw new Error(`${object.id} sourceBlocked availability is reserved for apparel spin sources`);
   }
   const keys = viewer.kind === "glb"
-    ? ["kind", "poster", "src", "cameraOrbit", "fieldOfView", "cameraTarget", "alt", "budget", "decoderPolicy"]
+    ? ["kind", "poster", "src", "cameraOrbit", "fieldOfView", "cameraTarget", "alt", "budget", "decoderPolicy", ...(viewer.orbitLimits === undefined ? [] : ["orbitLimits"])]
     : ["kind", "poster", "src", "alt", "budget", ...(sourceBlocked ? ["availability"] : [])];
   if (!exactKeySet(viewer, keys)) throw new Error(`${object.id} viewer must use the exact ${viewer.kind} contract`);
   if (viewer.poster !== object.gallery[0]?.path || !safeProjectPath(viewer.poster)) {
@@ -105,6 +106,12 @@ const validateViewer = (object) => {
     if (viewer.decoderPolicy !== "uncompressed-only") throw new Error(`${object.id} GLB decoder policy is invalid`);
     if (!/^assets\/merch-3d\/[a-z0-9-]+\.glb$/.test(viewer.src)) throw new Error(`${object.id} GLB source path is invalid`);
     validateCameraMetadata(object, viewer);
+    if (viewer.orbitLimits !== undefined
+      && (!exactKeySet(viewer.orbitLimits, ["min", "max"])
+        || !cameraOrbitLimit(viewer.orbitLimits.min)
+        || !cameraOrbitLimit(viewer.orbitLimits.max))) {
+      throw new Error(`${object.id} viewer orbit limits must use exact min max camera-orbit syntax`);
+    }
     if (!exactKeySet(viewer.budget, ["bytes", "triangles", "drawCalls"])
       || !Number.isInteger(viewer.budget.bytes) || viewer.budget.bytes < 1
       || !Number.isInteger(viewer.budget.triangles) || viewer.budget.triangles < 0

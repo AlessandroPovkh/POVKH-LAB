@@ -262,6 +262,10 @@ const activateModel = async (root, elements, routeSignal) => {
   };
   model.className = "product-viewer-model";
   model.setAttribute("camera-controls", "");
+  if (root.dataset.viewerMinCameraOrbit && root.dataset.viewerMaxCameraOrbit) {
+    model.setAttribute("min-camera-orbit", root.dataset.viewerMinCameraOrbit);
+    model.setAttribute("max-camera-orbit", root.dataset.viewerMaxCameraOrbit);
+  }
   model.setAttribute("touch-action", "pan-y");
   model.setAttribute("interaction-prompt", "none");
   model.setAttribute("loading", "eager");

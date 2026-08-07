@@ -515,6 +515,7 @@
         "cameraOrbit": { "desktop": "155deg 78deg 118%", "mobile": "162deg 80deg 110%" },
         "fieldOfView": { "desktop": "24deg", "mobile": "20deg" },
         "cameraTarget": { "desktop": "auto 0.590m auto", "mobile": "auto 0.630m auto" },
+        "orbitLimits": { "min": "auto 68deg auto", "max": "auto 98deg auto" },
         "alt": {
           "en": "3D concept visualization of a black hoodie with exact reverse artwork; not a manufacturing reference.",
           "it": "Visualizzazione 3D concept di una felpa nera con grafica posteriore esatta; non è un riferimento per la produzione.",
