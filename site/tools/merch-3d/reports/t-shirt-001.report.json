@@ -285,7 +285,7 @@
   },
   "output": {
     "path": "assets/merch-3d/t-shirt-001.glb",
-    "sha256": "2f28e7723b6458d780ea1b2cf6e89a44090be15216262344c948c8906f8f03ab"
+    "sha256": "0c022e2601d6f5c7fac2fb11fa629f8509cf37f79e7be190aea18911f1cb255b"
   },
   "deterministic": {
     "verifiedBySecondInMemoryBuild": true

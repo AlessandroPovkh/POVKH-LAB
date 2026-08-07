@@ -425,6 +425,10 @@ for (const record of records) {
     if (record.assetKey === "t-shirt-001") {
       const shell = nodes.get("T_Shirt_Draped_Shell");
       const shellBounds = getBounds(shell);
+      for (const attribute of ["NORMAL", "TANGENT"]) {
+        const values = shell.getMesh().listPrimitives()[0].getAttribute(attribute).getArray();
+        assert.equal(Array.from(values).filter((value) => value !== 0 && Math.abs(value) < 1e-12).length, 0, `t-shirt ${attribute} must canonicalize platform-dependent near-zero components`);
+      }
       assert.equal(connectedTriangleComponents(shell), 1, "t-shirt body, shoulders and sleeves must be one connected shell");
       assert.ok(distinctAxisValues(shell, 2) >= 8, "t-shirt shell must carry shaped cloth depth");
       const depthRatio = (shellBounds.max[2] - shellBounds.min[2]) / (shellBounds.max[0] - shellBounds.min[0]);

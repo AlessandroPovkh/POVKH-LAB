@@ -1250,6 +1250,7 @@ const artworkMaterialFor = async (doc, source) => {
 
 const primitiveFor = (doc, buffer, name, geometry, material) => {
   assert.ok(geometry.indices.length > 0, `${name} geometry is empty`);
+  const canonicalComponent = (value) => Math.abs(value) < 1e-12 ? 0 : value;
   const tangents = [];
   for (let offset = 0; offset < geometry.normals.length; offset += 3) {
     const normal = geometry.normals.slice(offset, offset + 3);
@@ -1259,11 +1260,11 @@ const primitiveFor = (doc, buffer, name, geometry, material) => {
       reference[2] * normal[0] - reference[0] * normal[2],
       reference[0] * normal[1] - reference[1] * normal[0]
     ]);
-    tangents.push(...tangent, 1);
+    tangents.push(...tangent.map(canonicalComponent), 1);
   }
   return doc.createPrimitive()
     .setAttribute("POSITION", doc.createAccessor(`${name}_POSITION`).setType("VEC3").setArray(new Float32Array(geometry.positions)).setBuffer(buffer))
-    .setAttribute("NORMAL", doc.createAccessor(`${name}_NORMAL`).setType("VEC3").setArray(new Float32Array(geometry.normals)).setBuffer(buffer))
+    .setAttribute("NORMAL", doc.createAccessor(`${name}_NORMAL`).setType("VEC3").setArray(new Float32Array(geometry.normals.map(canonicalComponent))).setBuffer(buffer))
     .setAttribute("TANGENT", doc.createAccessor(`${name}_TANGENT`).setType("VEC4").setArray(new Float32Array(tangents)).setBuffer(buffer))
     .setAttribute("TEXCOORD_0", doc.createAccessor(`${name}_TEXCOORD_0`).setType("VEC2").setArray(new Float32Array(geometry.uvs)).setBuffer(buffer))
     .setIndices(doc.createAccessor(`${name}_INDICES`).setType("SCALAR").setArray(new Uint32Array(geometry.indices)).setBuffer(buffer))

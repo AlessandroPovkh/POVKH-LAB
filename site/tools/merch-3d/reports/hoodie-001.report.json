@@ -289,7 +289,7 @@
   },
   "output": {
     "path": "assets/merch-3d/hoodie-001.glb",
-    "sha256": "1a49ffaa3a8429f4f51c9d01e9bd409d265ced46ab30e820666721ececfb563c"
+    "sha256": "6d3b10ad981fa39d06596f1cadff58d8337c79c7953d0be26a55d7bdfb85fcdf"
   },
   "deterministic": {
     "verifiedBySecondInMemoryBuild": true
