@@ -96,7 +96,7 @@ Routes:
 - `/merch/` and eleven `/merch/{slug}/` routes — the DROP 001 concept overview and non-commercial object galleries;
 - `/about/`, `/contact/`, `/press/` — label context, verified contact and approved press assets;
 - `/links/` — Access Terminal chooser for the label's verified external social channels;
-- `/download/` — Euclidean Echo 0.1.0 public-preview installers and two classified plugin slots.
+- `/download/` — Euclidean Echo 0.1.1 macOS Universal test-candidate archive and two classified plugin slots.
 
 The same 50 content routes exist below `/it/` and `/ru/`. The build also
 generates localized `404.html` pages and locale-specific web manifests, for a

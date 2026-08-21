@@ -1142,7 +1142,7 @@ const createLocalePages = (locale, catalog, audioLibrary, artistLibrary, merchLi
 
   const download = t.pages.download;
   const plugin = download.product;
-  const pluginAssetRoot = `${assetPrefixFor(locale, "download")}assets/downloads/euclidean-echo/0.1.0/`;
+  const pluginAssetRoot = `${assetPrefixFor(locale, "download")}assets/downloads/euclidean-echo/0.1.1/`;
   const pluginFeedbackHref = CONTACT_EMAIL
     ? mailtoHrefFor(CONTACT_EMAIL, plugin.feedbackSubject)
     : hrefFor(locale, "download", locale, "contact");

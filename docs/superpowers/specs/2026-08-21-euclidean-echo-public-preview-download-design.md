@@ -1,11 +1,11 @@
 # Euclidean Echo Public Preview Download Design
 
 **Date:** 2026-08-21  
-**Status:** Approved concept; implementation pending written-spec review
+**Status:** Implemented; revised for the 0.1.1 test candidate
 
 ## Goal
 
-Publish the existing Euclidean Echo 0.1.0 installers on the localized POVKH LAB
+Publish the Euclidean Echo 0.1.1 macOS Universal test-candidate archive on the localized POVKH LAB
 `/download/` page, invite public testing and feedback, and state the current
 validation and signing limitations without implying certification or production
 readiness.
@@ -38,14 +38,11 @@ The Euclidean Echo card contains:
 
 1. product index and preview-status badge;
 2. the approved current-interface screenshot from the plugin project;
-3. product name, version `0.1.0`, and a concise description of the synchronized
+3. product name, version `0.1.1`, the `TEST CANDIDATE` label, and a concise description of the synchronized
    Euclidean multi-tap delay;
-4. supported deliverables: VST3 and standalone on Windows; VST3, AU and
-   standalone on macOS;
-5. three explicit download controls:
-   - macOS / Apple Silicon;
-   - macOS / Intel;
-   - Windows / x64;
+4. supported deliverables: VST3, AU and standalone on macOS Universal
+   (Apple Silicon and Intel);
+5. one explicit download control for the macOS Universal ZIP archive;
 6. the signing, notarization and host-validation warning;
 7. a feedback mail link to the configured `CONTACT_EMAIL`, with a localized
    subject identifying Euclidean Echo Preview Feedback;
@@ -58,20 +55,21 @@ lock.
 
 ## Assets and downloads
 
-Use the prepared release artifacts from
-`/Users/alessandropovkh/Desktop/Plugin Euclidean Echo/dist/installers/`:
+Use the prepared release artifact from the plugin's
+`codex/euclidean-echo-v5-precision` worktree:
 
-- `Euclidean_Echo_0.1.0_macOS_AppleSilicon.pkg`;
-- `Euclidean_Echo_0.1.0_macOS_Intel.pkg`;
-- `Euclidean_Echo_0.1.0_Windows_x64_Setup.exe`.
+- `Euclidean_Echo_0.1.1_macOS_Universal_TestCandidate.zip`.
 
 Copy immutable release files into a versioned public directory beneath
-`site/assets/downloads/euclidean-echo/0.1.0/`. Use the current 900×560 interface
-render from `/Users/alessandropovkh/Desktop/Plugin Euclidean Echo/ui_preview_900x560.png`
+`site/assets/downloads/euclidean-echo/0.1.1/`. Use the current 900×560 interface
+render from the same worktree's `build/macos-release/ui_preview_collapsed_900x560.png`
 as a local optimized web asset; do not link to the external project path at
 runtime.
 
-Generate a plain-text `SHA256SUMS` file from the exact copied installer bytes.
+The superseded 0.1.0 macOS packages and Windows installer are removed from the
+public site because no matching 0.1.1 Windows candidate was supplied.
+
+Generate a plain-text `SHA256SUMS` file from the exact copied archive bytes.
 The website build must copy these files without transformation. Installer links
 must use local, base-path-aware URLs and descriptive accessible names.
 
@@ -91,10 +89,10 @@ content. Keyboard focus and contrast follow the existing button system.
 Add focused automated coverage before implementation for:
 
 - localized Euclidean Echo name, version, preview status and warning copy;
-- all three download links and their exact local targets;
+- the single download link and its exact local target;
 - feedback mail link using the configured contact address;
 - preservation of the two locked module cards;
-- source-to-public installer byte equality;
+- source-to-public archive byte equality;
 - SHA-256 manifest correctness;
 - absence of unsupported certification, notarization or stable-release claims.
 

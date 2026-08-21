@@ -302,17 +302,15 @@ export const COPY = {
         product: {
           index: "MODULE / 01",
           name: "Euclidean Echo",
-          version: "VERSION / 0.1.0",
+          version: "VERSION / 0.1.1 / TEST CANDIDATE",
           status: "PUBLIC PREVIEW / NOT CERTIFIED",
           description: "A tempo-synchronized multi-tap delay that distributes repeats with Euclidean rhythm controls.",
-          formats: "Windows: VST3 and standalone. macOS: VST3, AU and standalone.",
-          downloadLabel: "Euclidean Echo installers",
+          formats: "macOS Universal (Apple Silicon + Intel): VST3, AU and standalone.",
+          downloadLabel: "Euclidean Echo test archive",
           downloads: [
-            ["macOS / Apple Silicon", "Euclidean_Echo_0.1.0_macOS_AppleSilicon.pkg"],
-            ["macOS / Intel", "Euclidean_Echo_0.1.0_macOS_Intel.pkg"],
-            ["Windows / x64", "Euclidean_Echo_0.1.0_Windows_x64_Setup.exe"]
+            ["macOS Universal / ZIP", "Euclidean_Echo_0.1.1_macOS_Universal_TestCandidate.zip"]
           ],
-          warning: "Preview software: real-DAW and external plugin-host validation are still in progress. The macOS bundles are ad-hoc signed, but the packages are not Apple Developer ID signed and are not Apple notarized. All builds are provided for testing at your own discretion.",
+          warning: "Preview software: real-DAW and external plugin-host validation are still in progress. The macOS bundles are ad-hoc signed, but the package is not Apple Developer ID signed and is not Apple notarized. This test candidate is provided for testing at your own discretion.",
           invitation: "Test it freely — and tell us what works, what breaks and what you would like to see next.",
           feedbackCta: "Send feedback",
           feedbackSubject: "Euclidean Echo Preview Feedback",
@@ -549,17 +547,15 @@ export const COPY = {
         product: {
           index: "MODULO / 01",
           name: "Euclidean Echo",
-          version: "VERSIONE / 0.1.0",
+          version: "VERSIONE / 0.1.1 / TEST CANDIDATE",
           status: "ANTEPRIMA PUBBLICA / NON CERTIFICATO",
           description: "Delay multi-tap sincronizzato al tempo che distribuisce le ripetizioni tramite controlli ritmici euclidei.",
-          formats: "Windows: VST3 e standalone. macOS: VST3, AU e standalone.",
-          downloadLabel: "Installer di Euclidean Echo",
+          formats: "macOS Universal (Apple Silicon + Intel): VST3, AU e standalone.",
+          downloadLabel: "Archivio di test di Euclidean Echo",
           downloads: [
-            ["macOS / Apple Silicon", "Euclidean_Echo_0.1.0_macOS_AppleSilicon.pkg"],
-            ["macOS / Intel", "Euclidean_Echo_0.1.0_macOS_Intel.pkg"],
-            ["Windows / x64", "Euclidean_Echo_0.1.0_Windows_x64_Setup.exe"]
+            ["macOS Universal / ZIP", "Euclidean_Echo_0.1.1_macOS_Universal_TestCandidate.zip"]
           ],
-          warning: "Software in anteprima: la validazione nelle DAW reali e negli host plugin esterni è ancora in corso. I bundle macOS hanno una firma ad hoc, ma i pacchetti non sono firmati con Apple Developer ID e non sono notarizzati da Apple. Usa tutte le build per i test a tua discrezione.",
+          warning: "Software in anteprima: la validazione nelle DAW reali e negli host plugin esterni è ancora in corso. I bundle macOS hanno una firma ad hoc, ma il pacchetto non è firmato con Apple Developer ID e non è notarizzato da Apple. Usa questo test candidate a tua discrezione.",
           invitation: "Provalo liberamente e raccontaci cosa funziona, cosa si rompe e cosa vorresti trovare nella prossima versione.",
           feedbackCta: "Invia feedback",
           feedbackSubject: "Feedback anteprima Euclidean Echo",
@@ -796,17 +792,15 @@ export const COPY = {
         product: {
           index: "МОДУЛЬ / 01",
           name: "Euclidean Echo",
-          version: "ВЕРСИЯ / 0.1.0",
+          version: "ВЕРСИЯ / 0.1.1 / TEST CANDIDATE",
           status: "ПУБЛИЧНОЕ ПРЕВЬЮ / НЕ СЕРТИФИЦИРОВАНО",
           description: "Синхронизированный с темпом мультитэп-дилей, который распределяет повторы с помощью эвклидовых ритмов.",
-          formats: "Windows: VST3 и standalone. macOS: VST3, AU и standalone.",
-          downloadLabel: "Установщики Euclidean Echo",
+          formats: "macOS Universal (Apple Silicon + Intel): VST3, AU и standalone.",
+          downloadLabel: "Тестовый архив Euclidean Echo",
           downloads: [
-            ["macOS / Apple Silicon", "Euclidean_Echo_0.1.0_macOS_AppleSilicon.pkg"],
-            ["macOS / Intel", "Euclidean_Echo_0.1.0_macOS_Intel.pkg"],
-            ["Windows / x64", "Euclidean_Echo_0.1.0_Windows_x64_Setup.exe"]
+            ["macOS Universal / ZIP", "Euclidean_Echo_0.1.1_macOS_Universal_TestCandidate.zip"]
           ],
-          warning: "Это превью: проверка в реальных DAW и сторонних хостах плагинов ещё не завершена. Бандлы macOS подписаны ad hoc, но пакеты не подписаны Apple Developer ID и не прошли нотарификацию Apple. Используйте все сборки для тестирования на своё усмотрение.",
+          warning: "Это превью: проверка в реальных DAW и сторонних хостах плагинов ещё не завершена. Бандлы macOS подписаны ad hoc, но пакет не подписан Apple Developer ID и не прошёл нотарификацию Apple. Используйте этот тестовый кандидат на своё усмотрение.",
           invitation: "Тестируйте на здоровье — и пишите, что работает, что ломается и чего не хватает.",
           feedbackCta: "Написать отзыв",
           feedbackSubject: "Обратная связь по превью Euclidean Echo",
