@@ -1413,6 +1413,7 @@ html[lang="ru"] .step h3 {
 .step,
 .empty-state,
 .editorial-block,
+.plugin-release,
 .plugin-vault,
 .section-head > div,
 .about-intro > div,
@@ -1424,6 +1425,108 @@ html[lang="ru"] .step h3 {
 .plugin-grid {
   display: grid;
   gap: var(--space-2);
+}
+
+.plugin-release {
+  position: relative;
+  grid-column: 1 / -1;
+  min-width: 0;
+  padding: clamp(1.25rem, 3vw, 2.25rem);
+  border: 1px solid var(--line);
+  background:
+    linear-gradient(135deg, rgba(214, 255, 63, 0.09), transparent 42%),
+    var(--surface);
+}
+
+.plugin-preview-status {
+  min-width: 0;
+  max-width: 22rem;
+  padding: 0.45rem 0.65rem;
+  border: 1px solid #d6ff3f;
+  color: #d6ff3f;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+  text-align: right;
+}
+
+.plugin-release-layout {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 28rem), 1fr));
+  gap: clamp(1.5rem, 4vw, 4rem);
+  align-items: start;
+  margin-top: var(--space-4);
+}
+
+.plugin-release-figure {
+  min-width: 0;
+  margin: 0;
+}
+
+.plugin-release-figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--line);
+  background: var(--void);
+}
+
+.plugin-release-copy {
+  min-width: 0;
+}
+
+.plugin-release-copy > p:not(.eyebrow) {
+  margin: var(--space-2) 0 0;
+  color: var(--steel);
+}
+
+.plugin-release-copy .plugin-formats {
+  color: var(--bone);
+}
+
+.plugin-downloads {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
+  gap: 0.75rem;
+  margin-top: var(--space-4);
+}
+
+.plugin-downloads .button {
+  width: 100%;
+  font-size: 0.72rem;
+}
+
+.plugin-release-copy .plugin-warning {
+  padding-left: 1rem;
+  border-left: 2px solid var(--signal);
+  color: var(--bone);
+}
+
+.plugin-release-copy .plugin-invitation {
+  font-size: clamp(1rem, 1.6vw, 1.25rem);
+}
+
+.plugin-release-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+  margin-top: var(--space-4);
+}
+
+.plugin-checksum-link {
+  color: var(--steel);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.75rem;
+  text-underline-offset: 0.25em;
+}
+
+.plugin-checksum-link:hover {
+  color: var(--signal);
 }
 
 .plugin-vault {
@@ -1450,6 +1553,7 @@ html[lang="ru"] .step h3 {
 .plugin-vault-head {
   position: relative;
   display: flex;
+  flex-wrap: wrap;
   align-items: flex-start;
   justify-content: space-between;
   gap: var(--space-2);

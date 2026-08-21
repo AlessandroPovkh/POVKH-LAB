@@ -22,6 +22,7 @@ const readAsset = async (relative) => {
 const merchLibrary = await validateMerchLibrary(registry, copyAuthority, { readAsset });
 const pages = createPages(catalog, audioLibrary, artistLibrary, merchLibrary);
 const locales = ["en", "it", "ru"];
+const staticProducts = new Set(["hoodie", "cap"]);
 const outputFor = (locale, slug) => `${locale === "en" ? "" : `${locale}/`}merch/${slug}/index.html`;
 const fragment = (html, pattern, label) => {
   const match = html.match(pattern);
@@ -29,6 +30,24 @@ const fragment = (html, pattern, label) => {
   return match[0];
 };
 const count = (html, pattern) => [...html.matchAll(pattern)].length;
+
+test("renders hoodie and cap without public 3D viewers", () => {
+  for (const locale of locales) {
+    for (const slug of ["hoodie", "cap"]) {
+      const object = merchLibrary.objects.find((entry) => entry.slug === slug);
+      const html = pages.get(outputFor(locale, slug)).toString();
+      const hero = object.gallery[0];
+
+      assert.match(html, new RegExp(`src="[^"]*${hero.path.replaceAll("/", "\\/")}"`));
+      assert.match(html, new RegExp(`alt="${hero.alt[locale].replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}"`));
+      assert.doesNotMatch(html, /data-product-viewer(?:[ >])/);
+      assert.doesNotMatch(html, /data-product-viewer-activate(?:[ >])/);
+      assert.doesNotMatch(html, /assets\/product-viewer\.js/);
+      assert.doesNotMatch(html, /assets\/vendor\/model-viewer\.min\.js/);
+      assert.doesNotMatch(html, new RegExp(object.viewer.src.replaceAll("/", "\\/")));
+    }
+  }
+});
 
 test("accepts only an exact optional min/max orbit-limit pair", async () => {
   const valid = structuredClone(registry);
@@ -66,9 +85,10 @@ test("pins and vendors one first-party model-viewer runtime with its Apache noti
   assert.match(license, /Apache License[\s\S]*Version 2\.0/i);
 });
 
-test("renders every localized product as an inert poster-first viewer shell", () => {
+test("renders each remaining localized product as an inert poster-first viewer shell", () => {
   for (const locale of locales) {
     for (const object of merchLibrary.objects) {
+      if (staticProducts.has(object.slug)) continue;
       const html = pages.get(outputFor(locale, object.slug)).toString();
       const viewer = fragment(
         html,
@@ -154,15 +174,6 @@ test("keeps the viewer launcher local, explicit, recoverable and route-disposabl
     "runtime must apply the maximum orbit before assigning the model source"
   );
   assert.doesNotMatch(viewerSource, /https?:\/\//i, "runtime must not call a cloud converter, CDN or remote decoder");
-});
-
-test("renders the governed hoodie orbit limits identically in every locale", () => {
-  for (const locale of locales) {
-    const html = pages.get(outputFor(locale, "hoodie")).toString();
-    const viewer = fragment(html, /<section class="product-viewer"[\s\S]*?<\/section>/, `${locale}/hoodie product viewer`);
-    assert.match(viewer, /data-viewer-min-camera-orbit="auto 68deg auto"/);
-    assert.match(viewer, /data-viewer-max-camera-orbit="auto 98deg auto"/);
-  }
 });
 
 test("renders the governed cassette camera profiles identically in every locale", () => {

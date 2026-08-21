@@ -18,6 +18,7 @@ const readAsset = async (relative) => {
 };
 const merchLibrary = await validateMerchLibrary(registry, copyAuthority, { readAsset });
 const pages = createPages(catalog, audioLibrary, artistLibrary, merchLibrary);
+const staticProducts = new Set(["hoodie", "cap"]);
 const locales = ["en", "it", "ru"];
 const localePath = (locale, route) => `${locale === "en" ? "" : `${locale}/`}${route ? `${route}/index.html` : "index.html"}`;
 const pageFor = (locale, route) => pages.get(localePath(locale, route)).toString();
@@ -108,7 +109,7 @@ test("shows collection status once and never repeats it on merch object cards or
       const detail = pageFor(locale, `merch/${object.slug}`);
       assert.equal(count(detail, /data-merch-visible-status(?:[ >])/g), 1, `${locale}/${object.slug} must show concept status once`);
       const hero = fragment(detail, /<section class="merch-detail-hero"[\s\S]*?<\/section>/, `${locale}/${object.slug} detail hero`);
-      assert.equal(count(hero, /data-product-viewer-activate(?:[ >])/g), 1, `${locale}/${object.slug} needs one leading viewer action`);
+      assert.equal(count(hero, /data-product-viewer-activate(?:[ >])/g), staticProducts.has(object.slug) ? 0 : 1, `${locale}/${object.slug} has the wrong leading viewer action count`);
       assert.doesNotMatch(hero, /href="#merch-concept-gallery"/, `${locale}/${object.slug} must remove the redundant View Gallery action`);
       if (object.viewer.availability === "sourceBlocked") {
         assert.match(hero, /data-product-viewer-activate[^>]*disabled[^>]*aria-disabled="true"/, `${locale}/${object.slug} source block must stay honest`);

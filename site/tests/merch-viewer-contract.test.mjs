@@ -32,9 +32,9 @@ const requireViewer = (object) => {
   return object.viewer;
 };
 
-test("declares one poster-first interactive viewer for every DROP 001 object", () => {
+test("retains one governed poster-first GLB contract for every DROP 001 object", () => {
   assert.equal(library.objects.length, 11);
-  assert.equal(library.objects.filter(({ viewer }) => viewer.kind === "glb").length, 11, "DROP 001 must expose 11 GLB viewers");
+  assert.equal(library.objects.filter(({ viewer }) => viewer.kind === "glb").length, 11, "DROP 001 must retain 11 governed GLB contracts");
   assert.deepEqual(library.objects.filter(({ viewer }) => viewer.availability === "sourceBlocked"), [], "DROP 001 must expose zero blocked viewers");
   const sources = new Set();
   for (const object of library.objects) {
@@ -76,7 +76,7 @@ test("binds the cassette viewer camera metadata to its governed desktop and mobi
   });
 });
 
-test("limits the hoodie viewer to the approved catalog orbit", () => {
+test("retains the governed hoodie orbit metadata for archived model QA", () => {
   const hoodie = library.objects.find(({ slug }) => slug === "hoodie");
   assert.deepEqual(hoodie.viewer.orbitLimits, {
     min: "auto 68deg auto",
