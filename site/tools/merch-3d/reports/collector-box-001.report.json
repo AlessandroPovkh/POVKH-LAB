@@ -1,0 +1,252 @@
+{
+  "schemaVersion": 1,
+  "assetKey": "collector-box-001",
+  "sourceIntegrity": {
+    "artwork": {
+      "path": "sources/collector-box-001/PVKH_ASCII_REVERSE_EXACT_1600x600_v01.png",
+      "sha256": "284e69cfb0e6e7fef2a993f44289577efabd1fae576c9280bab4d4e2f59b398f",
+      "application": "exact-raster-reused-with-placement-specific-full-image-uvs",
+      "bytes": 159393
+    },
+    "geometryAuthority": {
+      "path": "sources/collector-box-001/povkh-lab-ascii-dark-outlined.svg",
+      "sha256": "aa95b301a5c41798cbd8335d33ff48ec42699f79c1960c323117126ea877be3c",
+      "application": "audit-only-reverse-raster-is-embedded",
+      "bytes": 136811
+    }
+  },
+  "authorityIntegrity": {
+    "provenanceV04": {
+      "fixturePath": "sources/collector-box-001/authority/provenance-v04.authority.json",
+      "fixtureSha256": "3a87594942da155c0ae89e676d1d73c9ef80323e6c08627859bc97fb1a366d7e",
+      "canonicalPath": "production/physical-merch/concepts/drop-001/renders/archive-objects/collector-box-001/provenance-v04.json",
+      "canonicalSha256": "55070315d383fa3dfea8ecbf1fbfe4ab3e9c2f6a0e1ef3bed480fada50731ee2"
+    },
+    "parentProvenance": {
+      "fixturePath": "sources/collector-box-001/authority/parent-provenance.authority.json",
+      "fixtureSha256": "8dbf9c5758fffe068fb9ef89cd5711d15598410894c88c2f17177d595e75d9eb",
+      "canonicalPath": "production/physical-merch/concepts/drop-001/renders/archive-objects/collector-box-001/provenance.json",
+      "canonicalSha256": "12639f1f8201464ec1a320a6f56f040e47280852cb1e764bbad0d39cb8527bc6"
+    },
+    "selection": {
+      "fixturePath": "sources/collector-box-001/authority/selection.authority.json",
+      "fixtureSha256": "3bbfbf0487c6f0e7ef931f8323bfed61007bfab3b3b584cb3ea5b2e63a04d6a6",
+      "canonicalPath": "production/physical-merch/concepts/drop-001/renders/archive-objects/collector-box-001/candidate-selection.json",
+      "canonicalSha256": "bfdbe40c0322e64d0d8291b1c9602692337a3a14c6c959c2dd34fffaa8f37493"
+    },
+    "compositionOnly": {
+      "fixturePath": "sources/collector-box-001/authority/composition-only.authority.json",
+      "fixtureSha256": "c9d7819b003560e5d09f4dbdcc71fe83cbf23c6c6ce9a0882971b89fb7f6f0f0",
+      "canonicalPath": "production/physical-merch/concepts/drop-001/renders/archive-objects/collector-box-001/source/final-contents-geometry-v04.json",
+      "canonicalSha256": "7ba671184f982ba03f24f6281f6d3685c78cd4cd0f4c6cfd7fc03fd01b32313a",
+      "application": "concept-composition-reference-only-not-machinable"
+    }
+  },
+  "derivedMaterialIntegrity": {
+    "bookclothNormal": {
+      "path": "sources/collector-box-001/PVKH_COLLECTOR_BOX_BOOKCLOTH_NORMAL_v01.png",
+      "sha256": "8b04ece8038f37ecf6fe1379615e2e0a6deac983e3ad55baf1167aef74eec373",
+      "method": "approved GLB texture promoted to a governed cross-architecture build fixture",
+      "bytes": 36958
+    }
+  },
+  "derivedMaterialSha256": {
+    "bookclothNormal": "8b04ece8038f37ecf6fe1379615e2e0a6deac983e3ad55baf1167aef74eec373"
+  },
+  "identityEvidence": {
+    "canonicalArtwork": {
+      "path": "sources/collector-box-001/PVKH_ASCII_REVERSE_EXACT_1600x600_v01.png",
+      "sha256": "284e69cfb0e6e7fef2a993f44289577efabd1fae576c9280bab4d4e2f59b398f",
+      "authority": "canonical-governed-exact-raster"
+    },
+    "conceptDerivedPlacements": {
+      "lidPanel": {
+        "node": "Collector_Box_Lid_Identity",
+        "coordinateSpace": "provisional-lid-local-mm",
+        "centreMm": [
+          -12,
+          8.2,
+          -103
+        ],
+        "surfaceMm": [
+          120,
+          45
+        ],
+        "uvBounds": [
+          0,
+          0,
+          1,
+          1
+        ],
+        "rotationDeg": 0,
+        "canonicalArtworkSha256": "284e69cfb0e6e7fef2a993f44289577efabd1fae576c9280bab4d4e2f59b398f",
+        "placementAuthority": "concept-derived-viewer-placement-not-production-registration",
+        "sourceUse": "full-image-no-crop-no-redraw"
+      },
+      "zineCover": {
+        "node": "Collector_Box_Zine_Identity_Exact",
+        "coordinateSpace": "open-scene-world-mm",
+        "centreMm": [
+          -50,
+          57.8,
+          -15
+        ],
+        "surfaceMm": [
+          78,
+          29.25
+        ],
+        "uvBounds": [
+          0,
+          0,
+          1,
+          1
+        ],
+        "rotationDeg": 0,
+        "canonicalArtworkSha256": "284e69cfb0e6e7fef2a993f44289577efabd1fae576c9280bab4d4e2f59b398f",
+        "placementAuthority": "concept-derived-viewer-placement-not-production-registration",
+        "sourceUse": "full-image-no-crop-no-redraw"
+      },
+      "stickerInsert": {
+        "node": "Collector_Box_Sticker_Identity_Insert",
+        "coordinateSpace": "provisional-lid-local-mm",
+        "centreMm": [
+          65,
+          8.2,
+          -56
+        ],
+        "surfaceMm": [
+          75,
+          28.125
+        ],
+        "uvBounds": [
+          0,
+          0,
+          1,
+          1
+        ],
+        "rotationDeg": 0,
+        "canonicalArtworkSha256": "284e69cfb0e6e7fef2a993f44289577efabd1fae576c9280bab4d4e2f59b398f",
+        "placementAuthority": "concept-derived-viewer-placement-not-production-registration",
+        "sourceUse": "full-image-no-crop-no-redraw"
+      }
+    }
+  },
+  "physicalEvidence": {
+    "method": "reopened-glb-scene-bounds-and-node-instanced-primitive-count",
+    "provisionalClosedEnvelopeMm": [
+      250,
+      315,
+      55
+    ],
+    "actualOpenSceneBoundsMm": {
+      "min": [
+        -125,
+        0,
+        -119.971
+      ],
+      "max": [
+        125,
+        221.079,
+        125
+      ],
+      "size": [
+        250,
+        221.079,
+        244.971
+      ]
+    },
+    "dimensionAuthority": "provisional-closed-envelope-not-open-scene-not-machinable",
+    "boundsRelationship": "measured open scene differs from provisional closed envelope; neither is machinable",
+    "state": "default-open-archive-set",
+    "selectedForm": "01 / ARCHIVE CLAMSHELL",
+    "openAngleDeg": 105,
+    "modeled": [
+      "open base and lid",
+      "bone lid lining",
+      "modular tray and recesses",
+      "zine",
+      "cassette",
+      "cd",
+      "data-key",
+      "vinyl-archive-sleeve",
+      "sticker-identity"
+    ],
+    "excluded": [
+      "working hinge",
+      "vendor dieline",
+      "manufacturing internals",
+      "machinability claim"
+    ]
+  },
+  "cameraRecommendations": {
+    "poster": "assets/merch/collector-box-set-closed.webp",
+    "desktop": {
+      "default": {
+        "orbit": "25deg 56deg 135%",
+        "target": "auto 0.075m auto",
+        "fieldOfView": "29deg"
+      },
+      "front": {
+        "orbit": "0deg 54deg 138%",
+        "target": "auto 0.075m auto",
+        "fieldOfView": "29deg"
+      },
+      "rear": {
+        "orbit": "180deg 57deg 140%",
+        "target": "auto 0.075m auto",
+        "fieldOfView": "30deg"
+      }
+    },
+    "mobile": {
+      "default": {
+        "orbit": "25deg 58deg 145%",
+        "target": "auto 0.075m auto",
+        "fieldOfView": "30deg"
+      },
+      "front": {
+        "orbit": "0deg 56deg 145%",
+        "target": "auto 0.075m auto",
+        "fieldOfView": "30deg"
+      },
+      "rear": {
+        "orbit": "180deg 58deg 148%",
+        "target": "auto 0.075m auto",
+        "fieldOfView": "30deg"
+      }
+    }
+  },
+  "validation": {
+    "errors": 0,
+    "warnings": 0,
+    "infos": 1,
+    "hints": 0
+  },
+  "budget": {
+    "triangles": 934,
+    "drawCalls": 9,
+    "uniqueMeshPrimitives": 9,
+    "bytes": 271352,
+    "ceilings": {
+      "maxBytes": 2100000,
+      "maxTriangles": 40000,
+      "maxDrawCalls": 10,
+      "hardMaxBytes": 2500000,
+      "hardMaxTriangles": 50000,
+      "hardMaxDrawCalls": 12
+    }
+  },
+  "output": {
+    "path": "assets/merch-3d/collector-box-001.glb",
+    "sha256": "886f26820f6dcd5f6d4e2cc32d8a4840db2761d6d499191dae12b441c3b230e2"
+  },
+  "deterministic": {
+    "verifiedBySecondInMemoryBuild": true
+  },
+  "visualComparison": {
+    "canonicalSelected": [
+      "assets/merch/collector-box-set-open.webp"
+    ],
+    "reviewStatus": "captured-six-views-readability-source-compare",
+    "browserQa": "tools/merch-3d/reports/collector-box-001.browser-qa.json"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "authorityType": "governed-minimal-copy",
+  "canonicalPath": "production/physical-merch/concepts/drop-001/renders/archive-objects/data-key-003/placements.json",
+  "canonicalSha256": "ee2b6576ecff0c1f2b0d7d6960c5e2c451f660ff44110fa65d5fdec00fd80188",
+  "selectedScope": "closed device mark only",
+  "deviceIdentity": "one compact exact laser mark",
+  "sourceRegistrationPx": {
+    "canvas": [1536, 1024],
+    "origin": [1030, 392],
+    "markCanvas": [72, 64],
+    "destinationQuad": [[4, 2], [67, 12], [4, 51], [67, 61]]
+  },
+  "excluded": ["packaging identity", "packaging copy", "extended gallery states"]
+}

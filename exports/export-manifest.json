@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 2,
+  "sourceSha256": "4d9b9e3f22c331cb3a0426a8a8f25039aa5101968559de9834fafc669d2c8819",
+  "boardSheets": 12,
+  "board": {
+    "pdf": "POVKH-LAB-Brand-Board-v1.0.pdf",
+    "overview": "POVKH-LAB-Brand-Board-v1.0.png",
+    "pageDirectory": "board-pages",
+    "pageWidth": 1600,
+    "pageHeight": 1000
+  },
+  "rasters": [
+    {
+      "output": "POVKHLAB_Logo_Stacked_Dark_2000.png",
+      "width": 2000,
+      "height": 2000,
+      "transparent": false
+    },
+    {
+      "output": "POVKHLAB_Logo_Stacked_Light_2000.png",
+      "width": 2000,
+      "height": 2000,
+      "transparent": false
+    },
+    {
+      "output": "POVKHLAB_Mark_PL_Dark_1500.png",
+      "width": 1500,
+      "height": 1500,
+      "transparent": false
+    },
+    {
+      "output": "POVKHLAB_Logo_Horizontal_Dark_3200x800.png",
+      "width": 3200,
+      "height": 800,
+      "transparent": false
+    },
+    {
+      "output": "POVKHLAB_Logo_Stacked_Reverse_Transparent_2000.png",
+      "width": 2000,
+      "height": 2000,
+      "transparent": true
+    },
+    {
+      "output": "POVKHLAB_Logo_Stacked_MonoBlack_Transparent_2000.png",
+      "width": 2000,
+      "height": 2000,
+      "transparent": true
+    },
+    {
+      "output": "POVKHLAB_Mark_PL_Reverse_Transparent_1500.png",
+      "width": 1500,
+      "height": 1500,
+      "transparent": true
+    },
+    {
+      "output": "POVKHLAB_ASCII_Signature_Dark_3200x1200.png",
+      "width": 3200,
+      "height": 1200,
+      "transparent": false
+    },
+    {
+      "output": "POVKHLAB_Template_Release_TYPE_3000.png",
+      "width": 3000,
+      "height": 3000,
+      "transparent": false
+    },
+    {
+      "output": "POVKHLAB_Template_Instagram_4x5_1080x1350.png",
+      "width": 1080,
+      "height": 1350,
+      "transparent": false
+    },
+    {
+      "output": "POVKHLAB_Template_Story_9x16_1080x1920.png",
+      "width": 1080,
+      "height": 1920,
+      "transparent": false
+    },
+    {
+      "output": "POVKHLAB_Template_YouTube_1280x720.png",
+      "width": 1280,
+      "height": 720,
+      "transparent": false
+    }
+  ]
+}

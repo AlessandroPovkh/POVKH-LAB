@@ -1,0 +1,556 @@
+{
+  "schemaVersion": 1,
+  "assetKey": "cap-001",
+  "optimized": {
+    "scenes": {
+      "properties": [
+        {
+          "name": "Cap_001_Concept_Visualization",
+          "rootName": "Cap_001_Centred_Grounded_Pivot",
+          "bboxMin": [
+            -0.13493,
+            0,
+            -0.1275
+          ],
+          "bboxMax": [
+            0.13493,
+            0.266,
+            0.255
+          ],
+          "renderVertexCount": 39690,
+          "uploadVertexCount": 14368,
+          "uploadNaiveVertexCount": 14368
+        }
+      ]
+    },
+    "meshes": {
+      "properties": [
+        {
+          "name": "Cap_Panel_01_Mesh",
+          "mode": [
+            "TRIANGLES"
+          ],
+          "meshPrimitives": 1,
+          "glPrimitives": 1470,
+          "vertices": 776,
+          "indices": [
+            "u32"
+          ],
+          "attributes": [
+            "NORMAL:f32",
+            "POSITION:f32",
+            "TANGENT:f32",
+            "TEXCOORD_0:f32"
+          ],
+          "instances": 1,
+          "size": 54888
+        },
+        {
+          "name": "Cap_Panel_02_Mesh",
+          "mode": [
+            "TRIANGLES"
+          ],
+          "meshPrimitives": 1,
+          "glPrimitives": 1470,
+          "vertices": 776,
+          "indices": [
+            "u32"
+          ],
+          "attributes": [
+            "NORMAL:f32",
+            "POSITION:f32",
+            "TANGENT:f32",
+            "TEXCOORD_0:f32"
+          ],
+          "instances": 1,
+          "size": 54888
+        },
+        {
+          "name": "Cap_Panel_03_Mesh",
+          "mode": [
+            "TRIANGLES"
+          ],
+          "meshPrimitives": 1,
+          "glPrimitives": 1470,
+          "vertices": 776,
+          "indices": [
+            "u32"
+          ],
+          "attributes": [
+            "NORMAL:f32",
+            "POSITION:f32",
+            "TANGENT:f32",
+            "TEXCOORD_0:f32"
+          ],
+          "instances": 1,
+          "size": 54888
+        },
+        {
+          "name": "Cap_Panel_04_Mesh",
+          "mode": [
+            "TRIANGLES"
+          ],
+          "meshPrimitives": 1,
+          "glPrimitives": 1048,
+          "vertices": 776,
+          "indices": [
+            "u32"
+          ],
+          "attributes": [
+            "NORMAL:f32",
+            "POSITION:f32",
+            "TANGENT:f32",
+            "TEXCOORD_0:f32"
+          ],
+          "instances": 1,
+          "size": 49824
+        },
+        {
+          "name": "Cap_Panel_05_Mesh",
+          "mode": [
+            "TRIANGLES"
+          ],
+          "meshPrimitives": 1,
+          "glPrimitives": 1470,
+          "vertices": 776,
+          "indices": [
+            "u32"
+          ],
+          "attributes": [
+            "NORMAL:f32",
+            "POSITION:f32",
+            "TANGENT:f32",
+            "TEXCOORD_0:f32"
+          ],
+          "instances": 1,
+          "size": 54888
+        },
+        {
+          "name": "Cap_Panel_06_Mesh",
+          "mode": [
+            "TRIANGLES"
+          ],
+          "meshPrimitives": 1,
+          "glPrimitives": 1470,
+          "vertices": 776,
+          "indices": [
+            "u32"
+          ],
+          "attributes": [
+            "NORMAL:f32",
+            "POSITION:f32",
+            "TANGENT:f32",
+            "TEXCOORD_0:f32"
+          ],
+          "instances": 1,
+          "size": 54888
+        },
+        {
+          "name": "Cap_Crown_Seams_Mesh",
+          "mode": [
+            "TRIANGLES"
+          ],
+          "meshPrimitives": 1,
+          "glPrimitives": 192,
+          "vertices": 384,
+          "indices": [
+            "u32"
+          ],
+          "attributes": [
+            "NORMAL:f32",
+            "POSITION:f32",
+            "TANGENT:f32",
+            "TEXCOORD_0:f32"
+          ],
+          "instances": 1,
+          "size": 20736
+        },
+        {
+          "name": "Cap_Crown_Creases_Mesh",
+          "mode": [
+            "TRIANGLES"
+          ],
+          "meshPrimitives": 1,
+          "glPrimitives": 160,
+          "vertices": 320,
+          "indices": [
+            "u32"
+          ],
+          "attributes": [
+            "NORMAL:f32",
+            "POSITION:f32",
+            "TANGENT:f32",
+            "TEXCOORD_0:f32"
+          ],
+          "instances": 1,
+          "size": 17280
+        },
+        {
+          "name": "Cap_Eyelets_Mesh",
+          "mode": [
+            "TRIANGLES"
+          ],
+          "meshPrimitives": 1,
+          "glPrimitives": 640,
+          "vertices": 1280,
+          "indices": [
+            "u32"
+          ],
+          "attributes": [
+            "NORMAL:f32",
+            "POSITION:f32",
+            "TANGENT:f32",
+            "TEXCOORD_0:f32"
+          ],
+          "instances": 1,
+          "size": 69120
+        },
+        {
+          "name": "Cap_Curved_Brim_Mesh",
+          "mode": [
+            "TRIANGLES"
+          ],
+          "meshPrimitives": 1,
+          "glPrimitives": 2768,
+          "vertices": 5536,
+          "indices": [
+            "u32"
+          ],
+          "attributes": [
+            "NORMAL:f32",
+            "POSITION:f32",
+            "TANGENT:f32",
+            "TEXCOORD_0:f32"
+          ],
+          "instances": 1,
+          "size": 298944
+        },
+        {
+          "name": "Cap_Bill_Edge_Stitching_Mesh",
+          "mode": [
+            "TRIANGLES"
+          ],
+          "meshPrimitives": 1,
+          "glPrimitives": 128,
+          "vertices": 256,
+          "indices": [
+            "u32"
+          ],
+          "attributes": [
+            "NORMAL:f32",
+            "POSITION:f32",
+            "TANGENT:f32",
+            "TEXCOORD_0:f32"
+          ],
+          "instances": 1,
+          "size": 13824
+        },
+        {
+          "name": "Cap_Crown_Bill_Transition_Mesh",
+          "mode": [
+            "TRIANGLES"
+          ],
+          "meshPrimitives": 1,
+          "glPrimitives": 56,
+          "vertices": 112,
+          "indices": [
+            "u32"
+          ],
+          "attributes": [
+            "NORMAL:f32",
+            "POSITION:f32",
+            "TANGENT:f32",
+            "TEXCOORD_0:f32"
+          ],
+          "instances": 1,
+          "size": 6048
+        },
+        {
+          "name": "Cap_Top_Button_Mesh",
+          "mode": [
+            "TRIANGLES"
+          ],
+          "meshPrimitives": 1,
+          "glPrimitives": 96,
+          "vertices": 240,
+          "indices": [
+            "u32"
+          ],
+          "attributes": [
+            "NORMAL:f32",
+            "POSITION:f32",
+            "TANGENT:f32",
+            "TEXCOORD_0:f32"
+          ],
+          "instances": 1,
+          "size": 12672
+        },
+        {
+          "name": "Cap_Rear_Aperture_Rim_Mesh",
+          "mode": [
+            "TRIANGLES"
+          ],
+          "meshPrimitives": 1,
+          "glPrimitives": 512,
+          "vertices": 1024,
+          "indices": [
+            "u32"
+          ],
+          "attributes": [
+            "NORMAL:f32",
+            "POSITION:f32",
+            "TANGENT:f32",
+            "TEXCOORD_0:f32"
+          ],
+          "instances": 1,
+          "size": 55296
+        },
+        {
+          "name": "Cap_Adjustment_Strap_Mesh",
+          "mode": [
+            "TRIANGLES"
+          ],
+          "meshPrimitives": 1,
+          "glPrimitives": 12,
+          "vertices": 24,
+          "indices": [
+            "u32"
+          ],
+          "attributes": [
+            "NORMAL:f32",
+            "POSITION:f32",
+            "TANGENT:f32",
+            "TEXCOORD_0:f32"
+          ],
+          "instances": 1,
+          "size": 1296
+        },
+        {
+          "name": "Cap_Adjustment_Keeper_Mesh",
+          "mode": [
+            "TRIANGLES"
+          ],
+          "meshPrimitives": 1,
+          "glPrimitives": 12,
+          "vertices": 24,
+          "indices": [
+            "u32"
+          ],
+          "attributes": [
+            "NORMAL:f32",
+            "POSITION:f32"
+          ],
+          "instances": 1,
+          "size": 720
+        },
+        {
+          "name": "Cap_Patch_Border_Mesh",
+          "mode": [
+            "TRIANGLES"
+          ],
+          "meshPrimitives": 1,
+          "glPrimitives": 96,
+          "vertices": 192,
+          "indices": [
+            "u32"
+          ],
+          "attributes": [
+            "NORMAL:f32",
+            "POSITION:f32",
+            "TANGENT:f32",
+            "TEXCOORD_0:f32"
+          ],
+          "instances": 1,
+          "size": 10368
+        },
+        {
+          "name": "Cap_Front_Patch_Mesh",
+          "mode": [
+            "TRIANGLES"
+          ],
+          "meshPrimitives": 1,
+          "glPrimitives": 96,
+          "vertices": 192,
+          "indices": [
+            "u32"
+          ],
+          "attributes": [
+            "NORMAL:f32",
+            "POSITION:f32",
+            "TANGENT:f32",
+            "TEXCOORD_0:f32"
+          ],
+          "instances": 1,
+          "size": 10368
+        },
+        {
+          "name": "Cap_Patch_Mark_Mesh",
+          "mode": [
+            "TRIANGLES"
+          ],
+          "meshPrimitives": 1,
+          "glPrimitives": 64,
+          "vertices": 128,
+          "indices": [
+            "u32"
+          ],
+          "attributes": [
+            "NORMAL:f32",
+            "POSITION:f32",
+            "TEXCOORD_0:f32"
+          ],
+          "instances": 1,
+          "size": 4864
+        }
+      ]
+    },
+    "materials": {
+      "properties": [
+        {
+          "name": "MAT_CAP_COMPACT_DARK_EXACT",
+          "instances": 1,
+          "textures": [
+            "baseColorTexture"
+          ],
+          "alphaMode": "BLEND",
+          "doubleSided": false
+        },
+        {
+          "name": "MAT_CAP_WASHED_VOID_TWILL",
+          "instances": 7,
+          "textures": [
+            "normalTexture",
+            "metallicRoughnessTexture"
+          ],
+          "alphaMode": "OPAQUE",
+          "doubleSided": false
+        },
+        {
+          "name": "MAT_CAP_TONAL_SEAM",
+          "instances": 9,
+          "textures": [
+            "normalTexture",
+            "metallicRoughnessTexture"
+          ],
+          "alphaMode": "OPAQUE",
+          "doubleSided": false
+        },
+        {
+          "name": "MAT_CAP_BONE_PATCH",
+          "instances": 1,
+          "textures": [
+            "normalTexture",
+            "metallicRoughnessTexture"
+          ],
+          "alphaMode": "OPAQUE",
+          "doubleSided": false
+        },
+        {
+          "name": "MAT_CAP_MATTE_HARDWARE",
+          "instances": 1,
+          "textures": [],
+          "alphaMode": "OPAQUE",
+          "doubleSided": false
+        }
+      ]
+    },
+    "textures": {
+      "properties": [
+        {
+          "name": "cap-001_Exact_Artwork_Texture",
+          "uri": "",
+          "slots": [
+            "baseColorTexture"
+          ],
+          "instances": 1,
+          "mimeType": "image/png",
+          "compression": "",
+          "resolution": "1000x1000",
+          "size": 49799,
+          "gpuSize": 5332856
+        },
+        {
+          "name": "MAT_CAP_WASHED_VOID_TWILL_Woven_Normal",
+          "uri": "",
+          "slots": [
+            "normalTexture"
+          ],
+          "instances": 1,
+          "mimeType": "image/png",
+          "compression": "",
+          "resolution": "64x64",
+          "size": 3719,
+          "gpuSize": 21844
+        },
+        {
+          "name": "MAT_CAP_WASHED_VOID_TWILL_Woven_Roughness",
+          "uri": "",
+          "slots": [
+            "metallicRoughnessTexture"
+          ],
+          "instances": 1,
+          "mimeType": "image/png",
+          "compression": "",
+          "resolution": "64x64",
+          "size": 2678,
+          "gpuSize": 21844
+        },
+        {
+          "name": "MAT_CAP_TONAL_SEAM_Woven_Normal",
+          "uri": "",
+          "slots": [
+            "normalTexture"
+          ],
+          "instances": 1,
+          "mimeType": "image/png",
+          "compression": "",
+          "resolution": "64x64",
+          "size": 3741,
+          "gpuSize": 21844
+        },
+        {
+          "name": "MAT_CAP_TONAL_SEAM_Woven_Roughness",
+          "uri": "",
+          "slots": [
+            "metallicRoughnessTexture"
+          ],
+          "instances": 1,
+          "mimeType": "image/png",
+          "compression": "",
+          "resolution": "64x64",
+          "size": 2680,
+          "gpuSize": 21844
+        },
+        {
+          "name": "MAT_CAP_BONE_PATCH_Woven_Normal",
+          "uri": "",
+          "slots": [
+            "normalTexture"
+          ],
+          "instances": 1,
+          "mimeType": "image/png",
+          "compression": "",
+          "resolution": "64x64",
+          "size": 3736,
+          "gpuSize": 21844
+        },
+        {
+          "name": "MAT_CAP_BONE_PATCH_Woven_Roughness",
+          "uri": "",
+          "slots": [
+            "metallicRoughnessTexture"
+          ],
+          "instances": 1,
+          "mimeType": "image/png",
+          "compression": "",
+          "resolution": "64x64",
+          "size": 2716,
+          "gpuSize": 21844
+        }
+      ]
+    },
+    "animations": {
+      "properties": []
+    }
+  }
+}

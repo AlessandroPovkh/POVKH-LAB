@@ -1,0 +1,10 @@
+{
+  "authorityType": "governed-minimal-copy",
+  "canonicalPath": "production/physical-merch/concepts/drop-001/renders/archive-objects/disc-004/provenance.json",
+  "canonicalSha256": "d566a881825a1db3187695450ae0b8d5cb8a933a1d6dcb95b190cafde1c8c72d",
+  "payload": {
+    "stage": "SELECTED_PACKET_USER_APPROVED",
+    "selectedCandidate": "BALANCED_CLEAR",
+    "discTreatment": "CLEAN SILVER / NO PRINTED MARK"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "authorityType": "governed-minimal-copy",
+  "canonicalPath": "production/physical-merch/concepts/drop-001/renders/archive-objects/collector-box-001/provenance-v04.json",
+  "canonicalSha256": "55070315d383fa3dfea8ecbf1fbfe4ab3e9c2f6a0e1ef3bed480fada50731ee2",
+  "status": "PRIVATE_SYNTHETIC_CONCEPT_NOT_PRODUCTION_ART",
+  "selectedForm": "01 / ARCHIVE CLAMSHELL",
+  "closedHeroSha256": "07a84bdcc039eb10038ce5a6486cda4bbe1455f01572307e78d9c646add8408e",
+  "lidIdentitySha256": "284e69cfb0e6e7fef2a993f44289577efabd1fae576c9280bab4d4e2f59b398f",
+  "vendorDielineConfirmed": false,
+  "physicalProofConfirmed": false
+}

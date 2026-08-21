@@ -1,0 +1,11 @@
+{
+  "authorityType": "governed-minimal-copy",
+  "canonicalPath": "production/physical-merch/concepts/drop-001/renders/vinyl/smoke-archive/placements.json",
+  "canonicalSha256": "2585de2c157c5823308ae7514f6c15404aa3a938b0563c728d0199ab6d1ea7e4",
+  "payload": {
+    "canvas": {"width": 1536, "height": 1024},
+    "frontMaster": "PVKH_VINYL_OUTER_FRONT_MASTER_v05.svg",
+    "reverseMaster": "PVKH_VINYL_OUTER_REVERSE_MASTER_v05.svg",
+    "centerLabelMaster": "PVKH_VINYL_CENTER_LABEL_MASTER_v05.svg"
+  }
+}

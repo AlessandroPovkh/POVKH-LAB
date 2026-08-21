@@ -372,10 +372,6 @@ a:hover {
   backdrop-filter: blur(5px);
 }
 
-body.playlist-open {
-  overflow: hidden;
-}
-
 .hud-playlist-head {
   display: flex;
   align-items: center;
@@ -532,8 +528,17 @@ body.playlist-open {
   display: block;
   width: 100%;
   height: 100%;
-  cursor: crosshair;
-  touch-action: manipulation;
+  cursor: pointer;
+  touch-action: pan-y;
+}
+
+.hud-waveform:focus-visible {
+  outline: var(--focus);
+  outline-offset: 2px;
+}
+
+.hud-audio[data-seeking="true"] .hud-waveform-shell {
+  border-color: var(--signal);
 }
 
 .hud-waveform-playhead {
@@ -557,9 +562,28 @@ body.playlist-open {
   background: var(--signal);
 }
 
+.hud-waveform-tooltip {
+  position: absolute;
+  z-index: 2;
+  top: -1.6rem;
+  left: clamp(1.6rem, calc(var(--seek-preview, 0) * 100%), calc(100% - 1.6rem));
+  transform: translateX(-50%);
+  padding: 0.2rem 0.35rem;
+  border: 1px solid var(--line-strong);
+  background: var(--void);
+  color: var(--bone);
+  font: 600 0.62rem/1 "IBM Plex Mono", monospace;
+  font-variant-numeric: tabular-nums;
+  pointer-events: none;
+}
+
+.hud-waveform-tooltip[hidden] {
+  display: none;
+}
+
 .hud-audio-controls {
   display: grid;
-  grid-template-columns: auto auto auto 1fr;
+  grid-template-columns: auto auto auto auto minmax(4.6rem, 1fr);
   gap: 0.35rem;
   margin-top: 0.65rem;
 }
@@ -598,6 +622,53 @@ body.playlist-open {
   font-variant-numeric: tabular-nums;
   letter-spacing: 0.04em;
   white-space: nowrap;
+}
+
+.hud-volume {
+  position: relative;
+}
+
+.hud-volume-toggle {
+  width: 100%;
+  min-width: 4.1rem !important;
+  font-variant-numeric: tabular-nums;
+}
+
+.hud-volume-popup {
+  position: absolute;
+  z-index: 3;
+  right: 0;
+  bottom: calc(100% + 0.5rem);
+  width: 9rem;
+  padding: 0.6rem;
+  border: 1px solid var(--signal);
+  background: var(--void);
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.5);
+}
+
+.hud-volume-popup[hidden] {
+  display: none;
+}
+
+.hud-volume-popup label,
+.hud-volume-popup span {
+  color: var(--bone);
+  font: 600 0.62rem/1 "IBM Plex Mono", monospace;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.hud-volume-popup span {
+  float: right;
+  color: var(--signal);
+}
+
+.hud-volume-popup input {
+  width: 100%;
+  min-height: 2.75rem;
+  margin: 0.25rem 0 0;
+  accent-color: var(--signal);
+  cursor: pointer;
 }
 
 .hud-audio-status {
@@ -1144,7 +1215,7 @@ main:focus {
 .card-title,
 .empty-title {
   margin: 0;
-  font-family: "Barlow Condensed", "Arial Narrow", sans-serif;
+  font-family: "Barlow Condensed", Arial, sans-serif;
   font-weight: 800;
   line-height: 0.82;
   letter-spacing: -0.035em;
@@ -2536,6 +2607,573 @@ html .artist-profile-heading .page-title {
 .about-intro,
 .smartlink-layout { align-items: start; }
 
+.page-links main {
+  min-height: calc(100dvh - 6rem);
+}
+
+.social-access-container {
+  min-height: inherit;
+}
+
+.social-access-terminal {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 0.92fr) minmax(22rem, 1.08fr);
+  align-items: end;
+  gap: clamp(2rem, 7vw, 8rem);
+  min-height: calc(100dvh - 6rem);
+  padding-block: clamp(3rem, 8vh, 7rem) clamp(8rem, 17vh, 13rem);
+  overflow: clip;
+}
+
+.social-access-intro,
+.social-access-panel {
+  position: relative;
+  z-index: 1;
+  min-width: 0;
+}
+
+.social-access-intro {
+  container-type: inline-size;
+}
+
+.social-access-title {
+  display: flex;
+  flex-direction: column;
+  max-width: 10ch;
+  margin: 0;
+  font-family: "Barlow Condensed", Arial, sans-serif;
+  font-size: clamp(4rem, 22cqi, 9rem);
+  font-weight: 800;
+  line-height: 0.76;
+  letter-spacing: -0.055em;
+  text-transform: uppercase;
+}
+
+html[lang="it"] .social-access-title {
+  font-size: clamp(3.5rem, 19cqi, 7.5rem);
+}
+
+html[lang="ru"] .social-access-title {
+  max-width: none;
+  font-size: clamp(2.25rem, 11cqi, 4.75rem);
+  letter-spacing: -0.045em;
+}
+
+.social-access-title > span {
+  display: block;
+  white-space: nowrap;
+}
+
+.social-access-lede {
+  max-width: 39rem;
+  margin: var(--space-4) 0 0;
+  color: var(--steel);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: clamp(0.78rem, 1.1vw, 0.92rem);
+  line-height: 1.55;
+}
+
+.social-access-status {
+  margin: 0 0 var(--space-2);
+  color: var(--steel);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.social-access-nav,
+.social-access-list {
+  margin: 0;
+  padding: 0;
+}
+
+.social-access-list {
+  list-style: none;
+  border-bottom: 1px solid var(--line-strong);
+}
+
+.social-access-item {
+  border-top: 1px solid var(--line-strong);
+}
+
+.social-access-link {
+  display: grid;
+  grid-template-columns: 3.25rem minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: clamp(5.25rem, 10vh, 7.25rem);
+  padding: var(--space-2) clamp(0.5rem, 1.5vw, 1.25rem);
+  color: var(--bone);
+  font-family: "IBM Plex Mono", monospace;
+  text-decoration: none;
+  transition: color var(--ease), background-color var(--ease), padding-left var(--ease);
+}
+
+.social-access-index {
+  color: var(--signal);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+}
+
+.social-access-service {
+  min-width: 0;
+  font-size: clamp(1.25rem, 2.4vw, 2.15rem);
+  font-weight: 600;
+  line-height: 1;
+  overflow-wrap: normal;
+  word-break: normal;
+  white-space: nowrap;
+  text-transform: uppercase;
+}
+
+.social-access-arrow {
+  color: var(--signal);
+  font-size: clamp(1.25rem, 2vw, 1.8rem);
+}
+
+.social-access-link:hover,
+.social-access-link:focus-visible {
+  padding-left: clamp(0.75rem, 2.2vw, 2rem);
+  background: var(--bone);
+  color: var(--void);
+}
+
+.social-access-link:hover .social-access-index,
+.social-access-link:hover .social-access-arrow,
+.social-access-link:focus-visible .social-access-index,
+.social-access-link:focus-visible .social-access-arrow {
+  color: var(--signal-ink);
+}
+
+.social-access-empty {
+  min-height: 11rem;
+  padding: var(--space-3);
+  border-block: 1px solid var(--line-strong);
+  font-family: "IBM Plex Mono", monospace;
+}
+
+.social-access-empty h2 {
+  margin: 0 0 var(--space-2);
+  font: 600 1rem/1.3 "IBM Plex Mono", monospace;
+  text-transform: uppercase;
+}
+
+.social-access-empty p {
+  margin: 0;
+  color: var(--steel);
+}
+
+.social-access-field {
+  position: absolute;
+  right: -9rem;
+  bottom: 2rem;
+  width: min(34rem, 44vw);
+  aspect-ratio: 1;
+  opacity: 0.28;
+  pointer-events: none;
+}
+
+.social-access-field::before,
+.social-access-field::after,
+.social-access-field span {
+  position: absolute;
+  content: "";
+  border: 1px solid var(--signal);
+}
+
+.social-access-field::before {
+  inset: 10%;
+  transform: rotate(9deg);
+}
+
+.social-access-field::after {
+  inset: 27%;
+  transform: rotate(38deg);
+}
+
+.social-access-field span:nth-child(1) {
+  top: 49%;
+  right: 0;
+  left: 0;
+}
+
+.social-access-field span:nth-child(2) {
+  top: 0;
+  bottom: 0;
+  left: 49%;
+}
+
+.social-access-field span:nth-child(3) {
+  inset: 41%;
+  background: var(--signal);
+}
+
+@media (max-width: 48rem) {
+  .social-access-terminal {
+    grid-template-columns: minmax(0, 1fr);
+    align-content: center;
+    align-items: start;
+    gap: 0.75rem;
+    min-height: auto;
+    padding-block: clamp(2rem, 4vh, 2.5rem) calc(10rem + env(safe-area-inset-bottom));
+  }
+
+  .social-access-title,
+  html[lang="it"] .social-access-title {
+    max-width: 100%;
+    font-size: clamp(1.5rem, calc(14vw + 0.4rem), 6.5rem);
+    line-height: 0.8;
+  }
+
+  html[lang="ru"] .social-access-title {
+    max-width: 100%;
+    font-size: clamp(1rem, calc(8vw + 0.25rem), 4rem);
+    line-height: 0.84;
+  }
+
+  .social-access-link {
+    grid-template-columns: 1.5rem minmax(0, 1fr) 1.25rem;
+    gap: clamp(0.35rem, 2vw, 0.6rem);
+    min-height: 3.5rem;
+    padding: 0.5rem 0.25rem;
+  }
+
+  .social-access-service {
+    font-size: clamp(0.75rem, calc(2vw + 0.625rem), 1.5rem);
+  }
+
+  .social-access-lede {
+    margin-top: var(--space-2);
+  }
+
+  .social-access-status {
+    margin-bottom: var(--space-1);
+  }
+
+  .social-access-field {
+    right: -11rem;
+    bottom: 2rem;
+    width: 24rem;
+    opacity: 0.2;
+  }
+}
+
+@media (max-width: 22rem) {
+  .social-access-service {
+    font-size: 1.1rem;
+  }
+
+  .social-access-lede {
+    font-size: 0.74rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .social-access-link {
+    transition: none;
+  }
+}
+
+/* Task 7 — simplified route hierarchy and measured compact player */
+.header-inner {
+  grid-template-columns: minmax(0, 1fr) auto;
+  min-height: 0;
+  padding-block: 0.5rem;
+}
+
+.site-index {
+  position: relative;
+  grid-column: 2;
+  grid-row: 1;
+  justify-self: end;
+}
+
+.site-index-panel {
+  position: absolute;
+  z-index: 100;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  width: min(20rem, calc(100vw - 2rem));
+  padding: 0.75rem;
+  border: 1px solid var(--line-strong);
+  background: var(--void);
+  box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.45);
+}
+
+.site-index-panel .nav-list {
+  display: grid;
+}
+
+.site-index-secondary {
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--line);
+}
+
+.site-index-panel .nav-link {
+  justify-content: flex-start;
+}
+
+.site-index-panel .language-nav {
+  display: block;
+  margin-top: 0.75rem;
+  padding: 0.75rem 0 0;
+  border-top: 1px solid var(--line);
+  border-left: 0;
+}
+
+.site-index[open] .menu-summary::after {
+  content: "−";
+}
+
+.lightweight-header-inner {
+  display: flex;
+  min-height: 4rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.lightweight-header .language-nav {
+  display: block;
+  padding: 0;
+  border: 0;
+}
+
+body[data-lightweight-shell] main {
+  min-height: calc(100dvh - 4rem);
+}
+
+main#main-content:focus {
+  outline: none;
+}
+
+main#main-content:target,
+main#main-content:focus-visible {
+  outline: 3px solid var(--signal);
+  outline-offset: -3px;
+}
+
+.merch-roadmap-disclosure {
+  padding-inline: 0;
+}
+
+.merch-roadmap-summary {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr) auto;
+  align-items: end;
+  gap: var(--space-3);
+  padding-block: var(--space-4);
+  border-block: 1px solid var(--line-strong);
+  cursor: pointer;
+  list-style: none;
+}
+
+.merch-roadmap-summary::-webkit-details-marker {
+  display: none;
+}
+
+.merch-roadmap-summary::after {
+  content: "+";
+  color: var(--signal);
+  font: 800 2rem/1 "Barlow Condensed", "Arial Narrow", sans-serif;
+}
+
+.merch-roadmap-disclosure[open] .merch-roadmap-summary::after {
+  content: "−";
+}
+
+.merch-roadmap-summary > span:first-child {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.merch-roadmap-summary .eyebrow,
+.merch-roadmap-summary .body-copy {
+  margin: 0;
+}
+
+.merch-roadmap-content {
+  padding-block: var(--space-2) var(--space-5);
+}
+
+body.audio-player-ready {
+  padding-bottom: var(--player-height, 0px);
+}
+
+.hud-audio.is-ready,
+.hud-audio.is-ready.is-scrolled {
+  top: auto;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: block;
+  width: 100%;
+  padding: 0.5rem var(--gutter) calc(0.5rem + env(safe-area-inset-bottom));
+  border-width: 1px 0 0;
+  background: rgba(8, 8, 8, 0.97);
+  box-shadow: 0 -4px 0 rgba(0, 0, 0, 0.34);
+}
+
+.hud-audio-bar {
+  display: flex;
+  min-height: 2.75rem;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.hud-audio-bar .hud-audio-track {
+  display: block;
+  min-width: 0;
+  flex: 1 1 auto;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.hud-audio-primary-controls {
+  display: flex;
+  flex: 0 0 auto;
+  gap: 0.35rem;
+}
+
+.hud-audio-primary-controls button {
+  min-height: 2.75rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid rgba(242, 239, 231, 0.28);
+  border-radius: 0;
+  background: transparent;
+  color: var(--steel);
+  font: 600 0.7rem/1 "IBM Plex Mono", monospace;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+}
+
+.hud-audio-primary-controls .hud-audio-queue {
+  padding-inline: 0.65rem;
+}
+
+.hud-audio-primary-controls [data-player-index] {
+  display: none;
+}
+
+.hud-player-tray {
+  position: absolute;
+  right: 0;
+  bottom: 100%;
+  width: min(42rem, 100vw);
+  max-height: calc(100dvh - var(--player-height, 0px) - 0.75rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  border: 1px solid var(--signal);
+  border-right: 0;
+  background:
+    linear-gradient(135deg, rgba(243, 34, 34, 0.12), transparent 38%),
+    var(--void);
+  box-shadow: -8px -8px 0 rgba(0, 0, 0, 0.5);
+}
+
+.hud-player-tray[hidden] {
+  display: none;
+}
+
+.hud-player-tray-body {
+  padding: 0 var(--space-2) var(--space-2);
+}
+
+.hud-player-tray .hud-waveform-shell {
+  display: block;
+  height: 4rem;
+  margin-top: 0.75rem;
+}
+
+.hud-player-tray .hud-audio-controls {
+  grid-template-columns: auto auto auto minmax(4.6rem, 1fr);
+}
+
+.hud-player-tray .hud-volume-popup {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 0.5rem);
+}
+
+.hud-player-tray .hud-audio-playlist {
+  max-height: none;
+}
+
+.merch-detail {
+  padding-bottom: calc(var(--space-6) + var(--player-height, 0px));
+}
+
+html:has(body.audio-player-ready.page-merch-detail) {
+  scroll-padding-bottom: calc(var(--player-height, 0px) + 1rem);
+}
+
+body.audio-player-ready.page-merch-detail .product-viewer {
+  padding-bottom: 0;
+}
+
+body.audio-player-ready.page-merch-detail .product-viewer-controls {
+  bottom: calc(var(--player-height, 0px) + 0.5rem);
+  scroll-margin-block: 5rem calc(var(--player-height, 0px) + 1rem);
+}
+
+body.audio-player-ready.page-merch .merch-hero {
+  padding-bottom: var(--space-3);
+}
+
+.language-link:focus {
+  outline: 3px solid var(--signal);
+  outline-offset: 2px;
+}
+
+.merch-roadmap-summary > span:first-child {
+  min-width: 0;
+}
+
+@media (max-width: 64rem) {
+  .merch-roadmap-summary {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .merch-roadmap-summary .body-copy {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 48rem) {
+  .merch-roadmap-summary {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .merch-roadmap-summary .body-copy {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (min-width: 80rem) {
+  .header-inner {
+    display: flex;
+    min-height: 6rem;
+    padding-block: 0;
+  }
+
+  .desktop-nav {
+    display: block;
+    margin-left: auto;
+  }
+
+  .site-index {
+    flex: 0 0 auto;
+  }
+
+  .site-index-primary {
+    display: none;
+  }
+}
+
 @media (min-width: 40rem) {
   .header-inner {
     grid-template-columns: minmax(0, 1fr) auto auto;
@@ -2581,7 +3219,7 @@ html .artist-profile-heading .page-title {
   }
 
   body.audio-player-ready {
-    padding-bottom: calc(8.5rem + env(safe-area-inset-bottom));
+    padding-bottom: calc(9.25rem + env(safe-area-inset-bottom));
   }
 
   .hud-audio {
@@ -2590,7 +3228,7 @@ html .artist-profile-heading .page-title {
     bottom: 0;
     left: 0;
     width: 100%;
-    padding: 0.45rem var(--gutter) calc(0.45rem + env(safe-area-inset-bottom));
+    padding: 0.2rem var(--gutter) calc(0.2rem + env(safe-area-inset-bottom));
     border-width: 1px 0 0;
     background: rgba(8, 8, 8, 0.96);
     box-shadow: 0 -5px 0 rgba(0, 0, 0, 0.34);
@@ -2608,14 +3246,16 @@ html .artist-profile-heading .page-title {
   }
 
   .hud-audio-track {
-    min-height: 2.75rem;
+    min-height: 1.6rem;
     margin-top: 0;
     padding: 0 calc(6.5rem + var(--gutter)) 0 0;
     border-top: 0;
   }
 
   .hud-waveform-shell {
-    display: none;
+    display: block;
+    height: calc(2.75rem + 2px);
+    margin-top: 0.15rem;
   }
 
   .hud-audio-track span {
@@ -2628,6 +3268,13 @@ html .artist-profile-heading .page-title {
 
   .hud-audio-controls {
     margin-top: 0.2rem;
+  }
+
+  .hud-volume-popup {
+    position: fixed;
+    right: var(--gutter);
+    bottom: calc(9.75rem + env(safe-area-inset-bottom));
+    max-width: calc(100vw - (var(--gutter) * 2));
   }
 
   .hud-audio-status {
@@ -2996,5 +3643,1007 @@ html[data-route-state="loading"] [data-route-main] {
     font-family: "IBM Plex Mono", monospace;
     font-size: 0.75rem;
     overflow-wrap: anywhere;
+  }
+}
+
+/* Merch overview: the object archive materialises behind one live editorial title. */
+.merch-hero {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.merch-hero::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, rgba(8, 8, 8, 0.9) 0%, rgba(8, 8, 8, 0.58) 46%, rgba(8, 8, 8, 0.28) 100%),
+    linear-gradient(180deg, rgba(8, 8, 8, 0.24), transparent 42%, rgba(8, 8, 8, 0.82));
+}
+
+.merch-motion-stage {
+  position: absolute;
+  z-index: -2;
+  inset: 0;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 78% 48%, rgba(243, 34, 34, 0.11), transparent 28%),
+    repeating-linear-gradient(0deg, transparent 0 31px, rgba(242, 239, 231, 0.025) 31px 32px),
+    var(--void);
+}
+
+.merch-motion-stage .hero-motion {
+  z-index: 0;
+  opacity: 0.72;
+  filter: saturate(0.96) contrast(1.1) brightness(0.7);
+}
+
+.merch-motion-fallback {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  opacity: 0.74;
+  pointer-events: none;
+  transition: opacity 180ms ease;
+}
+
+.merch-motion-ring {
+  position: absolute;
+  top: 24%;
+  right: 14%;
+  width: clamp(8rem, 24vw, 22rem);
+  aspect-ratio: 1;
+  border: 1px solid rgba(242, 239, 231, 0.68);
+  border-radius: 50%;
+  box-shadow:
+    inset 0 0 0 clamp(1.8rem, 6vw, 5rem) var(--void),
+    inset 0 0 0 calc(clamp(1.8rem, 6vw, 5rem) + 1px) rgba(242, 239, 231, 0.26);
+}
+
+.merch-motion-datum {
+  position: absolute;
+  top: 18%;
+  right: 8%;
+  bottom: 16%;
+  left: 8%;
+  background:
+    linear-gradient(var(--bone), var(--bone)) left top / 5rem 1px no-repeat,
+    linear-gradient(var(--bone), var(--bone)) left top / 1px 5rem no-repeat,
+    linear-gradient(var(--bone), var(--bone)) right bottom / 5rem 1px no-repeat,
+    linear-gradient(var(--bone), var(--bone)) right bottom / 1px 5rem no-repeat;
+  opacity: 0.42;
+}
+
+.merch-motion-signal {
+  position: absolute;
+  top: 12%;
+  bottom: 10%;
+  left: 63%;
+  width: 0.45rem;
+  background: var(--signal);
+  opacity: 0.82;
+  transform: rotate(24deg);
+  transform-origin: center;
+}
+
+.merch-motion-stage .hero-motion[data-motion-state="active"] + .merch-motion-fallback,
+.merch-motion-stage .hero-motion[data-motion-state="paused"] + .merch-motion-fallback {
+  opacity: 0.12;
+}
+
+.merch-categories {
+  display: grid;
+  gap: var(--space-5);
+}
+
+.merch-category {
+  min-width: 0;
+}
+
+.merch-category > h3 {
+  margin: 0 0 var(--space-2);
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--line-strong);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.merch-object-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+}
+
+.merch-object {
+  min-width: 0;
+  min-height: 12rem;
+  padding: var(--space-2);
+  display: grid;
+  grid-template-rows: auto 1fr auto auto;
+  background: var(--void);
+}
+
+.merch-object > * {
+  min-width: 0;
+}
+
+.merch-object h4,
+.merch-roadmap h3 {
+  margin: 0;
+  color: var(--bone);
+  font-family: "Barlow Condensed", sans-serif;
+  font-size: clamp(1.8rem, 4vw, 3.4rem);
+  line-height: 0.9;
+  text-transform: uppercase;
+}
+
+.merch-object h4 {
+  overflow-wrap: anywhere;
+}
+
+.merch-object-geometry {
+  align-self: center;
+  justify-self: center;
+  width: clamp(3rem, 8vw, 6rem);
+  aspect-ratio: 1;
+  border: 1px solid var(--line-strong);
+  transform: rotate(calc(var(--merch-tilt, 0) * 1deg));
+}
+
+.merch-object:nth-child(2n) .merch-object-geometry {
+  border-radius: 50%;
+  --merch-tilt: 8;
+}
+
+.merch-roadmap {
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--line-strong);
+  list-style: none;
+}
+
+.merch-roadmap li {
+  display: grid;
+  grid-template-columns: 4rem minmax(0, 1fr);
+  gap: var(--space-2);
+  padding: var(--space-3) 0;
+  border-bottom: 1px solid var(--line);
+}
+
+@media (min-width: 48rem) {
+  .merch-hero {
+    grid-template-columns: minmax(0, 1.2fr) minmax(16rem, 0.8fr);
+  }
+
+  .merch-hero > :first-child,
+  .merch-hero .hero-bottom {
+    grid-column: 1 / -1;
+  }
+
+  .merch-object-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  body.audio-player-ready.page-merch .merch-hero > :first-child {
+    margin-top: 11rem;
+  }
+}
+
+@media (min-width: 80rem) {
+  .merch-object-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 24rem) {
+  .merch-object-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 48rem) {
+  body.audio-player-ready.page-merch .merch-hero {
+    grid-template-columns: minmax(0, 1fr);
+    min-height: 0;
+    gap: var(--space-2);
+    padding-top: 0;
+    padding-bottom: calc(var(--space-3) + 8.5rem + env(safe-area-inset-bottom));
+  }
+
+  body.audio-player-ready.page-merch .merch-hero > :first-child {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    margin-top: calc(-1 * var(--space-1));
+  }
+
+  body.audio-player-ready.page-merch .merch-hero .hero-bottom {
+    grid-column: 1 / -1;
+    display: grid;
+    gap: var(--space-1);
+    margin-top: max(0px, calc(8.5rem - 17vw));
+  }
+
+  body.audio-player-ready.page-merch .hero-bottom > :last-child {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-1);
+  }
+
+  body.audio-player-ready.page-merch .hero-bottom .button-row {
+    margin-top: 0;
+  }
+
+  html[lang="ru"] body.audio-player-ready.page-merch .page-title {
+    font-size: min(clamp(1.2rem, 7vw, 3rem), calc(7vw + 0.2rem));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .merch-object-geometry,
+  .merch-motion-signal {
+    transform: none;
+  }
+
+  .merch-motion-fallback {
+    transition: none;
+  }
+}
+
+html[lang="ru"] .page-merch .page-title {
+  font-size: min(clamp(1.5rem, calc(12vw + 0.5rem), 8rem), calc(10vw + 0.2rem));
+}
+
+/* DROP 001 concept detail */
+.merch-object {
+  color: inherit;
+  text-decoration: none;
+  transition: border-color 160ms ease, color 160ms ease;
+}
+
+.merch-object:focus-visible,
+.merch-object:hover {
+  color: var(--signal);
+  outline: 1px solid var(--signal);
+  outline-offset: -1px;
+}
+
+.merch-object-image {
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  margin: var(--space-1) 0 var(--space-2);
+  object-fit: cover;
+  background: var(--void);
+}
+
+.merch-detail {
+  min-width: 0;
+  padding-bottom: calc(var(--space-6) + 9rem + env(safe-area-inset-bottom));
+}
+
+.merch-breadcrumb {
+  padding: var(--space-2) 0;
+  border-bottom: 1px solid var(--line);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.merch-breadcrumb ol {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.merch-breadcrumb li:not(:last-child)::after {
+  content: "/";
+  margin-left: 0.5rem;
+  color: var(--muted);
+}
+
+.merch-detail-hero {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: clamp(1rem, 2vw, 2rem);
+  align-items: center;
+  min-height: min(78vh, 54rem);
+  padding: var(--space-4) 0 var(--space-5);
+  border-bottom: 1px solid var(--line-strong);
+}
+
+.merch-detail-copy {
+  position: relative;
+  z-index: 1;
+  grid-column: 1 / span 4;
+  min-width: 0;
+  container-type: inline-size;
+}
+
+.merch-detail-copy .page-title {
+  max-width: 13ch;
+  font-size: clamp(1rem, calc(12cqi + 0.35rem), 3.75rem);
+  overflow-wrap: normal;
+  word-break: normal;
+  hyphens: none;
+}
+
+html[lang="ru"] .merch-detail-copy .page-title {
+  max-width: 15ch;
+  font-size: clamp(1rem, calc(10cqi + 0.35rem), 3.25rem);
+}
+
+.merch-detail-index {
+  position: absolute;
+  inset: -0.55em auto auto -0.08em;
+  z-index: -1;
+  color: rgba(242, 239, 231, 0.05);
+  font-family: "Barlow Condensed", sans-serif;
+  font-size: clamp(9rem, 22vw, 23rem);
+  font-weight: 800;
+  line-height: 0.7;
+}
+
+.merch-concept-status {
+  width: fit-content;
+  margin: var(--space-2) 0;
+  padding-top: 0.55rem;
+  border-top: 3px solid var(--signal);
+  color: var(--bone);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.merch-detail-visual {
+  grid-column: 5 / -1;
+  min-width: 0;
+  margin: 0;
+}
+
+.merch-detail-visual img {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: var(--void);
+}
+
+.merch-detail-visual figcaption,
+.product-viewer-caption,
+.merch-gallery-caption,
+.merch-gallery-dialog figcaption {
+  display: block;
+  margin: 0;
+  padding-top: 0.65rem;
+  color: var(--muted);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.product-viewer {
+  grid-column: 5 / -1;
+  min-width: 0;
+  margin: 0;
+}
+
+.product-viewer-stage {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 3 / 2;
+  border: 1px solid var(--line-strong);
+  background:
+    radial-gradient(circle at 54% 44%, rgba(242, 239, 231, 0.08), transparent 40%),
+    repeating-linear-gradient(0deg, transparent 0 31px, rgba(242, 239, 231, 0.018) 31px 32px),
+    var(--void);
+}
+
+.product-viewer-stage::after {
+  content: "";
+  position: absolute;
+  z-index: 3;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(var(--signal), var(--signal)) 0.75rem 0.75rem / 3rem 2px no-repeat,
+    linear-gradient(var(--line-strong), var(--line-strong)) calc(100% - 0.75rem) calc(100% - 0.75rem) / 3rem 1px no-repeat;
+}
+
+.product-viewer-stage > img,
+.product-viewer-canvas,
+.product-viewer-model,
+.product-viewer-spin {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.product-viewer-stage > img {
+  position: relative;
+  z-index: 1;
+  object-fit: cover;
+  background: var(--void);
+}
+
+.product-viewer-stage > img[hidden] {
+  display: none;
+}
+
+.product-viewer-canvas {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+}
+
+.product-viewer-model {
+  --poster-color: transparent;
+  background: transparent;
+  touch-action: pan-y;
+}
+
+.product-viewer-model:focus-visible {
+  outline: 2px solid var(--signal);
+  outline-offset: -3px;
+}
+
+.product-viewer-spin {
+  object-fit: contain;
+  background: var(--void);
+  cursor: ew-resize;
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.product-viewer-spin:focus-visible {
+  outline: 2px solid var(--signal);
+  outline-offset: -3px;
+}
+
+.product-viewer-datum {
+  position: absolute;
+  z-index: 4;
+  top: 0.75rem;
+  left: 0.75rem;
+  padding: 0.32rem 0.45rem;
+  color: var(--bone);
+  background: rgba(8, 8, 8, 0.78);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.64rem;
+  letter-spacing: 0.08em;
+  pointer-events: none;
+}
+
+.product-viewer-controls {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  min-height: 3.75rem;
+  padding-top: 0.75rem;
+}
+
+.product-viewer-controls .button {
+  position: relative;
+  z-index: 5;
+}
+
+.product-viewer-controls [data-product-viewer-activate][disabled] {
+  max-width: 100%;
+  cursor: not-allowed;
+  opacity: 0.72;
+  white-space: normal;
+}
+
+.product-viewer-status {
+  flex: 1 1 12rem;
+  min-height: 1.2em;
+  margin: 0;
+  color: var(--muted);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.product-viewer-instructions {
+  margin: 0.25rem 0 0;
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.product-viewer-controls [hidden],
+.product-viewer-instructions[hidden] {
+  display: none;
+}
+
+.merch-detail-gallery-section {
+  scroll-margin-top: 5rem;
+}
+
+.merch-gallery-list {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.merch-gallery-item {
+  grid-column: span 4;
+  min-width: 0;
+}
+
+.merch-gallery-item:first-child {
+  grid-column: span 8;
+}
+
+.merch-gallery-trigger {
+  position: relative;
+  display: block;
+  min-height: 44px;
+  color: inherit;
+  text-decoration: none;
+}
+
+.merch-gallery-trigger::after {
+  content: "";
+  position: absolute;
+  inset: -0.35rem;
+  border: 1px solid transparent;
+  pointer-events: none;
+  transition: border-color 160ms ease;
+}
+
+.merch-gallery-trigger:hover::after,
+.merch-gallery-trigger:focus-visible::after {
+  border-color: var(--signal);
+}
+
+.merch-gallery-trigger:focus-visible {
+  outline: none;
+}
+
+.merch-gallery-trigger img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  background: var(--void);
+}
+
+.merch-gallery-index {
+  position: absolute;
+  z-index: 1;
+  top: 0.6rem;
+  left: 0.6rem;
+  min-width: 2.3rem;
+  padding: 0.3rem;
+  background: var(--void);
+  border-left: 3px solid var(--signal);
+  color: var(--bone);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.7rem;
+}
+
+.merch-detail-story {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(18rem, 4fr);
+  gap: var(--space-4);
+  align-items: start;
+  border-top: 1px solid var(--line-strong);
+}
+
+.merch-detail-story > div:last-child {
+  container-type: inline-size;
+}
+
+.merch-detail-story .section-title {
+  max-width: 16ch;
+  font-size: clamp(0.85rem, calc(8cqi + 0.4rem), 3.75rem);
+  overflow-wrap: normal;
+  word-break: normal;
+  hyphens: none;
+}
+
+html[lang="ru"] .merch-detail-story .section-title {
+  max-width: 18ch;
+  font-size: clamp(0.75rem, calc(7cqi + 0.3rem), 3.25rem);
+}
+
+.merch-story-datum {
+  color: var(--line-strong);
+  font-family: "Barlow Condensed", sans-serif;
+  font-size: clamp(4.8rem, 12vw, 12rem);
+  font-weight: 800;
+  line-height: 0.8;
+  overflow-wrap: anywhere;
+}
+
+.merch-detail-specifications dl {
+  margin: 0;
+  border-top: 1px solid var(--line-strong);
+}
+
+.merch-detail-specifications dl > div {
+  display: grid;
+  grid-template-columns: minmax(8rem, 1fr) minmax(0, 2fr);
+  gap: var(--space-2);
+  padding: var(--space-2) 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.merch-release-gate {
+  margin: var(--space-5) 0;
+  padding: var(--space-3);
+  border: 1px solid var(--line-strong);
+  border-left: 4px solid var(--signal);
+}
+
+.merch-release-gate h2,
+.merch-release-gate p {
+  max-width: 58rem;
+}
+
+.merch-release-gate-label {
+  color: var(--signal);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.merch-detail-actions,
+.merch-adjacent {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.merch-adjacent {
+  justify-content: space-between;
+  margin-top: var(--space-4);
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--line-strong);
+}
+
+.merch-adjacent a {
+  display: grid;
+  min-width: min(100%, 16rem);
+  min-height: 44px;
+  padding: var(--space-2);
+  border: 1px solid var(--line);
+  color: inherit;
+  text-decoration: none;
+}
+
+.merch-adjacent a:hover,
+.merch-adjacent a:focus-visible {
+  border-color: var(--signal);
+}
+
+.merch-adjacent span {
+  color: var(--muted);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+}
+
+.merch-gallery-dialog {
+  width: min(96vw, 92rem);
+  max-width: none;
+  max-height: 94dvh;
+  margin: auto;
+  padding: 0;
+  overflow: hidden;
+  background: var(--void);
+  border: 1px solid var(--line-strong);
+  color: var(--bone);
+}
+
+.merch-gallery-dialog::backdrop {
+  background: rgba(0, 0, 0, 0.88);
+}
+
+.merch-gallery-dialog[open] {
+  animation: merch-dialog-in 160ms ease-out;
+}
+
+@keyframes merch-dialog-in {
+  from { opacity: 0; transform: scale(0.985); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.merch-gallery-dialog-head,
+.merch-gallery-dialog-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  padding: var(--space-2);
+}
+
+.merch-gallery-dialog-head {
+  border-bottom: 1px solid var(--line);
+}
+
+.merch-gallery-dialog-head h2 {
+  margin: 0;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: clamp(0.78rem, 2vw, 1rem);
+  text-transform: uppercase;
+}
+
+.merch-gallery-dialog button {
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.merch-gallery-dialog-stage {
+  height: min(72dvh, 48rem);
+  padding: var(--space-2);
+}
+
+.merch-gallery-dialog-figure {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+
+.merch-gallery-dialog-figure[hidden] {
+  display: none;
+}
+
+.merch-gallery-dialog-figure img {
+  display: block;
+  width: 100%;
+  height: calc(100% - 2rem);
+  object-fit: contain;
+}
+
+.merch-gallery-dialog-controls {
+  border-top: 1px solid var(--line);
+}
+
+.merch-gallery-dialog output {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.75rem;
+}
+
+@media (max-width: 64rem) {
+  .merch-detail-hero {
+    grid-template-columns: minmax(0, 1fr);
+    min-height: 0;
+    padding-top: var(--space-3);
+  }
+
+  .merch-detail-copy,
+  .merch-detail-visual,
+  .product-viewer {
+    grid-column: 1;
+  }
+
+  .merch-detail-copy { grid-row: 1; }
+  .merch-detail-visual,
+  .product-viewer { grid-row: 2; }
+
+  .merch-detail-index {
+    inset: -0.25em 0 auto auto;
+    font-size: clamp(8rem, 42vw, 12rem);
+  }
+
+  .merch-gallery-list {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .merch-gallery-item,
+  .merch-gallery-item:first-child {
+    grid-column: 1;
+  }
+
+  .merch-detail-story {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .merch-story-datum {
+    font-size: clamp(3.4rem, 18vw, 6rem);
+  }
+
+  .merch-gallery-dialog {
+    width: calc(100vw - 1rem);
+    max-height: calc(100dvh - 1rem);
+  }
+
+  .merch-gallery-dialog-stage {
+    height: min(64dvh, 36rem);
+  }
+
+  .merch-adjacent a {
+    width: 100%;
+  }
+}
+
+@media (max-width: 48rem) {
+  .product-viewer.product-viewer--active .product-viewer-stage {
+    height: min(70svh, 32.5rem);
+    max-height: calc(100svh - 8rem);
+    aspect-ratio: auto;
+  }
+
+  html:has(body.audio-player-ready.page-merch-detail) {
+    scroll-padding-bottom: calc(10rem + env(safe-area-inset-bottom));
+  }
+
+  body.audio-player-ready.page-merch-detail .product-viewer {
+    padding-bottom: calc(9.75rem + env(safe-area-inset-bottom));
+  }
+
+  body.audio-player-ready.page-merch-detail .product-viewer-controls {
+    position: sticky;
+    z-index: 6;
+    bottom: calc(9.5rem + env(safe-area-inset-bottom));
+    padding-bottom: 0.5rem;
+    background: var(--void);
+    scroll-margin-block: 5rem calc(10rem + env(safe-area-inset-bottom));
+  }
+}
+
+@media (min-width: 64.01rem) {
+  .merch-detail-story .section-title {
+    font-size: clamp(2rem, calc(10cqi + 0.25rem), 3.75rem);
+  }
+
+  html[lang="ru"] .merch-detail-story .section-title {
+    font-size: clamp(1.75rem, calc(8cqi + 0.25rem), 3.25rem);
+  }
+}
+
+@media (max-width: 24rem) {
+  html[lang="ru"] .merch-roadmap-summary .section-title {
+    font-size: min(clamp(0.75rem, calc(14cqi + 0.25rem), 6.5rem), 1rem);
+  }
+
+  .merch-detail {
+    padding-inline: max(0.75rem, env(safe-area-inset-left));
+  }
+
+  .merch-detail-specifications dl > div {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .merch-detail-actions .button {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .merch-object,
+  .merch-gallery-trigger::after,
+  .merch-gallery-dialog[open],
+  .product-viewer-model {
+    animation: none;
+    scroll-behavior: auto;
+    transition: none;
+  }
+}
+
+/* Keep the compact player and product clearance authoritative over legacy breakpoints. */
+body.audio-player-ready {
+  padding-bottom: var(--player-height, 0px);
+}
+
+.hud-audio.is-ready,
+.hud-audio.is-ready.is-scrolled {
+  top: auto;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: block;
+  width: 100%;
+  max-width: none;
+  padding: 4px var(--gutter) calc(4px + env(safe-area-inset-bottom));
+  border-width: 1px 0 0;
+}
+
+.hud-audio-bar {
+  display: flex;
+  min-height: 44px;
+  align-items: center;
+  gap: 12px;
+}
+
+.hud-audio-bar .hud-audio-track {
+  display: block;
+  min-width: 0;
+  flex: 1 1 auto;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.hud-audio-primary-controls {
+  display: flex;
+  flex: 0 0 auto;
+  gap: 6px;
+}
+
+.hud-audio-bar .hud-audio-track strong {
+  font-size: 12.5px;
+  line-height: 1;
+}
+
+.hud-audio-primary-controls button,
+.hud-audio-primary-controls .hud-audio-queue {
+  min-height: 44px;
+  padding: 8px 12px;
+  font-size: 11px;
+}
+
+.hud-player-tray {
+  position: absolute;
+  right: 0;
+  bottom: 100%;
+  width: min(42rem, 100vw);
+  max-height: calc(100dvh - var(--player-height, 0px) - 0.75rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.hud-player-tray[hidden] {
+  display: none;
+}
+
+.hud-player-tray .hud-waveform-shell {
+  display: block;
+  height: 4rem;
+  margin-top: 0.75rem;
+}
+
+.hud-player-tray .hud-volume-popup {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 0.5rem);
+}
+
+.merch-detail {
+  padding-bottom: calc(var(--space-6) + var(--player-height, 0px));
+}
+
+html:has(body.audio-player-ready.page-merch-detail) {
+  scroll-padding-bottom: calc(var(--player-height, 0px) + 1rem);
+}
+
+body.audio-player-ready.page-merch-detail .product-viewer {
+  padding-bottom: 0;
+}
+
+body.audio-player-ready.page-merch-detail .product-viewer-controls {
+  bottom: calc(var(--player-height, 0px) + 0.5rem);
+  scroll-margin-block: 5rem calc(var(--player-height, 0px) + 1rem);
+}
+
+body.audio-player-ready.page-merch .merch-hero {
+  padding-top: max(var(--space-3), calc(clamp(3rem, 9vw, 7rem) - var(--player-height, 0px)));
+  padding-bottom: calc(var(--space-3) + var(--player-height, 0px));
+}
+
+@media (min-width: 48rem) {
+  body.audio-player-ready.page-merch .merch-hero > :first-child {
+    margin-top: 0;
   }
 }

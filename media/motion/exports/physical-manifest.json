@@ -1,0 +1,143 @@
+{
+  "schemaVersion": 1,
+  "scene": "physical",
+  "sequence": "scan > register > materialise > hold",
+  "renderer": "Playwright + Chromium + ffmpeg",
+  "inputs": [
+    {
+      "file": "assets/fonts/BarlowCondensed-Black.ttf",
+      "sha256": "e74b750df582c608f35db467b711b2b60d2217618e85e60b72b42dfd00446cab"
+    },
+    {
+      "file": "assets/fonts/IBMPlexMono-Medium.ttf",
+      "sha256": "a9b4c49bb299e05b5f6c481e7fb5e78943d2793249a0c8874ab574a2d1ea6755"
+    },
+    {
+      "file": "assets/logo/povkh-lab-compact-reverse-transparent-outlined.svg",
+      "sha256": "72a56616e3606420c36923e94ac0bf3fe8c434391630cb89a4354729b48436bf"
+    },
+    {
+      "file": "media/motion/physical/source/physical.css",
+      "sha256": "2950f09425a556289d4c8f9212708478335d5a370817b7e0f365e4194786931e"
+    },
+    {
+      "file": "media/motion/physical/source/physical.js",
+      "sha256": "36e5a832e9480a574701c5c0b1dd2c9f4b3ba7123c8f2fc9dfde71c51582109a"
+    },
+    {
+      "file": "media/motion/physical/source/render.html",
+      "sha256": "095269a0a089e8d4539aeba5b7d95d7fe703dcc5a21977b2368cfb2432adb9ca"
+    },
+    {
+      "file": "media/motion/render_physical_motion.mjs",
+      "sha256": "1ad26a2003d4d5f6bbaeb0bbe8ff59ed8479ea64b01f06d77fe7d9e62b7fbd00"
+    }
+  ],
+  "sourceSha256": "1c5b68f1bd720847682a218903a7a76debdc7d55c438d0ed1f0797dc3904e154",
+  "toolchain": {
+    "playwright": {
+      "pinnedVersion": "1.61.1",
+      "actualVersion": "1.61.1",
+      "packageJsonSha256": "6b840268612656f0639fb7d68782e8353bdf11518589d30ddf66f283c2670ed5"
+    },
+    "chromium": {
+      "pinnedRevision": "1228",
+      "pinnedVersion": "149.0.7827.55",
+      "actualVersion": "149.0.7827.55",
+      "browsersJsonSha256": "ee39bc924bc3d1bd895626c2910f1292d109bbfeeb5abd113acb45e1951cc942",
+      "executableSha256": "b1b9e2dd063115031f08eadc10ed381ca0fa05b2284baff8f721d87f5f0f61b7"
+    },
+    "ffmpeg": {
+      "pinnedVersion": "7.0.2-tessus",
+      "actualVersion": "7.0.2-tessus",
+      "executableSha256": "963c2a860d7da397858be2dc6e15cd1ce07581b1d740566983f2754e61b6cfd5"
+    },
+    "environment": {
+      "node": "v24.12.0",
+      "platform": "darwin",
+      "arch": "arm64"
+    }
+  },
+  "assets": [
+    {
+      "file": "PVKH_MOTION_BLOB_PHYSICAL_1920x1080_v1.mp4",
+      "width": 1920,
+      "height": 1080,
+      "durationSeconds": 3,
+      "fps": 30,
+      "format": "mp4",
+      "audio": false,
+      "sha256": "ff89ac6bf1861040205ae3a6e8602fe99aac7dad3ae154bd6a028ac6796dcbfe",
+      "loopSeam": {
+        "method": "decoded-rgb24-normalized-mae",
+        "frames": "0:89",
+        "threshold": 0.0025,
+        "thresholdRationale": "mean decoded channel delta stays below 0.64 of one 8-bit code value",
+        "maxChannelThreshold": 8,
+        "maxChannelThresholdRationale": "no localized decoded channel may jump by more than 8 of 255 code values",
+        "normalizedMae": 0.002117638864,
+        "maxChannelDelta": 7
+      }
+    },
+    {
+      "file": "PVKH_MOTION_BLOB_PHYSICAL_1920x1080_v1.webm",
+      "width": 1920,
+      "height": 1080,
+      "durationSeconds": 3,
+      "fps": 30,
+      "format": "webm",
+      "audio": false,
+      "sha256": "1fcc14b4ccd5620e45788638bbfa0f3c52861a5a68ee3d6c7360c2c0b4c9c99d",
+      "loopSeam": {
+        "method": "decoded-rgb24-normalized-mae",
+        "frames": "0:89",
+        "threshold": 0.0025,
+        "thresholdRationale": "mean decoded channel delta stays below 0.64 of one 8-bit code value",
+        "maxChannelThreshold": 8,
+        "maxChannelThresholdRationale": "no localized decoded channel may jump by more than 8 of 255 code values",
+        "normalizedMae": 0.000563421009,
+        "maxChannelDelta": 4
+      }
+    },
+    {
+      "file": "PVKH_MOTION_BLOB_PHYSICAL_MOBILE_640x360_v1.mp4",
+      "width": 640,
+      "height": 360,
+      "durationSeconds": 3,
+      "fps": 24,
+      "format": "mp4",
+      "audio": false,
+      "sha256": "1fef0f63d949607c8be7a6aae0e6af3280e1037d9972801bbdc2c9bde4492449",
+      "loopSeam": {
+        "method": "decoded-rgb24-normalized-mae",
+        "frames": "0:71",
+        "threshold": 0.0025,
+        "thresholdRationale": "mean decoded channel delta stays below 0.64 of one 8-bit code value",
+        "maxChannelThreshold": 8,
+        "maxChannelThresholdRationale": "no localized decoded channel may jump by more than 8 of 255 code values",
+        "normalizedMae": 0.00156518927,
+        "maxChannelDelta": 4
+      }
+    },
+    {
+      "file": "PVKH_MOTION_BLOB_PHYSICAL_MOBILE_640x360_v1.webm",
+      "width": 640,
+      "height": 360,
+      "durationSeconds": 3,
+      "fps": 24,
+      "format": "webm",
+      "audio": false,
+      "sha256": "9fe5fd9f088eb0d32291763fddc1ffabed6592fda73ebdc130e197a4dd7831ad",
+      "loopSeam": {
+        "method": "decoded-rgb24-normalized-mae",
+        "frames": "0:71",
+        "threshold": 0.0025,
+        "thresholdRationale": "mean decoded channel delta stays below 0.64 of one 8-bit code value",
+        "maxChannelThreshold": 8,
+        "maxChannelThresholdRationale": "no localized decoded channel may jump by more than 8 of 255 code values",
+        "normalizedMae": 0.001139745597,
+        "maxChannelDelta": 3
+      }
+    }
+  ]
+}

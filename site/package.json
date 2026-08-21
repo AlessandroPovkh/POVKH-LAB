@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "Dependency-free static site for POVKH LAB",
+  "description": "Static site for POVKH LAB",
   "engines": {
-    "node": ">=18"
+    "node": ">=22"
   },
   "scripts": {
     "build": "node tools/build.mjs",
@@ -17,10 +17,35 @@
     "check": "node tools/check.mjs",
     "check:pages-base": "node tools/check-pages-base.mjs",
     "qa": "node tools/qa.mjs",
-    "test": "npm run build && npm run check && npm run qa"
+    "assets:merch": "node tools/export-merch-assets.mjs",
+    "assets:apparel-registration": "node tools/render-apparel-registration.mjs",
+    "test:merch": "node --test tools/merch.test.mjs",
+    "test:merch-assets": "node --test tools/merch-assets.test.mjs",
+    "test:merch-assets:source": "PVKH_VERIFY_PRIVATE_MERCH_SOURCES=1 node --test tools/merch-assets.test.mjs",
+    "test:merch-pages": "node --test tools/merch-pages.test.mjs",
+    "test:social-links": "node --test tools/social-links.test.mjs",
+    "test:workflow": "node --test tests/pages-workflow.test.mjs",
+    "test:merch-registration": "node --test tests/merch-registration.test.mjs",
+    "test:merch-motion": "node --test tests/merch-motion.test.mjs tests/merch-motion-portability.test.mjs",
+    "test:merch-motion:renderer": "PVKH_VERIFY_PHYSICAL_RENDER_TOOLCHAIN=1 node --test tests/merch-motion.test.mjs",
+    "test:merch-viewer-contract": "node --test tests/merch-viewer-contract.test.mjs",
+    "test:product-viewer-runtime": "node --test tests/product-viewer-runtime.test.mjs",
+    "test:product-viewer-camera": "node --test tests/product-viewer-camera-browser.test.mjs",
+    "test:product-viewer-catalog": "node --test tests/product-viewer-catalog-browser.test.mjs",
+    "benchmark:product-viewer": "node --test tests/product-viewer-performance-browser.test.mjs",
+    "test:merch-model-assets": "node --test tests/merch-model-assets.test.mjs",
+    "test:merch-model-builds": "node --test tools/merch-3d/*.test.mjs",
+    "test:interface-hierarchy": "node --test tests/interface-hierarchy.test.mjs",
+    "test": "npm run test:merch && npm run test:merch-assets && npm run test:merch-pages && npm run test:social-links && npm run test:workflow && npm run test:merch-registration && npm run test:merch-motion && npm run test:merch-viewer-contract && npm run test:product-viewer-runtime && npm run test:product-viewer-camera && npm run test:product-viewer-catalog && npm run test:merch-model-assets && npm run test:merch-model-builds && npm run test:interface-hierarchy && npm run build && npm run check && npm run qa"
   },
   "devDependencies": {
     "@axe-core/playwright": "4.10.2",
-    "playwright": "1.61.1"
+    "@gltf-transform/core": "4.4.2",
+    "@gltf-transform/functions": "4.4.2",
+    "@google/model-viewer": "4.3.1",
+    "@zxing/library": "0.21.3",
+    "gltf-validator": "2.0.0-dev.3.10",
+    "playwright": "1.61.1",
+    "sharp": "0.35.3"
   }
 }

@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "assetKey": "print-001",
+  "productId": "MRCH-008",
+  "coordinateSystem": { "unit": "metre", "up": "+Y", "front": "+Z", "pivot": "centred-display", "groundY": 0 },
+  "dimensionsMm": { "sheet": [420, 594, 0.4], "gap": 30, "display": [870, 594, 1.9], "bow": 1.5 },
+  "dimensionAuthority": {
+    "sheetTrim": { "status": "confirmed", "dimensionsMm": [420, 594], "basis": "governed ISO 216 A2 trim" },
+    "sheetThickness": { "status": "standard nominal", "valueMm": 0.4, "basis": "viewer-only uncoated paper stock" },
+    "displayGap": { "status": "confirmed", "valueMm": 30, "basis": "governed display separation" },
+    "naturalBow": { "status": "provisional", "authoredMm": 1.5, "maxMm": 2, "basis": "viewer presentation only; not manufacturing data" }
+  },
+  "geometry": {
+    "scene": "Print_001_Upright_A2_Pair",
+    "nodes": ["Print_001_Centred_Grounded_Pivot", "Print_001_Bone_Left", "Print_001_Void_Right"],
+    "meshes": ["Print_001_Bone_Left_Mesh", "Print_001_Void_Right_Mesh"],
+    "primitives": [
+      { "node": "Print_001_Bone_Left", "role": "paper-back-and-edges", "material": "MAT_BONE_PAPER" },
+      { "node": "Print_001_Bone_Left", "role": "artwork-front", "material": "MAT_PRINT_BONELEFT" },
+      { "node": "Print_001_Void_Right", "role": "paper-back-and-edges", "material": "MAT_VOID_PAPER" },
+      { "node": "Print_001_Void_Right", "role": "artwork-front", "material": "MAT_PRINT_VOIDRIGHT" }
+    ],
+    "segmentsPerSheet": 12,
+    "animations": 0
+  },
+  "identity": {
+    "boneLeft": {
+      "path": "sources/print-001/PVKH_PRINT_001_A_SIGNAL_BONE_FLAT_ARTWORK_v01.png",
+      "canonicalPath": "production/physical-merch/concepts/drop-001/renders/archive-objects/print-001/source/flat-art/PVKH_PRINT_001_A_SIGNAL_BONE_FLAT_ARTWORK_v01.png",
+      "sha256": "20f9a1113b7a861334496b736bb9bbe8f4e48e3853b65fb0f1731a04237e3ad5",
+      "resolutionPx": [1400, 1980],
+      "colourSpace": "sRGB",
+      "texture": { "sourceUse": "full-image-no-crop", "cropPx": [0, 0, 1400, 1980], "fit": "fill", "resolutionPx": [700, 990], "mimeType": "image/png", "derivedSha256": "4ec903ae742d428bdc893b88910eb7347ccd8b5a75766ba8c11ea7290aabeafd" },
+      "registration": { "surfaceMm": [420, 594], "uvBounds": [0, 0, 1, 1], "front": "+Z", "orientation": "source-top-left-to-sheet-top-left", "trim": "full-bleed" }
+    },
+    "voidRight": {
+      "path": "sources/print-001/PVKH_PRINT_001_B_VOID_REVERSE_FLAT_ARTWORK_v01.png",
+      "canonicalPath": "production/physical-merch/concepts/drop-001/renders/archive-objects/print-001/source/flat-art/PVKH_PRINT_001_B_VOID_REVERSE_FLAT_ARTWORK_v01.png",
+      "sha256": "6a852a668ff424e66ac1fc82925610e35637a79071b5727d5b99013a200d651e",
+      "resolutionPx": [1400, 1980],
+      "colourSpace": "sRGB",
+      "texture": { "sourceUse": "full-image-no-crop", "cropPx": [0, 0, 1400, 1980], "fit": "fill", "resolutionPx": [700, 990], "mimeType": "image/png", "derivedSha256": "5f93f5130c291d75ad5ae572f245e5a439174174fbb1eedfd58ab4c97757f1b3" },
+      "registration": { "surfaceMm": [420, 594], "uvBounds": [0, 0, 1, 1], "front": "+Z", "orientation": "source-top-left-to-sheet-top-left", "trim": "full-bleed" }
+    }
+  },
+  "materials": {
+    "bonePaper": { "name": "MAT_BONE_PAPER", "baseColor": [0.8879, 0.8632, 0.7991, 1], "metallic": 0, "roughness": 0.96 },
+    "voidPaper": { "name": "MAT_VOID_PAPER", "baseColor": [0.008, 0.009, 0.011, 1], "metallic": 0, "roughness": 0.94 },
+    "boneArtwork": { "name": "MAT_PRINT_BONELEFT", "baseColor": [1, 1, 1, 1], "metallic": 0, "roughness": 0.92 },
+    "voidArtwork": { "name": "MAT_PRINT_VOIDRIGHT", "baseColor": [1, 1, 1, 1], "metallic": 0, "roughness": 0.92 }
+  },
+  "camera": {
+    "orbit": "0deg 75deg 115%",
+    "fieldOfView": "30deg",
+    "target": "auto auto auto",
+    "evidenceViews": {
+      "front": { "orbit": "0deg 90deg 115%", "fieldOfView": "30deg", "target": "auto auto auto" },
+      "rear": { "orbit": "180deg 90deg 115%", "fieldOfView": "30deg", "target": "auto auto auto" }
+    }
+  },
+  "poster": { "path": "assets/merch/poster-diptych.webp", "sha256": "2e6724aa5dc4aeee30b66a9400e3129bcd0a117812a20d0b7094e9d8b15d4b3e", "role": "composition-reference-only", "textureUse": "forbidden" },
+  "inspectionPolicy": {
+    "reportPath": "reports/print-001.inspect.json",
+    "unoptimized": { "stage": "authored-before-dedup-prune" },
+    "optimized": { "stage": "reopened-after-dedup-prune" }
+  },
+  "budgets": { "maxBytes": 650000, "maxTriangles": 1500, "maxDrawCalls": 4 },
+  "toolchain": { "gltfTransform": "4.4.2", "gltfValidator": "2.0.0-dev.3.10", "sharp": "0.35.3" }
+}

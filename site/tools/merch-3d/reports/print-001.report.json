@@ -1,0 +1,393 @@
+{
+  "schemaVersion": 1,
+  "assetKey": "print-001",
+  "sourceIntegrity": {
+    "boneLeft": {
+      "path": "sources/print-001/PVKH_PRINT_001_A_SIGNAL_BONE_FLAT_ARTWORK_v01.png",
+      "canonicalPath": "production/physical-merch/concepts/drop-001/renders/archive-objects/print-001/source/flat-art/PVKH_PRINT_001_A_SIGNAL_BONE_FLAT_ARTWORK_v01.png",
+      "sha256": "20f9a1113b7a861334496b736bb9bbe8f4e48e3853b65fb0f1731a04237e3ad5",
+      "bytes": 371823,
+      "resolutionPx": [
+        1400,
+        1980
+      ],
+      "colourSpace": "sRGB",
+      "derivedRasterSha256": "4ec903ae742d428bdc893b88910eb7347ccd8b5a75766ba8c11ea7290aabeafd"
+    },
+    "voidRight": {
+      "path": "sources/print-001/PVKH_PRINT_001_B_VOID_REVERSE_FLAT_ARTWORK_v01.png",
+      "canonicalPath": "production/physical-merch/concepts/drop-001/renders/archive-objects/print-001/source/flat-art/PVKH_PRINT_001_B_VOID_REVERSE_FLAT_ARTWORK_v01.png",
+      "sha256": "6a852a668ff424e66ac1fc82925610e35637a79071b5727d5b99013a200d651e",
+      "bytes": 296237,
+      "resolutionPx": [
+        1400,
+        1980
+      ],
+      "colourSpace": "sRGB",
+      "derivedRasterSha256": "5f93f5130c291d75ad5ae572f245e5a439174174fbb1eedfd58ab4c97757f1b3"
+    }
+  },
+  "governedBuildRecord": {
+    "productId": "MRCH-008",
+    "dimensionAuthority": {
+      "sheetTrim": {
+        "status": "confirmed",
+        "dimensionsMm": [
+          420,
+          594
+        ],
+        "basis": "governed ISO 216 A2 trim"
+      },
+      "sheetThickness": {
+        "status": "standard nominal",
+        "valueMm": 0.4,
+        "basis": "viewer-only uncoated paper stock"
+      },
+      "displayGap": {
+        "status": "confirmed",
+        "valueMm": 30,
+        "basis": "governed display separation"
+      },
+      "naturalBow": {
+        "status": "provisional",
+        "authoredMm": 1.5,
+        "maxMm": 2,
+        "basis": "viewer presentation only; not manufacturing data"
+      }
+    },
+    "geometry": {
+      "declared": {
+        "scene": "Print_001_Upright_A2_Pair",
+        "nodes": [
+          "Print_001_Centred_Grounded_Pivot",
+          "Print_001_Bone_Left",
+          "Print_001_Void_Right"
+        ],
+        "meshes": [
+          "Print_001_Bone_Left_Mesh",
+          "Print_001_Void_Right_Mesh"
+        ],
+        "primitives": [
+          {
+            "node": "Print_001_Bone_Left",
+            "role": "paper-back-and-edges",
+            "material": "MAT_BONE_PAPER"
+          },
+          {
+            "node": "Print_001_Bone_Left",
+            "role": "artwork-front",
+            "material": "MAT_PRINT_BONELEFT"
+          },
+          {
+            "node": "Print_001_Void_Right",
+            "role": "paper-back-and-edges",
+            "material": "MAT_VOID_PAPER"
+          },
+          {
+            "node": "Print_001_Void_Right",
+            "role": "artwork-front",
+            "material": "MAT_PRINT_VOIDRIGHT"
+          }
+        ],
+        "segmentsPerSheet": 12,
+        "animations": 0
+      },
+      "actual": {
+        "nodes": [
+          "Print_001_Centred_Grounded_Pivot",
+          "Print_001_Bone_Left",
+          "Print_001_Void_Right"
+        ],
+        "meshes": [
+          "Print_001_Bone_Left_Mesh",
+          "Print_001_Void_Right_Mesh"
+        ],
+        "primitives": [
+          {
+            "node": "Print_001_Bone_Left",
+            "role": "paper-back-and-edges",
+            "material": "MAT_BONE_PAPER"
+          },
+          {
+            "node": "Print_001_Bone_Left",
+            "role": "artwork-front",
+            "material": "MAT_PRINT_BONELEFT"
+          },
+          {
+            "node": "Print_001_Void_Right",
+            "role": "paper-back-and-edges",
+            "material": "MAT_VOID_PAPER"
+          },
+          {
+            "node": "Print_001_Void_Right",
+            "role": "artwork-front",
+            "material": "MAT_PRINT_VOIDRIGHT"
+          }
+        ]
+      }
+    },
+    "materials": {
+      "bonePaper": {
+        "name": "MAT_BONE_PAPER",
+        "baseColor": [
+          0.8879,
+          0.8632,
+          0.7991,
+          1
+        ],
+        "metallic": 0,
+        "roughness": 0.96
+      },
+      "voidPaper": {
+        "name": "MAT_VOID_PAPER",
+        "baseColor": [
+          0.008,
+          0.009,
+          0.011,
+          1
+        ],
+        "metallic": 0,
+        "roughness": 0.94
+      },
+      "boneArtwork": {
+        "name": "MAT_PRINT_BONELEFT",
+        "baseColor": [
+          1,
+          1,
+          1,
+          1
+        ],
+        "metallic": 0,
+        "roughness": 0.92
+      },
+      "voidArtwork": {
+        "name": "MAT_PRINT_VOIDRIGHT",
+        "baseColor": [
+          1,
+          1,
+          1,
+          1
+        ],
+        "metallic": 0,
+        "roughness": 0.92
+      }
+    },
+    "textures": {
+      "boneLeft": {
+        "sourcePath": "sources/print-001/PVKH_PRINT_001_A_SIGNAL_BONE_FLAT_ARTWORK_v01.png",
+        "canonicalPath": "production/physical-merch/concepts/drop-001/renders/archive-objects/print-001/source/flat-art/PVKH_PRINT_001_A_SIGNAL_BONE_FLAT_ARTWORK_v01.png",
+        "sourceSha256": "20f9a1113b7a861334496b736bb9bbe8f4e48e3853b65fb0f1731a04237e3ad5",
+        "sourceResolutionPx": [
+          1400,
+          1980
+        ],
+        "colourSpace": "sRGB",
+        "derivation": {
+          "sourceUse": "full-image-no-crop",
+          "cropPx": [
+            0,
+            0,
+            1400,
+            1980
+          ],
+          "fit": "fill",
+          "resolutionPx": [
+            700,
+            990
+          ],
+          "mimeType": "image/png",
+          "derivedSha256": "4ec903ae742d428bdc893b88910eb7347ccd8b5a75766ba8c11ea7290aabeafd"
+        },
+        "registration": {
+          "surfaceMm": [
+            420,
+            594
+          ],
+          "uvBounds": [
+            0,
+            0,
+            1,
+            1
+          ],
+          "front": "+Z",
+          "orientation": "source-top-left-to-sheet-top-left",
+          "trim": "full-bleed"
+        }
+      },
+      "voidRight": {
+        "sourcePath": "sources/print-001/PVKH_PRINT_001_B_VOID_REVERSE_FLAT_ARTWORK_v01.png",
+        "canonicalPath": "production/physical-merch/concepts/drop-001/renders/archive-objects/print-001/source/flat-art/PVKH_PRINT_001_B_VOID_REVERSE_FLAT_ARTWORK_v01.png",
+        "sourceSha256": "6a852a668ff424e66ac1fc82925610e35637a79071b5727d5b99013a200d651e",
+        "sourceResolutionPx": [
+          1400,
+          1980
+        ],
+        "colourSpace": "sRGB",
+        "derivation": {
+          "sourceUse": "full-image-no-crop",
+          "cropPx": [
+            0,
+            0,
+            1400,
+            1980
+          ],
+          "fit": "fill",
+          "resolutionPx": [
+            700,
+            990
+          ],
+          "mimeType": "image/png",
+          "derivedSha256": "5f93f5130c291d75ad5ae572f245e5a439174174fbb1eedfd58ab4c97757f1b3"
+        },
+        "registration": {
+          "surfaceMm": [
+            420,
+            594
+          ],
+          "uvBounds": [
+            0,
+            0,
+            1,
+            1
+          ],
+          "front": "+Z",
+          "orientation": "source-top-left-to-sheet-top-left",
+          "trim": "full-bleed"
+        }
+      }
+    },
+    "camera": {
+      "orbit": "0deg 75deg 115%",
+      "fieldOfView": "30deg",
+      "target": "auto auto auto",
+      "evidenceViews": {
+        "front": {
+          "orbit": "0deg 90deg 115%",
+          "fieldOfView": "30deg",
+          "target": "auto auto auto"
+        },
+        "rear": {
+          "orbit": "180deg 90deg 115%",
+          "fieldOfView": "30deg",
+          "target": "auto auto auto"
+        }
+      }
+    },
+    "poster": {
+      "path": "assets/merch/poster-diptych.webp",
+      "sha256": "2e6724aa5dc4aeee30b66a9400e3129bcd0a117812a20d0b7094e9d8b15d4b3e",
+      "role": "composition-reference-only",
+      "textureUse": "forbidden"
+    },
+    "inspections": {
+      "unoptimized": {
+        "stage": "authored-before-dedup-prune",
+        "reportPath": "reports/print-001.inspect.json#/unoptimized",
+        "triangles": 200,
+        "drawCalls": 4
+      },
+      "optimized": {
+        "stage": "reopened-after-dedup-prune",
+        "reportPath": "reports/print-001.inspect.json#/optimized",
+        "triangles": 200,
+        "drawCalls": 4,
+        "bytes": 160244
+      }
+    }
+  },
+  "physicalEvidence": {
+    "method": "reopened-glb-bounds-and-node-registration",
+    "boundsMm": {
+      "min": [
+        -434.9999934434891,
+        0,
+        -0.949999994947575
+      ],
+      "max": [
+        434.9999934434891,
+        593.999981880188,
+        0.9500000225380063
+      ]
+    },
+    "nodeBoundsMm": {
+      "Print_001_Bone_Left": {
+        "min": [
+          -434.9999934434891,
+          0,
+          -0.949999994947575
+        ],
+        "max": [
+          -15.00000655651093,
+          593.999981880188,
+          0.9500000225380063
+        ]
+      },
+      "Print_001_Void_Right": {
+        "min": [
+          15.00000655651093,
+          0,
+          -0.949999994947575
+        ],
+        "max": [
+          434.9999934434891,
+          593.999981880188,
+          0.9500000225380063
+        ]
+      }
+    },
+    "sheetMm": [
+      420,
+      594,
+      0.4
+    ],
+    "gapMm": 30,
+    "bowMm": 1.5,
+    "leftArtwork": "boneLeft",
+    "rightArtwork": "voidRight"
+  },
+  "excludedPresentation": [
+    "frames",
+    "tape",
+    "shadows"
+  ],
+  "cameraRecommendations": {
+    "orbit": "0deg 75deg 115%",
+    "fieldOfView": "30deg",
+    "target": "auto auto auto",
+    "evidenceViews": {
+      "front": {
+        "orbit": "0deg 90deg 115%",
+        "fieldOfView": "30deg",
+        "target": "auto auto auto"
+      },
+      "rear": {
+        "orbit": "180deg 90deg 115%",
+        "fieldOfView": "30deg",
+        "target": "auto auto auto"
+      }
+    }
+  },
+  "validation": {
+    "errors": 0,
+    "warnings": 0,
+    "infos": 2,
+    "hints": 0
+  },
+  "budget": {
+    "triangles": 200,
+    "drawCalls": 4,
+    "bytes": 160244,
+    "ceilings": {
+      "maxBytes": 650000,
+      "maxTriangles": 1500,
+      "maxDrawCalls": 4
+    }
+  },
+  "output": {
+    "path": "assets/merch-3d/print-001.glb",
+    "sha256": "5d3fe72c4e24e2ba166a67d2176a68324b5efeec167db05b665bd3f689f09228"
+  },
+  "deterministic": {
+    "verifiedBySecondInMemoryBuild": true
+  }
+}

@@ -1,0 +1,372 @@
+{
+  "schemaVersion": 1,
+  "assetKey": "print-001",
+  "baseUrlPolicy": "ephemeral-local-static-server",
+  "capturePolicy": {
+    "deviceScaleFactor": 2,
+    "pixelDensity": "2x",
+    "defaultLabel": "governed-source-camera",
+    "defaultAuthority": "print-001.source.json#camera",
+    "defaultApplication": "live-page-manifest-verified-against-source",
+    "readability": "native-DPR2-crop-without-enlargement"
+  },
+  "screenshots": {
+    "desktop-default": {
+      "path": "reports/screenshots/print-001-desktop-default.png",
+      "sha256": "0d239e2e2ce512ffeeeb071d65b00c18f5b4d5e880b7e2ebafdd758c1312e2fc",
+      "viewportCssPx": [
+        1440,
+        1000
+      ],
+      "stageCssPx": [
+        756,
+        504
+      ],
+      "screenshotPx": [
+        1512,
+        1008
+      ],
+      "deviceScaleFactor": 2,
+      "viewRole": "default",
+      "cameraAuthority": "print-001.source.json#camera",
+      "cameraProfile": {
+        "orbit": "0deg 75deg 115%",
+        "fieldOfView": "30deg",
+        "target": "auto auto auto"
+      },
+      "cameraApplication": "live-page-manifest-verified-against-source",
+      "entropy": 2.3579
+    },
+    "desktop-front": {
+      "path": "reports/screenshots/print-001-desktop-front.png",
+      "sha256": "6f216d5c7bf30c51d8f5fa33f09bf266fd914cb86996d883090e3625b72e8972",
+      "viewportCssPx": [
+        1440,
+        1000
+      ],
+      "stageCssPx": [
+        756,
+        504
+      ],
+      "screenshotPx": [
+        1512,
+        1008
+      ],
+      "deviceScaleFactor": 2,
+      "viewRole": "front",
+      "cameraAuthority": "print-001.source.json#camera",
+      "cameraProfile": {
+        "orbit": "0deg 90deg 115%",
+        "fieldOfView": "30deg",
+        "target": "auto auto auto"
+      },
+      "cameraApplication": "governed-qa-view-applied-from-source",
+      "entropy": 2.3799
+    },
+    "desktop-rear": {
+      "path": "reports/screenshots/print-001-desktop-rear.png",
+      "sha256": "f3faaa1181067f3e1d2f8dae46a2c4d06fe746b58233af6b895294489e5f88b9",
+      "viewportCssPx": [
+        1440,
+        1000
+      ],
+      "stageCssPx": [
+        756,
+        504
+      ],
+      "screenshotPx": [
+        1512,
+        1008
+      ],
+      "deviceScaleFactor": 2,
+      "viewRole": "rear",
+      "cameraAuthority": "print-001.source.json#camera",
+      "cameraProfile": {
+        "orbit": "180deg 90deg 115%",
+        "fieldOfView": "30deg",
+        "target": "auto auto auto"
+      },
+      "cameraApplication": "governed-qa-view-applied-from-source",
+      "entropy": 1.9692
+    },
+    "mobile-default": {
+      "path": "reports/screenshots/print-001-mobile-default.png",
+      "sha256": "90106298c67d8137b515189f672f47f0d7ee67a72b5def862d2b9a777e83071b",
+      "viewportCssPx": [
+        390,
+        844
+      ],
+      "stageCssPx": [
+        358,
+        239
+      ],
+      "screenshotPx": [
+        716,
+        478
+      ],
+      "deviceScaleFactor": 2,
+      "viewRole": "default",
+      "cameraAuthority": "print-001.source.json#camera",
+      "cameraProfile": {
+        "orbit": "0deg 75deg 115%",
+        "fieldOfView": "30deg",
+        "target": "auto auto auto"
+      },
+      "cameraApplication": "live-page-manifest-verified-against-source",
+      "entropy": 2.5292
+    },
+    "mobile-front": {
+      "path": "reports/screenshots/print-001-mobile-front.png",
+      "sha256": "d36bca205f5fd55fcdfface880fb5af777a9a34aa2a48d0723e8f681e7cc5f90",
+      "viewportCssPx": [
+        390,
+        844
+      ],
+      "stageCssPx": [
+        358,
+        239
+      ],
+      "screenshotPx": [
+        716,
+        478
+      ],
+      "deviceScaleFactor": 2,
+      "viewRole": "front",
+      "cameraAuthority": "print-001.source.json#camera",
+      "cameraProfile": {
+        "orbit": "0deg 90deg 115%",
+        "fieldOfView": "30deg",
+        "target": "auto auto auto"
+      },
+      "cameraApplication": "governed-qa-view-applied-from-source",
+      "entropy": 2.5443
+    },
+    "mobile-rear": {
+      "path": "reports/screenshots/print-001-mobile-rear.png",
+      "sha256": "df27b00f7297ff83a47a6bef8e408ae13e4748c099364a4f581ad12678500527",
+      "viewportCssPx": [
+        390,
+        844
+      ],
+      "stageCssPx": [
+        358,
+        239
+      ],
+      "screenshotPx": [
+        716,
+        478
+      ],
+      "deviceScaleFactor": 2,
+      "viewRole": "rear",
+      "cameraAuthority": "print-001.source.json#camera",
+      "cameraProfile": {
+        "orbit": "180deg 90deg 115%",
+        "fieldOfView": "30deg",
+        "target": "auto auto auto"
+      },
+      "cameraApplication": "governed-qa-view-applied-from-source",
+      "entropy": 1.9927
+    },
+    "desktop-readability-crop": {
+      "path": "reports/screenshots/print-001-desktop-readability-crop.png",
+      "sha256": "8436f1a57a2557c23939a071800bebb89f80a5bfd9bb65f5d72463a07d5c860b",
+      "screenshotPx": [
+        1270,
+        846
+      ],
+      "deviceScaleFactor": 2,
+      "cameraAuthority": "print-001.source.json#camera",
+      "cameraProfile": {
+        "orbit": "0deg 90deg 115%",
+        "fieldOfView": "30deg",
+        "target": "auto auto auto"
+      },
+      "captureMethod": "native-DPR2-crop-without-enlargement",
+      "sourceScreenshot": "desktop-front",
+      "expected": "Bone master left / Void reverse master right"
+    }
+  },
+  "metrics": {
+    "desktop-default": {
+      "loaded": true,
+      "declaredCamera": {
+        "orbit": "0deg 75deg 115%",
+        "fieldOfView": "30deg",
+        "target": "auto auto auto"
+      },
+      "dimensionsM": [
+        0.8699999868869781,
+        0.593999981880188,
+        0.0019000000174855813
+      ],
+      "centreM": [
+        0,
+        0.296999990940094,
+        1.3795215620879264e-11
+      ],
+      "cameraOrbit": {
+        "theta": 0,
+        "phi": 1.3089969389957472,
+        "radius": 2.136847888252058
+      },
+      "fieldOfViewDeg": 30.000000000000004
+    },
+    "desktop-front": {
+      "loaded": true,
+      "declaredCamera": {
+        "orbit": "0deg 75deg 115%",
+        "fieldOfView": "30deg",
+        "target": "auto auto auto"
+      },
+      "dimensionsM": [
+        0.8699999868869781,
+        0.593999981880188,
+        0.0019000000174855813
+      ],
+      "centreM": [
+        0,
+        0.296999990940094,
+        1.3795215620879264e-11
+      ],
+      "cameraOrbit": {
+        "theta": 0,
+        "phi": 1.5707963267948966,
+        "radius": 2.136847888252058
+      },
+      "fieldOfViewDeg": 30.000000000000004
+    },
+    "desktop-rear": {
+      "loaded": true,
+      "declaredCamera": {
+        "orbit": "0deg 75deg 115%",
+        "fieldOfView": "30deg",
+        "target": "auto auto auto"
+      },
+      "dimensionsM": [
+        0.8699999868869781,
+        0.593999981880188,
+        0.0019000000174855813
+      ],
+      "centreM": [
+        0,
+        0.296999990940094,
+        1.3795215620879264e-11
+      ],
+      "cameraOrbit": {
+        "theta": 3.141592653589793,
+        "phi": 1.5707963267948966,
+        "radius": 2.136847888252058
+      },
+      "fieldOfViewDeg": 30.000000000000004
+    },
+    "mobile-default": {
+      "loaded": true,
+      "declaredCamera": {
+        "orbit": "0deg 75deg 115%",
+        "fieldOfView": "30deg",
+        "target": "auto auto auto"
+      },
+      "dimensionsM": [
+        0.8699999868869781,
+        0.593999981880188,
+        0.0019000000174855813
+      ],
+      "centreM": [
+        0,
+        0.296999990940094,
+        1.3795215620879264e-11
+      ],
+      "cameraOrbit": {
+        "theta": 0,
+        "phi": 1.3089969389957472,
+        "radius": 2.136847888252058
+      },
+      "fieldOfViewDeg": 30.000000000000004
+    },
+    "mobile-front": {
+      "loaded": true,
+      "declaredCamera": {
+        "orbit": "0deg 75deg 115%",
+        "fieldOfView": "30deg",
+        "target": "auto auto auto"
+      },
+      "dimensionsM": [
+        0.8699999868869781,
+        0.593999981880188,
+        0.0019000000174855813
+      ],
+      "centreM": [
+        0,
+        0.296999990940094,
+        1.3795215620879264e-11
+      ],
+      "cameraOrbit": {
+        "theta": 0,
+        "phi": 1.5707963267948966,
+        "radius": 2.136847888252058
+      },
+      "fieldOfViewDeg": 30.000000000000004
+    },
+    "mobile-rear": {
+      "loaded": true,
+      "declaredCamera": {
+        "orbit": "0deg 75deg 115%",
+        "fieldOfView": "30deg",
+        "target": "auto auto auto"
+      },
+      "dimensionsM": [
+        0.8699999868869781,
+        0.593999981880188,
+        0.0019000000174855813
+      ],
+      "centreM": [
+        0,
+        0.296999990940094,
+        1.3795215620879264e-11
+      ],
+      "cameraOrbit": {
+        "theta": 3.141592653589793,
+        "phi": 1.5707963267948966,
+        "radius": 2.136847888252058
+      },
+      "fieldOfViewDeg": 30.000000000000004
+    }
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "cameraRecommendation": {
+    "orbit": "0deg 75deg 115%",
+    "fieldOfView": "30deg",
+    "target": "auto auto auto",
+    "evidenceViews": {
+      "front": {
+        "orbit": "0deg 90deg 115%",
+        "fieldOfView": "30deg",
+        "target": "auto auto auto"
+      },
+      "rear": {
+        "orbit": "180deg 90deg 115%",
+        "fieldOfView": "30deg",
+        "target": "auto auto auto"
+      }
+    }
+  },
+  "visualComparison": {
+    "status": "pass",
+    "method": "exact-source-pair-left / live-browser-front-right",
+    "capturePixelDensity": "2x",
+    "artifactPath": "reports/screenshots/print-001-source-compare.png",
+    "artifactSha256": "1fe51d23b76f92106750972dd13b3a7ccd95f02eada5c50189889838a475b5fd",
+    "checks": [
+      "Bone artwork remains left",
+      "Void artwork remains right",
+      "30 mm gap remains open",
+      "no frame, tape or cast-shadow geometry"
+    ]
+  },
+  "visualRisks": [
+    "Fine typography is reduced at mobile default distance",
+    "Rear view intentionally shows unprinted paper backs",
+    "Subtle 1.5 mm bow is most legible under slight orbit"
+  ]
+}

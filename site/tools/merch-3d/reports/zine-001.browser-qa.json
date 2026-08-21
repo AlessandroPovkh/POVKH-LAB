@@ -1,0 +1,221 @@
+{
+  "schemaVersion": 1,
+  "assetKey": "zine-001",
+  "baseUrlPolicy": "ephemeral-local-static-server",
+  "screenshots": {
+    "desktop-default": {
+      "path": "reports/screenshots/zine-001-desktop-default.png",
+      "sha256": "51875862afc0fca89e9c50141247724178c807ed86baad191c2ec4511b24716a",
+      "viewportPx": [
+        1440,
+        1000
+      ],
+      "deviceScaleFactor": 2,
+      "entropy": 1.8458
+    },
+    "desktop-front": {
+      "path": "reports/screenshots/zine-001-desktop-front.png",
+      "sha256": "f730a4bc6e0d162be7c84ba8e8eca456088c8e3ce20d3ab43685aa73434afd81",
+      "viewportPx": [
+        1440,
+        1000
+      ],
+      "deviceScaleFactor": 2,
+      "entropy": 1.8401
+    },
+    "desktop-rear": {
+      "path": "reports/screenshots/zine-001-desktop-rear.png",
+      "sha256": "e7ef50784bf3f82920e4e87936d4601137980e164a1a12dcd28c5917a75aef19",
+      "viewportPx": [
+        1440,
+        1000
+      ],
+      "deviceScaleFactor": 2,
+      "entropy": 1.6946
+    },
+    "mobile-default": {
+      "path": "reports/screenshots/zine-001-mobile-default.png",
+      "sha256": "221764b7e7a4555fa84b0e27ed986594f16534ed6acf6226aaaf19cbbf17fea3",
+      "viewportPx": [
+        390,
+        844
+      ],
+      "deviceScaleFactor": 2,
+      "entropy": 1.9334
+    },
+    "mobile-front": {
+      "path": "reports/screenshots/zine-001-mobile-front.png",
+      "sha256": "ec96db6117b376cb8fecd09b05b1819838c7d6952b25c737dae4860427e7cecf",
+      "viewportPx": [
+        390,
+        844
+      ],
+      "deviceScaleFactor": 2,
+      "entropy": 1.9464
+    },
+    "mobile-rear": {
+      "path": "reports/screenshots/zine-001-mobile-rear.png",
+      "sha256": "7854d60a962a6cacb3ae62eefa014a63b24561fee7dc02a58361613956665872",
+      "viewportPx": [
+        390,
+        844
+      ],
+      "deviceScaleFactor": 2,
+      "entropy": 1.7427
+    },
+    "desktop-readability-crop": {
+      "path": "reports/screenshots/zine-001-desktop-readability-crop.png",
+      "sha256": "e0172130beee69bd714273a667ac34927425be6fd23589bf6408b85aeaf8e548",
+      "expected": [
+        "ZINE 001 / SIGNAL ARCHAEOLOGY",
+        "RECOVERY LOG / ARCHIVE OBJECT",
+        "POVKH_LAB::SIGNAL"
+      ]
+    }
+  },
+  "metrics": {
+    "desktop-default": {
+      "loaded": true,
+      "dimensionsM": [
+        0.14800000190734863,
+        0.20999999344348907,
+        0.002400000113993883
+      ],
+      "centreM": [
+        0,
+        0.10499999672174454,
+        0
+      ],
+      "cameraOrbit": {
+        "theta": 0.3490658503988659,
+        "phi": 1.2217304763960306,
+        "radius": 0.5211552804750482
+      },
+      "fieldOfViewDeg": 30.000000000000004
+    },
+    "desktop-front": {
+      "loaded": true,
+      "dimensionsM": [
+        0.14800000190734863,
+        0.20999999344348907,
+        0.002400000113993883
+      ],
+      "centreM": [
+        0,
+        0.10499999672174454,
+        0
+      ],
+      "cameraOrbit": {
+        "theta": 0,
+        "phi": 1.5707963267948966,
+        "radius": 0.5211552804750482
+      },
+      "fieldOfViewDeg": 30.000000000000004
+    },
+    "desktop-rear": {
+      "loaded": true,
+      "dimensionsM": [
+        0.14800000190734863,
+        0.20999999344348907,
+        0.002400000113993883
+      ],
+      "centreM": [
+        0,
+        0.10499999672174454,
+        0
+      ],
+      "cameraOrbit": {
+        "theta": 3.141592653589793,
+        "phi": 1.5707963267948966,
+        "radius": 0.5211552804750482
+      },
+      "fieldOfViewDeg": 30.000000000000004
+    },
+    "mobile-default": {
+      "loaded": true,
+      "dimensionsM": [
+        0.14800000190734863,
+        0.20999999344348907,
+        0.002400000113993883
+      ],
+      "centreM": [
+        0,
+        0.10499999672174454,
+        0
+      ],
+      "cameraOrbit": {
+        "theta": 0.3490658503988659,
+        "phi": 1.2217304763960306,
+        "radius": 0.5211552804750482
+      },
+      "fieldOfViewDeg": 30.000000000000004
+    },
+    "mobile-front": {
+      "loaded": true,
+      "dimensionsM": [
+        0.14800000190734863,
+        0.20999999344348907,
+        0.002400000113993883
+      ],
+      "centreM": [
+        0,
+        0.10499999672174454,
+        0
+      ],
+      "cameraOrbit": {
+        "theta": 0,
+        "phi": 1.5707963267948966,
+        "radius": 0.5211552804750482
+      },
+      "fieldOfViewDeg": 30.000000000000004
+    },
+    "mobile-rear": {
+      "loaded": true,
+      "dimensionsM": [
+        0.14800000190734863,
+        0.20999999344348907,
+        0.002400000113993883
+      ],
+      "centreM": [
+        0,
+        0.10499999672174454,
+        0
+      ],
+      "cameraOrbit": {
+        "theta": 3.141592653589793,
+        "phi": 1.5707963267948966,
+        "radius": 0.5211552804750482
+      },
+      "fieldOfViewDeg": 30.000000000000004
+    }
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "cameraRecommendation": {
+    "orbit": "20deg 70deg 110%",
+    "fieldOfView": "30deg",
+    "target": "auto auto auto"
+  },
+  "visualComparison": {
+    "status": "pass",
+    "method": "exact-cross-product-v04-cover-left / live-browser-front-right",
+    "sourcePath": "production/physical-merch/concepts/drop-001/renders/archive-objects/collector-box-001/source/artwork/PVKH_COLLECTOR_BOX_001_ZINE_FLAT_COVER_MASTER_v04.svg",
+    "sourceSha256": "ffbc37ed621dd18006c89d8c05cd356f4377a0fa66643fe38fe6c07e5df33485",
+    "authoritySha256": "c9781d0b7fbee456409fd8bf159572a0bec17206942e7ed33dd489a303dccf0c",
+    "artifactPath": "reports/screenshots/zine-001-source-compare.png",
+    "artifactSha256": "49c03a582c2ee5f55514b1f5afb70a829c52660dbaa91429f5ff137c2ebb550c",
+    "checks": [
+      "front artwork is uncropped exact cover master",
+      "closed black cover",
+      "page block visible only at edges",
+      "shallow left spine",
+      "exactly two staple marks",
+      "no interiors or page-turn state"
+    ]
+  },
+  "visualRisks": [
+    "Two staples are intentionally minute at default/mobile distance",
+    "2.4 mm closed thickness reads primarily in default orbit, not orthographic front",
+    "Rear view is intentionally unprinted black cover"
+  ]
+}

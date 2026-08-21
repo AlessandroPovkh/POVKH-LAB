@@ -1,0 +1,326 @@
+{
+  "schemaVersion": 1,
+  "assetKey": "cassette-002",
+  "sourceIntegrity": {
+    "ascii": {
+      "path": "sources/cassette-002/PVKH_ASCII_DARK_EXACT_1600x600_v01.png",
+      "sha256": "c46bf6bd82ea2ec6928e9fe4ca9a314b56580af49c044be0395579c43c06dada",
+      "bytes": 137134
+    },
+    "compactDark": {
+      "path": "sources/cassette-002/PVKH_COMPACT_DARK_EXACT_1000x1000_v01.png",
+      "sha256": "66dd2eeff4ba4c963b891a7968eb50226cbb17f4b78953803aeae8c11fe880dd",
+      "bytes": 54206
+    },
+    "compactReverse": {
+      "path": "sources/cassette-002/PVKH_COMPACT_REVERSE_EXACT_1000x1000_v01.png",
+      "sha256": "9d273a3fe83d93a321342d0e7da86d8fd4654f85efedc228ae6b41f53d98bd9b",
+      "bytes": 53859
+    }
+  },
+  "authorityIntegrity": {
+    "placements": {
+      "fixturePath": "sources/cassette-002/authority/placements.authority.json",
+      "fixtureSha256": "8b0a2662bcff4d9fa25f87694ca4ec898aa231dcdf70c614401738292633196f",
+      "canonicalPath": "production/physical-merch/concepts/drop-001/renders/archive-objects/cassette-002/placements.json",
+      "canonicalSha256": "398cf719dc099c785858baab7876ff95aead00763b000db46c899f90c6f0b783"
+    },
+    "provenance": {
+      "fixturePath": "sources/cassette-002/authority/provenance.authority.json",
+      "fixtureSha256": "58fb2d965e01dac12fd7f2639f1f8acc87e5a74b646c2e7c42dc53b1a736f262",
+      "canonicalPath": "production/physical-merch/concepts/drop-001/renders/archive-objects/cassette-002/provenance.json",
+      "canonicalSha256": "e274081bc3844843edc5b533f3d26085c40dc55a6646571c5f23c39eaf7242bb"
+    }
+  },
+  "dimensionsAuthority": {
+    "status": "nominal-provisional",
+    "description": "IEC compact-cassette and Norelco-case standard nominal viewer envelopes; replace with selected vendor drawings before manufacture."
+  },
+  "coordinates": {
+    "unit": "metre",
+    "up": "+Y",
+    "front": "+Z",
+    "pivot": "centred-overall-display",
+    "groundY": 0
+  },
+  "camera": {
+    "orbit": "18deg 70deg 103%",
+    "fieldOfView": "22deg",
+    "mobileOrbit": "14deg 72deg 105%",
+    "mobileFieldOfView": "19deg",
+    "mobileTarget": "auto 0.078m auto",
+    "poster": "assets/merch/cassette-hero.webp"
+  },
+  "validation": {
+    "errors": 0,
+    "warnings": 0,
+    "infos": 2,
+    "hints": 0
+  },
+  "mechanics": {
+    "evidence": "reopened-glb-topology-spatial",
+    "componentCounts": {
+      "hardware": 18,
+      "feltAndScrewHighlights": 27,
+      "tape": 3
+    },
+    "screws": 5,
+    "hubs": 2,
+    "guideRollers": 2,
+    "spindles": 2,
+    "continuousTapePath": true,
+    "pressurePad": true,
+    "emptyWindowBetweenHubs": true,
+    "measurements": {
+      "screwCentresMm": [
+        [
+          2,
+          57,
+          6.5
+        ],
+        [
+          88,
+          57,
+          6.5
+        ],
+        [
+          2,
+          7,
+          6.5
+        ],
+        [
+          88,
+          7,
+          6.5
+        ],
+        [
+          45,
+          6.5,
+          6.5
+        ]
+      ],
+      "hubCentresMm": [
+        [
+          24,
+          37,
+          5.6
+        ],
+        [
+          66,
+          37,
+          5.6
+        ]
+      ],
+      "spindleCentresMm": [
+        [
+          24,
+          37,
+          5.9
+        ],
+        [
+          66,
+          37,
+          5.9
+        ]
+      ],
+      "guideRollerCentresMm": [
+        [
+          10,
+          13,
+          6.2
+        ],
+        [
+          80,
+          13,
+          6.2
+        ]
+      ],
+      "pressurePadBoundsMm": {
+        "min": [
+          41,
+          9.2,
+          5.85
+        ],
+        "max": [
+          49,
+          13.2,
+          7.05
+        ]
+      },
+      "tapeRibbonBoundsMm": {
+        "min": [
+          9.5743,
+          10.4,
+          7.1
+        ],
+        "max": [
+          80.4257,
+          28.424,
+          7.1
+        ]
+      },
+      "tapeLandmarkDistanceMm": {
+        "leftGuide": 0.8,
+        "pressurePad": 0.8,
+        "rightGuide": 0.8
+      },
+      "emptyWindowMm": {
+        "minMm": [
+          37.5,
+          30,
+          6
+        ],
+        "maxMm": [
+          52.5,
+          44,
+          8
+        ]
+      }
+    }
+  },
+  "registration": {
+    "maxErrorPercent": 0.00004649162292480469,
+    "entries": [
+      {
+        "key": "asciiJCard",
+        "material": "MAT_IDENTITY_ASCII_DARK",
+        "coordinateSpace": "upper-case-local-mm",
+        "coordinateNode": "Cassette_002_Upper_Case_Coordinates",
+        "coordinateTranslationMm": [
+          12.15,
+          70
+        ],
+        "targetCentreMm": [
+          -66.5,
+          39.5
+        ],
+        "actualCentreMm": [
+          -66.49999972432852,
+          39.499999955296516
+        ],
+        "actualWorldCentreMm": [
+          -54.34999972432852,
+          109.49999995529652
+        ],
+        "assemblyTranslationMm": [
+          12.15,
+          0
+        ],
+        "targetSizeMm": [
+          87,
+          32.625
+        ],
+        "actualSizeMm": [
+          86.99999935925007,
+          32.625000923871994
+        ],
+        "uvBounds": [
+          0,
+          0,
+          1,
+          1
+        ],
+        "maxErrorPercent": 0.0000028317915525472942
+      },
+      {
+        "key": "signalRuleJCard",
+        "material": "MAT_SIGNAL_RED",
+        "coordinateSpace": "upper-case-local-mm",
+        "coordinateNode": "Cassette_002_Upper_Case_Coordinates",
+        "coordinateTranslationMm": [
+          12.15,
+          70
+        ],
+        "targetCentreMm": [
+          -66.5,
+          21.0135
+        ],
+        "actualCentreMm": [
+          -66.49999972432852,
+          21.013500168919563
+        ],
+        "actualWorldCentreMm": [
+          -54.34999972432852,
+          91.01350016891956
+        ],
+        "assemblyTranslationMm": [
+          12.15,
+          0
+        ],
+        "targetSizeMm": [
+          87,
+          0.6692
+        ],
+        "actualSizeMm": [
+          86.99999935925007,
+          0.6691999733448029
+        ],
+        "uvBounds": null,
+        "maxErrorPercent": 0.000003983143628303603
+      },
+      {
+        "key": "compactReverseShell",
+        "material": "MAT_IDENTITY_COMPACT_REVERSE",
+        "coordinateSpace": "assembly-local-mm",
+        "coordinateNode": "Cassette_002_Display_Geometry",
+        "coordinateTranslationMm": [
+          12.15,
+          0
+        ],
+        "targetCentreMm": [
+          81,
+          54
+        ],
+        "actualCentreMm": [
+          80.99999651312828,
+          54.00000140070915
+        ],
+        "actualWorldCentreMm": [
+          93.14999651312827,
+          54.00000140070915
+        ],
+        "assemblyTranslationMm": [
+          12.15,
+          0
+        ],
+        "targetSizeMm": [
+          7.5,
+          7.5
+        ],
+        "actualSizeMm": [
+          7.500000298023224,
+          7.500000298023224
+        ],
+        "uvBounds": [
+          0,
+          0,
+          1,
+          1
+        ],
+        "maxErrorPercent": 0.00004649162292480469
+      }
+    ]
+  },
+  "budget": {
+    "bytes": 520980,
+    "triangles": 4854,
+    "drawCalls": 10,
+    "ceilings": {
+      "bytes": 2500000,
+      "triangles": 50000,
+      "drawCalls": 12
+    }
+  },
+  "output": {
+    "path": "assets/merch-3d/cassette-002.glb",
+    "sha256": "a76dc594ebeb27412712ad1fb808ed93b97e30411e92f007bf1a59cd83ea9bf9"
+  },
+  "deterministic": {
+    "verifiedBySecondInMemoryBuild": true
+  },
+  "inspection": {
+    "unoptimized": "tools/merch-3d/reports/cassette-002.inspect-unoptimized.json",
+    "optimized": "tools/merch-3d/reports/cassette-002.inspect-optimized.json",
+    "browserQa": "tools/merch-3d/reports/cassette-002.browser-qa.json"
+  }
+}

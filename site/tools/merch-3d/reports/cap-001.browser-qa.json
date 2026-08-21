@@ -1,0 +1,242 @@
+{
+  "schemaVersion": 2,
+  "assetKey": "cap-001",
+  "renderer": "@google/model-viewer",
+  "capturePolicy": "built-product-page before/after activation at 390x844 plus isolated desktop/mobile/rear views and a deliberately tight elevated hood-cavity detail; await loaded visible dimensions and rendered pixels",
+  "hashPolicy": "snapshot integrity only; semantic gates and human visual review govern acceptance",
+  "views": [
+    {
+      "view": "desktop-default",
+      "surface": "isolated-model-viewer",
+      "path": "tools/merch-3d/reports/screenshots/cap-001-desktop-default.png",
+      "sha256": "5060e0f2c2e8adc7be47d60347feec5c51a0a9127ff2aa5f9f2a2981cd2477e8",
+      "viewportPx": [
+        900,
+        900
+      ],
+      "camera": {
+        "orbit": "25deg 72deg 115%",
+        "target": "auto 0.160m auto",
+        "fieldOfView": "24deg"
+      },
+      "errors": [],
+      "loaded": true,
+      "modelIsVisible": true,
+      "dimensionsM": [
+        0.2698618769645691,
+        0.26600000262260437,
+        0.3824999928474426
+      ],
+      "centreM": [
+        0,
+        0.13300000131130219,
+        0.0637499988079071
+      ],
+      "cameraOrbit": {
+        "theta": 0.4363323129985824,
+        "phi": 1.2566370614359172,
+        "radius": 1.3282012974540138
+      },
+      "fieldOfViewDeg": 24.000000000000004,
+      "foregroundPixels": 196728,
+      "foregroundBoundsPx": [
+        140,
+        261,
+        678,
+        826
+      ],
+      "visualMarginsPx": [
+        140,
+        261,
+        221,
+        73
+      ]
+    },
+    {
+      "view": "mobile-default",
+      "surface": "isolated-model-viewer",
+      "path": "tools/merch-3d/reports/screenshots/cap-001-mobile-default.png",
+      "sha256": "b70733b420691447ef6838003b5ecc1dc11c8921adbb1c27b938b2efc85a17e5",
+      "viewportPx": [
+        390,
+        600
+      ],
+      "camera": {
+        "orbit": "18deg 75deg 108%",
+        "target": "auto 0.150m auto",
+        "fieldOfView": "20deg"
+      },
+      "errors": [],
+      "loaded": true,
+      "modelIsVisible": true,
+      "dimensionsM": [
+        0.2698618769645691,
+        0.26600000262260437,
+        0.3824999928474426
+      ],
+      "centreM": [
+        0,
+        0.13300000131130219,
+        0.0637499988079071
+      ],
+      "cameraOrbit": {
+        "theta": 0.3141592653589793,
+        "phi": 1.3089969389957472,
+        "radius": 1.5565817796602914
+      },
+      "fieldOfViewDeg": 27.810172422861797,
+      "foregroundPixels": 45597,
+      "foregroundBoundsPx": [
+        54,
+        201,
+        302,
+        464
+      ],
+      "visualMarginsPx": [
+        54,
+        201,
+        87,
+        135
+      ]
+    },
+    {
+      "view": "desktop-rear-aperture",
+      "surface": "isolated-model-viewer",
+      "path": "tools/merch-3d/reports/screenshots/cap-001-desktop-rear-aperture.png",
+      "sha256": "2ce2793843bad8611df7598b19e379c0a83502686535da3411e1145ab76e46c3",
+      "viewportPx": [
+        900,
+        900
+      ],
+      "camera": {
+        "orbit": "180deg 88deg 108%",
+        "target": "auto 0.140m auto",
+        "fieldOfView": "23deg"
+      },
+      "errors": [],
+      "loaded": true,
+      "modelIsVisible": true,
+      "dimensionsM": [
+        0.2698618769645691,
+        0.26600000262260437,
+        0.3824999928474426
+      ],
+      "centreM": [
+        0,
+        0.13300000131130219,
+        0.0637499988079071
+      ],
+      "cameraOrbit": {
+        "theta": 3.141592653589793,
+        "phi": 1.53588974175501,
+        "radius": 1.3278659828301058
+      },
+      "fieldOfViewDeg": 23,
+      "foregroundPixels": 118629,
+      "foregroundBoundsPx": [
+        230,
+        232,
+        669,
+        642
+      ],
+      "visualMarginsPx": [
+        230,
+        232,
+        230,
+        257
+      ]
+    },
+    {
+      "view": "mobile-product-poster",
+      "surface": "built-product-page",
+      "activated": false,
+      "path": "tools/merch-3d/reports/screenshots/cap-001-mobile-product-poster.png",
+      "sha256": "8b0957cb8102b74ce9bfcefa531ebafe7afa377b210f481ce3246e61bcb99c1c",
+      "browserViewportPx": [
+        390,
+        844
+      ],
+      "viewportPx": [
+        358,
+        240
+      ],
+      "errors": [],
+      "thirdPartyRequests": []
+    },
+    {
+      "view": "mobile-product-stage",
+      "surface": "built-product-page",
+      "activated": true,
+      "path": "tools/merch-3d/reports/screenshots/cap-001-mobile-product-stage.png",
+      "sha256": "ad9368cd0cabc471dcfb611fb8760863afde5feebb202fb5c7d1726a90380b6d",
+      "browserViewportPx": [
+        390,
+        844
+      ],
+      "viewportPx": [
+        358,
+        521
+      ],
+      "camera": {
+        "orbit": "18deg 75deg 108%",
+        "target": "auto 0.150m auto",
+        "fieldOfView": "20deg"
+      },
+      "errors": [],
+      "thirdPartyRequests": [],
+      "overflowPx": 0,
+      "interaction": {
+        "pointerOrbitChanged": true,
+        "resetRestored": true
+      },
+      "loaded": true,
+      "modelIsVisible": true,
+      "dimensionsM": [
+        0.2698618769645691,
+        0.26600000262260437,
+        0.3824999928474426
+      ],
+      "centreM": [
+        0,
+        0.13300000131130219,
+        0.0637499988079071
+      ],
+      "cameraOrbit": {
+        "theta": 0.3141592653589793,
+        "phi": 1.3089969389957472,
+        "radius": 1.5565817796602914
+      },
+      "fieldOfViewDeg": 26.35651919525108,
+      "canvasPx": [
+        356,
+        518
+      ],
+      "foregroundPixels": 43388,
+      "artworkContrastPixels": 29441,
+      "foregroundBoundsPx": [
+        28,
+        169,
+        288,
+        424
+      ],
+      "visualMarginsPx": [
+        28,
+        169,
+        67,
+        93
+      ]
+    }
+  ],
+  "checks": {
+    "requiredViews": true,
+    "noBrowserErrors": true,
+    "noThirdPartyRequests": true,
+    "modelLoaded": true,
+    "nonBlankFrames": true,
+    "breathingRoom": true,
+    "builtPageBeforeAfter": true,
+    "expandedMobileInspectionStage": true,
+    "interactionAndReset": true,
+    "noLayoutOverflow": true
+  }
+}

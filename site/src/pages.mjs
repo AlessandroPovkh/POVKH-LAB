@@ -15,6 +15,7 @@ const absoluteUrlFor = (publicPath) => `${SITE_ORIGIN}${SITE_BASE_PATH}${publicP
 const NAV_ITEMS = [
   ["home", ""],
   ["catalog", "catalog"],
+  ["merch", "merch"],
   ["artists", "artists"],
   ["process", "process"],
   ["about", "about"],
@@ -22,13 +23,27 @@ const NAV_ITEMS = [
   ["download", "download"],
   ["contact", "contact"]
 ];
+const PRIMARY_NAV_KEYS = new Set(["home", "catalog", "merch", "artists"]);
 
 const PRESS_ASSETS = [
   "downloads/POVKH-LAB-Brand-Board-v1.0.pdf",
   "assets/logo/povkh-lab-horizontal-reverse-transparent-outlined.svg",
   "assets/logo/povkh-lab-horizontal-dark-outlined.svg",
-  "assets/logo/povkh-lab-primary-reverse-transparent-outlined.svg"
+  "assets/logo/povkh-lab-primary-reverse-transparent-outlined.svg",
+  "assets/logo/povkh-lab-ascii-reverse-transparent-outlined.svg"
 ];
+
+const SOURCE_BLOCKED_VIEWER_COPY = Object.freeze({
+  en: "360° view after approval of a physical sample",
+  it: "Vista 360° dopo l'approvazione di un campione fisico",
+  ru: "Обзор 360° после утверждения физического образца"
+});
+
+const SOURCE_BLOCKED_VIEWER_LABEL = Object.freeze({
+  en: "Approved concept image; interactive view pending sample approval",
+  it: "Immagine concept approvata; vista interattiva in attesa dell'approvazione del campione",
+  ru: "Утверждённое концепт-изображение; интерактивный обзор ожидает утверждения образца"
+});
 
 const escapeHtml = (value) => String(value)
   .replaceAll("&", "&amp;")
@@ -85,21 +100,18 @@ const activeFor = (route) => {
   return section === "listen" ? "catalog" : section;
 };
 
-const navMarkup = (locale, route, mobile = false) => {
+const navLinksMarkup = (locale, route, items) => {
   const t = COPY[locale].common;
   const active = activeFor(route);
-  const list = NAV_ITEMS.map(([key, targetRoute]) => {
+  return items.map(([key, targetRoute]) => {
     const current = key === active ? ' aria-current="page"' : "";
     return `<li><a class="nav-link" href="${hrefFor(locale, route, locale, targetRoute)}"${current}>${escapeHtml(t.nav[key])}</a></li>`;
   }).join("");
+};
 
-  if (mobile) {
-    return `<details class="mobile-nav">
-      <summary class="menu-summary">${escapeHtml(t.menu)}</summary>
-      <nav aria-label="${escapeHtml(t.mobilePrimaryNav)}"><ul class="nav-list">${list}</ul></nav>
-    </details>`;
-  }
-
+const navMarkup = (locale, route) => {
+  const t = COPY[locale].common;
+  const list = navLinksMarkup(locale, route, NAV_ITEMS.filter(([key]) => PRIMARY_NAV_KEYS.has(key)));
   return `<nav class="desktop-nav" aria-label="${escapeHtml(t.primaryNav)}"><ul class="nav-list">${list}</ul></nav>`;
 };
 
@@ -111,6 +123,20 @@ const languageMarkup = (locale, route) => {
     return `<li><a class="language-link" href="${hrefFor(locale, route, targetLocale, route)}" lang="${meta.lang}" hreflang="${meta.lang}" aria-label="${escapeHtml(meta.selfName)}"${current}>${meta.label}</a></li>`;
   }).join("");
   return `<nav class="language-nav" data-language-switcher aria-label="${escapeHtml(t.languageNav)}"><ul class="language-list">${links}</ul></nav>`;
+};
+
+const siteIndexMarkup = (locale, route) => {
+  const t = COPY[locale].common;
+  const primaryList = navLinksMarkup(locale, route, NAV_ITEMS.filter(([key]) => PRIMARY_NAV_KEYS.has(key)));
+  const secondaryList = navLinksMarkup(locale, route, NAV_ITEMS.filter(([key]) => !PRIMARY_NAV_KEYS.has(key)));
+  return `<details class="site-index" data-site-index>
+    <summary class="menu-summary">${escapeHtml(t.menu)} / Index</summary>
+    <div class="site-index-panel">
+      <nav class="site-index-primary" aria-label="${escapeHtml(t.mobilePrimaryNav)}"><ul class="nav-list">${primaryList}</ul></nav>
+      <nav class="site-index-secondary" aria-label="${escapeHtml(t.secondaryNav)}"><ul class="nav-list">${secondaryList}</ul></nav>
+      ${languageMarkup(locale, route)}
+    </div>
+  </details>`;
 };
 
 const signalFieldMarkup = () => `<div class="site-signal-layer" aria-hidden="true">
@@ -131,9 +157,9 @@ const playerTime = (seconds) => {
 
 const audioPlayerMarkup = (locale, prefix, tracks, defaultCatalogId) => {
   const copy = {
-    en: { player: "Audio player", prev: "Previous", prevShort: "PREV", play: "Play", playShort: "PLAY", pause: "Pause", pauseShort: "PAUSE", next: "Next", nextShort: "NEXT", queue: "Open track list", queueShort: "TRACKS", queueTitle: "Catalog playback", close: "Close track list", select: "Play {title} by {artist}", seek: "Seek through track", loading: "Reading waveform", blocked: "Press play to enable sound", waveformError: "Waveform unavailable", audioError: "Audio unavailable — retry play" },
-    it: { player: "Lettore audio", prev: "Precedente", prevShort: "PREC", play: "Riproduci", playShort: "PLAY", pause: "Pausa", pauseShort: "PAUSA", next: "Successivo", nextShort: "SUCC", queue: "Apri elenco tracce", queueShort: "TRACCE", queueTitle: "Riproduzione catalogo", close: "Chiudi elenco tracce", select: "Riproduci {title} di {artist}", seek: "Sposta la posizione nella traccia", loading: "Lettura forma d’onda", blocked: "Premi play per attivare l’audio", waveformError: "Forma d’onda non disponibile", audioError: "Audio non disponibile — riprova" },
-    ru: { player: "Аудиоплеер", prev: "Предыдущий", prevShort: "ПРЕД", play: "Воспроизвести", playShort: "ПУСК", pause: "Пауза", pauseShort: "ПАУЗА", next: "Следующий", nextShort: "СЛЕД", queue: "Открыть список треков", queueShort: "ТРЕКИ", queueTitle: "Воспроизведение каталога", close: "Закрыть список треков", select: "Воспроизвести {title} — {artist}", seek: "Перемотка по треку", loading: "Чтение формы волны", blocked: "Нажмите play, чтобы включить звук", waveformError: "Форма волны недоступна", audioError: "Аудио недоступно — повторите запуск" }
+    en: { player: "Audio player", prev: "Previous", prevShort: "PREV", play: "Play", playShort: "PLAY", pause: "Pause", pauseShort: "PAUSE", next: "Next", nextShort: "NEXT", volume: "Volume", volumeControl: "Volume control", queue: "Open track list", queueShort: "TRACKS", queueTitle: "Catalog playback", close: "Close track list", select: "Play {title} by {artist}", seek: "Seek through track", loading: "Reading waveform", blocked: "Press play to enable sound", waveformError: "Waveform unavailable", audioError: "Audio unavailable — retry play" },
+    it: { player: "Lettore audio", prev: "Precedente", prevShort: "PREC", play: "Riproduci", playShort: "PLAY", pause: "Pausa", pauseShort: "PAUSA", next: "Successivo", nextShort: "SUCC", volume: "Volume", volumeControl: "Controllo volume", queue: "Apri elenco tracce", queueShort: "TRACCE", queueTitle: "Riproduzione catalogo", close: "Chiudi elenco tracce", select: "Riproduci {title} di {artist}", seek: "Sposta la posizione nella traccia", loading: "Lettura forma d’onda", blocked: "Premi play per attivare l’audio", waveformError: "Forma d’onda non disponibile", audioError: "Audio non disponibile — riprova" },
+    ru: { player: "Аудиоплеер", prev: "Предыдущий", prevShort: "ПРЕД", play: "Воспроизвести", playShort: "ПУСК", pause: "Пауза", pauseShort: "ПАУЗА", next: "Следующий", nextShort: "СЛЕД", volume: "Громкость", volumeControl: "Регулятор громкости", queue: "Открыть список треков", queueShort: "ТРЕКИ", queueTitle: "Воспроизведение каталога", close: "Закрыть список треков", select: "Воспроизвести {title} — {artist}", seek: "Перемотка по треку", loading: "Чтение формы волны", blocked: "Нажмите play, чтобы включить звук", waveformError: "Форма волны недоступна", audioError: "Аудио недоступно — повторите запуск" }
   }[locale];
   const defaultIndex = tracks.findIndex((track) => track.id === defaultCatalogId);
   if (defaultIndex < 0) throw new Error(`${defaultCatalogId} is required for the global audio player`);
@@ -149,29 +175,48 @@ const audioPlayerMarkup = (locale, prefix, tracks, defaultCatalogId) => {
   }).join("\n      ");
   return `<aside class="hud-audio" data-audio-player data-track-count="${tracks.length}" data-state="loading" aria-label="${escapeHtml(copy.player)}">
     <audio id="povkh-audio-engine" data-audio-engine preload="none"></audio>
-    <div class="hud-audio-head">
-      <span class="hud-audio-live" aria-hidden="true"><i></i> AUDIO / LIVE</span>
-      <button class="hud-audio-queue" type="button" data-player-playlist-toggle aria-haspopup="dialog" aria-controls="povkh-playlist" aria-label="${escapeHtml(copy.queue)}">${escapeHtml(copy.queueShort)} <span data-player-index>${String(defaultIndex + 1).padStart(2, "0")} / ${String(tracks.length).padStart(2, "0")}</span></button>
+    <div class="hud-audio-bar" data-player-bar>
+      <div class="hud-audio-track">
+        <strong data-player-title>${escapeHtml(defaultTrack.title.toUpperCase())}</strong>
+        <span class="sr-only" data-player-artist>${escapeHtml(artistCredit)}</span>
+      </div>
+      <div class="hud-audio-primary-controls">
+        <button class="hud-audio-toggle" type="button" data-player-toggle data-play-label="${escapeHtml(copy.play)}" data-play-text="${escapeHtml(copy.playShort)}" data-pause-label="${escapeHtml(copy.pause)}" data-pause-text="${escapeHtml(copy.pauseShort)}" aria-label="${escapeHtml(copy.play)}">${escapeHtml(copy.playShort)}</button>
+        <button class="hud-audio-queue" type="button" data-player-playlist-toggle data-player-tray-toggle aria-controls="povkh-player-tray" aria-expanded="false" aria-label="${escapeHtml(copy.queue)}">${escapeHtml(copy.queueShort)} <span data-player-index>${String(defaultIndex + 1).padStart(2, "0")} / ${String(tracks.length).padStart(2, "0")}</span></button>
+      </div>
     </div>
-    <div class="hud-audio-track">
-      <strong data-player-title>${escapeHtml(defaultTrack.title.toUpperCase())}</strong>
-      <span data-player-artist>${escapeHtml(artistCredit)}</span>
-    </div>
-    <div class="hud-waveform-shell">
-      <canvas class="hud-waveform" data-player-waveform width="640" height="112" tabindex="0" role="slider" aria-controls="povkh-audio-engine" aria-label="${escapeHtml(copy.seek)}" aria-valuemin="0" aria-valuemax="${Math.round(defaultTrack.audio.duration)}" aria-valuenow="0"></canvas>
-      <i class="hud-waveform-playhead" data-player-playhead aria-hidden="true"></i>
-    </div>
-    <div class="hud-audio-controls">
-      <button type="button" data-player-prev aria-label="${escapeHtml(copy.prev)}">${escapeHtml(copy.prevShort)}</button>
-      <button class="hud-audio-toggle" type="button" data-player-toggle data-play-label="${escapeHtml(copy.play)}" data-play-text="${escapeHtml(copy.playShort)}" data-pause-label="${escapeHtml(copy.pause)}" data-pause-text="${escapeHtml(copy.pauseShort)}" aria-label="${escapeHtml(copy.play)}">${escapeHtml(copy.playShort)}</button>
-      <button type="button" data-player-next aria-label="${escapeHtml(copy.next)}">${escapeHtml(copy.nextShort)}</button>
-      <output data-player-time aria-live="off">00:00 / ${playerTime(defaultTrack.audio.duration)}</output>
-    </div>
-    <p class="hud-audio-status" data-player-status data-loading-label="${escapeHtml(copy.loading)}" data-blocked-label="${escapeHtml(copy.blocked)}" data-waveform-error-label="${escapeHtml(copy.waveformError)}" data-audio-error-label="${escapeHtml(copy.audioError)}" aria-live="polite">${escapeHtml(copy.loading)}</p>
-    <dialog class="hud-playlist-dialog" id="povkh-playlist" data-player-playlist-dialog aria-labelledby="povkh-playlist-title">
-      <div class="hud-playlist-head"><div><span class="eyebrow">AUDIO / ${String(tracks.length).padStart(2, "0")}</span><h2 id="povkh-playlist-title" data-player-playlist-title>${escapeHtml(copy.queueTitle)}</h2></div><button type="button" data-player-playlist-close aria-label="${escapeHtml(copy.close)}">×</button></div>
-      <ol class="hud-audio-playlist">${playlist}</ol>
-    </dialog>
+    <section class="hud-player-tray" id="povkh-player-tray" data-player-tray hidden aria-labelledby="povkh-player-tray-title">
+      <div class="hud-playlist-head"><div><span class="eyebrow">AUDIO / ${String(tracks.length).padStart(2, "0")}</span><h2 id="povkh-player-tray-title" data-player-playlist-title>${escapeHtml(copy.queueTitle)}</h2></div><button type="button" data-player-playlist-close data-player-tray-close aria-label="${escapeHtml(copy.close)}">×</button></div>
+      <div class="hud-player-tray-body">
+        <div class="hud-waveform-shell">
+          <canvas class="hud-waveform" data-player-waveform width="640" height="112" tabindex="0" role="slider" aria-controls="povkh-audio-engine" aria-label="${escapeHtml(copy.seek)}" aria-valuemin="0" aria-valuemax="${Math.round(defaultTrack.audio.duration)}" aria-valuenow="0"></canvas>
+          <i class="hud-waveform-playhead" data-player-playhead aria-hidden="true"></i>
+          <output class="hud-waveform-tooltip" data-player-seek-tooltip hidden aria-hidden="true">00:00</output>
+        </div>
+        <div class="hud-audio-controls">
+          <button type="button" data-player-prev aria-label="${escapeHtml(copy.prev)}">${escapeHtml(copy.prevShort)}</button>
+          <button type="button" data-player-next aria-label="${escapeHtml(copy.next)}">${escapeHtml(copy.nextShort)}</button>
+          <div class="hud-volume" data-player-volume-shell>
+            <button class="hud-volume-toggle" type="button"
+              data-player-volume-toggle
+              data-volume-label="${escapeHtml(copy.volume)}"
+              aria-label="${escapeHtml(copy.volume)}: 60%"
+              aria-expanded="false"
+              aria-controls="povkh-volume-popup">
+              <span aria-hidden="true">VOL </span><span data-player-volume-value aria-hidden="true">60</span>
+            </button>
+            <div class="hud-volume-popup" id="povkh-volume-popup" data-player-volume-popup hidden>
+              <label id="povkh-volume-label" for="povkh-volume-range" data-player-volume-label>${escapeHtml(copy.volumeControl)}</label>
+              <span data-player-volume-percent aria-hidden="true">60%</span>
+              <input id="povkh-volume-range" data-player-volume type="range" min="0" max="100" step="1" value="60" aria-labelledby="povkh-volume-label" aria-controls="povkh-audio-engine" aria-valuenow="60" aria-valuetext="60%">
+            </div>
+          </div>
+          <output data-player-time aria-live="off">00:00 / ${playerTime(defaultTrack.audio.duration)}</output>
+        </div>
+        <p class="hud-audio-status" data-player-status data-loading-label="${escapeHtml(copy.loading)}" data-blocked-label="${escapeHtml(copy.blocked)}" data-waveform-error-label="${escapeHtml(copy.waveformError)}" data-audio-error-label="${escapeHtml(copy.audioError)}" aria-live="polite">${escapeHtml(copy.loading)}</p>
+        <ol class="hud-audio-playlist">${playlist}</ol>
+      </div>
+    </section>
   </aside>`;
 };
 
@@ -246,7 +291,7 @@ const shell = ({ locale, route, title, description, body, catalog, audioLibrary,
     .map((targetLocale) => `<meta property="og:locale:alternate" content="${LOCALE_META[targetLocale].ogLocale}">`)
     .join("\n  ");
 
-  return `<!doctype html>
+  const documentHead = `<!doctype html>
 <html lang="${meta.lang}" data-site-base="${SITE_BASE_PATH}">
 <head>
   <meta charset="utf-8">
@@ -255,7 +300,7 @@ const shell = ({ locale, route, title, description, body, catalog, audioLibrary,
   <meta name="color-scheme" content="dark">
   <meta name="robots" content="${route === "404" ? "noindex, follow" : ROBOTS_CONTENT}" data-route-head>
   <meta name="referrer" content="no-referrer">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self'; font-src 'self'; script-src 'self' 'sha256-${structuredDataHash}'; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; font-src 'self'; script-src 'self' 'wasm-unsafe-eval' 'sha256-${structuredDataHash}'; connect-src 'self' blob:; object-src 'none'; base-uri 'none'; form-action 'self'">
   <title data-route-head>${escapeHtml(fullTitle)}</title>
   <meta name="description" content="${escapeHtml(description)}" data-route-head>
   <link rel="canonical" href="${canonical}" data-route-head>
@@ -278,9 +323,26 @@ const shell = ({ locale, route, title, description, body, catalog, audioLibrary,
   <link rel="preload" href="${prefix}assets/fonts/Inter-Variable.ttf" as="font" type="font/ttf" crossorigin>
   <link rel="stylesheet" href="${prefix}assets/styles.css">
   <script type="application/ld+json" data-route-head>${structuredData}</script>
-  <script src="${prefix}assets/site.js" defer></script>
-  <script src="${prefix}assets/router.js" defer></script>
-</head>
+  ${route === "404" ? "" : `<script src="${prefix}assets/site.js" defer></script>
+  <script src="${prefix}assets/router.js" defer></script>`}
+</head>`;
+
+  if (route === "404") return `${documentHead}
+<body class="${pageClass}" data-lightweight-shell data-site-status="${SITE_STATUS}" data-locale="${locale}">
+  <header class="site-header lightweight-header">
+    <div class="container lightweight-header-inner">
+      <a class="brand-link" href="${hrefFor(locale, route, locale, "")}" aria-label="${escapeHtml(t.brandHome)}">
+        <img src="${prefix}assets/logo/povkh-lab-horizontal-reverse-transparent-outlined.svg" width="1600" height="400" alt="POVKH LAB">
+      </a>
+      ${languageMarkup(locale, route)}
+    </div>
+  </header>
+  <main id="main-content" tabindex="-1">${body}</main>
+</body>
+</html>
+`;
+
+  return `${documentHead}
 <body class="${pageClass}" data-site-status="${SITE_STATUS}" data-locale="${locale}">
   <a class="skip-link" href="#main-content">${escapeHtml(t.skip)}</a>
   <header class="site-header" data-route-header>
@@ -289,8 +351,7 @@ const shell = ({ locale, route, title, description, body, catalog, audioLibrary,
         <img src="${prefix}assets/logo/povkh-lab-horizontal-reverse-transparent-outlined.svg" width="1600" height="400" alt="POVKH LAB">
       </a>
       ${navMarkup(locale, route)}
-      ${navMarkup(locale, route, true)}
-      ${languageMarkup(locale, route)}
+      ${siteIndexMarkup(locale, route)}
     </div>
   </header>
   ${globalHudMarkup(catalog, defaultTrackIndex, audioTracks.length)}
@@ -310,11 +371,12 @@ const shell = ({ locale, route, title, description, body, catalog, audioLibrary,
       <img class="footer-mark" src="${prefix}assets/logo/povkh-lab-compact-reverse-transparent-outlined.svg" width="1000" height="1000" alt="">
       <nav aria-label="${escapeHtml(t.footerNav)}"><ul class="footer-links">
         <li><a href="${hrefFor(locale, route, locale, "catalog")}">${escapeHtml(t.nav.catalog)}</a></li>
+        <li><a href="${hrefFor(locale, route, locale, "merch")}">${escapeHtml(t.nav.merch)}</a></li>
         <li><a href="${hrefFor(locale, route, locale, "process")}">${escapeHtml(t.nav.process)}</a></li>
         <li><a href="${hrefFor(locale, route, locale, "press")}">${escapeHtml(t.nav.press)}</a></li>
         <li><a href="${hrefFor(locale, route, locale, "download")}">${escapeHtml(t.nav.download)}</a></li>
         <li><a href="${hrefFor(locale, route, locale, "contact")}">${escapeHtml(t.nav.contact)}</a></li>
-        ${SOCIAL_LINKS.map(({ label: socialLabel, url }) => `<li><a href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(socialLabel)} ↗</a></li>`).join("")}
+        <li><a href="${hrefFor(locale, route, locale, "links")}">${escapeHtml(COPY[locale].pages.links.title)}</a></li>
       </ul></nav>
       <p class="footer-meta">POVKH LAB<br>${escapeHtml(t.footer.tagline)}<br>${escapeHtml(t.footer.version)}</p>
     </div>
@@ -475,7 +537,127 @@ const releaseCardMarkup = ({ locale, currentRoute, release, t, filterable = fals
   </a>`;
 };
 
-const createLocalePages = (locale, catalog, audioLibrary, artistLibrary) => {
+const merchDetailStructuredData = ({ object, locale, route }) => ({
+  "@type": "CreativeWork",
+  "@id": `${absoluteUrlFor(publicPathFor(locale, route))}#concept`,
+  name: object.content[locale].name,
+  description: object.content[locale].metaDescription,
+  url: absoluteUrlFor(publicPathFor(locale, route)),
+  inLanguage: LOCALE_META[locale].lang,
+  creator: { "@id": `${absoluteUrlFor("/")}#label` },
+  isPartOf: { "@type": "CreativeWorkSeries", name: "POVKH LAB DROP 001" },
+  image: object.gallery.map(({ path: imagePath }) => absoluteUrlFor(`/${imagePath}`))
+});
+
+const merchGalleryMarkup = ({ object, locale, route, copy }) => {
+  const prefix = assetPrefixFor(locale, route);
+  const gallery = object.gallery.filter((image, index) => index !== 0 || image.path !== object.viewer.poster);
+  const total = gallery.length;
+  const inline = gallery.map((image, index) => `<li class="merch-gallery-item" data-merch-gallery-item data-gallery-index="${index}">
+      <a class="merch-gallery-trigger" data-merch-gallery-trigger href="${prefix}${escapeHtml(image.path)}" aria-label="${escapeHtml(`${copy.viewGallery}: ${image.alt[locale]}`)}">
+        <span class="merch-gallery-index" aria-hidden="true">${String(index + 1).padStart(2, "0")}</span>
+        <img src="${prefix}${escapeHtml(image.path)}" width="${image.width}" height="${image.height}" alt="${escapeHtml(image.alt[locale])}" loading="lazy" decoding="async">
+        <span class="merch-gallery-caption">${escapeHtml(image.caption[locale])}</span>
+      </a>
+    </li>`).join("");
+  const slides = gallery.map((image, index) => `<figure class="merch-gallery-dialog-figure" data-merch-gallery-figure data-gallery-index="${index}"${index === 0 ? "" : " hidden"}>
+        <img src="${prefix}${escapeHtml(image.path)}" width="${image.width}" height="${image.height}" alt="${escapeHtml(image.alt[locale])}" loading="lazy" decoding="async">
+        <figcaption>${escapeHtml(image.caption[locale])}</figcaption>
+      </figure>`).join("");
+  const counterLabel = interpolate(copy.imageCounter, { current: "1", total: String(total) });
+  return `<div class="merch-gallery" data-merch-gallery data-gallery-count="${total}">
+    <ol class="merch-gallery-list" data-merch-gallery-list aria-label="${escapeHtml(copy.galleryLabel)}">${inline}</ol>
+    <dialog class="merch-gallery-dialog" data-merch-gallery-dialog aria-labelledby="${escapeHtml(object.id)}-gallery-title">
+      <div class="merch-gallery-dialog-head">
+        <h2 id="${escapeHtml(object.id)}-gallery-title">${escapeHtml(object.content[locale].name)} / ${escapeHtml(copy.galleryLabel)}</h2>
+        <button type="button" data-merch-gallery-close aria-label="${escapeHtml(copy.closeGallery)}">×</button>
+      </div>
+      <div class="merch-gallery-dialog-stage">${slides}</div>
+      <div class="merch-gallery-dialog-controls">
+        <button type="button" data-merch-gallery-previous aria-label="${escapeHtml(copy.previousImage)}" disabled>←</button>
+        <output data-merch-gallery-counter data-counter-template="${escapeHtml(copy.imageCounter)}" aria-live="polite" aria-atomic="true" aria-label="${escapeHtml(counterLabel)}">01 / ${String(total).padStart(2, "0")}</output>
+        <button type="button" data-merch-gallery-next aria-label="${escapeHtml(copy.nextImage)}">→</button>
+      </div>
+    </dialog>
+  </div>`;
+};
+
+const productViewerMarkup = ({ object, locale, route, copy }) => {
+  const prefix = assetPrefixFor(locale, route);
+  const viewer = object.viewer;
+  const hero = object.gallery[0];
+  const dataSaverCopy = copy.viewerDataSaver;
+  const sourceBlocked = viewer.availability === "sourceBlocked";
+  const blockedCopy = SOURCE_BLOCKED_VIEWER_COPY[locale];
+  const instructionsId = `${object.id.toLowerCase()}-viewer-instructions`;
+  const cameraOrbit = viewer.cameraOrbit || { desktop: "0deg 75deg 105%", mobile: "0deg 75deg 105%" };
+  const fieldOfView = viewer.fieldOfView || { desktop: "auto", mobile: "auto" };
+  const cameraTarget = viewer.cameraTarget || { desktop: "auto auto auto", mobile: "auto auto auto" };
+  const orbitLimits = viewer.orbitLimits;
+  const orbitLimitAttributes = orbitLimits
+    ? ` data-viewer-min-camera-orbit="${escapeHtml(orbitLimits.min)}" data-viewer-max-camera-orbit="${escapeHtml(orbitLimits.max)}"`
+    : "";
+  return `<section class="product-viewer" data-product-viewer data-viewer-kind="${escapeHtml(viewer.kind)}" data-viewer-availability="${sourceBlocked ? "sourceBlocked" : "available"}" data-viewer-src="${prefix}${escapeHtml(viewer.src)}" data-viewer-poster="${prefix}${escapeHtml(viewer.poster)}" data-viewer-orbit-desktop="${escapeHtml(cameraOrbit.desktop)}" data-viewer-orbit-mobile="${escapeHtml(cameraOrbit.mobile)}" data-viewer-field-of-view-desktop="${escapeHtml(fieldOfView.desktop)}" data-viewer-field-of-view-mobile="${escapeHtml(fieldOfView.mobile)}" data-viewer-camera-target-desktop="${escapeHtml(cameraTarget.desktop)}" data-viewer-camera-target-mobile="${escapeHtml(cameraTarget.mobile)}"${orbitLimitAttributes} data-viewer-module="${prefix}assets/product-viewer.js" data-viewer-runtime="${prefix}assets/vendor/model-viewer.min.js" data-viewer-loading="${escapeHtml(copy.viewerLoading)}" data-viewer-ready="${escapeHtml(copy.viewerReady)}" data-viewer-error="${escapeHtml(copy.viewerError)}" data-viewer-data-saver="${escapeHtml(dataSaverCopy)}" data-viewer-budget="${escapeHtml(String(viewer.budget.bytes || viewer.budget.desktopBytes || 0))}" aria-label="${escapeHtml(sourceBlocked ? SOURCE_BLOCKED_VIEWER_LABEL[locale] : copy.viewerLabel)}">
+    <div class="product-viewer-stage" data-product-viewer-stage>
+      <img data-product-viewer-poster src="${prefix}${escapeHtml(hero.path)}" width="${hero.width}" height="${hero.height}" alt="${escapeHtml(viewer.alt[locale])}" loading="eager" fetchpriority="high" decoding="async">
+      <div class="product-viewer-canvas" data-product-viewer-canvas aria-hidden="true"></div>
+      <span class="product-viewer-datum" aria-hidden="true">OBJECT / ${escapeHtml(object.id.slice(-3))}</span>
+    </div>
+    <div class="product-viewer-controls">
+      <button class="button" type="button" data-product-viewer-activate${sourceBlocked ? ` disabled aria-disabled="true"` : ""}>${escapeHtml(sourceBlocked ? blockedCopy : copy.viewerActivate)}</button>
+      <button class="button button-secondary" type="button" data-product-viewer-reset hidden>${escapeHtml(copy.viewerReset)}</button>
+      <p class="product-viewer-status" data-product-viewer-status role="status" aria-live="polite" aria-atomic="true">${sourceBlocked ? escapeHtml(blockedCopy) : ""}</p>
+    </div>
+    <p class="product-viewer-instructions" id="${escapeHtml(instructionsId)}" data-product-viewer-instructions hidden>${escapeHtml(copy.viewerInstructions)}</p>
+    <p class="product-viewer-caption">${escapeHtml(hero.caption[locale])}</p>
+  </section>`;
+};
+
+const merchDetailMarkup = ({ object, previous, next, locale, route, overview, copy }) => {
+  const content = object.content[locale];
+  const adjacent = [
+    previous ? `<a rel="prev" href="${hrefFor(locale, route, locale, `merch/${previous.slug}`)}"><span>${escapeHtml(copy.previousObject)}</span><strong>${escapeHtml(previous.content[locale].name)}</strong></a>` : "",
+    next ? `<a rel="next" href="${hrefFor(locale, route, locale, `merch/${next.slug}`)}"><span>${escapeHtml(copy.nextObject)}</span><strong>${escapeHtml(next.content[locale].name)}</strong></a>` : ""
+  ].filter(Boolean).join("");
+  return `<div class="container merch-detail" data-merch-detail-id="${escapeHtml(object.id)}" data-merch-stage="concept">
+    <nav class="merch-breadcrumb" data-merch-breadcrumb aria-label="${escapeHtml(COPY[locale].common.breadcrumb)}"><ol>
+      <li><a href="${hrefFor(locale, route, locale, "")}">${escapeHtml(COPY[locale].common.nav.home)}</a></li>
+      <li><a href="${hrefFor(locale, route, locale, "merch")}">${escapeHtml(overview.title)}</a></li>
+      <li aria-current="page">${escapeHtml(content.name)}</li>
+    </ol></nav>
+    <section class="merch-detail-hero" aria-labelledby="merch-detail-title">
+      <div class="merch-detail-copy">
+        <span class="merch-detail-index" aria-hidden="true">${String(object.order).padStart(2, "0")}</span>
+        <p class="eyebrow">${escapeHtml(content.eyebrow)}</p>
+        <h1 class="page-title" id="merch-detail-title">${escapeHtml(content.name)}</h1>
+        <p class="merch-concept-status" data-merch-visible-status>${escapeHtml(copy.conceptStatus)}</p>
+        <p class="lede">${escapeHtml(content.lede)}</p>
+      </div>
+      ${productViewerMarkup({ object, locale, route, copy })}
+    </section>
+    <section class="section merch-detail-gallery-section" id="merch-concept-gallery" aria-labelledby="merch-gallery-heading">
+      <div class="section-head section-rule"><div><p class="eyebrow">${escapeHtml(content.eyebrow)}</p><h2 class="section-title" id="merch-gallery-heading">${escapeHtml(copy.galleryLabel)}</h2></div><p class="body-copy">${escapeHtml(content.conceptNote)}</p></div>
+      ${merchGalleryMarkup({ object, locale, route, copy })}
+    </section>
+    <section class="section merch-detail-story" aria-labelledby="merch-story-title">
+      <div class="merch-story-datum" aria-hidden="true">OBJECT / CONCEPT</div>
+      <div><p class="eyebrow">${escapeHtml(copy.storyEyebrow)}</p><h2 class="section-title" id="merch-story-title">${escapeHtml(content.storyTitle)}</h2><p class="body-copy">${escapeHtml(content.storyBody)}</p></div>
+    </section>
+    ${object.specifications.length ? `<section class="section merch-detail-specifications"><h2>${escapeHtml(copy.specificationsTitle)}</h2><dl>${object.specifications.map((specification) => `<div><dt>${escapeHtml(specification.label[locale])}</dt><dd>${escapeHtml(specification.value[locale])}</dd></div>`).join("")}</dl></section>` : ""}
+    <aside class="merch-release-gate" data-merch-release-gate>
+      <h2>${escapeHtml(copy.releaseGateTitle)}</h2>
+      <p>${escapeHtml(content.conceptNote)}</p>
+      <p>${escapeHtml(object.releaseGate.copy[locale])}</p>
+    </aside>
+    <div class="merch-detail-actions">
+      <a class="button" href="${hrefFor(locale, route, locale, "merch")}">← ${escapeHtml(copy.backToDrop)}</a>
+      <a class="button button-secondary" href="${hrefFor(locale, route, locale, "links")}">${escapeHtml(copy.accessTerminal)} →</a>
+    </div>
+    <nav class="merch-adjacent" aria-label="${escapeHtml(copy.galleryLabel)}">${adjacent}</nav>
+  </div>`;
+};
+
+const createLocalePages = (locale, catalog, audioLibrary, artistLibrary, merchLibrary) => {
   const t = COPY[locale];
   const releases = catalog.releases;
   const artistByName = new Map(artistLibrary.artists.map((artist) => [artist.name, artist]));
@@ -492,7 +674,8 @@ const createLocalePages = (locale, catalog, audioLibrary, artistLibrary) => {
     || [...published].sort((a, b) => b.releaseDate.localeCompare(a.releaseDate))[0];
   const pages = new Map();
   const page = (route, key, body, options = {}) => {
-    const copy = t.pages[key];
+    const { copy: copyOverride, ...shellOptions } = options;
+    const copy = copyOverride || t.pages[key];
     pages.set(outputPathFor(locale, route), shell({
       locale,
       route,
@@ -501,7 +684,7 @@ const createLocalePages = (locale, catalog, audioLibrary, artistLibrary) => {
       body,
       catalog,
       audioLibrary,
-      ...options
+      ...shellOptions
     }));
   };
 
@@ -693,6 +876,89 @@ const createLocalePages = (locale, catalog, audioLibrary, artistLibrary) => {
     }
   }
 
+  const merch = merchLibrary.content[locale];
+  const merchObjectsByCategory = new Map(merchLibrary.categories.map(({ id }) => [
+    id,
+    merchLibrary.objects.filter((object) => object.category === id)
+  ]));
+
+  page("merch", "merch", `
+  <div class="container">
+    <section class="hero merch-hero" aria-labelledby="merch-title">
+      <div>
+        <p class="eyebrow">${escapeHtml(merch.eyebrow)}</p>
+        <h1 class="page-title" id="merch-title">${escapeHtml(merch.heroTitle)}</h1>
+      </div>
+      <div class="merch-motion-stage" data-merch-motion-stage>
+        ${heroMotionMarkup(locale, "merch", "PHYSICAL")}
+        <div class="merch-motion-fallback" data-merch-motion-fallback aria-hidden="true">
+          <span class="merch-motion-ring"></span>
+          <span class="merch-motion-datum"></span>
+          <span class="merch-motion-signal"></span>
+        </div>
+      </div>
+      <div class="hero-bottom">
+        <p class="lede">${escapeHtml(merch.lede)}</p>
+        <div>
+          <p class="meta muted" data-merch-visible-status>${escapeHtml(merch.status)}</p>
+        </div>
+      </div>
+    </section>
+  </div>
+  <section class="section" id="merch-objects" data-merch-index>
+    <div class="container">
+      <div class="section-head section-rule">
+        <div><p class="eyebrow">${escapeHtml(merch.indexEyebrow)}</p><h2 class="section-title">${escapeHtml(merch.indexTitle)}</h2></div>
+        <p class="body-copy">${escapeHtml(merch.indexBody)}</p>
+      </div>
+      <div class="merch-categories">
+        ${merchLibrary.categories.map(({ id }) => `
+          <section class="merch-category" data-merch-category="${escapeHtml(id)}" aria-labelledby="merch-category-${escapeHtml(id)}">
+            <h3 id="merch-category-${escapeHtml(id)}">${escapeHtml(merch.categoryLabels[id])}</h3>
+            <div class="merch-object-grid">
+              ${merchObjectsByCategory.get(id).map((object) => `
+                <a class="merch-object" data-merch-object data-merch-detail data-merch-id="${escapeHtml(object.id)}" data-merch-status="comingSoon" href="${hrefFor(locale, "merch", locale, `merch/${object.slug}`)}">
+                  <span class="index-no">${escapeHtml(String(object.order).padStart(2, "0"))}</span>
+                  <img class="merch-object-image" src="${assetPrefixFor(locale, "merch")}${escapeHtml(object.gallery[0].path)}" width="${object.gallery[0].width}" height="${object.gallery[0].height}" alt="${escapeHtml(object.gallery[0].alt[locale])}" loading="lazy" decoding="async">
+                  <h4>${escapeHtml(object.content[locale].name)}</h4>
+                </a>`).join("")}
+            </div>
+          </section>`).join("")}
+      </div>
+    </div>
+  </section>
+  <details class="section merch-roadmap-disclosure" data-merch-roadmap>
+    <summary class="container merch-roadmap-summary">
+      <span><span class="eyebrow">${escapeHtml(merch.roadmapEyebrow)}</span><span class="section-title" role="heading" aria-level="2">${escapeHtml(merch.roadmapTitle)}</span></span>
+      <span class="body-copy">${escapeHtml(merch.roadmapBody)}</span>
+    </summary>
+    <div class="container merch-roadmap-content">
+      <ol class="merch-roadmap">
+        ${merch.roadmapPhases.map((phase) => `<li><span class="index-no">${escapeHtml(phase.index)}</span><div><h3>${escapeHtml(phase.title)}</h3><p>${escapeHtml(phase.body)}</p></div></li>`).join("")}
+      </ol>
+    </div>
+  </details>
+`, { copy: merch, pageClass: "page-merch" });
+
+  for (const [index, object] of merchLibrary.objects.entries()) {
+    const route = `merch/${object.slug}`;
+    const previous = merchLibrary.objects[index - 1] || null;
+    const next = merchLibrary.objects[index + 1] || null;
+    page(route, "merchDetail", merchDetailMarkup({
+      object,
+      previous,
+      next,
+      locale,
+      route,
+      overview: merch,
+      copy: merchLibrary.copy[locale]
+    }), {
+      copy: { title: object.content[locale].name, description: object.content[locale].metaDescription },
+      pageClass: "page-merch-detail",
+      structuredDataExtra: merchDetailStructuredData({ object, locale, route })
+    });
+  }
+
   const artists = t.pages.artists;
   const artistIndex = new Map();
   for (const release of releases) {
@@ -835,6 +1101,37 @@ const createLocalePages = (locale, catalog, audioLibrary, artistLibrary) => {
     </div></section>
     <section class="section"><div class="container"><p class="body-copy">${escapeHtml(contact.pressBody)}</p><div class="button-row"><a class="button" href="${hrefFor(locale, "contact", locale, "press")}">${escapeHtml(contact.pressCta)}</a></div></div></section>`, { pageClass: "page-contact" });
 
+  const links = t.pages.links;
+  const socialAccessMarkup = SOCIAL_LINKS.length
+    ? `<nav class="social-access-nav" data-social-access-nav aria-label="${escapeHtml(links.navLabel)}">
+        <ol class="social-access-list">
+          ${SOCIAL_LINKS.map(({ id, label: service, url }, index) => `<li class="social-access-item">
+            <a class="social-access-link" data-social-access-link data-social-id="${escapeHtml(id)}" href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer" aria-label="${escapeHtml(interpolate(links.serviceAria, { service }))}">
+              <span class="social-access-index" aria-hidden="true">${String(index + 1).padStart(2, "0")}</span>
+              <span class="social-access-service">${escapeHtml(service)}</span>
+              <span class="social-access-arrow" aria-hidden="true">↗</span>
+            </a>
+          </li>`).join("")}
+        </ol>
+      </nav>`
+    : `<div class="social-access-empty" role="status"><h2>${escapeHtml(links.emptyTitle)}</h2><p>${escapeHtml(links.emptyBody)}</p></div>`;
+
+  page("links", "links", `
+    <div class="container social-access-container">
+      <section class="social-access-terminal" aria-labelledby="social-access-title">
+        <div class="social-access-intro">
+          <p class="eyebrow">${escapeHtml(links.eyebrow)}</p>
+          <h1 class="social-access-title" id="social-access-title">${links.displayTitle.map((line) => `<span>${escapeHtml(line)}</span>`).join("")}</h1>
+          <p class="social-access-lede">${escapeHtml(links.lede)}</p>
+        </div>
+        <div class="social-access-panel">
+          <p class="social-access-status">${escapeHtml(links.status)}</p>
+          ${socialAccessMarkup}
+        </div>
+        <div class="social-access-field" aria-hidden="true"><span></span><span></span><span></span></div>
+      </section>
+    </div>`, { pageClass: "page-links" });
+
   const download = t.pages.download;
   page("download", "download", `
     <div class="container"><section class="hero" aria-labelledby="download-title">
@@ -859,10 +1156,16 @@ const createLocalePages = (locale, catalog, audioLibrary, artistLibrary) => {
   return pages;
 };
 
-export const createPages = (catalog, audioLibrary, artistLibrary) => {
+export const createPages = (catalog, audioLibrary, artistLibrary, merchLibrary) => {
   const pages = new Map();
   for (const locale of LOCALES) {
-    for (const [relative, html] of createLocalePages(locale, catalog, audioLibrary, artistLibrary)) pages.set(relative, html);
+    for (const [relative, html] of createLocalePages(
+      locale,
+      catalog,
+      audioLibrary,
+      artistLibrary,
+      merchLibrary
+    )) pages.set(relative, html);
   }
   return pages;
 };

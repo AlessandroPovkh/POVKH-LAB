@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "assetKey": "signal-kit-001",
+  "coordinateSystem": { "unit": "metre", "up": "+Y", "front": "+Z", "pivot": "centred-carrier", "groundY": 0 },
+  "dimensionsMm": { "carrier": [148, 210, 0.25], "islandRise": 0.12 },
+  "canonicalSource": {
+    "master": {
+      "canonicalPath": "production/physical-merch/concepts/drop-001/renders/archive-objects/signal-kit-001/source/artwork/PVKH_SIGNAL_KIT_001_SELECTED_SHEET_MASTER_v06.svg",
+      "fixturePath": "sources/signal-kit-001/PVKH_SIGNAL_KIT_001_SELECTED_SHEET_MASTER_v06.svg",
+      "sha256": "be373904e0986ef4e4f61c6bf61f6c42cb0c281b085c48326d48a27014a1cf20"
+    },
+    "productionQr": {
+      "canonicalPath": "production/physical-merch/concepts/drop-001/renders/archive-objects/signal-kit-001/source/qr/PVKH_SOCIAL_ACCESS_QR_PRODUCTION_CONCEPT_v06.png",
+      "fixturePath": "sources/signal-kit-001/PVKH_SOCIAL_ACCESS_QR_PRODUCTION_CONCEPT_v06.png",
+      "sha256": "dc1d01331f2d58fca1ff49a2929d1bc2f835355f2ed7453a767eba85bd773e2e"
+    },
+    "masterAuthority": {
+      "canonicalPath": "production/physical-merch/concepts/drop-001/renders/archive-objects/signal-kit-001/source/artwork/master-authority-v06.json",
+      "fixturePath": "sources/signal-kit-001/authority/master-authority-v06.json",
+      "sha256": "c2056c207509d7df8e837ecc7c41e4a608df655e59f9abffc725c08e73797167"
+    },
+    "placementsGeometryOnly": {
+      "canonicalPath": "production/physical-merch/concepts/drop-001/renders/archive-objects/signal-kit-001/placements.json",
+      "fixturePath": "sources/signal-kit-001/authority/placements-v05.geometry-only.json",
+      "sha256": "04c73d6322291384401da88dc0e09d7dc5cfba702de3661930ee1bf28d4c857a",
+      "usage": ["island bounds", "spacing", "shape geometry"],
+      "forbiddenUses": ["artwork", "QR payload", "QR image", "copy"]
+    },
+    "provenance": {
+      "canonicalPath": "production/physical-merch/concepts/drop-001/renders/archive-objects/signal-kit-001/provenance-v06.json",
+      "fixturePath": "sources/signal-kit-001/authority/provenance-v06.json",
+      "sha256": "5a7c1d7ed7f53c6060bd9f422d5b70e739ee3f3fceae094e4f77884565281a0f"
+    }
+  },
+  "qr": { "targetUrl": "https://alessandropovkh.github.io/POVKH-LAB/links/", "textureCropPx": [600, 876, 192, 192] },
+  "islands": [
+    { "role": "ASCII", "shape": "rounded-rect", "x": 48, "y": 60, "width": 792, "height": 366, "radius": 24 },
+    { "role": "PRIMARY", "shape": "rounded-rect", "x": 60, "y": 474, "width": 390, "height": 390, "radius": 30 },
+    { "role": "COMPACT", "shape": "rounded-rect", "x": 498, "y": 498, "width": 330, "height": 330, "radius": 30 },
+    { "role": "SIGNAL_RED_WORDMARK", "shape": "chamfered", "x": 60, "y": 936, "width": 360, "height": 54, "chamfer": 18 },
+    { "role": "ACCESS_QR", "shape": "chamfered", "x": 576, "y": 852, "width": 240, "height": 300, "chamfer": 18 }
+  ],
+  "materials": { "bone": { "baseColor": [0.8879, 0.8632, 0.7991, 1], "metallic": 0, "roughness": 0.96 } },
+  "camera": { "orbit": "0deg 70deg 115%", "fieldOfView": "30deg", "target": "auto auto auto" },
+  "budgets": { "maxBytes": 750000, "maxTriangles": 4000, "maxDrawCalls": 4 },
+  "toolchain": { "gltfTransform": "4.4.2", "gltfValidator": "2.0.0-dev.3.10", "sharp": "0.35.3" }
+}

@@ -1,3 +1,5 @@
+import { resolveSocialLinks } from "./social-links.mjs";
+
 const rawMode = process.env.POVKH_SITE_MODE || "preview";
 const rawOrigin = process.env.POVKH_SITE_ORIGIN || "https://povkh-lab.example";
 const rawBasePath = process.env.POVKH_SITE_BASE_PATH || "";
@@ -50,22 +52,13 @@ if (IS_PRODUCTION && !CONTACT_EMAIL) {
 const socialDefinitions = [
   ["telegram", "Telegram", "POVKH_SOCIAL_TELEGRAM", "https://t.me/povkhlab"],
   ["tiktok", "TikTok", "POVKH_SOCIAL_TIKTOK", "https://www.tiktok.com/@povkh_lab_recordings"],
-  ["instagram", "Instagram", "POVKH_SOCIAL_INSTAGRAM"],
+  ["instagram", "Instagram", "POVKH_SOCIAL_INSTAGRAM", "https://www.instagram.com/povkh_lab/"],
   ["youtube", "YouTube", "POVKH_SOCIAL_YOUTUBE", "https://www.youtube.com/@POVKH_LAB"],
   ["soundcloud", "SoundCloud", "POVKH_SOCIAL_SOUNDCLOUD"]
 ];
 
-export const SOCIAL_LINKS = socialDefinitions.flatMap(([id, label, environmentKey, approvedDefault = ""]) => {
-  const value = (process.env[environmentKey] || approvedDefault).trim();
-  if (!value) return [];
-  let url;
-  try {
-    url = new URL(value);
-  } catch {
-    throw new Error(`${environmentKey} must be an absolute HTTPS URL`);
-  }
-  if (url.protocol !== "https:" || url.username || url.password) {
-    throw new Error(`${environmentKey} must be an absolute HTTPS URL without credentials`);
-  }
-  return [{ id, label, url: url.href }];
+export const SOCIAL_LINKS = resolveSocialLinks({
+  definitions: socialDefinitions,
+  environment: process.env,
+  production: IS_PRODUCTION
 });

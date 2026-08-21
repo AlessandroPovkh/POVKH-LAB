@@ -1,0 +1,213 @@
+{
+  "scenes": {
+    "properties": [
+      {
+        "name": "Disc_004_Closed_Jewel_Display",
+        "rootName": "Disc_004_Centred_Grounded_Pivot",
+        "bboxMin": [
+          -0.071,
+          0,
+          -0.0052
+        ],
+        "bboxMax": [
+          0.071,
+          0.125,
+          0.0052
+        ],
+        "renderVertexCount": 8526,
+        "uploadVertexCount": 5828,
+        "uploadNaiveVertexCount": 5828
+      }
+    ]
+  },
+  "meshes": {
+    "properties": [
+      {
+        "name": "Disc_Jewel_Case_Mesh",
+        "mode": [
+          "TRIANGLES"
+        ],
+        "meshPrimitives": 1,
+        "glPrimitives": 384,
+        "vertices": 912,
+        "indices": [
+          "u16"
+        ],
+        "attributes": [
+          "NORMAL:f32",
+          "POSITION:f32"
+        ],
+        "instances": 1,
+        "size": 24192
+      },
+      {
+        "name": "Disc_Black_Tray_Mesh",
+        "mode": [
+          "TRIANGLES"
+        ],
+        "meshPrimitives": 1,
+        "glPrimitives": 12,
+        "vertices": 24,
+        "indices": [
+          "u16"
+        ],
+        "attributes": [
+          "NORMAL:f32",
+          "POSITION:f32"
+        ],
+        "instances": 1,
+        "size": 648
+      },
+      {
+        "name": "Disc_Bone_Insert_Mesh",
+        "mode": [
+          "TRIANGLES"
+        ],
+        "meshPrimitives": 1,
+        "glPrimitives": 12,
+        "vertices": 24,
+        "indices": [
+          "u16"
+        ],
+        "attributes": [
+          "NORMAL:f32",
+          "POSITION:f32"
+        ],
+        "instances": 1,
+        "size": 648
+      },
+      {
+        "name": "Disc_Insert_ASCII_Identity_Mesh",
+        "mode": [
+          "TRIANGLES"
+        ],
+        "meshPrimitives": 1,
+        "glPrimitives": 2,
+        "vertices": 4,
+        "indices": [
+          "u16"
+        ],
+        "attributes": [
+          "NORMAL:f32",
+          "POSITION:f32",
+          "TEXCOORD_0:f32"
+        ],
+        "instances": 1,
+        "size": 140
+      },
+      {
+        "name": "Disc_Carrier_Mesh",
+        "mode": [
+          "TRIANGLES"
+        ],
+        "meshPrimitives": 1,
+        "glPrimitives": 1664,
+        "vertices": 3328,
+        "indices": [
+          "u16"
+        ],
+        "attributes": [
+          "NORMAL:f32",
+          "POSITION:f32",
+          "TEXCOORD_0:f32"
+        ],
+        "instances": 1,
+        "size": 116480
+      },
+      {
+        "name": "Disc_Clear_Hub_Mesh",
+        "mode": [
+          "TRIANGLES"
+        ],
+        "meshPrimitives": 1,
+        "glPrimitives": 768,
+        "vertices": 1536,
+        "indices": [
+          "u16"
+        ],
+        "attributes": [
+          "NORMAL:f32",
+          "POSITION:f32"
+        ],
+        "instances": 1,
+        "size": 41472
+      }
+    ]
+  },
+  "materials": {
+    "properties": [
+      {
+        "name": "MAT_CLEAR_JEWEL_POLYMER",
+        "instances": 2,
+        "textures": [],
+        "alphaMode": "BLEND",
+        "doubleSided": true
+      },
+      {
+        "name": "MAT_BLACK_JEWEL_TRAY",
+        "instances": 1,
+        "textures": [],
+        "alphaMode": "OPAQUE",
+        "doubleSided": false
+      },
+      {
+        "name": "MAT_BONE_INSERT",
+        "instances": 1,
+        "textures": [],
+        "alphaMode": "OPAQUE",
+        "doubleSided": false
+      },
+      {
+        "name": "MAT_CLEAN_SILVER_DISC",
+        "instances": 1,
+        "textures": [
+          "baseColorTexture"
+        ],
+        "alphaMode": "OPAQUE",
+        "doubleSided": false
+      },
+      {
+        "name": "MAT_INSERT_ASCII_EXACT",
+        "instances": 1,
+        "textures": [
+          "baseColorTexture"
+        ],
+        "alphaMode": "OPAQUE",
+        "doubleSided": true
+      }
+    ]
+  },
+  "textures": {
+    "properties": [
+      {
+        "name": "Disc_004_Controlled_Radial_Silver_Texture",
+        "uri": "",
+        "slots": [
+          "baseColorTexture"
+        ],
+        "instances": 1,
+        "mimeType": "image/png",
+        "compression": "",
+        "resolution": "512x512",
+        "size": 185942,
+        "gpuSize": 1398100
+      },
+      {
+        "name": "Disc_004_ASCII_Exact_Texture",
+        "uri": "",
+        "slots": [
+          "baseColorTexture"
+        ],
+        "instances": 1,
+        "mimeType": "image/png",
+        "compression": "",
+        "resolution": "1600x600",
+        "size": 147451,
+        "gpuSize": 5119556
+      }
+    ]
+  },
+  "animations": {
+    "properties": []
+  }
+}

@@ -1,0 +1,100 @@
+{
+  "scenes": {
+    "properties": [
+      {
+        "name": "Zine_001_Static_Closed_A5",
+        "rootName": "Zine_001_Centred_Grounded_Pivot",
+        "bboxMin": [
+          -0.074,
+          0,
+          -0.0012
+        ],
+        "bboxMax": [
+          0.074,
+          0.21,
+          0.0012
+        ],
+        "renderVertexCount": 222,
+        "uploadVertexCount": 148,
+        "uploadNaiveVertexCount": 148
+      }
+    ]
+  },
+  "meshes": {
+    "properties": [
+      {
+        "name": "Zine_001_Closed_Assembly_Mesh",
+        "mode": [
+          "TRIANGLES"
+        ],
+        "meshPrimitives": 4,
+        "glPrimitives": 74,
+        "vertices": 148,
+        "indices": [
+          "u16"
+        ],
+        "attributes": [
+          "NORMAL:f32",
+          "POSITION:f32",
+          "TEXCOORD_0:f32"
+        ],
+        "instances": 1,
+        "size": 4028
+      }
+    ]
+  },
+  "materials": {
+    "properties": [
+      {
+        "name": "MAT_ZINE_BLACK_COVER",
+        "instances": 1,
+        "textures": [],
+        "alphaMode": "OPAQUE",
+        "doubleSided": false
+      },
+      {
+        "name": "MAT_ZINE_PAGE_BLOCK",
+        "instances": 1,
+        "textures": [],
+        "alphaMode": "OPAQUE",
+        "doubleSided": false
+      },
+      {
+        "name": "MAT_ZINE_STAPLES",
+        "instances": 1,
+        "textures": [],
+        "alphaMode": "OPAQUE",
+        "doubleSided": false
+      },
+      {
+        "name": "MAT_ZINE_V04_FRONT_COVER",
+        "instances": 1,
+        "textures": [
+          "baseColorTexture"
+        ],
+        "alphaMode": "BLEND",
+        "doubleSided": true
+      }
+    ]
+  },
+  "textures": {
+    "properties": [
+      {
+        "name": "Zine_001_V04_Cover_Texture",
+        "uri": "",
+        "slots": [
+          "baseColorTexture"
+        ],
+        "instances": 1,
+        "mimeType": "image/png",
+        "compression": "",
+        "resolution": "800x1135",
+        "size": 42171,
+        "gpuSize": 4840568
+      }
+    ]
+  },
+  "animations": {
+    "properties": []
+  }
+}

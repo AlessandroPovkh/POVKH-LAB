@@ -1,0 +1,195 @@
+{
+  "schemaVersion": 1,
+  "assetKey": "vinyl-001",
+  "baseUrl": "http://127.0.0.1:4173/merch/vinyl/",
+  "capturedAtPolicy": "timestamp-omitted-for-determinism",
+  "views": [
+    {
+      "view": "desktop-default",
+      "path": "tools/merch-3d/reports/screenshots/vinyl-001-desktop-default.png",
+      "sha256": "887d676ae8ae4d6c137478e316afbe680c560190344875124aa9608680577b5c",
+      "viewportPx": [
+        1440,
+        1000
+      ],
+      "entropy": 3.0228,
+      "errors": [],
+      "loaded": true,
+      "dimensionsM": [
+        0.6260000044107437,
+        0.3149999976158142,
+        0.008230000010358635
+      ],
+      "centreM": [
+        3.3974647539736225e-9,
+        0.1574999988079071,
+        0.0006649999933049544
+      ],
+      "fieldOfViewDeg": 24.000000000000004,
+      "cameraOrbit": {
+        "theta": 0.3490658503988659,
+        "phi": 1.3089969389957472,
+        "radius": 1.4195461643027327
+      }
+    },
+    {
+      "view": "desktop-front",
+      "path": "tools/merch-3d/reports/screenshots/vinyl-001-desktop-front.png",
+      "sha256": "1bf107a44ba271dc2560e399024b1a6dd8dd71f51d613bf4879b18a12fbfa9ff",
+      "viewportPx": [
+        1440,
+        1000
+      ],
+      "entropy": 3.1077,
+      "errors": [],
+      "loaded": true,
+      "dimensionsM": [
+        0.6260000044107437,
+        0.3149999976158142,
+        0.008230000010358635
+      ],
+      "centreM": [
+        3.3974647539736225e-9,
+        0.1574999988079071,
+        0.0006649999933049544
+      ],
+      "fieldOfViewDeg": 23,
+      "cameraOrbit": {
+        "theta": 0,
+        "phi": 1.3089969389957472,
+        "radius": 1.4195461643027327
+      }
+    },
+    {
+      "view": "desktop-rear",
+      "path": "tools/merch-3d/reports/screenshots/vinyl-001-desktop-rear.png",
+      "sha256": "659a96cfe4616f494a16c4c5e247b1e2a1810a4818d4d8dd282f654dc8cff624",
+      "viewportPx": [
+        1440,
+        1000
+      ],
+      "entropy": 2.9277,
+      "errors": [],
+      "loaded": true,
+      "dimensionsM": [
+        0.6260000044107437,
+        0.3149999976158142,
+        0.008230000010358635
+      ],
+      "centreM": [
+        3.3974647539736225e-9,
+        0.1574999988079071,
+        0.0006649999933049544
+      ],
+      "fieldOfViewDeg": 23,
+      "cameraOrbit": {
+        "theta": 3.141592653589793,
+        "phi": 1.3089969389957472,
+        "radius": 1.4195461643027327
+      }
+    },
+    {
+      "view": "mobile-default",
+      "path": "tools/merch-3d/reports/screenshots/vinyl-001-mobile-default.png",
+      "sha256": "637b209de08f468b3d5bbb8f23db96eb1c3b3ae7bbad96398746fe33dcceb468",
+      "viewportPx": [
+        390,
+        844
+      ],
+      "entropy": 3.527,
+      "errors": [],
+      "loaded": true,
+      "dimensionsM": [
+        0.6260000044107437,
+        0.3149999976158142,
+        0.008230000010358635
+      ],
+      "centreM": [
+        3.3974647539736225e-9,
+        0.1574999988079071,
+        0.0006649999933049544
+      ],
+      "fieldOfViewDeg": 19.999999999999996,
+      "cameraOrbit": {
+        "theta": 0.3141592653589793,
+        "phi": 1.3264502315156903,
+        "radius": 1.4195461643027327
+      }
+    },
+    {
+      "view": "mobile-front",
+      "path": "tools/merch-3d/reports/screenshots/vinyl-001-mobile-front.png",
+      "sha256": "ca0ba14b8e839cbad6d8a8f810eab4ef07e12a5d5235a72e042ac43fddb1a186",
+      "viewportPx": [
+        390,
+        844
+      ],
+      "entropy": 3.4906,
+      "errors": [],
+      "loaded": true,
+      "dimensionsM": [
+        0.6260000044107437,
+        0.3149999976158142,
+        0.008230000010358635
+      ],
+      "centreM": [
+        3.3974647539736225e-9,
+        0.1574999988079071,
+        0.0006649999933049544
+      ],
+      "fieldOfViewDeg": 19.999999999999996,
+      "cameraOrbit": {
+        "theta": 0,
+        "phi": 1.3264502315156903,
+        "radius": 1.4195461643027327
+      }
+    },
+    {
+      "view": "mobile-rear",
+      "path": "tools/merch-3d/reports/screenshots/vinyl-001-mobile-rear.png",
+      "sha256": "7a3aa2390bdcc9a717336bf86d3f8157161b7408103910f7ceb9a6b3a475dea5",
+      "viewportPx": [
+        390,
+        844
+      ],
+      "entropy": 3.3011,
+      "errors": [],
+      "loaded": true,
+      "dimensionsM": [
+        0.6260000044107437,
+        0.3149999976158142,
+        0.008230000010358635
+      ],
+      "centreM": [
+        3.3974647539736225e-9,
+        0.1574999988079071,
+        0.0006649999933049544
+      ],
+      "fieldOfViewDeg": 19.999999999999996,
+      "cameraOrbit": {
+        "theta": 3.141592653589793,
+        "phi": 1.3264502315156903,
+        "radius": 1.4195461643027327
+      }
+    },
+    {
+      "view": "desktop-readability-crop",
+      "path": "tools/merch-3d/reports/screenshots/vinyl-001-desktop-readability-crop.png",
+      "sha256": "08e4fcf118120a8b23d1fe6691466ab2f52264f5a3156252e2f26eeb6d777281",
+      "expected": "exact v05 outer-front master including governed tracklist"
+    }
+  ],
+  "visualComparison": {
+    "canonicalPath": "production/physical-merch/concepts/drop-001/renders/vinyl/smoke-archive/renders/PVKH_DROP001_VINYL_SIGNAL_RED_PHYSICAL_MASTER_FULL_KIT_HERO_CONCEPT_v05.png",
+    "canonicalSha256": "43cbdb58915a7b43b8d64f6f46582f3393c51069d11e62b8c6e2be33e0acdedc",
+    "artifactPath": "tools/merch-3d/reports/screenshots/vinyl-001-selected-gallery-compare.png",
+    "artifactSha256": "7a5a884fd9592b1b16386f4de939d73b83e9499ab2bc18c3931fc11edf28ea9f",
+    "layout": "canonical-left / live-3d-front-right"
+  },
+  "checks": {
+    "sixRequiredViews": true,
+    "noBrowserErrors": true,
+    "readabilityCrop": true,
+    "modelLoaded": true
+  }
+}

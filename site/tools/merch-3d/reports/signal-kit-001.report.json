@@ -1,0 +1,112 @@
+{
+  "schemaVersion": 1,
+  "assetKey": "signal-kit-001",
+  "sourceIntegrity": {
+    "master": {
+      "canonicalPath": "production/physical-merch/concepts/drop-001/renders/archive-objects/signal-kit-001/source/artwork/PVKH_SIGNAL_KIT_001_SELECTED_SHEET_MASTER_v06.svg",
+      "fixturePath": "sources/signal-kit-001/PVKH_SIGNAL_KIT_001_SELECTED_SHEET_MASTER_v06.svg",
+      "sha256": "be373904e0986ef4e4f61c6bf61f6c42cb0c281b085c48326d48a27014a1cf20",
+      "bytes": 395059
+    },
+    "productionQr": {
+      "canonicalPath": "production/physical-merch/concepts/drop-001/renders/archive-objects/signal-kit-001/source/qr/PVKH_SOCIAL_ACCESS_QR_PRODUCTION_CONCEPT_v06.png",
+      "fixturePath": "sources/signal-kit-001/PVKH_SOCIAL_ACCESS_QR_PRODUCTION_CONCEPT_v06.png",
+      "sha256": "dc1d01331f2d58fca1ff49a2929d1bc2f835355f2ed7453a767eba85bd773e2e",
+      "bytes": 8979
+    },
+    "masterAuthority": {
+      "canonicalPath": "production/physical-merch/concepts/drop-001/renders/archive-objects/signal-kit-001/source/artwork/master-authority-v06.json",
+      "fixturePath": "sources/signal-kit-001/authority/master-authority-v06.json",
+      "sha256": "c2056c207509d7df8e837ecc7c41e4a608df655e59f9abffc725c08e73797167",
+      "bytes": 2558
+    },
+    "placementsGeometryOnly": {
+      "canonicalPath": "production/physical-merch/concepts/drop-001/renders/archive-objects/signal-kit-001/placements.json",
+      "fixturePath": "sources/signal-kit-001/authority/placements-v05.geometry-only.json",
+      "sha256": "04c73d6322291384401da88dc0e09d7dc5cfba702de3661930ee1bf28d4c857a",
+      "bytes": 5353
+    },
+    "provenance": {
+      "canonicalPath": "production/physical-merch/concepts/drop-001/renders/archive-objects/signal-kit-001/provenance-v06.json",
+      "fixturePath": "sources/signal-kit-001/authority/provenance-v06.json",
+      "sha256": "5a7c1d7ed7f53c6060bd9f422d5b70e739ee3f3fceae094e4f77884565281a0f",
+      "bytes": 11427
+    }
+  },
+  "derivedRaster": {
+    "sha256": "5b2faf695bfa6b26ac7c90944b93075b8733eef460c832b986f642f377727124",
+    "bytes": 38288,
+    "dimensionsPx": [
+      888,
+      1260
+    ],
+    "canonicalMasterSha256": "be373904e0986ef4e4f61c6bf61f6c42cb0c281b085c48326d48a27014a1cf20"
+  },
+  "qrEvidence": {
+    "productionQrSha256": "dc1d01331f2d58fca1ff49a2929d1bc2f835355f2ed7453a767eba85bd773e2e",
+    "exactTargetUrl": "https://alessandropovkh.github.io/POVKH-LAB/links/",
+    "embeddedTextureDecodedUrl": "https://alessandropovkh.github.io/POVKH-LAB/links/",
+    "cropPx": [
+      600,
+      876,
+      192,
+      192
+    ]
+  },
+  "physicalEvidence": {
+    "method": "reopened-glb-bounds-and-island-registration",
+    "boundsMm": {
+      "min": [
+        -74.00000095367432,
+        0,
+        -0.1850000059371814
+      ],
+      "max": [
+        74.00000095367432,
+        209.99999344348907,
+        0.18500000290572644
+      ]
+    },
+    "carrierMm": [
+      148,
+      210,
+      0.25
+    ],
+    "islandRiseMm": 0.12,
+    "attachedUnpeeledIslandRoles": [
+      "ASCII",
+      "PRIMARY",
+      "COMPACT",
+      "SIGNAL_RED_WORDMARK",
+      "ACCESS_QR"
+    ]
+  },
+  "cameraRecommendations": {
+    "orbit": "0deg 70deg 115%",
+    "fieldOfView": "30deg",
+    "target": "auto auto auto"
+  },
+  "validation": {
+    "errors": 0,
+    "warnings": 0,
+    "infos": 1,
+    "hints": 0
+  },
+  "budget": {
+    "triangles": 206,
+    "drawCalls": 2,
+    "bytes": 52488,
+    "ceilings": {
+      "maxBytes": 750000,
+      "maxTriangles": 4000,
+      "maxDrawCalls": 4
+    }
+  },
+  "output": {
+    "path": "assets/merch-3d/signal-kit-001.glb",
+    "sha256": "8e5fa17f6788d2497f705b17098200193c19cc5725486192b444eafe27968b48"
+  },
+  "deterministic": {
+    "verifiedBySecondInMemoryBuild": true
+  }
+}

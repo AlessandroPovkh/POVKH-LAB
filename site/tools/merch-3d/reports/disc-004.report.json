@@ -1,0 +1,140 @@
+{
+  "schemaVersion": 1,
+  "assetKey": "disc-004",
+  "geometryPolicy": {
+    "carrierRadialSegments": 64,
+    "carrierGrooveCount": 9,
+    "indexComponent": "UNSIGNED_SHORT",
+    "indexBits": 16,
+    "decoderPolicy": "uncompressed-only"
+  },
+  "sourceIntegrity": {
+    "ascii": {
+      "path": "sources/disc-004/PVKH_ASCII_DARK_EXACT_1600x600_v01.png",
+      "sha256": "1c122d375b5b46f4aa06549e339e288ae89f185fab4e61c68fb7790a2f33bad7",
+      "bytes": 147451,
+      "application": "front-insert-exact"
+    },
+    "compactReverse": {
+      "path": "sources/disc-004/PVKH_COMPACT_REVERSE_EXACT_1000x1000_v01.png",
+      "sha256": "9d273a3fe83d93a321342d0e7da86d8fd4654f85efedc228ae6b41f53d98bd9b",
+      "bytes": 53859,
+      "application": "audit-only-not-embedded"
+    }
+  },
+  "authorityIntegrity": {
+    "placements": {
+      "fixturePath": "sources/disc-004/authority/placements.json",
+      "fixtureSha256": "ae2354c623e9515f848586cc3f48bcddaf2d8e3e7063bcf21c0a010ac6c14b2e",
+      "canonicalPath": "production/physical-merch/concepts/drop-001/renders/archive-objects/disc-004/placements.json",
+      "canonicalSha256": "e025849c17099c7b656c114c92590b8d2dc622942e51e80c44f1446e7b438cb1"
+    },
+    "provenance": {
+      "fixturePath": "sources/disc-004/authority/provenance.json",
+      "fixtureSha256": "eed25cdd008090cf586d48c8f40672746544b2564a570b1478d2d67ffacfcb88",
+      "canonicalPath": "production/physical-merch/concepts/drop-001/renders/archive-objects/disc-004/provenance.json",
+      "canonicalSha256": "d566a881825a1db3187695450ae0b8d5cb8a933a1d6dcb95b190cafde1c8c72d"
+    },
+    "selection": {
+      "fixturePath": "sources/disc-004/authority/selection.json",
+      "fixtureSha256": "5d1214c7e88addca5faa1f00f6149729f0b3503802d3c2e473005b728fdf0d17",
+      "canonicalPath": "production/physical-merch/concepts/drop-001/renders/archive-objects/disc-004/candidate-selection.json",
+      "canonicalSha256": "4dc10ad7fb52f18c5c8e977bd56afae9bd43a1b49a1daed836987bea98c2d1d2"
+    }
+  },
+  "derivedMaterialSha256": {
+    "cleanSilverRadial": "7db5b492c5517da464ba05fb5d30f7d743a3d4f8ddc7d9ffac58d2840e71f5b0"
+  },
+  "physicalEvidence": {
+    "method": "reopened-glb-accessor-bounds",
+    "dimensionsMm": {
+      "jewelCase": [
+        142,
+        125,
+        10.4
+      ],
+      "disc": {
+        "diameter": 120,
+        "depth": 1.2,
+        "centreHoleDiameter": 15
+      },
+      "frontInsert": [
+        120,
+        120,
+        0.25
+      ]
+    },
+    "centreHoleDiameterMm": 15,
+    "discTreatment": "clean-silver-no-printed-mark",
+    "printedMark": false
+  },
+  "cameraRecommendations": {
+    "poster": "assets/merch/cd-case.webp",
+    "desktop": {
+      "default": {
+        "orbit": "25deg 70deg 110%",
+        "target": "auto 0.063m auto",
+        "fieldOfView": "24deg"
+      },
+      "front": {
+        "orbit": "0deg 70deg 106%",
+        "target": "auto 0.063m auto",
+        "fieldOfView": "23deg"
+      },
+      "rear": {
+        "orbit": "180deg 70deg 108%",
+        "target": "auto 0.063m auto",
+        "fieldOfView": "23deg"
+      }
+    },
+    "mobile": {
+      "default": {
+        "orbit": "22deg 72deg 114%",
+        "target": "auto 0.064m auto",
+        "fieldOfView": "20deg"
+      },
+      "front": {
+        "orbit": "0deg 72deg 110%",
+        "target": "auto 0.064m auto",
+        "fieldOfView": "20deg"
+      },
+      "rear": {
+        "orbit": "180deg 72deg 112%",
+        "target": "auto 0.064m auto",
+        "fieldOfView": "20deg"
+      }
+    }
+  },
+  "validation": {
+    "errors": 0,
+    "warnings": 0,
+    "infos": 1,
+    "hints": 0
+  },
+  "budget": {
+    "triangles": 2842,
+    "drawCalls": 6,
+    "bytes": 523660,
+    "ceilings": {
+      "maxBytes": 700000,
+      "maxTriangles": 6000,
+      "maxDrawCalls": 6
+    }
+  },
+  "output": {
+    "path": "assets/merch-3d/disc-004.glb",
+    "sha256": "dd967959b2b2d50c97179fd90733d3dba334b26ab1f1f2b8e5f8e756b573c624"
+  },
+  "deterministic": {
+    "verifiedBySecondInMemoryBuild": true
+  },
+  "visualComparison": {
+    "canonicalSelected": [
+      "PVKH_DROP001_DISC_004_CASE_HERO_CONCEPT_v01.png",
+      "PVKH_DROP001_DISC_004_OPEN_SET_CONCEPT_v01.png",
+      "PVKH_DROP001_DISC_004_MATERIAL_DETAIL_CONCEPT_v01.png"
+    ],
+    "reviewStatus": "captured-six-views-readability-selected-compare",
+    "browserQa": "tools/merch-3d/reports/disc-004.browser-qa.json"
+  }
+}

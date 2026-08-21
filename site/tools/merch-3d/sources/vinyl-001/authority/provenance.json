@@ -1,0 +1,10 @@
+{
+  "authorityType": "governed-minimal-copy",
+  "canonicalPath": "production/physical-merch/concepts/drop-001/renders/vinyl/smoke-archive/provenance.json",
+  "canonicalSha256": "1f3f67e11b49d8fc3d9590a1431c3dd5f3d174463121d1caab4de4164b05d7d9",
+  "payload": {
+    "selectedRevision": "physical-master-v05",
+    "discTreatment": "translucent-signal-red-smoke",
+    "identityMethod": "exact-governed-master-artwork"
+  }
+}

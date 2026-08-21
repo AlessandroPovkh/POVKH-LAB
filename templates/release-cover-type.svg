@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="3000" height="3000" viewBox="0 0 1000 1000" role="img" aria-labelledby="title desc" data-template-version="1.0" data-safe-inset="60">
+  <title id="title">POVKH LAB release cover TYPE template</title>
+  <desc id="desc">Square sample production template, 3000 by 3000 pixels, visibly marked not for publication. Critical text remains inside the 60-unit optical safe area. The lower-right publisher mark uses the approved outlined compact PL logo.</desc>
+  <style>
+    @font-face { font-family: Barlow; src: url("../assets/fonts/BarlowCondensed-Black.ttf") format("truetype"); font-style: normal; font-weight: 900; font-display: swap; }
+    @font-face { font-family: Plex; src: url("../assets/fonts/IBMPlexMono-Regular.ttf") format("truetype"); font-style: normal; font-weight: 400; font-display: swap; }
+    .display { font-family: Barlow, "Arial Narrow", sans-serif; font-weight: 900; font-synthesis: none; }
+    .meta { font-family: Plex, monospace; font-weight: 400; font-synthesis: none; letter-spacing: .08em; }
+  </style>
+  <rect width="1000" height="1000" fill="#080808"/>
+  <text x="934" y="82" fill="#F2EFE7" class="meta" font-size="13" text-anchor="end">SAMPLE / NOT FOR PUBLICATION</text>
+  <text data-critical="true" x="66" y="130" fill="#F32222" class="meta" font-size="24">PVKH-001 / 18.09.2026</text>
+  <text data-critical="true" x="60" y="540" fill="#F2EFE7" class="display" font-size="370" textLength="880" lengthAdjust="spacingAndGlyphs">ARTIST</text>
+  <rect x="66" y="574" width="868" height="22" fill="#F32222"/>
+  <text data-critical="true" x="64" y="818" fill="#F2EFE7" class="display" font-size="240" textLength="870" lengthAdjust="spacingAndGlyphs">RELEASE</text>
+  <g data-critical="true" fill="#F2EFE7" class="meta" font-size="18">
+    <text x="66" y="895">01 / TRACK TITLE</text>
+    <text x="66" y="925">02 / TRACK TITLE</text>
+  </g>
+  <image data-critical="true" href="../assets/logo/povkh-lab-compact-reverse-transparent-outlined.svg" x="884" y="884" width="50" height="50" preserveAspectRatio="xMidYMid meet" aria-hidden="true" focusable="false"/>
+</svg>

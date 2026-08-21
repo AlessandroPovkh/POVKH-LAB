@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "status": "PRIVATE_SYNTHETIC_CONCEPT_NOT_PRODUCTION_ART",
+  "physicalMaster": {
+    "path": "source/artwork/PVKH_COLLECTOR_BOX_001_ZINE_FLAT_COVER_MASTER_v04.svg",
+    "sha256": "ffbc37ed621dd18006c89d8c05cd356f4377a0fa66643fe38fe6c07e5df33485",
+    "width": 1000,
+    "height": 1419,
+    "viewBox": "0 0 1000 1419"
+  },
+  "sourceAuthorities": [
+    {
+      "role": "identity",
+      "path": "production/physical-merch/concepts/drop-001/explorations/ascii-bullet/revised-capsule/source/PVKH_ASCII_REVERSE_EXACT_1600x600_v01.png",
+      "sha256": "284e69cfb0e6e7fef2a993f44289577efabd1fae576c9280bab4d4e2f59b398f"
+    },
+    {
+      "role": "regular",
+      "path": "assets/fonts/IBMPlexMono-Regular.ttf",
+      "sha256": "6a3412f058c7d8dfd9170c41e85ade48e5156ecb89356110ca57a0a27734af46"
+    },
+    {
+      "role": "semibold",
+      "path": "assets/fonts/IBMPlexMono-SemiBold.ttf",
+      "sha256": "d3c38e55c78f5b0f28009fddba4834ec503278936a5986032424c9bd2d23aa46"
+    },
+    {
+      "role": "acceptedClosedRender",
+      "path": "production/physical-merch/concepts/drop-001/renders/archive-objects/zine-001/renders/PVKH_ZINE_001_INK_PRESSURE_CLOSED_HERO_CONCEPT_v01.png",
+      "sha256": "1d24ec4170335fc4868b288a02f550d65b78dfb0af9931f719e28b47b50b68a2"
+    }
+  ],
+  "copy": {
+    "title": "ZINE 001 / SIGNAL ARCHAEOLOGY",
+    "recovery": "RECOVERY LOG / ARCHIVE OBJECT"
+  },
+  "placement": {
+    "title": {
+      "x": 34,
+      "y": 58,
+      "fontSize": 20
+    },
+    "recovery": {
+      "x": 34,
+      "y": 86,
+      "fontSize": 12,
+      "opacity": 0.62
+    },
+    "identity": {
+      "x": 278,
+      "y": 102,
+      "width": 448,
+      "height": 1209,
+      "rotation": 90
+    }
+  }
+}

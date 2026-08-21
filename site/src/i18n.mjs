@@ -10,12 +10,13 @@ export const LOCALE_META = {
 
 const common = {
   en: {
-    nav: { home: "Home", catalog: "Catalog", artists: "Artists", process: "Process", about: "About", press: "Press", download: "Download", contact: "Contact" },
+    nav: { home: "Home", catalog: "Catalog", merch: "Merch", artists: "Artists", process: "Process", about: "About", press: "Press", download: "Download", contact: "Contact" },
     menu: "Menu",
     languageNav: "Language",
     skip: "Skip to main content",
     primaryNav: "Primary navigation",
     mobilePrimaryNav: "Mobile primary navigation",
+    secondaryNav: "Secondary navigation",
     footerNav: "Footer navigation",
     breadcrumb: "Breadcrumb",
     brandHome: "POVKH LAB — home",
@@ -38,12 +39,13 @@ const common = {
     }
   },
   it: {
-    nav: { home: "Home", catalog: "Catalogo", artists: "Artisti", process: "Processo", about: "Chi siamo", press: "Stampa", download: "Download", contact: "Contatti" },
+    nav: { home: "Home", catalog: "Catalogo", merch: "Merch", artists: "Artisti", process: "Processo", about: "Chi siamo", press: "Stampa", download: "Download", contact: "Contatti" },
     menu: "Menu",
     languageNav: "Lingua",
     skip: "Vai al contenuto principale",
     primaryNav: "Navigazione principale",
     mobilePrimaryNav: "Navigazione principale mobile",
+    secondaryNav: "Navigazione secondaria",
     footerNav: "Navigazione a piè di pagina",
     breadcrumb: "Percorso di navigazione",
     brandHome: "POVKH LAB — pagina iniziale",
@@ -66,12 +68,13 @@ const common = {
     }
   },
   ru: {
-    nav: { home: "Главная", catalog: "Каталог", artists: "Артисты", process: "Процесс", about: "О нас", press: "Пресса", download: "Скачать", contact: "Контакты" },
+    nav: { home: "Главная", catalog: "Каталог", merch: "Мерч", artists: "Артисты", process: "Процесс", about: "О нас", press: "Пресса", download: "Скачать", contact: "Контакты" },
     menu: "Меню",
     languageNav: "Язык",
     skip: "Перейти к основному содержимому",
     primaryNav: "Основная навигация",
     mobilePrimaryNav: "Основная мобильная навигация",
+    secondaryNav: "Дополнительная навигация",
     footerNav: "Навигация в подвале",
     breadcrumb: "Навигационная цепочка",
     brandHome: "POVKH LAB — главная",
@@ -247,15 +250,16 @@ export const COPY = {
         description: "Approved POVKH LAB logo masters and an identity reference board with clearly marked sample release content.",
         eyebrow: "Press / identity assets",
         lede: "Approved outlined logo masters plus an identity reference board. Release-specific press material will appear only after approval.",
-        version: "Asset version: brand system v1.0",
-        downloadsEyebrow: "Downloads / 04",
+        version: "Asset version: Terminal Relic brand system v2.0",
+        downloadsEyebrow: "Downloads / 05",
         downloadsTitle: "Logo masters + reference",
-        downloadsBody: "The three SVG files are approved logo masters. The board documents identity usage; its release names, dates and copy are explicitly marked sample data.",
+        downloadsBody: "The four SVG files are approved Terminal Relic logo masters. The board documents identity usage; its release names, dates and copy are explicitly marked sample data.",
         cards: [
           ["PDF / 12 pages / reference", "Brand board", "Approved identity rules with clearly marked sample release metadata and example copy."],
           ["SVG / outlined", "Horizontal reverse", "Bone and Signal logo for approved dark backgrounds."],
           ["SVG / outlined", "Horizontal dark", "Void and Signal logo for approved light backgrounds."],
-          ["SVG / outlined", "Primary reverse", "Stacked master for square and portrait placements on dark backgrounds."]
+          ["SVG / outlined", "Primary reverse", "Stacked master for square and portrait placements on dark backgrounds."],
+          ["SVG / outlined", "ASCII signature", "Secondary terminal-format signature for large dark-field applications."]
         ],
         namingEyebrow: "Naming",
         namingTitle: "POVKH LAB",
@@ -301,6 +305,18 @@ export const COPY = {
           ["MODULE / 03", "Plugin classified", "Build identity and documentation pending."]
         ],
         footer: "Downloads, contribution links and verified requirements will appear after the packages pass release review."
+      },
+      links: {
+        title: "Social access",
+        description: "Verified POVKH LAB social channels: Telegram, TikTok, Instagram and YouTube.",
+        eyebrow: "LINK NODE / VERIFIED CHANNELS",
+        displayTitle: ["SOCIAL", "ACCESS"],
+        lede: "Select a verified label channel. Every destination opens outside the archive.",
+        navLabel: "Verified POVKH LAB social channels",
+        serviceAria: "Open POVKH LAB on {service} in a new tab",
+        status: "ACCESS / EXTERNAL",
+        emptyTitle: "No verified channel available",
+        emptyBody: "The access node is not public yet. Return to the label archive."
       },
       notFound: {
         title: "Page not found",
@@ -462,15 +478,16 @@ export const COPY = {
         description: "Master approvati del logo POVKH LAB e un brand board di riferimento con contenuti di uscita di esempio chiaramente contrassegnati.",
         eyebrow: "Stampa / materiali dell’identità",
         lede: "Master approvati del logo convertiti in tracciati e un brand board di riferimento. I materiali stampa specifici dell’uscita appariranno solo dopo l’approvazione.",
-        version: "Versione dei materiali: sistema di identità v1.0",
-        downloadsEyebrow: "Download / 04",
+        version: "Versione dei materiali: sistema Terminal Relic v2.0",
+        downloadsEyebrow: "Download / 05",
         downloadsTitle: "Master del logo + riferimento",
-        downloadsBody: "I tre file SVG sono master approvati del logo. Il board documenta l’uso dell’identità; nomi delle uscite, date e testi sono esplicitamente indicati come dati di esempio.",
+        downloadsBody: "I quattro file SVG sono master approvati Terminal Relic. Il board documenta l’uso dell’identità; nomi delle uscite, date e testi sono esplicitamente indicati come dati di esempio.",
         cards: [
           ["PDF / 12 pagine / riferimento", "Brand board", "Regole approvate dell’identità con metadati di uscita di esempio e testi dimostrativi chiaramente contrassegnati."],
           ["SVG / convertito in tracciati", "Orizzontale negativo", "Logo Bone e Signal per sfondi scuri approvati."],
           ["SVG / convertito in tracciati", "Orizzontale scuro", "Logo Void e Signal per sfondi chiari approvati."],
-          ["SVG / convertito in tracciati", "Primario negativo", "Master impilato per applicazioni quadrate e verticali su sfondi scuri."]
+          ["SVG / convertito in tracciati", "Primario negativo", "Master impilato per applicazioni quadrate e verticali su sfondi scuri."],
+          ["SVG / convertito in tracciati", "Firma ASCII", "Firma secondaria in formato terminale per applicazioni ampie su fondo scuro."]
         ],
         namingEyebrow: "Denominazione",
         namingTitle: "POVKH LAB",
@@ -516,6 +533,18 @@ export const COPY = {
           ["MODULO / 03", "Plugin classificato", "Identità della build e documentazione in attesa."]
         ],
         footer: "Download, link di supporto e requisiti verificati appariranno dopo la revisione dei pacchetti."
+      },
+      links: {
+        title: "Accesso social",
+        description: "Canali social verificati di POVKH LAB: Telegram, TikTok, Instagram e YouTube.",
+        eyebrow: "NODO LINK / CANALI VERIFICATI",
+        displayTitle: ["ACCESSO", "SOCIAL"],
+        lede: "Seleziona un canale verificato dell’etichetta. Ogni destinazione si apre fuori dall’archivio.",
+        navLabel: "Canali social verificati di POVKH LAB",
+        serviceAria: "Apri POVKH LAB su {service} in una nuova scheda",
+        status: "ACCESSO / ESTERNO",
+        emptyTitle: "Nessun canale verificato disponibile",
+        emptyBody: "Il nodo di accesso non è ancora pubblico. Torna all’archivio dell’etichetta."
       },
       notFound: {
         title: "Pagina non trovata",
@@ -677,15 +706,16 @@ export const COPY = {
         description: "Утверждённые мастер-файлы логотипа POVKH LAB и справочный бренд-борд с явно обозначенным демонстрационным контентом релиза.",
         eyebrow: "Пресса / материалы айдентики",
         lede: "Утверждённые мастер-файлы логотипа в кривых и справочный бренд-борд. Материалы для прессы по конкретному релизу появятся только после утверждения.",
-        version: "Версия материалов: бренд-система v1.0",
-        downloadsEyebrow: "Загрузки / 04",
+        version: "Версия материалов: бренд-система Terminal Relic v2.0",
+        downloadsEyebrow: "Загрузки / 05",
         downloadsTitle: "Мастер‑файлы логотипа + справочный материал",
-        downloadsBody: "Три SVG-файла — утверждённые мастер-файлы логотипа. Бренд-борд описывает правила использования айдентики; названия релизов, даты и тексты явно отмечены как демонстрационные данные.",
+        downloadsBody: "Четыре SVG-файла — утверждённые мастер-файлы Terminal Relic. Бренд-борд описывает правила использования айдентики; названия релизов, даты и тексты явно отмечены как демонстрационные данные.",
         cards: [
           ["PDF / 12 страниц / справочный материал", "Бренд-борд", "Утверждённые правила айдентики с явно обозначенными демонстрационными метаданными релиза и примерами текстов."],
           ["SVG / в кривых", "Горизонтальный инверсный", "Логотип в цветах Bone и Signal для утверждённых тёмных фонов."],
           ["SVG / в кривых", "Горизонтальный тёмный", "Логотип в цветах Void и Signal для утверждённых светлых фонов."],
-          ["SVG / в кривых", "Основной инверсный", "Вертикально скомпонованный мастер-файл для квадратного и портретного размещения на тёмном фоне."]
+          ["SVG / в кривых", "Основной инверсный", "Вертикально скомпонованный мастер-файл для квадратного и портретного размещения на тёмном фоне."],
+          ["SVG / в кривых", "ASCII-подпись", "Вторичная терминальная подпись для крупных носителей на тёмном фоне."]
         ],
         namingEyebrow: "Название",
         namingTitle: "POVKH LAB",
@@ -731,6 +761,18 @@ export const COPY = {
           ["МОДУЛЬ / 03", "Плагин засекречен", "Идентификатор сборки и документация ожидаются."]
         ],
         footer: "Загрузки, ссылки поддержки и проверенные системные требования появятся после финальной проверки пакетов."
+      },
+      links: {
+        title: "Социальный доступ",
+        description: "Подтверждённые социальные каналы POVKH LAB: Telegram, TikTok, Instagram и YouTube.",
+        eyebrow: "УЗЕЛ СВЯЗИ / ПОДТВЕРЖДЁННЫЕ КАНАЛЫ",
+        displayTitle: ["СОЦИАЛЬНЫЙ", "ДОСТУП"],
+        lede: "Выберите подтверждённый канал лейбла. Каждая ссылка открывается вне архива.",
+        navLabel: "Подтверждённые социальные каналы POVKH LAB",
+        serviceAria: "Открыть POVKH LAB в {service} в новой вкладке",
+        status: "ДОСТУП / ВНЕШНИЙ",
+        emptyTitle: "Нет доступных подтверждённых каналов",
+        emptyBody: "Узел доступа ещё не опубликован. Вернитесь в архив лейбла."
       },
       notFound: {
         title: "Страница не найдена",

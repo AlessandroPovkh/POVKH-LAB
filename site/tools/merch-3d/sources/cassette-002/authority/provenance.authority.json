@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "authorityType": "governed-minimal-copy",
+  "canonicalPath": "production/physical-merch/concepts/drop-001/renders/archive-objects/cassette-002/provenance.json",
+  "canonicalSha256": "e274081bc3844843edc5b533f3d26085c40dc55a6646571c5f23c39eaf7242bb",
+  "payload": {
+    "stage": "IDENTITY_PACKET_USER_APPROVED",
+    "typographyAuthority": "assets/fonts/IBMPlexMono-SemiBold.ttf",
+    "identity": {
+      "applied": true,
+      "generatedByImageModel": false,
+      "method": "Deterministic placement of exact governed identity attachments.",
+      "placementAuthority": "placements.json",
+      "masterAuthorities": [
+        {"path": "assets/logo/povkh-lab-ascii-dark-outlined.svg", "sha256": "aa95b301a5c41798cbd8335d33ff48ec42699f79c1960c323117126ea877be3c"},
+        {"path": "assets/logo/povkh-lab-compact-dark-outlined.svg", "sha256": "00f33dbdfb15a970c8cc2f5d0d033559ff8a8e8c98ead66449b382981c1e0970"},
+        {"path": "assets/logo/povkh-lab-compact-reverse-transparent-outlined.svg", "sha256": "72a56616e3606420c36923e94ac0bf3fe8c434391630cb89a4354729b48436bf"}
+      ]
+    },
+    "approvedMetadata": [
+      "POVKH LAB / ARCHIVE OBJECT 002",
+      "FORMAT / COMPACT CASSETTE",
+      "STATE / CONCEPT"
+    ],
+    "identityFiles": [
+      {"path": "source/identity/PVKH_ASCII_DARK_EXACT_1600x600_v01.png", "sha256": "c46bf6bd82ea2ec6928e9fe4ca9a314b56580af49c044be0395579c43c06dada", "width": 1600, "height": 600},
+      {"path": "source/identity/PVKH_COMPACT_DARK_EXACT_1000x1000_v01.png", "sha256": "66dd2eeff4ba4c963b891a7968eb50226cbb17f4b78953803aeae8c11fe880dd", "width": 1000, "height": 1000},
+      {"path": "source/identity/PVKH_COMPACT_REVERSE_EXACT_1000x1000_v01.png", "sha256": "9d273a3fe83d93a321342d0e7da86d8fd4654f85efedc228ae6b41f53d98bd9b", "width": 1000, "height": 1000}
+    ]
+  }
+}

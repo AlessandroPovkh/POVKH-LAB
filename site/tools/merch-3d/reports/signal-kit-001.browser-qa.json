@@ -1,0 +1,269 @@
+{
+  "schemaVersion": 1,
+  "assetKey": "signal-kit-001",
+  "baseUrlPolicy": "ephemeral-local-static-server",
+  "screenshots": {
+    "desktop-default": {
+      "path": "reports/screenshots/signal-kit-001-desktop-default.png",
+      "sha256": "189388e82809a2e5bc5e2c4f758d02185311e2f73adca62a1a097dff2aca1a33",
+      "viewportPx": [
+        1440,
+        1000
+      ],
+      "deviceScaleFactor": 3,
+      "entropy": 2.1415
+    },
+    "desktop-front": {
+      "path": "reports/screenshots/signal-kit-001-desktop-front.png",
+      "sha256": "0cee02ebe7eae971a0da8f4d9cfcd5e1c1b6804770a5402c10ae4fe4e363f536",
+      "viewportPx": [
+        1440,
+        1000
+      ],
+      "deviceScaleFactor": 3,
+      "entropy": 2.2038
+    },
+    "desktop-rear": {
+      "path": "reports/screenshots/signal-kit-001-desktop-rear.png",
+      "sha256": "7add892265fb397119575cf34a448c7059a56752a7bc94279d9962f19e826e31",
+      "viewportPx": [
+        1440,
+        1000
+      ],
+      "deviceScaleFactor": 3,
+      "entropy": 1.6332
+    },
+    "mobile-default": {
+      "path": "reports/screenshots/signal-kit-001-mobile-default.png",
+      "sha256": "52e62f51125736e2462d28c8823aee55aa87cd9d7f9a29a1f847f2408b972a21",
+      "viewportPx": [
+        390,
+        844
+      ],
+      "deviceScaleFactor": 3,
+      "entropy": 2.3512
+    },
+    "mobile-front": {
+      "path": "reports/screenshots/signal-kit-001-mobile-front.png",
+      "sha256": "2f156455c024196dbf5da648783db671adf668c79589df0ee954fd615e3e3e4a",
+      "viewportPx": [
+        390,
+        844
+      ],
+      "deviceScaleFactor": 3,
+      "entropy": 2.4156
+    },
+    "mobile-rear": {
+      "path": "reports/screenshots/signal-kit-001-mobile-rear.png",
+      "sha256": "0b31a2788bab89e0ec823dc8d23b243d08d2b0b5c14d5250d65f7a8f4571bd97",
+      "viewportPx": [
+        390,
+        844
+      ],
+      "deviceScaleFactor": 3,
+      "entropy": 1.6557
+    },
+    "desktop-default-qr-crop": {
+      "path": "reports/screenshots/signal-kit-001-desktop-default-qr-crop.png",
+      "sha256": "7411eb96242bacf21fd0d087f87ce652452244233a435293413712d72b6b078e",
+      "sourceCropPx": [
+        1180,
+        850,
+        360,
+        370
+      ]
+    },
+    "desktop-front-qr-crop": {
+      "path": "reports/screenshots/signal-kit-001-desktop-front-qr-crop.png",
+      "sha256": "2b829c9be195e98110767e4976353c87612fcbaf1eae315a26ab54ab090c710c",
+      "sourceCropPx": [
+        1180,
+        820,
+        370,
+        390
+      ]
+    }
+  },
+  "metrics": {
+    "desktop-default": {
+      "loaded": true,
+      "dimensionsM": [
+        0.14800000190734863,
+        0.20999999344348907,
+        0.00037000000884290785
+      ],
+      "centreM": [
+        0,
+        0.10499999672174454,
+        -1.5157274849304792e-12
+      ],
+      "cameraOrbit": {
+        "theta": 0,
+        "phi": 1.2217304763960306,
+        "radius": 0.5211330824618399
+      },
+      "fieldOfViewDeg": 30.000000000000004
+    },
+    "desktop-front": {
+      "loaded": true,
+      "dimensionsM": [
+        0.14800000190734863,
+        0.20999999344348907,
+        0.00037000000884290785
+      ],
+      "centreM": [
+        0,
+        0.10499999672174454,
+        -1.5157274849304792e-12
+      ],
+      "cameraOrbit": {
+        "theta": 0,
+        "phi": 1.5707963267948966,
+        "radius": 0.5211330824618399
+      },
+      "fieldOfViewDeg": 30.000000000000004
+    },
+    "desktop-rear": {
+      "loaded": true,
+      "dimensionsM": [
+        0.14800000190734863,
+        0.20999999344348907,
+        0.00037000000884290785
+      ],
+      "centreM": [
+        0,
+        0.10499999672174454,
+        -1.5157274849304792e-12
+      ],
+      "cameraOrbit": {
+        "theta": 3.141592653589793,
+        "phi": 1.5707963267948966,
+        "radius": 0.5211330824618399
+      },
+      "fieldOfViewDeg": 30.000000000000004
+    },
+    "mobile-default": {
+      "loaded": true,
+      "dimensionsM": [
+        0.14800000190734863,
+        0.20999999344348907,
+        0.00037000000884290785
+      ],
+      "centreM": [
+        0,
+        0.10499999672174454,
+        -1.5157274849304792e-12
+      ],
+      "cameraOrbit": {
+        "theta": 0,
+        "phi": 1.2217304763960306,
+        "radius": 0.5211330824618399
+      },
+      "fieldOfViewDeg": 30.000000000000004
+    },
+    "mobile-front": {
+      "loaded": true,
+      "dimensionsM": [
+        0.14800000190734863,
+        0.20999999344348907,
+        0.00037000000884290785
+      ],
+      "centreM": [
+        0,
+        0.10499999672174454,
+        -1.5157274849304792e-12
+      ],
+      "cameraOrbit": {
+        "theta": 0,
+        "phi": 1.5707963267948966,
+        "radius": 0.5211330824618399
+      },
+      "fieldOfViewDeg": 30.000000000000004
+    },
+    "mobile-rear": {
+      "loaded": true,
+      "dimensionsM": [
+        0.14800000190734863,
+        0.20999999344348907,
+        0.00037000000884290785
+      ],
+      "centreM": [
+        0,
+        0.10499999672174454,
+        -1.5157274849304792e-12
+      ],
+      "cameraOrbit": {
+        "theta": 3.141592653589793,
+        "phi": 1.5707963267948966,
+        "radius": 0.5211330824618399
+      },
+      "fieldOfViewDeg": 30.000000000000004
+    }
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "cameraRecommendation": {
+    "orbit": "0deg 70deg 115%",
+    "fieldOfView": "30deg",
+    "target": "auto auto auto"
+  },
+  "qrDecode": {
+    "exactTargetUrl": "https://alessandropovkh.github.io/POVKH-LAB/links/",
+    "method": "ZXing decode of lossless crop taken directly from governed stage screenshot",
+    "desktopDefault": "https://alessandropovkh.github.io/POVKH-LAB/links/",
+    "desktopFront": "https://alessandropovkh.github.io/POVKH-LAB/links/",
+    "defaultFinderPoints": [
+      {
+        "x": 320,
+        "y": 641
+      },
+      {
+        "x": 325.5,
+        "y": 357
+      },
+      {
+        "x": 640.5,
+        "y": 357
+      },
+      {
+        "x": 604,
+        "y": 615
+      }
+    ],
+    "frontFinderPoints": [
+      {
+        "x": 334.5,
+        "y": 779
+      },
+      {
+        "x": 334.5,
+        "y": 471
+      },
+      {
+        "x": 643.5,
+        "y": 471
+      },
+      {
+        "x": 615,
+        "y": 750.5
+      }
+    ]
+  },
+  "visualComparison": {
+    "status": "pass",
+    "method": "self-contained-v06-master-left / live-browser-front-right",
+    "artifactPath": "reports/screenshots/signal-kit-001-source-compare.png",
+    "artifactSha256": "bb90cd6d29b476825423641ce80ea2fcac044eaaf54bc13e5fb85e6f48908a94",
+    "checks": [
+      "all five islands remain attached",
+      "no peel state",
+      "v06 artwork preserved",
+      "production QR remains machine-readable"
+    ]
+  },
+  "visualRisks": [
+    "Shallow 0.12 mm die-cut rise is intentionally subtle",
+    "Fine identity detail compresses at mobile default distance",
+    "QR decoding depends on maintaining lossless embedded PNG and governed camera distance"
+  ]
+}

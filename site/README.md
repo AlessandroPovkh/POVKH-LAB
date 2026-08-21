@@ -54,6 +54,11 @@ genre vocabulary and review flags used while preparing the catalog. It is an
 audit artifact, not a second runtime source, and is also excluded from the
 public build.
 
+`data/merch.json` is the source of truth for the coming-soon merch overview,
+including its localized copy, object order, categories and roadmap. Object detail
+routes remain unpublished until `detailEnabled` is true and approved local
+photography plus complete EN/IT/RU copy are available.
+
 The global HUD audio console contains all 13 catalog masters in canonical
 PVKH-001 → PVKH-013 order, with PVKH-007 “Opportunist” selected by default.
 Canonical project copies live in the root `Tracks/` folder as tagged stereo MP3
@@ -64,6 +69,11 @@ the browser never decodes a full file merely to draw the graph. Audible
 autoplay is attempted, but browsers may require the explicit PLAY control.
 Save-Data defers the MP3 request until that explicit action. Native Media
 Session metadata and play/pause/seek actions are used when supported.
+First visits start at 60% volume; later visits restore the last valid local
+preference. The instrument-style `VOL` control opens a horizontal,
+keyboard-accessible popup range. The waveform accepts click, drag and touch
+seeking, with five-second arrow-key steps, and records a pending restore time
+so seeking remains available before the media has loaded.
 The track-list dialog allows direct keyboard or pointer selection of any catalog
 position. Internal navigation progressively replaces the route while preserving
 the single audio element, current time and play state; direct URLs and no-JavaScript
@@ -83,12 +93,21 @@ Routes:
 - `/catalog/` and `/catalog/pvkh-001/` through `/catalog/pvkh-013/` — catalog and release details;
 - `/listen/pvkh-001/` through `/listen/pvkh-011/` — local service choosers for published releases;
 - `/artists/`, five `/artists/{slug}/` files and `/process/` — confirmed catalog roster, derived discographies and working method;
-- `/about/`, `/contact/`, `/press/` — label context, verified-contact placeholder and approved press assets;
+- `/merch/` and eleven `/merch/{slug}/` routes — the DROP 001 concept overview and non-commercial object galleries;
+- `/about/`, `/contact/`, `/press/` — label context, verified contact and approved press assets;
+- `/links/` — Access Terminal chooser for the label's verified external social channels;
 - `/download/` — pre-release classified plugin slots without invented product details.
 
-The same 37 content routes exist below `/it/` and `/ru/`. The build also
+The same 50 content routes exist below `/it/` and `/ru/`. The build also
 generates localized `404.html` pages and locale-specific web manifests, for a
-total of 114 HTML pages.
+total of 153 HTML pages.
+
+`SOCIAL_LINKS` from `src/config.mjs` is the only runtime authority for the
+Access Terminal, contact and footer social destinations. Its approved defaults
+are Telegram, TikTok, Instagram and YouTube, in that order. SoundCloud remains
+optional until a verified HTTPS URL is supplied. An explicitly blank social
+environment value omits that service; production fails closed if no verified
+destination remains.
 
 Confirmed local artwork is published for all thirteen releases. The build also
 keeps deterministic signal plates generated from the real track waveforms as a
@@ -111,19 +130,25 @@ POVKH_SITE_BASE_PATH=
 POVKH_CONTACT_EMAIL=alessandropovkh@icloud.com
 POVKH_SOCIAL_TELEGRAM=https://t.me/povkhlab
 POVKH_SOCIAL_TIKTOK=https://www.tiktok.com/@povkh_lab_recordings
-POVKH_SOCIAL_INSTAGRAM=
+POVKH_SOCIAL_INSTAGRAM=https://www.instagram.com/povkh_lab/
 POVKH_SOCIAL_YOUTUBE=https://www.youtube.com/@POVKH_LAB
 POVKH_SOCIAL_SOUNDCLOUD=
 POVKH_OG_IMAGE=/assets/og/povkh-lab-og.png
 ```
 
+The selected Signal Kit preview QR still resolves directly to Telegram and is
+not approved for production printing. Only an explicitly approved real HTTPS
+origin can authorize regeneration to `<approved-origin>/links/`; `.example`,
+preview, temporary deployment and third-party redirect URLs are invalid print
+targets. Regeneration, decoding and print approval are a separate release gate.
+
 Before public launch:
 
 1. approve the real production domain and set `POVKH_SITE_ORIGIN` for the build;
-2. verify optional social channels and provide them as build variables; the approved contact email defaults to `alessandropovkh@icloud.com`;
-4. replace planned dates, genres, preorder URLs or missing listening links only after platform verification;
-5. run a strict `POVKH_SITE_MODE=production` build; it generates indexable meta, `robots.txt` and `sitemap.xml` only after the gates pass;
-6. run `npm test` and inspect the multilingual screenshots in `artifacts/qa/`.
+2. verify optional SoundCloud and provide it as a build variable if approved; the approved contact email defaults to `alessandropovkh@icloud.com`;
+3. replace planned dates, genres, preorder URLs or missing listening links only after platform verification;
+4. run a strict `POVKH_SITE_MODE=production` build; it generates indexable meta, `robots.txt` and `sitemap.xml` only after the gates pass;
+5. run `npm test` and inspect the multilingual screenshots in `artifacts/qa/`.
 
 The press-page PDF is copied at build time from the canonical root export
 `../exports/POVKH-LAB-Brand-Board-v1.0.pdf`; the static QA requires an exact

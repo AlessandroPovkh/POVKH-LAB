@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1920" viewBox="0 0 1080 1920" role="img" aria-labelledby="title desc" data-template-version="1.0" data-safe-zone="120 250 720 1350">
+  <title id="title">POVKH LAB Story and Reel 9:16 signal template</title>
+  <desc id="desc">Vertical sample production template, 1080 by 1920 pixels, visibly marked not for publication. Keep critical text between x 120 and 840 and between y 250 and 1600 to clear platform interface overlays.</desc>
+  <style>
+    @font-face { font-family: Barlow; src: url("../assets/fonts/BarlowCondensed-Black.ttf") format("truetype"); font-style: normal; font-weight: 900; font-display: swap; }
+    @font-face { font-family: Plex; src: url("../assets/fonts/IBMPlexMono-Regular.ttf") format("truetype"); font-style: normal; font-weight: 400; font-display: swap; }
+    .display { font-family: Barlow, "Arial Narrow", sans-serif; font-weight: 900; font-synthesis: none; }
+    .meta { font-family: Plex, monospace; font-weight: 400; font-synthesis: none; letter-spacing: .08em; }
+  </style>
+  <rect width="1080" height="1920" fill="#080808"/>
+  <text data-critical="true" x="120" y="300" fill="#F32222" class="meta" font-size="24">SIGNAL / PVKH-001</text>
+  <text x="840" y="300" fill="#F2EFE7" class="meta" font-size="17" text-anchor="end">SAMPLE / NOT FOR PUBLICATION</text>
+  <text x="44" y="940" fill="#F2EFE7" class="display" font-size="450" textLength="992" lengthAdjust="spacingAndGlyphs">001</text>
+  <rect x="90" y="982" width="900" height="28" fill="#F32222"/>
+  <text data-critical="true" x="120" y="1215" fill="#F2EFE7" class="display" font-size="220" textLength="720" lengthAdjust="spacingAndGlyphs">ARTIST</text>
+  <text data-critical="true" x="120" y="1390" fill="#F2EFE7" class="display" font-size="170" textLength="700" lengthAdjust="spacingAndGlyphs">RELEASE</text>
+  <g data-critical="true" fill="#F2EFE7" class="meta" font-size="22">
+    <text x="120" y="1535">18.09.2026 / 00:15 EXCERPT</text>
+    <text x="120" y="1575">FORM HOLDS THE EXPERIMENT</text>
+  </g>
+  <line x1="120" y1="1600" x2="840" y2="1600" stroke="#8F918F" stroke-width="2" stroke-dasharray="8 8"/>
+  <text x="120" y="1650" fill="#8F918F" class="meta" font-size="17">UI OVERLAY ZONE / NO CRITICAL TEXT BELOW 1600</text>
+</svg>

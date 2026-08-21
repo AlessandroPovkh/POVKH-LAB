@@ -1,0 +1,207 @@
+{
+  "schemaVersion": 1,
+  "assetKey": "disc-004",
+  "baseUrl": "http://127.0.0.1:4173/merch/cd/",
+  "capturedAtPolicy": "timestamp-omitted-for-determinism",
+  "views": [
+    {
+      "view": "desktop-default",
+      "path": "tools/merch-3d/reports/screenshots/disc-004-desktop-default.png",
+      "sha256": "a8756124bc96defde1284ea1ec08d8e8eb16d00451cacd4d708171da20c90253",
+      "viewportPx": [
+        1440,
+        1000
+      ],
+      "entropy": 2.3474,
+      "errors": [],
+      "loaded": true,
+      "dimensionsM": [
+        0.1420000046491623,
+        0.125,
+        0.010400000028312206
+      ],
+      "centreM": [
+        0,
+        0.0625,
+        0
+      ],
+      "fieldOfViewDeg": 24.000000000000004,
+      "cameraOrbit": {
+        "theta": 0.4363323129985824,
+        "phi": 1.2217304763960306,
+        "radius": 0.4800909275319899
+      }
+    },
+    {
+      "view": "desktop-front",
+      "path": "tools/merch-3d/reports/screenshots/disc-004-desktop-front.png",
+      "sha256": "7eb700be838b5d322ae9e3cc82f65f5ca219c46b6fea7b64055bd8f0eb4bb38b",
+      "viewportPx": [
+        1440,
+        1000
+      ],
+      "entropy": 2.4209,
+      "errors": [],
+      "loaded": true,
+      "dimensionsM": [
+        0.1420000046491623,
+        0.125,
+        0.010400000028312206
+      ],
+      "centreM": [
+        0,
+        0.0625,
+        0
+      ],
+      "fieldOfViewDeg": 23,
+      "cameraOrbit": {
+        "theta": 0,
+        "phi": 1.2217304763960306,
+        "radius": 0.4800909275319899
+      }
+    },
+    {
+      "view": "desktop-rear",
+      "path": "tools/merch-3d/reports/screenshots/disc-004-desktop-rear.png",
+      "sha256": "b0f6b479c029750dac2b4b809860d567fd00189e0affd12165dfecbb5c75f26f",
+      "viewportPx": [
+        1440,
+        1000
+      ],
+      "entropy": 3.2942,
+      "errors": [],
+      "loaded": true,
+      "dimensionsM": [
+        0.1420000046491623,
+        0.125,
+        0.010400000028312206
+      ],
+      "centreM": [
+        0,
+        0.0625,
+        0
+      ],
+      "fieldOfViewDeg": 23,
+      "cameraOrbit": {
+        "theta": 3.141592653589793,
+        "phi": 1.2217304763960306,
+        "radius": 0.4800909275319899
+      }
+    },
+    {
+      "view": "mobile-default",
+      "path": "tools/merch-3d/reports/screenshots/disc-004-mobile-default.png",
+      "sha256": "d5b42bb4a1be72dea479fa7b388e27f21a45aff0ab33d31a71e6d3a88c843d2c",
+      "viewportPx": [
+        390,
+        844
+      ],
+      "entropy": 2.4737,
+      "errors": [],
+      "loaded": true,
+      "dimensionsM": [
+        0.1420000046491623,
+        0.125,
+        0.010400000028312206
+      ],
+      "centreM": [
+        0,
+        0.0625,
+        0
+      ],
+      "fieldOfViewDeg": 19.999999999999996,
+      "cameraOrbit": {
+        "theta": 0.3839724354387525,
+        "phi": 1.2566370614359172,
+        "radius": 0.578845371479327
+      }
+    },
+    {
+      "view": "mobile-front",
+      "path": "tools/merch-3d/reports/screenshots/disc-004-mobile-front.png",
+      "sha256": "06cb58c2c816f99de7e54902fbe76c38ea373433057052dab3a0c9d14c32f09a",
+      "viewportPx": [
+        390,
+        844
+      ],
+      "entropy": 2.5024,
+      "errors": [],
+      "loaded": true,
+      "dimensionsM": [
+        0.1420000046491623,
+        0.125,
+        0.010400000028312206
+      ],
+      "centreM": [
+        0,
+        0.0625,
+        0
+      ],
+      "fieldOfViewDeg": 19.999999999999996,
+      "cameraOrbit": {
+        "theta": 0,
+        "phi": 1.2566370614359172,
+        "radius": 0.578845371479327
+      }
+    },
+    {
+      "view": "mobile-rear",
+      "path": "tools/merch-3d/reports/screenshots/disc-004-mobile-rear.png",
+      "sha256": "fd1948d4f1b6978695d2f1e44ca9c71ff3b1844f4aaed751b5ab1dfff285c4fb",
+      "viewportPx": [
+        390,
+        844
+      ],
+      "entropy": 3.2637,
+      "errors": [],
+      "loaded": true,
+      "dimensionsM": [
+        0.1420000046491623,
+        0.125,
+        0.010400000028312206
+      ],
+      "centreM": [
+        0,
+        0.0625,
+        0
+      ],
+      "fieldOfViewDeg": 19.999999999999996,
+      "cameraOrbit": {
+        "theta": 3.141592653589793,
+        "phi": 1.2566370614359172,
+        "radius": 0.578845371479327
+      }
+    },
+    {
+      "view": "desktop-readability-crop",
+      "path": "tools/merch-3d/reports/screenshots/disc-004-desktop-readability-crop.png",
+      "sha256": "e03918774b7ed5469002619aaa1cb28e6961c3e0b79147c89035ed55262aecf9",
+      "expected": "exact governed ASCII attachment without retyped metadata"
+    }
+  ],
+  "visualComparison": {
+    "canonicalReferences": [
+      {
+        "path": "production/physical-merch/concepts/drop-001/renders/archive-objects/disc-004/renders/selected/PVKH_DROP001_DISC_004_CASE_HERO_CONCEPT_v01.png",
+        "sha256": "bb30752d3f2e061ceca9c0ef7c1fb9779c0ddaa836add1e29e4198660254d2a5"
+      },
+      {
+        "path": "production/physical-merch/concepts/drop-001/renders/archive-objects/disc-004/renders/selected/PVKH_DROP001_DISC_004_OPEN_SET_CONCEPT_v01.png",
+        "sha256": "4f3edba72b28cca7e0cfde9063cd869c38074dffa3d1fc528a3f6c4669638d05"
+      },
+      {
+        "path": "production/physical-merch/concepts/drop-001/renders/archive-objects/disc-004/renders/selected/PVKH_DROP001_DISC_004_MATERIAL_DETAIL_CONCEPT_v01.png",
+        "sha256": "c9d2bcb236222b652ea2401b8b20f80af26b7b52bbac3c6b5ac746b312fd0e72"
+      }
+    ],
+    "artifactPath": "tools/merch-3d/reports/screenshots/disc-004-selected-gallery-compare.png",
+    "artifactSha256": "11757736cbd56ea8e7e9b02b8124db63d215bb2295ce938b17719d5795c80bb9",
+    "layout": "case / open / material-detail / live-front / live-rear"
+  },
+  "checks": {
+    "sixRequiredViews": true,
+    "noBrowserErrors": true,
+    "readabilityCrop": true,
+    "modelLoaded": true
+  }
+}

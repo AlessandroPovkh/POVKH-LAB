@@ -1,0 +1,298 @@
+{
+  "scenes": {
+    "properties": [
+      {
+        "name": "Collector_Box_001_Default_Open_Archive_Set",
+        "rootName": "Collector_Box_001_Centred_Grounded_Pivot",
+        "bboxMin": [
+          -0.125,
+          0,
+          -0.11997
+        ],
+        "bboxMax": [
+          0.125,
+          0.22108,
+          0.125
+        ],
+        "renderVertexCount": 2802,
+        "uploadVertexCount": 1878,
+        "uploadNaiveVertexCount": 1878
+      }
+    ]
+  },
+  "meshes": {
+    "properties": [
+      {
+        "name": "Collector_Box_Visual_Batch_Board_Mesh",
+        "mode": [
+          "TRIANGLES"
+        ],
+        "meshPrimitives": 1,
+        "glPrimitives": 24,
+        "vertices": 48,
+        "indices": [
+          "u32"
+        ],
+        "attributes": [
+          "NORMAL:f32",
+          "POSITION:f32",
+          "TANGENT:f32",
+          "TEXCOORD_0:f32"
+        ],
+        "instances": 1,
+        "size": 2592
+      },
+      {
+        "name": "Collector_Box_Visual_Batch_Bone_Mesh",
+        "mode": [
+          "TRIANGLES"
+        ],
+        "meshPrimitives": 1,
+        "glPrimitives": 36,
+        "vertices": 72,
+        "indices": [
+          "u32"
+        ],
+        "attributes": [
+          "NORMAL:f32",
+          "POSITION:f32"
+        ],
+        "instances": 1,
+        "size": 2160
+      },
+      {
+        "name": "Collector_Box_Visual_Batch_Tray_Mesh",
+        "mode": [
+          "TRIANGLES"
+        ],
+        "meshPrimitives": 1,
+        "glPrimitives": 256,
+        "vertices": 514,
+        "indices": [
+          "u32"
+        ],
+        "attributes": [
+          "NORMAL:f32",
+          "POSITION:f32"
+        ],
+        "instances": 1,
+        "size": 15408
+      },
+      {
+        "name": "Collector_Box_Visual_Batch_Zine_Mesh",
+        "mode": [
+          "TRIANGLES"
+        ],
+        "meshPrimitives": 1,
+        "glPrimitives": 12,
+        "vertices": 24,
+        "indices": [
+          "u32"
+        ],
+        "attributes": [
+          "NORMAL:f32",
+          "POSITION:f32"
+        ],
+        "instances": 1,
+        "size": 720
+      },
+      {
+        "name": "Collector_Box_Visual_Batch_Cassette_Mesh",
+        "mode": [
+          "TRIANGLES"
+        ],
+        "meshPrimitives": 1,
+        "glPrimitives": 248,
+        "vertices": 500,
+        "indices": [
+          "u32"
+        ],
+        "attributes": [
+          "NORMAL:f32",
+          "POSITION:f32"
+        ],
+        "instances": 1,
+        "size": 14976
+      },
+      {
+        "name": "Collector_Box_Visual_Batch_Disc_Mesh",
+        "mode": [
+          "TRIANGLES"
+        ],
+        "meshPrimitives": 1,
+        "glPrimitives": 304,
+        "vertices": 612,
+        "indices": [
+          "u32"
+        ],
+        "attributes": [
+          "NORMAL:f32",
+          "POSITION:f32"
+        ],
+        "instances": 1,
+        "size": 18336
+      },
+      {
+        "name": "Collector_Box_Visual_Batch_Data_Key_Mesh",
+        "mode": [
+          "TRIANGLES"
+        ],
+        "meshPrimitives": 1,
+        "glPrimitives": 12,
+        "vertices": 24,
+        "indices": [
+          "u32"
+        ],
+        "attributes": [
+          "NORMAL:f32",
+          "POSITION:f32"
+        ],
+        "instances": 1,
+        "size": 720
+      },
+      {
+        "name": "Collector_Box_Visual_Batch_Signal_Mesh",
+        "mode": [
+          "TRIANGLES"
+        ],
+        "meshPrimitives": 1,
+        "glPrimitives": 36,
+        "vertices": 72,
+        "indices": [
+          "u32"
+        ],
+        "attributes": [
+          "NORMAL:f32",
+          "POSITION:f32"
+        ],
+        "instances": 1,
+        "size": 2160
+      },
+      {
+        "name": "Collector_Box_Visual_Batch_Identity_Mesh",
+        "mode": [
+          "TRIANGLES"
+        ],
+        "meshPrimitives": 1,
+        "glPrimitives": 6,
+        "vertices": 12,
+        "indices": [
+          "u32"
+        ],
+        "attributes": [
+          "NORMAL:f32",
+          "POSITION:f32",
+          "TEXCOORD_0:f32"
+        ],
+        "instances": 1,
+        "size": 456
+      }
+    ]
+  },
+  "materials": {
+    "properties": [
+      {
+        "name": "MAT_VOID_PAPER_WRAPPED_BOARD",
+        "instances": 1,
+        "textures": [
+          "normalTexture"
+        ],
+        "alphaMode": "OPAQUE",
+        "doubleSided": true
+      },
+      {
+        "name": "MAT_BONE_LINING_AND_PAPER",
+        "instances": 1,
+        "textures": [],
+        "alphaMode": "OPAQUE",
+        "doubleSided": true
+      },
+      {
+        "name": "MAT_DARK_MODULAR_TRAY",
+        "instances": 1,
+        "textures": [],
+        "alphaMode": "OPAQUE",
+        "doubleSided": true
+      },
+      {
+        "name": "MAT_VOID_ZINE",
+        "instances": 1,
+        "textures": [],
+        "alphaMode": "OPAQUE",
+        "doubleSided": true
+      },
+      {
+        "name": "MAT_SMOKE_CASSETTE",
+        "instances": 1,
+        "textures": [],
+        "alphaMode": "BLEND",
+        "doubleSided": true
+      },
+      {
+        "name": "MAT_OPTICAL_DISC",
+        "instances": 1,
+        "textures": [],
+        "alphaMode": "OPAQUE",
+        "doubleSided": true
+      },
+      {
+        "name": "MAT_DATA_KEY",
+        "instances": 1,
+        "textures": [],
+        "alphaMode": "OPAQUE",
+        "doubleSided": true
+      },
+      {
+        "name": "MAT_SIGNAL_RED_PULL_TAB",
+        "instances": 1,
+        "textures": [],
+        "alphaMode": "OPAQUE",
+        "doubleSided": true
+      },
+      {
+        "name": "MAT_EXACT_REVERSE_LID_IDENTITY",
+        "instances": 1,
+        "textures": [
+          "baseColorTexture",
+          "emissiveTexture"
+        ],
+        "alphaMode": "BLEND",
+        "doubleSided": true
+      }
+    ]
+  },
+  "textures": {
+    "properties": [
+      {
+        "name": "Collector_Box_001_Bookcloth_Normal",
+        "uri": "",
+        "slots": [
+          "normalTexture"
+        ],
+        "instances": 1,
+        "mimeType": "image/png",
+        "compression": "",
+        "resolution": "256x256",
+        "size": 36958,
+        "gpuSize": 349524
+      },
+      {
+        "name": "Collector_Box_001_Identity_Exact",
+        "uri": "",
+        "slots": [
+          "baseColorTexture",
+          "emissiveTexture"
+        ],
+        "instances": 1,
+        "mimeType": "image/png",
+        "compression": "",
+        "resolution": "1600x600",
+        "size": 159393,
+        "gpuSize": 5119556
+      }
+    ]
+  },
+  "animations": {
+    "properties": []
+  }
+}

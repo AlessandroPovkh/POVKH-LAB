@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "authorityType": "governed-minimal-copy",
+  "canonicalPath": "production/physical-merch/concepts/drop-001/renders/archive-objects/collector-box-001/candidate-selection.json",
+  "canonicalSha256": "bfdbe40c0322e64d0d8291b1c9602692337a3a14c6c959c2dd34fffaa8f37493",
+  "userSelection": "01 / ARCHIVE CLAMSHELL",
+  "decision": "retain first clamshell architecture and exact logo applications",
+  "siteGalleryEligible": false,
+  "productionArt": false,
+  "realProductPhoto": false
+}

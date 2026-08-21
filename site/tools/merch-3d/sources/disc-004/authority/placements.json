@@ -1,0 +1,11 @@
+{
+  "authorityType": "governed-minimal-copy",
+  "canonicalPath": "production/physical-merch/concepts/drop-001/renders/archive-objects/disc-004/placements.json",
+  "canonicalSha256": "e025849c17099c7b656c114c92590b8d2dc622942e51e80c44f1446e7b438cb1",
+  "payload": {
+    "canvas": {"width": 1536, "height": 1024},
+    "identity": "PVKH_ASCII_DARK_EXACT_1600x600_v01.png",
+    "discIdentityApplied": false,
+    "discTreatment": "clean-silver-no-mark"
+  }
+}

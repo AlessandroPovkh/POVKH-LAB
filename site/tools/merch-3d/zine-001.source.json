@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "assetKey": "zine-001",
+  "coordinateSystem": { "unit": "metre", "up": "+Y", "front": "+Z", "pivot": "centred-closed-book", "groundY": 0 },
+  "dimensionsMm": { "closed": [148, 210, 2.4], "frontCover": 0.2, "backCover": 0.2, "pageBlock": 2, "spineWidth": 0.6 },
+  "pageCount": 32,
+  "displayState": "static-closed",
+  "canonicalSource": {
+    "cover": {
+      "canonicalPath": "production/physical-merch/concepts/drop-001/renders/archive-objects/collector-box-001/source/artwork/PVKH_COLLECTOR_BOX_001_ZINE_FLAT_COVER_MASTER_v04.svg",
+      "fixturePath": "sources/zine-001/PVKH_COLLECTOR_BOX_001_ZINE_FLAT_COVER_MASTER_v04.svg",
+      "sha256": "ffbc37ed621dd18006c89d8c05cd356f4377a0fa66643fe38fe6c07e5df33485"
+    },
+    "authority": {
+      "canonicalPath": "production/physical-merch/concepts/drop-001/renders/archive-objects/collector-box-001/source/artwork/zine-flat-cover-authority-v04.json",
+      "fixturePath": "sources/zine-001/authority/zine-flat-cover-authority-v04.json",
+      "sha256": "c9781d0b7fbee456409fd8bf159572a0bec17206942e7ed33dd489a303dccf0c"
+    }
+  },
+  "galleryPolicy": "never-crop-gallery-renders",
+  "materials": {
+    "blackCover": { "baseColor": [0.005, 0.005, 0.006, 1], "metallic": 0, "roughness": 0.94 },
+    "pageBlock": { "baseColor": [0.845, 0.82, 0.76, 1], "metallic": 0, "roughness": 1 },
+    "staple": { "baseColor": [0.42, 0.45, 0.47, 1], "metallic": 0.86, "roughness": 0.24 }
+  },
+  "staples": [
+    { "name": "Staple_01", "centreMm": [-70.5, 70, 1.15], "sizeMm": [6, 0.5, 0.1] },
+    { "name": "Staple_02", "centreMm": [-70.5, 140, 1.15], "sizeMm": [6, 0.5, 0.1] }
+  ],
+  "camera": { "orbit": "20deg 70deg 110%", "fieldOfView": "30deg", "target": "auto auto auto" },
+  "budgets": { "maxBytes": 780000, "maxTriangles": 4500, "maxDrawCalls": 4 },
+  "toolchain": { "gltfTransform": "4.4.2", "gltfValidator": "2.0.0-dev.3.10", "sharp": "0.35.3" }
+}

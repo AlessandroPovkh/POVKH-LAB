@@ -1,0 +1,11 @@
+{
+  "authorityType": "governed-minimal-copy",
+  "canonicalPath": "production/physical-merch/concepts/drop-001/renders/vinyl/smoke-archive/source/artwork/master-authorities-v05.json",
+  "canonicalSha256": "adf0d3d5d15cee2b8a2dc5ee3243a0c5c8c71526a5213c4fd9f4d38f3d6fc10a",
+  "payload": {
+    "revision": "v05",
+    "outerFront": "6a3a80aa9a45b273fe840395a03f4c46f2a6aed5b0b4d3b39139373399113b1b",
+    "outerReverse": "69746c784d303957e608a13747d83725a2a96c7872f7143cf76314302922eca6",
+    "centerLabel": "23b918489decf0a7b2ae1d0ac0b14fc9eea5b5e3e6bf2b6f1074f7a9ea115c18"
+  }
+}

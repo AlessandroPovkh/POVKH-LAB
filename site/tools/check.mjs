@@ -9,8 +9,10 @@ import {
   ROBOTS_CONTENT,
   SITE_BASE_PATH,
   SITE_ORIGIN,
-  SITE_STATUS
+  SITE_STATUS,
+  SOCIAL_LINKS
 } from "../src/config.mjs";
+import { validateMerchLibrary } from "../src/merch.mjs";
 import { hasValidStreamingServiceOrder, isOfficialStreamingUrl } from "../src/streaming.mjs";
 
 const siteRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -56,6 +58,42 @@ const catalog = JSON.parse(await readFile(catalogPath, "utf8"));
 const audioLibraryPath = path.join(siteRoot, "data", "audio-library.json");
 const audioLibrary = JSON.parse(await readFile(audioLibraryPath, "utf8"));
 const artistLibrary = JSON.parse(await readFile(path.join(siteRoot, "data", "artists.json"), "utf8"));
+const merchRegistry = JSON.parse(await readFile(path.join(siteRoot, "data", "merch.json"), "utf8"));
+const merchCopyAuthority = JSON.parse(await readFile(path.join(siteRoot, "data", "merch-copy-authority.json"), "utf8"));
+const merchAssetManifest = JSON.parse(await readFile(path.join(siteRoot, "data", "merch-asset-manifest.json"), "utf8"));
+const merchAssetsByPath = new Map(merchAssetManifest.assets.map((asset) => [asset.publicPath, asset]));
+const webpDimensions = (buffer) => {
+  if (buffer.subarray(0, 4).toString("ascii") !== "RIFF"
+    || buffer.subarray(8, 12).toString("ascii") !== "WEBP") return null;
+  const type = buffer.subarray(12, 16).toString("ascii");
+  if (type === "VP8X") return { width: 1 + buffer.readUIntLE(24, 3), height: 1 + buffer.readUIntLE(27, 3) };
+  if (type === "VP8L" && buffer[20] === 0x2f) return {
+    width: 1 + buffer[21] + ((buffer[22] & 0x3f) << 8),
+    height: 1 + ((buffer[22] & 0xc0) >> 6) + (buffer[23] << 2) + ((buffer[24] & 0x0f) << 10)
+  };
+  if (type === "VP8 ") {
+    const marker = buffer.indexOf(Buffer.from([0x9d, 0x01, 0x2a]), 20);
+    if (marker >= 0) return {
+      width: buffer.readUInt16LE(marker + 3) & 0x3fff,
+      height: buffer.readUInt16LE(marker + 5) & 0x3fff
+    };
+  }
+  return null;
+};
+const merchLibrary = await validateMerchLibrary(
+  merchRegistry,
+  merchCopyAuthority,
+  {
+    readAsset: async (relative) => {
+      const record = merchAssetsByPath.get(relative);
+      if (!record) return null;
+      const bytes = await readFile(path.join(distDir, relative));
+      const dimensions = webpDimensions(bytes);
+      const hash = createHash("sha256").update(bytes).digest("hex");
+      return dimensions && hash === record.outputSha256 ? { path: relative, ...dimensions, sha256: hash } : null;
+    }
+  }
+);
 const releaseRoutes = Array.isArray(catalog.releases)
   ? catalog.releases.map((release) => `catalog/${release.slug}`)
   : [];
@@ -65,6 +103,7 @@ const listenRoutes = Array.isArray(catalog.releases)
 const artistRoutes = Array.isArray(artistLibrary.artists)
   ? artistLibrary.artists.map((artist) => `artists/${artist.slug}`)
   : [];
+const merchRoutes = merchLibrary.objects.map((object) => `merch/${object.slug}`);
 const artistByRoute = new Map((artistLibrary.artists || []).map((artist) => [
   `artists/${artist.slug}`,
   {
@@ -79,9 +118,12 @@ const contentRoutes = [
   "catalog",
   "contact",
   "download",
+  "links",
+  "merch",
   "press",
   "process",
   ...artistRoutes,
+  ...merchRoutes,
   ...releaseRoutes,
   ...listenRoutes
 ];
@@ -378,6 +420,133 @@ for (const pageCase of pageCases) {
     if (bodyTags.length !== 1 || !hasClass(bodyTags[0], "page-404")) fail(`${label}: 404 page class is missing`);
   }
 
+  if (pageCase.route === "merch") {
+    const expectedStatus = {
+      en: "STATUS / COMING SOON",
+      it: "STATO / PROSSIMAMENTE",
+      ru: "СТАТУС / СКОРО"
+    }[pageCase.locale.id];
+    const visibleStatuses = [...html.matchAll(/<p class="meta(?: muted)?" data-merch-visible-status>([^<]*)<\/p>/g)]
+      .map(([, text]) => text);
+    if (visibleStatuses.length !== 1
+      || visibleStatuses.some((status) => status !== expectedStatus)) {
+      fail(`${label}: merch collection status must visibly appear exactly once as ${expectedStatus}`);
+    }
+    const objectTags = tagsFor(html, "a")
+      .filter((tag) => attribute(tag, "data-merch-object") !== null);
+    if (objectTags.length !== merchLibrary.objects.length) {
+      fail(`${label}: merch object count is ${objectTags.length}, expected ${merchLibrary.objects.length}`);
+    }
+    if (objectTags.some((tag) => attribute(tag, "data-merch-status") !== "comingSoon")) {
+      fail(`${label}: every first-release merch object must remain comingSoon`);
+    }
+    const detailAnchors = tagsFor(html, "a").filter((tag) => attribute(tag, "data-merch-detail") !== null);
+    if (detailAnchors.length !== merchLibrary.objects.length) {
+      fail(`${label}: merch detail anchor count is ${detailAnchors.length}, expected ${merchLibrary.objects.length}`);
+    }
+    for (const object of merchLibrary.objects) {
+      const expectedPath = `${SITE_BASE_PATH}${publicPathFor(pageCase.locale, `merch/${object.slug}`)}`;
+      const matches = detailAnchors.filter((tag) => {
+        const href = attribute(tag, "href");
+        return attribute(tag, "data-merch-id") === object.id
+          && href
+          && resolveReference(pageCase, href).pathname === expectedPath;
+      });
+      if (matches.length !== 1) fail(`${label}: ${object.id} must link exactly once to ${expectedPath}`);
+    }
+    const roadmapTags = tagsFor(html, "details").filter((tag) => attribute(tag, "data-merch-roadmap") !== null);
+    if (roadmapTags.length !== 1 || attribute(roadmapTags[0], "open") !== null) {
+      fail(`${label}: merch roadmap must render exactly once as a closed disclosure`);
+    }
+    const merchMain = html.match(/<main\b(?=[^>]*\bdata-route-main(?:\s|=|>))[^>]*>([\s\S]*?)<\/main>/i)?.[1] || "";
+    const commercialAttributes = [
+      "data-merch-price",
+      "data-merch-stock",
+      "data-merch-size",
+      "data-merch-sizes",
+      "data-merch-shipping",
+      "data-merch-quantity",
+      "data-merch-currency",
+      "data-merch-edition-size",
+      "data-merch-checkout",
+      "data-merch-preorder",
+      "data-merch-notification",
+      "data-merch-countdown"
+    ];
+    if (commercialAttributes.some((name) => new RegExp(`\\s${name}(?:\\s|=|>)`, "i").test(merchMain))) {
+      fail(`${label}: merch page leaked a commercial UI contract`);
+    }
+    if (/<(?:form|input|select|textarea)\b/i.test(merchMain)) {
+      fail(`${label}: merch main must not render commercial form controls`);
+    }
+  }
+
+  if (pageCase.route.startsWith("merch/")) {
+    const slug = pageCase.route.slice("merch/".length);
+    const object = merchLibrary.objects.find((candidate) => candidate.slug === slug);
+    const merchMain = html.match(/<main\b(?=[^>]*\bdata-route-main(?:\s|=|>))[^>]*>([\s\S]*?)<\/main>/i)?.[1] || "";
+    if (!object
+      || !merchMain.includes(`data-merch-detail-id="${object?.id || ""}"`)
+      || !/\sdata-merch-stage="concept"/.test(merchMain)
+      || !/\sdata-merch-release-gate(?:\s|>)/.test(merchMain)
+      || /\sdata-merch-(?:price|stock|size|sizes|shipping|quantity|currency|edition-size|checkout|preorder|notification|countdown)(?:\s|=|>)/i.test(merchMain)
+      || /<(?:form|input|select|textarea)\b/i.test(merchMain)) {
+      fail(`${label}: merch detail must remain a non-commercial concept route`);
+    }
+    const galleryItems = (merchMain.match(/\sdata-merch-gallery-item(?:\s|>)/g) || []).length;
+    const expectedGalleryItems = object?.gallery.filter((image) => image.path !== object.viewer.poster).length;
+    if (object && galleryItems !== expectedGalleryItems) {
+      fail(`${label}: merch gallery contains ${galleryItems} views, expected ${expectedGalleryItems} after omitting the viewer poster`);
+    }
+    const detailJsonLd = [...html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)]
+      .find((match) => attribute(`<script${match[1]}>`, "type") === "application/ld+json")?.[2];
+    try {
+      const graph = JSON.parse(detailJsonLd)["@graph"];
+      const concepts = graph?.filter((item) => item["@type"] === "CreativeWork") || [];
+      if (concepts.length !== 1
+        || concepts[0].image?.length !== object?.gallery.length
+        || graph.some((item) => item["@type"] === "Product" || item["@type"] === "Offer")) {
+        fail(`${label}: merch JSON-LD must expose one CreativeWork and no commerce schema`);
+      }
+    } catch {
+      fail(`${label}: merch detail JSON-LD is invalid`);
+    }
+  }
+
+  if (pageCase.route === "links") {
+    const body = tagsFor(html, "body");
+    if (body.length !== 1 || !hasClass(body[0], "page-links")) fail(`${label}: links page class is missing`);
+
+    const navs = tagsFor(html, "nav").filter((tag) => attribute(tag, "data-social-access-nav") !== null);
+    if (navs.length !== 1 || attribute(navs[0], "aria-label") !== COPY[pageCase.locale.id].pages.links.navLabel) {
+      fail(`${label}: links page needs one localized social-access navigation landmark`);
+    }
+
+    const anchors = tagsFor(html, "a").filter((tag) => attribute(tag, "data-social-access-link") !== null);
+    if (anchors.length !== SOCIAL_LINKS.length) {
+      fail(`${label}: social destination count is ${anchors.length}, expected ${SOCIAL_LINKS.length}`);
+    }
+    for (const [index, social] of SOCIAL_LINKS.entries()) {
+      const anchor = anchors[index];
+      const expectedAria = COPY[pageCase.locale.id].pages.links.serviceAria
+        .replaceAll("{service}", social.label);
+      const relTokens = new Set(anchor ? (attribute(anchor, "rel") || "").split(/\s+/) : []);
+      if (!anchor
+        || attribute(anchor, "data-social-id") !== social.id
+        || attribute(anchor, "href") !== social.url
+        || attribute(anchor, "target") !== "_blank"
+        || !relTokens.has("noopener")
+        || !relTokens.has("noreferrer")
+        || attribute(anchor, "aria-label") !== expectedAria) {
+        fail(`${label}: social row ${social.id} does not match SOCIAL_LINKS and the safe external-link contract`);
+      }
+    }
+    const renderedDestinations = anchors.map((anchor) => attribute(anchor, "href"));
+    if (new Set(renderedDestinations).size !== renderedDestinations.length) {
+      fail(`${label}: rendered social destinations must be unique`);
+    }
+  }
+
   const bodyTags = tagsFor(html, "body");
   if (bodyTags.length !== 1) {
     fail(`${label}: expected exactly one body element`);
@@ -387,8 +556,13 @@ for (const pageCase of pageCases) {
   }
 
   if (!/<meta name="viewport" content="width=device-width, initial-scale=1">/.test(html)) fail(`${label}: invalid viewport meta`);
-  if (!/<main id="main-content" tabindex="-1" data-route-main>/.test(html)) fail(`${label}: missing focusable route main landmark`);
-  if (!/class="skip-link" href="#main-content"/.test(html)) fail(`${label}: missing skip link`);
+  if (pageCase.route === "404") {
+    if (!/<main id="main-content" tabindex="-1">/.test(html)) fail(`${label}: missing lightweight main landmark`);
+    if (/class="skip-link" href="#main-content"/.test(html)) fail(`${label}: lightweight 404 must omit the skip-link shell`);
+  } else {
+    if (!/<main id="main-content" tabindex="-1" data-route-main>/.test(html)) fail(`${label}: missing focusable route main landmark`);
+    if (!/class="skip-link" href="#main-content"/.test(html)) fail(`${label}: missing skip link`);
+  }
   const expectedRobotsMeta = pageCase.route === "404" ? "noindex, follow" : ROBOTS_CONTENT;
   if (!html.includes(`<meta name="robots" content="${expectedRobotsMeta}" data-route-head>`)) fail(`${label}: robots meta does not match route and site mode`);
   if ((html.match(/<h1\b/g) || []).length !== 1) fail(`${label}: expected exactly one h1`);
@@ -403,6 +577,12 @@ for (const pageCase of pageCases) {
   const magneticLinkCount = (html.match(/\sdata-signal-panel-link(?:\s|>)/g) || []).length;
   const targetBracketCount = (html.match(/\sdata-signal-target-brackets(?:\s|>)/g) || []).length;
   const legacySignalCount = (html.match(/data-signal-(?:shell|part|facet|scan|node|link|readout|ticker)/g) || []).length;
+  if (pageCase.route === "404") {
+    if (signalLayerCount !== 0 || signalFieldCount !== 0 || magneticLinkCount !== 0 || targetBracketCount !== 0 || legacySignalCount !== 0) {
+      fail(`${label}: lightweight 404 must omit the signal shell`);
+    }
+    if ((html.match(/\sdata-audio-player(?:\s|>)/g) || []).length !== 0) fail(`${label}: lightweight 404 must omit the audio player`);
+  } else {
   if (signalLayerCount !== 1 || signalFieldCount !== 1 || magneticLinkCount !== 1 || targetBracketCount !== 1 || legacySignalCount !== 0) {
     fail(`${label}: expected one legacy-free magnetic signal field, got layer/field/link/brackets/legacy ${signalLayerCount}/${signalFieldCount}/${magneticLinkCount}/${targetBracketCount}/${legacySignalCount}`);
   }
@@ -423,19 +603,27 @@ for (const pageCase of pageCases) {
   const audioPlayerTags = tagsFor(html, "aside").filter((tag) => attribute(tag, "data-audio-player") !== null);
   const playerTracks = tagsFor(html, "li").filter((tag) => attribute(tag, "data-player-track") !== null);
   const playerSelects = tagsFor(html, "button").filter((tag) => attribute(tag, "data-player-select") !== null);
-  const playlistDialogs = tagsFor(html, "dialog").filter((tag) => attribute(tag, "data-player-playlist-dialog") !== null);
+  const playerTrays = tagsFor(html, "section").filter((tag) => attribute(tag, "data-player-tray") !== null);
   const playlistToggles = tagsFor(html, "button").filter((tag) => attribute(tag, "data-player-playlist-toggle") !== null);
   const defaultTrack = audioLibrary.tracks.find((track) => track.catalogId === audioLibrary.defaultCatalogId);
   if (audioPlayerTags.length !== 1
     || attribute(audioPlayerTags[0], "data-track-count") !== String(audioLibrary.tracks.length)
     || playerTracks.length !== audioLibrary.tracks.length
     || playerSelects.length !== audioLibrary.tracks.length
-    || playlistDialogs.length !== 1
+    || playerTrays.length !== 1
     || playlistToggles.length !== 1
-    || attribute(playlistToggles[0], "aria-haspopup") !== "dialog"
+    || attribute(playerTrays[0], "id") !== "povkh-player-tray"
+    || attribute(playerTrays[0], "hidden") === null
+    || attribute(playlistToggles[0], "aria-controls") !== "povkh-player-tray"
+    || attribute(playlistToggles[0], "aria-expanded") !== "false"
     || !defaultTrack
     || /<audio[^>]+\ssrc=/.test(html)) {
     fail(`${label}: global audio player metadata or deferred-source contract is invalid`);
+  }
+  const seekTooltips = tagsFor(html, "output")
+    .filter((tag) => attribute(tag, "data-player-seek-tooltip") !== null);
+  if (seekTooltips.length !== 1 || attribute(seekTooltips[0], "hidden") === null) {
+    fail(`${label}: waveform needs one initially hidden seek tooltip`);
   }
   for (const [index, expected] of audioLibrary.tracks.entries()) {
     const release = catalog.releases.find((item) => item.id === expected.catalogId);
@@ -454,6 +642,91 @@ for (const pageCase of pageCases) {
     if (!select || !attribute(select, "aria-label") || (attribute(select, "aria-current") === "true") !== (expected.catalogId === audioLibrary.defaultCatalogId)) {
       fail(`${label}: player selector ${expected.catalogId} is not keyboard-accessible or has incorrect current state`);
     }
+  }
+
+  const volumeToggles = tagsFor(html, "button")
+    .filter((tag) => attribute(tag, "data-player-volume-toggle") !== null);
+  const volumeRanges = tagsFor(html, "input")
+    .filter((tag) => attribute(tag, "data-player-volume") !== null);
+  const volumePopups = tagsFor(html, "div")
+    .filter((tag) => attribute(tag, "data-player-volume-popup") !== null);
+  const volumeLabels = tagsFor(html, "label")
+    .filter((tag) => attribute(tag, "data-player-volume-label") !== null);
+  const volumeValues = tagsFor(html, "span")
+    .filter((tag) => attribute(tag, "data-player-volume-value") !== null);
+  const volumePercents = tagsFor(html, "span")
+    .filter((tag) => attribute(tag, "data-player-volume-percent") !== null);
+  const volumeTags = ["button", "div", "input", "label", "output", "span"].flatMap((tagName) => tagsFor(html, tagName))
+    .filter((tag) => [
+      "data-player-volume-shell",
+      "data-player-volume-toggle",
+      "data-player-volume-popup",
+      "data-player-volume-label",
+      "data-player-volume-value",
+      "data-player-volume-percent",
+      "data-player-volume"
+  ].some((name) => attribute(tag, name) !== null));
+  const expectedVolume = ({
+    en: { volume: "Volume", toggle: "Volume: 60%", label: "Volume control" },
+    it: { volume: "Volume", toggle: "Volume: 60%", label: "Controllo volume" },
+    ru: { volume: "Громкость", toggle: "Громкость: 60%", label: "Регулятор громкости" }
+  })[pageCase.locale.id] || {};
+  const hasExpectedVolume = ["volume", "toggle", "label"].every((key) => typeof expectedVolume[key] === "string" && expectedVolume[key].trim());
+  if (volumeToggles.length !== 1 || volumeRanges.length !== 1 || volumePopups.length !== 1
+    || volumeLabels.length !== 1 || volumeValues.length !== 1 || volumePercents.length !== 1) {
+    fail(`${label}: player needs exactly one accessible, non-live volume control set`);
+  } else {
+    const toggle = volumeToggles[0];
+    const range = volumeRanges[0];
+    const popup = volumePopups[0];
+    const volumeLabel = volumeLabels[0];
+    const volumeValue = volumeValues[0];
+    const volumePercent = volumePercents[0];
+    const popupId = attribute(popup, "id");
+    const toggleControls = attribute(toggle, "aria-controls");
+    const labelId = attribute(volumeLabel, "id");
+    const rangeLabelledBy = attribute(range, "aria-labelledby");
+    const rangeId = attribute(range, "id");
+    const labelFor = attribute(volumeLabel, "for");
+    const localizedLabel = hasExpectedVolume
+      ? new RegExp(
+        `<label\\b[^>]*\\bid=["']${escapeRegExp(labelId || "")}["'][^>]*>\\s*${escapeRegExp(expectedVolume.label)}\\s*</label>`,
+        "i"
+      )
+      : null;
+    if (!hasExpectedVolume
+      || attribute(toggle, "aria-expanded") !== "false"
+      || popupId !== "povkh-volume-popup"
+      || toggleControls !== "povkh-volume-popup"
+      || toggleControls !== popupId
+      || attribute(toggle, "aria-label") !== expectedVolume.toggle
+      || attribute(toggle, "data-volume-label") !== expectedVolume.volume
+      || attribute(range, "type") !== "range"
+      || attribute(range, "min") !== "0"
+      || attribute(range, "max") !== "100"
+      || attribute(range, "step") !== "1"
+      || attribute(range, "value") !== "60"
+      || attribute(range, "aria-valuenow") !== "60"
+      || attribute(range, "aria-valuetext") !== "60%"
+      || labelId !== "povkh-volume-label"
+      || rangeLabelledBy !== "povkh-volume-label"
+      || rangeLabelledBy !== labelId
+      || rangeId !== "povkh-volume-range"
+      || labelFor !== "povkh-volume-range"
+      || labelFor !== rangeId
+      || attribute(range, "aria-controls") !== "povkh-audio-engine"
+      || !localizedLabel?.test(html)
+      || attribute(volumeValue, "aria-hidden") !== "true"
+      || attribute(volumePercent, "aria-hidden") !== "true"
+      || attribute(popup, "hidden") === null) {
+      fail(`${label}: player volume semantics are invalid`);
+    }
+    if (volumeTags.some((tag) => attribute(tag, "aria-live") !== null
+      || ["alert", "log", "marquee", "status", "timer"].includes((attribute(tag, "role") || "").toLowerCase())
+      || /^<output\b/i.test(tag))) {
+      fail(`${label}: player volume feedback must not create a live region`);
+    }
+  }
   }
 
   const metaDescription = singleMetaContent(html, "name", "description", label);
@@ -805,7 +1078,7 @@ for (const pageCase of pageCases) {
   if (/<source\b[^>]*\ssrc=["'][^"']*\/assets\/motion\//i.test(html)) {
     fail(`${label}: decorative motion source must stay inert until client preferences are known`);
   }
-  if (!/<source\b[^>]*\bdata-src=["'][^"']*\/assets\/motion\//i.test(html)) {
+  if (pageCase.route !== "404" && !/<source\b[^>]*\bdata-src=["'][^"']*\/assets\/motion\//i.test(html)) {
     fail(`${label}: deferred decorative motion source is missing`);
   }
 
@@ -822,7 +1095,16 @@ for (const pageCase of pageCases) {
 
   const csp = singleMetaContent(html, "http-equiv", "Content-Security-Policy", label);
   if (csp !== null) {
-    for (const directive of ["default-src 'self'", "object-src 'none'", "base-uri 'none'", "form-action 'self'"]) {
+    for (const directive of [
+      "default-src 'self'",
+      "img-src 'self' data: blob:",
+      "style-src 'self' 'unsafe-inline'",
+      "script-src 'self' 'wasm-unsafe-eval'",
+      "connect-src 'self' blob:",
+      "object-src 'none'",
+      "base-uri 'none'",
+      "form-action 'self'"
+    ]) {
       if (!csp.includes(directive)) fail(`${label}: CSP missing ${directive}`);
     }
     const structuredDataScripts = [...html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)]
@@ -915,6 +1197,17 @@ for (const token of ["--void: #080808", "--bone: #f2efe7", "--signal: #f32222", 
 for (const family of ["Barlow Condensed", "Inter", "IBM Plex Mono"]) {
   if (!css.includes(family)) fail(`Missing local brand font: ${family}`);
 }
+for (const selector of [
+  ".social-access-terminal",
+  ".social-access-title",
+  ".social-access-link",
+  ".social-access-field"
+]) {
+  if (!css.includes(`${selector} {`)) fail(`Missing Access Terminal style block: ${selector}`);
+}
+if (!/\.social-access-link\s*\{[\s\S]*?min-height:\s*(?:clamp\([^;]+\)|[4-9][0-9]px|[2-9](?:\.\d+)?rem)/.test(css)) {
+  fail("Access Terminal links need an explicit minimum target height");
+}
 if (!/@media \(prefers-reduced-motion: reduce\)/.test(css)) fail("Reduced-motion media query missing");
 if (!/@media print/.test(css)) fail("Print stylesheet missing");
 if (/(?:#ec4899|space mono|fira|fonts\.googleapis)/i.test(css)) fail("Non-brand palette, font or CDN reference found");
@@ -940,10 +1233,14 @@ for (const logo of [
   "povkh-lab-compact-reverse-transparent-outlined.svg",
   "povkh-lab-horizontal-dark-outlined.svg",
   "povkh-lab-horizontal-reverse-transparent-outlined.svg",
-  "povkh-lab-primary-reverse-transparent-outlined.svg"
+  "povkh-lab-primary-reverse-transparent-outlined.svg",
+  "povkh-lab-ascii-reverse-transparent-outlined.svg"
 ]) {
-  const svg = await readFile(path.join(distDir, "assets", "logo", logo), "utf8");
+  const publicLogo = await readFile(path.join(distDir, "assets", "logo", logo));
+  const canonicalLogo = await readFile(path.join(siteRoot, "..", "assets", "logo", logo));
+  const svg = publicLogo.toString("utf8");
   if (/<text\b|<image\b|@font-face|href=/i.test(svg)) fail(`Logo is not self-contained outlined SVG: ${logo}`);
+  if (!publicLogo.equals(canonicalLogo)) fail(`Public logo differs from canonical Terminal Relic master: ${logo}`);
 }
 
 const buildManifest = JSON.parse(await readFile(path.join(distDir, "build-manifest.json"), "utf8"));

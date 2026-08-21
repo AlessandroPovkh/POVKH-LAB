@@ -1,0 +1,293 @@
+{
+  "schemaVersion": 1,
+  "assetKey": "t-shirt-001",
+  "sourceIntegrity": {
+    "artwork": {
+      "path": "sources/t-shirt-001/PVKH_ASCII_DARK_KNOCKOUT_EXACT_1600x600_v01.png",
+      "canonicalPath": "production/physical-merch/concepts/drop-001/explorations/ascii-bullet/revised-capsule/source/PVKH_ASCII_DARK_KNOCKOUT_EXACT_1600x600_v01.png",
+      "sha256": "c46bf6bd82ea2ec6928e9fe4ca9a314b56580af49c044be0395579c43c06dada",
+      "bytes": 137134,
+      "resolutionPx": [
+        1600,
+        600
+      ],
+      "decodedPixelSha256": "a7a1caaa8c0d3cc5ff5b04b303d42f962ba0161f0516fd01a8e0a7af0f84b6c0",
+      "sourceUse": "full-image-no-crop-no-redraw"
+    },
+    "poster": {
+      "path": "assets/merch/t-shirt-front.webp",
+      "sha256": "89cac41d6abf06cccc1952823b5c2dcdf4a063a063a98dfebb998b19c428db4e",
+      "bytes": 73502
+    }
+  },
+  "governedBuildRecord": {
+    "productId": "MRCH-005",
+    "truthBoundary": {
+      "status": "concept-visualization",
+      "manufacturingReference": false,
+      "vendorFitClaim": false,
+      "fabricSimulationClaim": false,
+      "constructionAccuracyClaim": false,
+      "productionDimensionsClaim": false
+    },
+    "dimensions": {
+      "authority": "provisional-viewer-envelope-not-production-dimensions",
+      "viewerEnvelopeMm": [
+        1137,
+        1042,
+        165
+      ],
+      "replacementGate": "selected vendor blank, measured approved sample and size-specific tech pack"
+    },
+    "geometry": {
+      "scene": "T_Shirt_001_Concept_Visualization",
+      "pivot": "T_Shirt_001_Centred_Grounded_Pivot",
+      "requiredNodes": [
+        "T_Shirt_Draped_Shell",
+        "T_Shirt_Collar",
+        "T_Shirt_Collar_Interior",
+        "T_Shirt_Sleeve_Hems",
+        "T_Shirt_Curved_Hem",
+        "T_Shirt_Front_Artwork"
+      ],
+      "features": [
+        "tailored tubular torso with cut armholes stitched to matching shared short-sleeve root rings",
+        "single indexed garment shell with blended armhole normals and coherent global garment-space UVs",
+        "open tubular sleeve hems",
+        "level curved hem",
+        "open dimensional rib collar with dark inner wall",
+        "readable front and back",
+        "exact front artwork surface"
+      ]
+    },
+    "artwork": {
+      "path": "sources/t-shirt-001/PVKH_ASCII_DARK_KNOCKOUT_EXACT_1600x600_v01.png",
+      "canonicalPath": "production/physical-merch/concepts/drop-001/explorations/ascii-bullet/revised-capsule/source/PVKH_ASCII_DARK_KNOCKOUT_EXACT_1600x600_v01.png",
+      "authorityPath": "data/apparel-print-registration-v02.json#/garments/t-shirt/master",
+      "authoritySha256": "75a20bc9682937274d4fedc6c11a090b646561bd8961082fa9fdf843030ad935",
+      "sha256": "c46bf6bd82ea2ec6928e9fe4ca9a314b56580af49c044be0395579c43c06dada",
+      "resolutionPx": [
+        1600,
+        600
+      ],
+      "registration": {
+        "surfaceMm": [
+          300,
+          112.5
+        ],
+        "aspectRatio": "8:3",
+        "side": "front",
+        "sourceUse": "full-image-no-crop-no-redraw"
+      }
+    },
+    "materials": {
+      "fabric": {
+        "name": "MAT_T_SHIRT_BONE_FABRIC",
+        "baseColor": [
+          0.82,
+          0.79,
+          0.71,
+          1
+        ],
+        "metallic": 0,
+        "roughness": 0.96,
+        "surface": "woven-bone"
+      },
+      "collar": {
+        "name": "MAT_T_SHIRT_BONE_RIB",
+        "baseColor": [
+          0.75,
+          0.72,
+          0.65,
+          1
+        ],
+        "metallic": 0,
+        "roughness": 0.98,
+        "surface": "rib-knit-bone"
+      },
+      "interior": {
+        "name": "MAT_T_SHIRT_NECK_INTERIOR",
+        "baseColor": [
+          0.025,
+          0.024,
+          0.022,
+          1
+        ],
+        "metallic": 0,
+        "roughness": 1,
+        "surface": "rib-knit-shadow"
+      },
+      "artwork": {
+        "name": "MAT_T_SHIRT_ASCII_DARK_EXACT",
+        "baseColor": [
+          1,
+          1,
+          1,
+          1
+        ],
+        "metallic": 0,
+        "roughness": 0.9
+      }
+    },
+    "camera": {
+      "poster": "assets/merch/t-shirt-front.webp",
+      "desktop": {
+        "default": {
+          "orbit": "8deg 78deg 113%",
+          "target": "auto 0.550m auto",
+          "fieldOfView": "23deg"
+        },
+        "front": {
+          "orbit": "0deg 82deg 112%",
+          "target": "auto 0.550m auto",
+          "fieldOfView": "23deg"
+        },
+        "rear": {
+          "orbit": "180deg 82deg 112%",
+          "target": "auto 0.550m auto",
+          "fieldOfView": "23deg"
+        }
+      },
+      "mobile": {
+        "default": {
+          "orbit": "6deg 80deg 107%",
+          "target": "auto 0.530m auto",
+          "fieldOfView": "20deg"
+        },
+        "front": {
+          "orbit": "0deg 83deg 106%",
+          "target": "auto 0.530m auto",
+          "fieldOfView": "20deg"
+        },
+        "rear": {
+          "orbit": "180deg 83deg 106%",
+          "target": "auto 0.530m auto",
+          "fieldOfView": "20deg"
+        }
+      }
+    },
+    "poster": {
+      "path": "assets/merch/t-shirt-front.webp",
+      "sha256": "89cac41d6abf06cccc1952823b5c2dcdf4a063a063a98dfebb998b19c428db4e",
+      "role": "approved-concept-poster-not-texture"
+    },
+    "inventory": {
+      "nodes": [
+        "T_Shirt_001_Centred_Grounded_Pivot",
+        "T_Shirt_Draped_Shell",
+        "T_Shirt_Collar",
+        "T_Shirt_Collar_Interior",
+        "T_Shirt_Sleeve_Hems",
+        "T_Shirt_Curved_Hem",
+        "T_Shirt_Front_Artwork"
+      ],
+      "meshes": [
+        "T_Shirt_Draped_Shell_Mesh",
+        "T_Shirt_Collar_Mesh",
+        "T_Shirt_Collar_Interior_Mesh",
+        "T_Shirt_Sleeve_Hems_Mesh",
+        "T_Shirt_Curved_Hem_Mesh",
+        "T_Shirt_Front_Artwork_Mesh"
+      ],
+      "materials": [
+        "MAT_T_SHIRT_ASCII_DARK_EXACT",
+        "MAT_T_SHIRT_BONE_FABRIC",
+        "MAT_T_SHIRT_BONE_RIB",
+        "MAT_T_SHIRT_NECK_INTERIOR"
+      ],
+      "textures": [
+        "t-shirt-001_Exact_Artwork_Texture",
+        "MAT_T_SHIRT_BONE_FABRIC_Woven_Normal",
+        "MAT_T_SHIRT_BONE_FABRIC_Woven_Roughness",
+        "MAT_T_SHIRT_BONE_RIB_Woven_Normal",
+        "MAT_T_SHIRT_BONE_RIB_Woven_Roughness",
+        "MAT_T_SHIRT_NECK_INTERIOR_Woven_Normal",
+        "MAT_T_SHIRT_NECK_INTERIOR_Woven_Roughness"
+      ],
+      "animations": 0,
+      "extensionsUsed": []
+    }
+  },
+  "physicalEvidence": {
+    "method": "reopened-glb-bounds-node-and-texture-metadata",
+    "boundsMm": {
+      "min": [
+        -568.4283375740051,
+        5.249159118131756e-32,
+        -79.99999821186066
+      ],
+      "max": [
+        568.4283375740051,
+        1041.0000085830688,
+        85.00000089406967
+      ],
+      "size": [
+        1136.8566751480103,
+        1041.0000085830688,
+        164.99999910593033
+      ]
+    },
+    "geometryPurpose": "volumetric placement and front/back readability",
+    "manufacturingReference": false
+  },
+  "cameraRecommendations": {
+    "poster": "assets/merch/t-shirt-front.webp",
+    "desktop": {
+      "default": {
+        "orbit": "8deg 78deg 113%",
+        "target": "auto 0.550m auto",
+        "fieldOfView": "23deg"
+      },
+      "front": {
+        "orbit": "0deg 82deg 112%",
+        "target": "auto 0.550m auto",
+        "fieldOfView": "23deg"
+      },
+      "rear": {
+        "orbit": "180deg 82deg 112%",
+        "target": "auto 0.550m auto",
+        "fieldOfView": "23deg"
+      }
+    },
+    "mobile": {
+      "default": {
+        "orbit": "6deg 80deg 107%",
+        "target": "auto 0.530m auto",
+        "fieldOfView": "20deg"
+      },
+      "front": {
+        "orbit": "0deg 83deg 106%",
+        "target": "auto 0.530m auto",
+        "fieldOfView": "20deg"
+      },
+      "rear": {
+        "orbit": "180deg 83deg 106%",
+        "target": "auto 0.530m auto",
+        "fieldOfView": "20deg"
+      }
+    }
+  },
+  "validation": {
+    "errors": 0,
+    "warnings": 0,
+    "infos": 1,
+    "hints": 0
+  },
+  "budget": {
+    "triangles": 3128,
+    "drawCalls": 6,
+    "bytes": 328120,
+    "ceilings": {
+      "maxBytes": 4000000,
+      "maxTriangles": 80000,
+      "maxDrawCalls": 20
+    }
+  },
+  "output": {
+    "path": "assets/merch-3d/t-shirt-001.glb",
+    "sha256": "0c022e2601d6f5c7fac2fb11fa629f8509cf37f79e7be190aea18911f1cb255b"
+  },
+  "deterministic": {
+    "verifiedBySecondInMemoryBuild": true
+  }
+}

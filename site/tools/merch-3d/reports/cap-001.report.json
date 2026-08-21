@@ -1,0 +1,365 @@
+{
+  "schemaVersion": 1,
+  "assetKey": "cap-001",
+  "sourceIntegrity": {
+    "artwork": {
+      "path": "sources/cap-001/PVKH_COMPACT_DARK_KNOCKOUT_EXACT_1000x1000_v01.png",
+      "canonicalPath": "production/physical-merch/concepts/drop-001/explorations/ascii-bullet/revised-capsule/cap-field-issue/source/PVKH_COMPACT_DARK_KNOCKOUT_EXACT_1000x1000_v01.png",
+      "sha256": "a42fca876265d2c1b1a9c1e169e24cd80da2c626ed1ff8e4632d1893afcac782",
+      "bytes": 49799,
+      "resolutionPx": [
+        1000,
+        1000
+      ],
+      "decodedPixelSha256": "fddb1a9be6920ed92c932060e40cd771606c901b601fbd99ddefb8293cdcb6b1",
+      "sourceUse": "full-image-no-crop-no-redraw"
+    },
+    "poster": {
+      "path": "assets/merch/cap-front.webp",
+      "sha256": "89a7eb03898676f0c0e7c63f551380ec42fea52e677282c938d648a41029d45b",
+      "bytes": 33266
+    }
+  },
+  "governedBuildRecord": {
+    "productId": "MRCH-007",
+    "truthBoundary": {
+      "status": "concept-visualization",
+      "manufacturingReference": false,
+      "vendorFitClaim": false,
+      "fabricSimulationClaim": false,
+      "constructionAccuracyClaim": false,
+      "productionDimensionsClaim": false
+    },
+    "dimensions": {
+      "authority": "provisional-viewer-envelope-not-production-dimensions",
+      "viewerEnvelopeMm": [
+        270,
+        266,
+        384
+      ],
+      "replacementGate": "selected cap blank, woven-label vendor proof and measured approved sample"
+    },
+    "geometry": {
+      "scene": "Cap_001_Concept_Visualization",
+      "pivot": "Cap_001_Centred_Grounded_Pivot",
+      "requiredNodes": [
+        "Cap_Panel_01",
+        "Cap_Panel_02",
+        "Cap_Panel_03",
+        "Cap_Panel_04",
+        "Cap_Panel_05",
+        "Cap_Panel_06",
+        "Cap_Crown_Seams",
+        "Cap_Crown_Creases",
+        "Cap_Eyelets",
+        "Cap_Curved_Brim",
+        "Cap_Bill_Edge_Stitching",
+        "Cap_Crown_Bill_Transition",
+        "Cap_Top_Button",
+        "Cap_Rear_Aperture_Rim",
+        "Cap_Adjustment_Strap",
+        "Cap_Adjustment_Keeper",
+        "Cap_Front_Patch",
+        "Cap_Patch_Border",
+        "Cap_Patch_Mark"
+      ],
+      "features": [
+        "six shaped crown panels with raised seam topology and subtle creases",
+        "four embroidered eyelets",
+        "doubly curved dimensional brim with two tonal stitch rows",
+        "crown-to-bill transition",
+        "top button",
+        "unfilled anatomical rear through-aperture",
+        "single bridging adjustment strap with keeper",
+        "conformed bone front patch with integrated border",
+        "exact compact mark"
+      ]
+    },
+    "artwork": {
+      "path": "sources/cap-001/PVKH_COMPACT_DARK_KNOCKOUT_EXACT_1000x1000_v01.png",
+      "canonicalPath": "production/physical-merch/concepts/drop-001/explorations/ascii-bullet/revised-capsule/cap-field-issue/source/PVKH_COMPACT_DARK_KNOCKOUT_EXACT_1000x1000_v01.png",
+      "authorityPath": "production/physical-merch/concepts/drop-001/explorations/ascii-bullet/revised-capsule/cap-field-issue/provenance.json#/identity/raster",
+      "authoritySha256": "19fc96d537894d187e9273271b6e3681edc965a673420c2058cc1edf601acc12",
+      "sha256": "a42fca876265d2c1b1a9c1e169e24cd80da2c626ed1ff8e4632d1893afcac782",
+      "resolutionPx": [
+        1000,
+        1000
+      ],
+      "registration": {
+        "surfaceMm": [
+          20,
+          20
+        ],
+        "patchMm": [
+          55,
+          28
+        ],
+        "aspectRatio": "1:1",
+        "side": "front-patch",
+        "sourceUse": "full-image-no-crop-no-redraw"
+      }
+    },
+    "materials": {
+      "crown": {
+        "name": "MAT_CAP_WASHED_VOID_TWILL",
+        "baseColor": [
+          0.028,
+          0.03,
+          0.034,
+          1
+        ],
+        "metallic": 0,
+        "roughness": 0.95,
+        "surface": "washed-twill-void",
+        "doubleSided": false
+      },
+      "seam": {
+        "name": "MAT_CAP_TONAL_SEAM",
+        "baseColor": [
+          0.018,
+          0.02,
+          0.023,
+          1
+        ],
+        "metallic": 0,
+        "roughness": 0.98,
+        "surface": "woven-seam-void",
+        "doubleSided": false
+      },
+      "patch": {
+        "name": "MAT_CAP_BONE_PATCH",
+        "baseColor": [
+          0.82,
+          0.79,
+          0.71,
+          1
+        ],
+        "metallic": 0,
+        "roughness": 0.98,
+        "surface": "woven-patch-bone",
+        "doubleSided": false
+      },
+      "opening": {
+        "name": "MAT_CAP_REAR_OPENING",
+        "baseColor": [
+          0.001,
+          0.001,
+          0.002,
+          1
+        ],
+        "metallic": 0,
+        "roughness": 1
+      },
+      "hardware": {
+        "name": "MAT_CAP_MATTE_HARDWARE",
+        "baseColor": [
+          0.04,
+          0.045,
+          0.05,
+          1
+        ],
+        "metallic": 0.72,
+        "roughness": 0.42
+      },
+      "artwork": {
+        "name": "MAT_CAP_COMPACT_DARK_EXACT",
+        "baseColor": [
+          1,
+          1,
+          1,
+          1
+        ],
+        "metallic": 0,
+        "roughness": 0.9,
+        "doubleSided": false
+      }
+    },
+    "camera": {
+      "poster": "assets/merch/cap-front.webp",
+      "desktop": {
+        "default": {
+          "orbit": "25deg 72deg 115%",
+          "target": "auto 0.160m auto",
+          "fieldOfView": "24deg"
+        },
+        "front": {
+          "orbit": "0deg 76deg 112%",
+          "target": "auto 0.160m auto",
+          "fieldOfView": "23deg"
+        },
+        "rear": {
+          "orbit": "180deg 88deg 108%",
+          "target": "auto 0.140m auto",
+          "fieldOfView": "23deg"
+        }
+      },
+      "mobile": {
+        "default": {
+          "orbit": "18deg 75deg 108%",
+          "target": "auto 0.150m auto",
+          "fieldOfView": "20deg"
+        },
+        "front": {
+          "orbit": "0deg 78deg 106%",
+          "target": "auto 0.150m auto",
+          "fieldOfView": "20deg"
+        },
+        "rear": {
+          "orbit": "180deg 88deg 108%",
+          "target": "auto 0.140m auto",
+          "fieldOfView": "20deg"
+        }
+      }
+    },
+    "poster": {
+      "path": "assets/merch/cap-front.webp",
+      "sha256": "89a7eb03898676f0c0e7c63f551380ec42fea52e677282c938d648a41029d45b",
+      "role": "approved-concept-poster-not-texture"
+    },
+    "inventory": {
+      "nodes": [
+        "Cap_001_Centred_Grounded_Pivot",
+        "Cap_Panel_01",
+        "Cap_Panel_02",
+        "Cap_Panel_03",
+        "Cap_Panel_04",
+        "Cap_Panel_05",
+        "Cap_Panel_06",
+        "Cap_Crown_Seams",
+        "Cap_Crown_Creases",
+        "Cap_Eyelets",
+        "Cap_Curved_Brim",
+        "Cap_Bill_Edge_Stitching",
+        "Cap_Crown_Bill_Transition",
+        "Cap_Top_Button",
+        "Cap_Rear_Aperture_Rim",
+        "Cap_Adjustment_Strap",
+        "Cap_Adjustment_Keeper",
+        "Cap_Patch_Border",
+        "Cap_Front_Patch",
+        "Cap_Patch_Mark"
+      ],
+      "meshes": [
+        "Cap_Panel_01_Mesh",
+        "Cap_Panel_02_Mesh",
+        "Cap_Panel_03_Mesh",
+        "Cap_Panel_04_Mesh",
+        "Cap_Panel_05_Mesh",
+        "Cap_Panel_06_Mesh",
+        "Cap_Crown_Seams_Mesh",
+        "Cap_Crown_Creases_Mesh",
+        "Cap_Eyelets_Mesh",
+        "Cap_Curved_Brim_Mesh",
+        "Cap_Bill_Edge_Stitching_Mesh",
+        "Cap_Crown_Bill_Transition_Mesh",
+        "Cap_Top_Button_Mesh",
+        "Cap_Rear_Aperture_Rim_Mesh",
+        "Cap_Adjustment_Strap_Mesh",
+        "Cap_Adjustment_Keeper_Mesh",
+        "Cap_Patch_Border_Mesh",
+        "Cap_Front_Patch_Mesh",
+        "Cap_Patch_Mark_Mesh"
+      ],
+      "materials": [
+        "MAT_CAP_COMPACT_DARK_EXACT",
+        "MAT_CAP_WASHED_VOID_TWILL",
+        "MAT_CAP_TONAL_SEAM",
+        "MAT_CAP_BONE_PATCH",
+        "MAT_CAP_MATTE_HARDWARE"
+      ],
+      "textures": [
+        "cap-001_Exact_Artwork_Texture",
+        "MAT_CAP_WASHED_VOID_TWILL_Woven_Normal",
+        "MAT_CAP_WASHED_VOID_TWILL_Woven_Roughness",
+        "MAT_CAP_TONAL_SEAM_Woven_Normal",
+        "MAT_CAP_TONAL_SEAM_Woven_Roughness",
+        "MAT_CAP_BONE_PATCH_Woven_Normal",
+        "MAT_CAP_BONE_PATCH_Woven_Roughness"
+      ],
+      "animations": 0,
+      "extensionsUsed": []
+    }
+  },
+  "physicalEvidence": {
+    "method": "reopened-glb-bounds-node-and-texture-metadata",
+    "boundsMm": {
+      "min": [
+        -134.93093848228455,
+        0,
+        -127.49999761581421
+      ],
+      "max": [
+        134.93093848228455,
+        266.00000262260437,
+        254.99999523162842
+      ],
+      "size": [
+        269.8618769645691,
+        266.00000262260437,
+        382.4999928474426
+      ]
+    },
+    "geometryPurpose": "volumetric placement and front/back readability",
+    "manufacturingReference": false
+  },
+  "cameraRecommendations": {
+    "poster": "assets/merch/cap-front.webp",
+    "desktop": {
+      "default": {
+        "orbit": "25deg 72deg 115%",
+        "target": "auto 0.160m auto",
+        "fieldOfView": "24deg"
+      },
+      "front": {
+        "orbit": "0deg 76deg 112%",
+        "target": "auto 0.160m auto",
+        "fieldOfView": "23deg"
+      },
+      "rear": {
+        "orbit": "180deg 88deg 108%",
+        "target": "auto 0.140m auto",
+        "fieldOfView": "23deg"
+      }
+    },
+    "mobile": {
+      "default": {
+        "orbit": "18deg 75deg 108%",
+        "target": "auto 0.150m auto",
+        "fieldOfView": "20deg"
+      },
+      "front": {
+        "orbit": "0deg 78deg 106%",
+        "target": "auto 0.150m auto",
+        "fieldOfView": "20deg"
+      },
+      "rear": {
+        "orbit": "180deg 88deg 108%",
+        "target": "auto 0.140m auto",
+        "fieldOfView": "20deg"
+      }
+    }
+  },
+  "validation": {
+    "errors": 0,
+    "warnings": 0,
+    "infos": 1,
+    "hints": 0
+  },
+  "budget": {
+    "triangles": 13230,
+    "drawCalls": 19,
+    "bytes": 832856,
+    "ceilings": {
+      "maxBytes": 1250000,
+      "maxTriangles": 30000,
+      "maxDrawCalls": 20
+    }
+  },
+  "output": {
+    "path": "assets/merch-3d/cap-001.glb",
+    "sha256": "b4c488d6829f1e57cf6e042aa523bcc2d3d936c9600268248ce12f4fb70930d6"
+  },
+  "deterministic": {
+    "verifiedBySecondInMemoryBuild": true
+  }
+}
