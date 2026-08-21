@@ -37,7 +37,7 @@ const coverage = [
   { slug: "vinyl", assetKey: "vinyl-001", route: "/merch/vinyl/", modelPath: "assets/merch-3d/vinyl-001.glb" },
   { slug: "cd", assetKey: "disc-004", route: "/merch/cd/", modelPath: "assets/merch-3d/disc-004.glb" },
   { slug: "cassette", assetKey: "cassette-002", route: "/merch/cassette/", modelPath: "assets/merch-3d/cassette-002.glb" },
-  { slug: "cap", assetKey: "cap-001", route: "/merch/cap/", modelPath: "assets/merch-3d/cap-001.glb" },
+  { slug: "t-shirt", assetKey: "t-shirt-001", route: "/merch/t-shirt/", modelPath: "assets/merch-3d/t-shirt-001.glb" },
   { slug: "zine-booklet", assetKey: "zine-001", route: "/merch/zine-booklet/", modelPath: "assets/merch-3d/zine-001.glb" }
 ];
 const recommendedCiGates = {
@@ -79,7 +79,7 @@ const recommendedCiGates = {
       maxDragLongTaskTotalMs: 250,
       minOrbitDeltaRad: 0.1
     },
-    cap: {
+    "t-shirt": {
       maxColdClickToReadyMs: 8_000,
       maxFirstPartyTransferredBytes: 2_500_000,
       minVisiblePixels: 50_000,
@@ -587,8 +587,8 @@ const runBenchmark = async () => {
   const largestReviewedAsset = assetCoverage.reduce((largest, asset) => asset.modelBytes > largest.modelBytes ? asset : largest);
   const smallestReviewedFlatAsset = assetCoverage.find(({ slug }) => slug === "zine-booklet");
   assert.ok(smallestReviewedFlatAsset, "zine performance sentinel is missing");
-  const apparelSentinel = assetCoverage.find(({ slug }) => slug === "cap");
-  assert.ok(apparelSentinel, "cap apparel performance sentinel is missing");
+  const apparelSentinel = assetCoverage.find(({ slug }) => slug === "t-shirt");
+  assert.ok(apparelSentinel, "T-shirt apparel performance sentinel is missing");
   const sampled = [largestReviewedAsset, apparelSentinel, smallestReviewedFlatAsset]
     .filter((asset, index, assets) => assets.findIndex(({ slug }) => slug === asset.slug) === index);
   const preactivationChecks = [];
@@ -672,7 +672,7 @@ const assertReportShape = (report) => {
 
   for (const asset of report.assets) {
     const largest = report.assetCoverage.reduce((current, candidate) => candidate.modelBytes > current.modelBytes ? candidate : current);
-    assert.ok([largest.slug, "cap", "zine-booklet"].includes(asset.slug));
+    assert.ok([largest.slug, "t-shirt", "zine-booklet"].includes(asset.slug));
     assert.equal(asset.samples.length >= 3, true);
     assert.ok(finite(asset.modelBytes) && asset.modelBytes > 0);
     for (const sample of asset.samples) {

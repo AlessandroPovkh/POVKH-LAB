@@ -18,6 +18,7 @@ const readAsset = async (relative) => {
 };
 const merchLibrary = await validateMerchLibrary(registry, copyAuthority, { readAsset });
 const pages = createPages(catalog, audioLibrary, artistLibrary, merchLibrary);
+const staticProducts = new Set(["hoodie", "cap"]);
 
 const localePath = (locale, route) => `${locale === "en" ? "" : `${locale}/`}${route}/index.html`;
 const count = (html, pattern) => [...html.matchAll(pattern)].length;
@@ -50,16 +51,20 @@ test("renders 33 localized concept detail routes and linked overview cards", () 
       assert.match(html, /data-merch-stage="concept"/);
       assert.match(html, /data-merch-breadcrumb/);
       assert.match(html, new RegExp(`data-merch-breadcrumb aria-label="${escapeHtml(COPY[locale].common.breadcrumb)}"`));
-      const viewer = html.match(/<section class="product-viewer"[\s\S]*?<\/section>/)?.[0] || "";
-      assert.doesNotMatch(viewer, /<figcaption>/, `${locale}/${object.slug} viewer caption needs valid non-figure semantics`);
-      assert.match(viewer, /<p class="product-viewer-caption">/, `${locale}/${object.slug} viewer caption is missing`);
+      if (staticProducts.has(object.slug)) {
+        assert.match(html, /<figure class="merch-detail-visual">[\s\S]*?<figcaption>/, `${locale}/${object.slug} static hero is missing`);
+      } else {
+        const viewer = html.match(/<section class="product-viewer"[\s\S]*?<\/section>/)?.[0] || "";
+        assert.doesNotMatch(viewer, /<figcaption>/, `${locale}/${object.slug} viewer caption needs valid non-figure semantics`);
+        assert.match(viewer, /<p class="product-viewer-caption">/, `${locale}/${object.slug} viewer caption is missing`);
+      }
       assert.equal(count(html, /data-merch-gallery-item(?:[ >])/g), object.gallery.length - 1);
       assert.match(html, new RegExp(`>${object.content[locale].name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}<`));
       assert.match(html, new RegExp(object.content[locale].metaDescription.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
       for (const [index, image] of object.gallery.entries()) {
         assert.ok(html.includes(image.path), `${locale}/${object.slug}/${image.role} asset missing`);
         assert.ok(html.includes(`width="${image.width}" height="${image.height}"`));
-        assert.ok(html.includes(escapeHtml(index === 0 ? object.viewer.alt[locale] : image.alt[locale])));
+        assert.ok(html.includes(escapeHtml(index === 0 && !staticProducts.has(object.slug) ? object.viewer.alt[locale] : image.alt[locale])));
         assert.ok(html.includes(escapeHtml(image.caption[locale])));
         if (index === 0) assert.match(html, new RegExp(`${image.path}[^>]+loading="eager"[^>]+fetchpriority="high"`));
       }

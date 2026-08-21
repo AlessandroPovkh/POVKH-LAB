@@ -584,8 +584,14 @@ const merchGalleryMarkup = ({ object, locale, route, copy }) => {
 
 const productViewerMarkup = ({ object, locale, route, copy }) => {
   const prefix = assetPrefixFor(locale, route);
-  const viewer = object.viewer;
   const hero = object.gallery[0];
+  if (["hoodie", "cap"].includes(object.slug)) {
+    return `<figure class="merch-detail-visual">
+      <img src="${prefix}${escapeHtml(hero.path)}" width="${hero.width}" height="${hero.height}" alt="${escapeHtml(hero.alt[locale])}" loading="eager" fetchpriority="high" decoding="async">
+      <figcaption>${escapeHtml(hero.caption[locale])}</figcaption>
+    </figure>`;
+  }
+  const viewer = object.viewer;
   const dataSaverCopy = copy.viewerDataSaver;
   const sourceBlocked = viewer.availability === "sourceBlocked";
   const blockedCopy = SOURCE_BLOCKED_VIEWER_COPY[locale];

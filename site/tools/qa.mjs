@@ -627,13 +627,14 @@ try {
       const merchSlug = baseRoute.match(/^\/merch\/([a-z0-9-]+)\/$/)?.[1] || null;
       if (merchSlug) {
         const expectedObject = merchLibrary.objects.find((object) => object.slug === merchSlug);
+        const staticProduct = ["hoodie", "cap"].includes(merchSlug);
         const expectedGalleryCount = expectedObject?.gallery.filter((image) => image.path !== expectedObject.viewer.poster).length || 0;
         const detailContract = await page.evaluate(() => {
           const gallery = document.querySelector("[data-merch-gallery]");
           const triggers = [...document.querySelectorAll("[data-merch-gallery-trigger]")];
           const figures = [...document.querySelectorAll("[data-merch-gallery-figure]")];
           const releaseGate = document.querySelector("[data-merch-release-gate]");
-          const hero = document.querySelector("[data-product-viewer-poster]");
+          const hero = document.querySelector("[data-product-viewer-poster], .merch-detail-visual img");
           return {
             rootCount: document.querySelectorAll("[data-merch-detail-id]").length,
             objectId: document.querySelector("[data-merch-detail-id]")?.dataset.merchDetailId || null,
@@ -674,7 +675,7 @@ try {
           || detailContract.gateCount !== 1
           || detailContract.heroLoading !== "eager"
           || detailContract.heroPriority !== "high"
-          || detailContract.leadingActions !== 1
+          || detailContract.leadingActions !== (staticProduct ? 0 : 1)
           || detailContract.galleryJump !== 0
           || detailContract.visibleStatuses !== 1
           || detailContract.posterRepeated

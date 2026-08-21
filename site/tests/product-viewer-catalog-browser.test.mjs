@@ -12,7 +12,8 @@ import { createStaticServer } from "../tools/server.mjs";
 const siteRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const execFile = promisify(execFileCallback);
 const merch = JSON.parse(await readFile(path.join(siteRoot, "data/merch.json"), "utf8"));
-const interactive = merch.objects.filter(({ viewer }) => viewer.kind === "glb");
+const staticProducts = new Set(["hoodie", "cap"]);
+const interactive = merch.objects.filter(({ slug, viewer }) => !staticProducts.has(slug) && viewer.kind === "glb");
 const blocked = merch.objects.filter(({ viewer }) => viewer.availability === "sourceBlocked");
 const profiles = [
   { name: "desktop", viewport: { width: 1440, height: 1000 } },
@@ -177,7 +178,7 @@ const perturbCamera = async (page, initialTheta, label) => {
 };
 
 test("activates every released GLB poster-first with exact governed cameras and visible geometry", { timeout: 180_000 }, async () => {
-  assert.equal(interactive.length, 11, "DROP 001 must expose eleven governed GLB viewers");
+  assert.equal(interactive.length, 9, "DROP 001 must expose nine public GLB viewers");
 
   for (const profile of profiles) {
     for (const object of interactive) {
@@ -193,7 +194,7 @@ test("activates every released GLB poster-first with exact governed cameras and 
       page.on("pageerror", (error) => errors.push(error.message));
       await page.setViewportSize(profile.viewport);
       await page.goto(`${baseUrl}/merch/${object.slug}/`, { waitUntil: "networkidle" });
-      const apparelMobile = profile.name === "mobile" && ["t-shirt", "hoodie", "cap"].includes(object.slug);
+      const apparelMobile = profile.name === "mobile" && object.slug === "t-shirt";
       const inactiveStage = apparelMobile ? await page.locator("[data-product-viewer-stage]").boundingBox() : null;
       if (inactiveStage) {
         closeTo(inactiveStage.width, 358, 1, `mobile/${object.slug} inactive stage width`);
@@ -266,7 +267,7 @@ test("activates every released GLB poster-first with exact governed cameras and 
   }
 });
 
-test("releases all apparel concept GLBs without blocked controls or eager model requests", { timeout: 30_000 }, async () => {
+test("keeps hoodie and cap static while the T-shirt GLB remains available", { timeout: 30_000 }, async () => {
   assert.deepEqual(blocked, []);
   for (const profile of profiles) {
     const context = await browser.newContext();
@@ -277,7 +278,8 @@ test("releases all apparel concept GLBs without blocked controls or eager model 
       await page.setViewportSize(profile.viewport);
       await page.goto(`${baseUrl}/merch/${object.slug}/`, { waitUntil: "networkidle" });
       const activation = page.locator("[data-product-viewer-activate]");
-      assert.equal(await activation.isDisabled(), false, `${profile.name}/${object.slug} concept GLB must be activatable`);
+      assert.equal(await activation.count(), staticProducts.has(object.slug) ? 0 : 1, `${profile.name}/${object.slug} has the wrong public viewer state`);
+      if (!staticProducts.has(object.slug)) assert.equal(await activation.isDisabled(), false, `${profile.name}/${object.slug} concept GLB must be activatable`);
       assert.deepEqual(requests.filter((url) => heavyRequest.test(url)), [], `${profile.name}/${object.slug} fetched viewer assets before activation`);
       assert.equal(requests.some((url) => new URL(url).origin !== baseUrl), false, `${profile.name}/${object.slug} made a third-party request`);
       await page.close();
