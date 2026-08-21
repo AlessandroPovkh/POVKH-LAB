@@ -292,19 +292,38 @@ export const COPY = {
       },
       download: {
         title: "Download",
-        description: "A future download and support area for three POVKH LAB plugins currently in development.",
-        eyebrow: "Tools / encrypted preview",
-        lede: "Three plugins exist. Their public names, builds and delivery terms remain sealed until the release package is ready.",
-        status: "3 modules / access pending",
-        gridEyebrow: "Private builds / 03",
-        gridTitle: "Signals under lock",
-        gridBody: "These slots reserve the future product structure without publishing unverified plugin details or fictional release dates.",
+        description: "Download the Euclidean Echo public preview and explore two additional POVKH LAB plugins still in development.",
+        eyebrow: "Tools / public preview",
+        lede: "Euclidean Echo is open for public testing. Two additional modules remain sealed while their release packages are prepared.",
+        status: "1 public preview / 2 access pending",
+        gridEyebrow: "Public build / 01",
+        gridTitle: "Euclidean Echo available",
+        gridBody: "Download the current preview build, test it in your setup and tell us what works, what breaks and what is missing.",
+        product: {
+          index: "MODULE / 01",
+          name: "Euclidean Echo",
+          version: "VERSION / 0.1.0",
+          status: "PUBLIC PREVIEW / NOT CERTIFIED",
+          description: "A tempo-synchronized multi-tap delay that distributes repeats with Euclidean rhythm controls.",
+          formats: "Windows: VST3 and standalone. macOS: VST3, AU and standalone.",
+          downloadLabel: "Euclidean Echo installers",
+          downloads: [
+            ["macOS / Apple Silicon", "Euclidean_Echo_0.1.0_macOS_AppleSilicon.pkg"],
+            ["macOS / Intel", "Euclidean_Echo_0.1.0_macOS_Intel.pkg"],
+            ["Windows / x64", "Euclidean_Echo_0.1.0_Windows_x64_Setup.exe"]
+          ],
+          warning: "Preview software: real-DAW and external plugin-host validation are still in progress. The macOS bundles are ad-hoc signed, but the packages are not Apple Developer ID signed and are not Apple notarized. All builds are provided for testing at your own discretion.",
+          invitation: "Test it freely — and tell us what works, what breaks and what you would like to see next.",
+          feedbackCta: "Send feedback",
+          feedbackSubject: "Euclidean Echo Preview Feedback",
+          checksumCta: "SHA-256 checksums",
+          imageAlt: "Euclidean Echo plugin interface with Euclidean rhythm and delay controls"
+        },
         cards: [
-          ["MODULE / 01", "Plugin classified", "Build identity and download channel pending."],
           ["MODULE / 02", "Plugin classified", "Build identity and support model pending."],
           ["MODULE / 03", "Plugin classified", "Build identity and documentation pending."]
         ],
-        footer: "Downloads, contribution links and verified requirements will appear after the packages pass release review."
+        footer: "Euclidean Echo is an unfinished public preview, not a certified production release. Please keep backups and share useful testing context with your feedback."
       },
       links: {
         title: "Social access",
@@ -520,19 +539,38 @@ export const COPY = {
       },
       download: {
         title: "Download",
-        description: "Futura area di download e supporto per tre plugin POVKH LAB attualmente in sviluppo.",
-        eyebrow: "Strumenti / anteprima cifrata",
-        lede: "Esistono tre plugin. Nomi pubblici, build e condizioni di distribuzione restano protetti finché il pacchetto di rilascio non sarà pronto.",
-        status: "3 moduli / accesso in attesa",
-        gridEyebrow: "Build private / 03",
-        gridTitle: "Segnali protetti",
-        gridBody: "Questi slot preparano la futura struttura prodotto senza pubblicare dettagli non verificati o date di uscita inventate.",
+        description: "Scarica l’anteprima pubblica di Euclidean Echo e scopri altri due plugin POVKH LAB ancora in sviluppo.",
+        eyebrow: "Strumenti / anteprima pubblica",
+        lede: "Euclidean Echo è disponibile per i test pubblici. Altri due moduli restano protetti mentre prepariamo i loro pacchetti di rilascio.",
+        status: "1 anteprima pubblica / 2 accessi in attesa",
+        gridEyebrow: "Build pubblica / 01",
+        gridTitle: "Euclidean Echo disponibile",
+        gridBody: "Scarica la build attuale, provala nel tuo setup e raccontaci cosa funziona, cosa si rompe e cosa manca.",
+        product: {
+          index: "MODULO / 01",
+          name: "Euclidean Echo",
+          version: "VERSIONE / 0.1.0",
+          status: "ANTEPRIMA PUBBLICA / NON CERTIFICATO",
+          description: "Delay multi-tap sincronizzato al tempo che distribuisce le ripetizioni tramite controlli ritmici euclidei.",
+          formats: "Windows: VST3 e standalone. macOS: VST3, AU e standalone.",
+          downloadLabel: "Installer di Euclidean Echo",
+          downloads: [
+            ["macOS / Apple Silicon", "Euclidean_Echo_0.1.0_macOS_AppleSilicon.pkg"],
+            ["macOS / Intel", "Euclidean_Echo_0.1.0_macOS_Intel.pkg"],
+            ["Windows / x64", "Euclidean_Echo_0.1.0_Windows_x64_Setup.exe"]
+          ],
+          warning: "Software in anteprima: la validazione nelle DAW reali e negli host plugin esterni è ancora in corso. I bundle macOS hanno una firma ad hoc, ma i pacchetti non sono firmati con Apple Developer ID e non sono notarizzati da Apple. Usa tutte le build per i test a tua discrezione.",
+          invitation: "Provalo liberamente e raccontaci cosa funziona, cosa si rompe e cosa vorresti trovare nella prossima versione.",
+          feedbackCta: "Invia feedback",
+          feedbackSubject: "Feedback anteprima Euclidean Echo",
+          checksumCta: "Checksum SHA-256",
+          imageAlt: "Interfaccia del plugin Euclidean Echo con controlli per ritmo euclideo e delay"
+        },
         cards: [
-          ["MODULO / 01", "Plugin classificato", "Identità della build e canale di download in attesa."],
           ["MODULO / 02", "Plugin classificato", "Identità della build e modello di supporto in attesa."],
           ["MODULO / 03", "Plugin classificato", "Identità della build e documentazione in attesa."]
         ],
-        footer: "Download, link di supporto e requisiti verificati appariranno dopo la revisione dei pacchetti."
+        footer: "Euclidean Echo è un’anteprima pubblica incompleta, non una release di produzione certificata. Conserva i backup e includi nel feedback informazioni utili sul test."
       },
       links: {
         title: "Accesso social",
@@ -748,19 +786,38 @@ export const COPY = {
       },
       download: {
         title: "Скачать",
-        description: "Будущий раздел загрузки и поддержки трёх плагинов POVKH LAB, которые сейчас готовятся к выпуску.",
-        eyebrow: "Инструменты / зашифрованное превью",
-        lede: "Три плагина уже существуют. Публичные названия, сборки и условия распространения остаются закрытыми до готовности релизного пакета.",
-        status: "3 модуля / доступ ожидается",
-        gridEyebrow: "Закрытые сборки / 03",
-        gridTitle: "Сигналы под защитой",
-        gridBody: "Эти слоты резервируют будущую продуктовую структуру без публикации непроверенных деталей и вымышленных дат релиза.",
+        description: "Скачайте публичное превью Euclidean Echo и узнайте о двух других плагинах POVKH LAB, которые ещё находятся в разработке.",
+        eyebrow: "Инструменты / публичное превью",
+        lede: "Euclidean Echo открыт для публичного тестирования. Ещё два модуля остаются закрытыми, пока готовятся их релизные пакеты.",
+        status: "1 публичное превью / 2 доступа ожидаются",
+        gridEyebrow: "Публичная сборка / 01",
+        gridTitle: "Euclidean Echo доступен",
+        gridBody: "Скачивайте текущую сборку, тестируйте её в своей системе и рассказывайте, что работает, что ломается и чего не хватает.",
+        product: {
+          index: "МОДУЛЬ / 01",
+          name: "Euclidean Echo",
+          version: "ВЕРСИЯ / 0.1.0",
+          status: "ПУБЛИЧНОЕ ПРЕВЬЮ / НЕ СЕРТИФИЦИРОВАНО",
+          description: "Синхронизированный с темпом мультитэп-дилей, который распределяет повторы с помощью эвклидовых ритмов.",
+          formats: "Windows: VST3 и standalone. macOS: VST3, AU и standalone.",
+          downloadLabel: "Установщики Euclidean Echo",
+          downloads: [
+            ["macOS / Apple Silicon", "Euclidean_Echo_0.1.0_macOS_AppleSilicon.pkg"],
+            ["macOS / Intel", "Euclidean_Echo_0.1.0_macOS_Intel.pkg"],
+            ["Windows / x64", "Euclidean_Echo_0.1.0_Windows_x64_Setup.exe"]
+          ],
+          warning: "Это превью: проверка в реальных DAW и сторонних хостах плагинов ещё не завершена. Бандлы macOS подписаны ad hoc, но пакеты не подписаны Apple Developer ID и не прошли нотарификацию Apple. Используйте все сборки для тестирования на своё усмотрение.",
+          invitation: "Тестируйте на здоровье — и пишите, что работает, что ломается и чего не хватает.",
+          feedbackCta: "Написать отзыв",
+          feedbackSubject: "Обратная связь по превью Euclidean Echo",
+          checksumCta: "Контрольные суммы SHA-256",
+          imageAlt: "Интерфейс плагина Euclidean Echo с управлением эвклидовым ритмом и дилеем"
+        },
         cards: [
-          ["МОДУЛЬ / 01", "Плагин засекречен", "Идентификатор сборки и канал загрузки ожидаются."],
           ["МОДУЛЬ / 02", "Плагин засекречен", "Идентификатор сборки и модель поддержки ожидаются."],
           ["МОДУЛЬ / 03", "Плагин засекречен", "Идентификатор сборки и документация ожидаются."]
         ],
-        footer: "Загрузки, ссылки поддержки и проверенные системные требования появятся после финальной проверки пакетов."
+        footer: "Euclidean Echo — незавершённое публичное превью, а не сертифицированный production-релиз. Сохраняйте резервные копии и добавляйте к отзыву полезную информацию о тестовой системе."
       },
       links: {
         title: "Социальный доступ",

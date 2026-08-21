@@ -52,6 +52,8 @@ const escapeHtml = (value) => String(value)
   .replaceAll('"', "&quot;")
   .replaceAll("'", "&#039;");
 
+export const mailtoHrefFor = (recipient, subject) => `mailto:${encodeURIComponent(recipient)}?subject=${encodeURIComponent(subject)}`;
+
 const localizedRoute = (locale, route) => [LOCALE_META[locale].prefix, route === "404" ? "" : route]
   .filter(Boolean)
   .join("/");
@@ -1139,6 +1141,11 @@ const createLocalePages = (locale, catalog, audioLibrary, artistLibrary, merchLi
     </div>`, { pageClass: "page-links" });
 
   const download = t.pages.download;
+  const plugin = download.product;
+  const pluginAssetRoot = `${assetPrefixFor(locale, "download")}assets/downloads/euclidean-echo/0.1.0/`;
+  const pluginFeedbackHref = CONTACT_EMAIL
+    ? mailtoHrefFor(CONTACT_EMAIL, plugin.feedbackSubject)
+    : hrefFor(locale, "download", locale, "contact");
   page("download", "download", `
     <div class="container"><section class="hero" aria-labelledby="download-title">
       ${heroMotionMarkup(locale, "download", "PRIME")}
@@ -1147,11 +1154,35 @@ const createLocalePages = (locale, catalog, audioLibrary, artistLibrary, merchLi
     </section></div>
     <section class="section"><div class="container">
       <div class="section-head section-rule"><div><p class="eyebrow">${escapeHtml(download.gridEyebrow)}</p><h2 class="section-title">${escapeHtml(download.gridTitle)}</h2></div><p class="body-copy">${escapeHtml(download.gridBody)}</p></div>
-      <div class="plugin-grid">${download.cards.map(([index, title, body], itemIndex) => `<article class="plugin-vault">
-        <div class="plugin-vault-head"><span class="index-no">${escapeHtml(index)}</span><span class="cipher-timer cipher-timer-${itemIndex + 1}" aria-hidden="true"></span></div>
+      <div class="plugin-grid">
+        <article class="plugin-release" data-plugin-product="euclidean-echo">
+          <div class="plugin-vault-head"><span class="index-no">${escapeHtml(plugin.index)}</span><span class="plugin-preview-status">${escapeHtml(plugin.status)}</span></div>
+          <div class="plugin-release-layout">
+            <figure class="plugin-release-figure">
+              <img src="${pluginAssetRoot}euclidean-echo-ui.png" width="900" height="560" alt="${escapeHtml(plugin.imageAlt)}" loading="lazy" decoding="async">
+            </figure>
+            <div class="plugin-release-copy">
+              <p class="eyebrow">${escapeHtml(plugin.version)}</p>
+              <h3 class="card-title">${escapeHtml(plugin.name)}</h3>
+              <p>${escapeHtml(plugin.description)}</p>
+              <p class="plugin-formats">${escapeHtml(plugin.formats)}</p>
+              <div class="plugin-downloads" aria-label="${escapeHtml(plugin.downloadLabel)}">
+                ${plugin.downloads.map(([label, filename]) => `<a class="button" href="${pluginAssetRoot}${escapeHtml(filename)}" download="${escapeHtml(filename)}">${escapeHtml(label)}</a>`).join("")}
+              </div>
+              <p class="plugin-warning">${escapeHtml(plugin.warning)}</p>
+              <p class="plugin-invitation">${escapeHtml(plugin.invitation)}</p>
+              <div class="plugin-release-actions">
+                <a class="button button-secondary" href="${escapeHtml(pluginFeedbackHref)}">${escapeHtml(plugin.feedbackCta)}</a>
+                <a class="plugin-checksum-link" href="${pluginAssetRoot}SHA256SUMS">${escapeHtml(plugin.checksumCta)}</a>
+              </div>
+            </div>
+          </div>
+        </article>
+        ${download.cards.map(([index, title, body], itemIndex) => `<article class="plugin-vault" data-plugin-locked>
+        <div class="plugin-vault-head"><span class="index-no">${escapeHtml(index)}</span><span class="cipher-timer cipher-timer-${itemIndex + 2}" aria-hidden="true"></span></div>
         <div class="plugin-lock" aria-hidden="true"><span></span><span></span><span></span></div>
         <h3 class="card-title">${escapeHtml(title)}</h3><p>${escapeHtml(body)}</p>
-        <div class="cipher-strip" aria-hidden="true">0x${String(itemIndex + 31).padStart(2, "0")} / ▓▒░ / NULL_ACCESS</div>
+        <div class="cipher-strip" aria-hidden="true">0x${String(itemIndex + 32).padStart(2, "0")} / ▓▒░ / NULL_ACCESS</div>
       </article>`).join("")}</div>
     </div></section>
     <section class="section"><div class="container"><p class="body-copy">${escapeHtml(download.footer)}</p></div></section>`, { pageClass: "page-download" });
