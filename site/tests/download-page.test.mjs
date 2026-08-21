@@ -37,6 +37,7 @@ const localeCases = [
     assetPrefix: "../",
     status: "PUBLIC PREVIEW / NOT CERTIFIED",
     warningClaims: ["real-DAW", "external plugin-host", "ad-hoc signed", "not Apple Developer ID signed", "not Apple notarized"],
+    samplePackClaims: ["RESIDENT SAMPLE PACKS / CLASSIFIED", "Original modular recordings", "Original artist sample pack", "RESIDENT / CLASSIFIED 01", "RESIDENT / CLASSIFIED 02"],
     unsupportedClaim: /\b(?:stable release|certified release|Apple-notarized build)\b/i,
     subject: "Euclidean Echo Preview Feedback"
   },
@@ -46,6 +47,7 @@ const localeCases = [
     assetPrefix: "../../",
     status: "ANTEPRIMA PUBBLICA / NON CERTIFICATO",
     warningClaims: ["DAW reali", "host plugin esterni", "firma ad hoc", "non è firmato con Apple Developer ID", "non è notarizzato da Apple"],
+    samplePackClaims: ["SAMPLE PACK DEI RESIDENT / RISERVATI", "Registrazioni modulari originali", "Sample pack d’autore originale", "RESIDENT / RISERVATO 01", "RESIDENT / RISERVATO 02"],
     unsupportedClaim: /\b(?:release stabile|release certificata|build notarizzata da Apple)\b/i,
     subject: "Feedback anteprima Euclidean Echo"
   },
@@ -55,6 +57,7 @@ const localeCases = [
     assetPrefix: "../../",
     status: "ПУБЛИЧНОЕ ПРЕВЬЮ / НЕ СЕРТИФИЦИРОВАНО",
     warningClaims: ["реальных DAW", "сторонних хостах плагинов", "подписаны ad hoc", "не подписан Apple Developer ID", "не прошёл нотарификацию Apple"],
+    samplePackClaims: ["СЕМПЛ-ПАКИ РЕЗИДЕНТОВ / ЗАСЕКРЕЧЕНО", "Авторские записи модульной системы", "Авторский семпл-пак", "РЕЗИДЕНТ / ЗАСЕКРЕЧЕН 01", "РЕЗИДЕНТ / ЗАСЕКРЕЧЕН 02"],
     unsupportedClaim: /(?:стабильный релиз|сертифицированный релиз|нотарифицированная Apple сборка)/i,
     subject: "Обратная связь по превью Euclidean Echo"
   }
@@ -86,6 +89,20 @@ test("publishes one localized Euclidean Echo preview with one universal archive 
     const feedbackHref = `mailto:${encodeURIComponent(CONTACT_EMAIL)}?subject=${encodeURIComponent(localeCase.subject)}`;
     assert.ok(html.includes(`href="${feedbackHref}"`), `${localeCase.locale} feedback email is missing`);
     assert.ok(html.includes(`${localeCase.assetPrefix}assets/downloads/euclidean-echo/0.1.1/SHA256SUMS`), `${localeCase.locale} checksum link is missing`);
+  }
+});
+
+test("publishes two classified sample packs by distinct residents with one modular pack", () => {
+  for (const localeCase of localeCases) {
+    const html = pages.get(localeCase.output).toString();
+    assert.equal(count(html, /data-sample-pack-locked(?:[ >])/g), 2, `${localeCase.locale} needs two classified sample packs`);
+    assert.equal(count(html, /data-sample-pack-kind="modular"/g), 1, `${localeCase.locale} needs one modular sample pack`);
+    assert.equal(count(html, /data-sample-pack-kind="artist"/g), 1, `${localeCase.locale} needs one non-modular artist sample pack`);
+    assert.equal(count(html, /data-resident="classified-01"/g), 1, `${localeCase.locale} needs the first classified resident`);
+    assert.equal(count(html, /data-resident="classified-02"/g), 1, `${localeCase.locale} needs a distinct second classified resident`);
+    for (const claim of localeCase.samplePackClaims) {
+      assert.ok(html.includes(claim), `${localeCase.locale} sample-pack copy is missing ${claim}`);
+    }
   }
 });
 

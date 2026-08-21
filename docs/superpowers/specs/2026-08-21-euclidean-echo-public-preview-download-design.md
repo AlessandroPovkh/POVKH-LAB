@@ -30,9 +30,12 @@ it mechanically.
 
 ## Page structure
 
-Keep `/download/` as the plugin page. Replace the first classified module card
-with a public Euclidean Echo product card while preserving the other two locked
-module cards.
+Keep `/download/` as the label's software and sample-download page. Replace the
+first classified module card with a public Euclidean Echo product card while
+preserving the other two locked plugin cards. A separate classified section
+contains two original sample packs by different label residents; one is
+identified as a modular-synthesis archive. Artist identities, pack titles,
+contents and downloads remain sealed.
 
 The Euclidean Echo card contains:
 
@@ -48,10 +51,8 @@ The Euclidean Echo card contains:
    subject identifying Euclidean Echo Preview Feedback;
 8. a link to a SHA-256 checksum manifest.
 
-The page introduction, metadata and footer must be revised in all three locales
-so they no longer claim that every plugin name and download is sealed. They
-should state that one public preview is available and two modules remain under
-lock.
+The page introduction and metadata must state that one public preview is
+available while two plugins and two resident sample packs remain under lock.
 
 ## Assets and downloads
 
@@ -92,6 +93,8 @@ Add focused automated coverage before implementation for:
 - the single download link and its exact local target;
 - feedback mail link using the configured contact address;
 - preservation of the two locked module cards;
+- two locked sample packs attributed to distinct classified residents, with
+  exactly one identified as modular;
 - source-to-public archive byte equality;
 - SHA-256 manifest correctness;
 - absence of unsupported certification, notarization or stable-release claims.

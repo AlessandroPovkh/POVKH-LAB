@@ -292,10 +292,10 @@ export const COPY = {
       },
       download: {
         title: "Download",
-        description: "Download the Euclidean Echo public preview and explore two additional POVKH LAB plugins still in development.",
+        description: "Download the Euclidean Echo public preview and explore classified POVKH LAB plugins and resident sample packs still in development.",
         eyebrow: "Tools / public preview",
-        lede: "Euclidean Echo is open for public testing. Two additional modules remain sealed while their release packages are prepared.",
-        status: "1 public preview / 2 access pending",
+        lede: "Euclidean Echo is open for public testing. Two additional plugins and two resident sample packs remain sealed.",
+        status: "1 public preview / 4 access pending",
         gridEyebrow: "Public build / 01",
         gridTitle: "Euclidean Echo available",
         gridBody: "Download the current preview build, test it in your setup and tell us what works, what breaks and what is missing.",
@@ -321,6 +321,15 @@ export const COPY = {
           ["MODULE / 02", "Plugin classified", "Build identity and support model pending."],
           ["MODULE / 03", "Plugin classified", "Build identity and documentation pending."]
         ],
+        samplePacks: {
+          eyebrow: "RESIDENT SAMPLE PACKS / CLASSIFIED",
+          title: "Two archives under seal",
+          body: "Two original sample packs by different POVKH LAB residents. One is built from modular synthesis recordings.",
+          cards: [
+            ["SAMPLE PACK / 01", "RESIDENT / CLASSIFIED 01", "Original modular recordings", "An authored modular-system sample pack. Identity, contents and release access remain sealed.", "modular", "classified-01"],
+            ["SAMPLE PACK / 02", "RESIDENT / CLASSIFIED 02", "Original artist sample pack", "A separate authored sample pack by another label resident. Identity, contents and release access remain sealed.", "artist", "classified-02"]
+          ]
+        },
         footer: "Euclidean Echo is an unfinished public preview, not a certified production release. Please keep backups and share useful testing context with your feedback."
       },
       links: {
@@ -537,10 +546,10 @@ export const COPY = {
       },
       download: {
         title: "Download",
-        description: "Scarica l’anteprima pubblica di Euclidean Echo e scopri altri due plugin POVKH LAB ancora in sviluppo.",
+        description: "Scarica l’anteprima pubblica di Euclidean Echo e scopri plugin e sample pack dei resident POVKH LAB ancora riservati.",
         eyebrow: "Strumenti / anteprima pubblica",
-        lede: "Euclidean Echo è disponibile per i test pubblici. Altri due moduli restano protetti mentre prepariamo i loro pacchetti di rilascio.",
-        status: "1 anteprima pubblica / 2 accessi in attesa",
+        lede: "Euclidean Echo è disponibile per i test pubblici. Altri due plugin e due sample pack dei resident restano protetti.",
+        status: "1 anteprima pubblica / 4 accessi in attesa",
         gridEyebrow: "Build pubblica / 01",
         gridTitle: "Euclidean Echo disponibile",
         gridBody: "Scarica la build attuale, provala nel tuo setup e raccontaci cosa funziona, cosa si rompe e cosa manca.",
@@ -566,6 +575,15 @@ export const COPY = {
           ["MODULO / 02", "Plugin classificato", "Identità della build e modello di supporto in attesa."],
           ["MODULO / 03", "Plugin classificato", "Identità della build e documentazione in attesa."]
         ],
+        samplePacks: {
+          eyebrow: "SAMPLE PACK DEI RESIDENT / RISERVATI",
+          title: "Due archivi sotto sigillo",
+          body: "Due sample pack originali creati da resident diversi di POVKH LAB. Uno nasce da registrazioni di sintesi modulare.",
+          cards: [
+            ["SAMPLE PACK / 01", "RESIDENT / RISERVATO 01", "Registrazioni modulari originali", "Un sample pack d’autore registrato con un sistema modulare. Identità, contenuti e accesso restano riservati.", "modular", "classified-01"],
+            ["SAMPLE PACK / 02", "RESIDENT / RISERVATO 02", "Sample pack d’autore originale", "Un archivio separato creato da un altro resident dell’etichetta. Identità, contenuti e accesso restano riservati.", "artist", "classified-02"]
+          ]
+        },
         footer: "Euclidean Echo è un’anteprima pubblica incompleta, non una release di produzione certificata. Conserva i backup e includi nel feedback informazioni utili sul test."
       },
       links: {
@@ -782,10 +800,10 @@ export const COPY = {
       },
       download: {
         title: "Скачать",
-        description: "Скачайте публичное превью Euclidean Echo и узнайте о двух других плагинах POVKH LAB, которые ещё находятся в разработке.",
+        description: "Скачайте публичное превью Euclidean Echo и узнайте о засекреченных плагинах и авторских семпл-паках резидентов POVKH LAB.",
         eyebrow: "Инструменты / публичное превью",
-        lede: "Euclidean Echo открыт для публичного тестирования. Ещё два модуля остаются закрытыми, пока готовятся их релизные пакеты.",
-        status: "1 публичное превью / 2 доступа ожидаются",
+        lede: "Euclidean Echo открыт для публичного тестирования. Ещё два плагина и два семпл-пака резидентов остаются засекреченными.",
+        status: "1 публичное превью / 4 доступа ожидаются",
         gridEyebrow: "Публичная сборка / 01",
         gridTitle: "Euclidean Echo доступен",
         gridBody: "Скачивайте текущую сборку, тестируйте её в своей системе и рассказывайте, что работает, что ломается и чего не хватает.",
@@ -811,6 +829,15 @@ export const COPY = {
           ["МОДУЛЬ / 02", "Плагин засекречен", "Идентификатор сборки и модель поддержки ожидаются."],
           ["МОДУЛЬ / 03", "Плагин засекречен", "Идентификатор сборки и документация ожидаются."]
         ],
+        samplePacks: {
+          eyebrow: "СЕМПЛ-ПАКИ РЕЗИДЕНТОВ / ЗАСЕКРЕЧЕНО",
+          title: "Два архива под грифом",
+          body: "Два разных авторских семпл-пака от резидентов POVKH LAB. Один из них собран из записей модульного синтеза.",
+          cards: [
+            ["СЕМПЛ-ПАК / 01", "РЕЗИДЕНТ / ЗАСЕКРЕЧЕН 01", "Авторские записи модульной системы", "Семпл-пак, записанный автором на модульной системе. Личность, содержимое и доступ пока засекречены.", "modular", "classified-01"],
+            ["СЕМПЛ-ПАК / 02", "РЕЗИДЕНТ / ЗАСЕКРЕЧЕН 02", "Авторский семпл-пак", "Отдельный авторский архив другого резидента лейбла. Личность, содержимое и доступ пока засекречены.", "artist", "classified-02"]
+          ]
+        },
         footer: "Euclidean Echo — незавершённое публичное превью, а не сертифицированный production-релиз. Сохраняйте резервные копии и добавляйте к отзыву полезную информацию о тестовой системе."
       },
       links: {

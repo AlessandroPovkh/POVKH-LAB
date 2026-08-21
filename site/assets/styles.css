@@ -1601,6 +1601,10 @@ html[lang="ru"] .step h3 {
   color: var(--steel);
 }
 
+.sample-pack-vault {
+  padding-bottom: 5rem;
+}
+
 .cipher-strip {
   position: absolute;
   right: 0;

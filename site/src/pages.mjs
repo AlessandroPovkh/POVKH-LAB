@@ -1185,6 +1185,17 @@ const createLocalePages = (locale, catalog, audioLibrary, artistLibrary, merchLi
         <div class="cipher-strip" aria-hidden="true">0x${String(itemIndex + 32).padStart(2, "0")} / ▓▒░ / NULL_ACCESS</div>
       </article>`).join("")}</div>
     </div></section>
+    <section class="section" data-sample-pack-vaults><div class="container">
+      <div class="section-head section-rule"><div><p class="eyebrow">${escapeHtml(download.samplePacks.eyebrow)}</p><h2 class="section-title">${escapeHtml(download.samplePacks.title)}</h2></div><p class="body-copy">${escapeHtml(download.samplePacks.body)}</p></div>
+      <div class="plugin-grid">
+        ${download.samplePacks.cards.map(([index, author, title, body, kind, resident], itemIndex) => `<article class="plugin-vault sample-pack-vault" data-sample-pack-locked data-sample-pack-kind="${escapeHtml(kind)}" data-resident="${escapeHtml(resident)}">
+          <div class="plugin-vault-head"><span class="index-no">${escapeHtml(index)}</span><span class="cipher-timer cipher-timer-${itemIndex + 4}" aria-hidden="true"></span></div>
+          <div class="plugin-lock" aria-hidden="true"><span></span><span></span><span></span></div>
+          <p class="eyebrow">${escapeHtml(author)}</p><h3 class="card-title">${escapeHtml(title)}</h3><p>${escapeHtml(body)}</p>
+          <div class="cipher-strip" aria-hidden="true">0x${String(itemIndex + 64).padStart(2, "0")} / ▓▒░ / SAMPLE_LOCK</div>
+        </article>`).join("")}
+      </div>
+    </div></section>
     <section class="section"><div class="container"><p class="body-copy">${escapeHtml(download.footer)}</p></div></section>`, { pageClass: "page-download" });
 
   const notFound = t.pages.notFound;
