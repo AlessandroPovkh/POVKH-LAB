@@ -6,7 +6,10 @@ const siteRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), ".."
 const catalog = JSON.parse(await readFile(path.join(siteRoot, "data", "catalog.json"), "utf8"));
 const audioLibrary = JSON.parse(await readFile(path.join(siteRoot, "data", "audio-library.json"), "utf8"));
 const outputDir = path.join(siteRoot, "assets", "releases", "signals");
-const audioByCatalogId = new Map(audioLibrary.tracks.map((track) => [track.catalogId, track]));
+const audioByCatalogId = new Map();
+for (const track of audioLibrary.tracks) {
+  if (!audioByCatalogId.has(track.catalogId)) audioByCatalogId.set(track.catalogId, track);
+}
 
 const escapeXml = (value) => String(value)
   .replaceAll("&", "&amp;")

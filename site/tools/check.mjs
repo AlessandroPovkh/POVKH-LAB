@@ -415,9 +415,15 @@ if (catalog.releases?.find((release) => release.id === "PVKH-009")?.title !== "N
 if (catalog.releases?.find((release) => release.id === "PVKH-013")?.title !== "Все сон") fail("PVKH-013: intentional title spelling regressed");
 if (catalog.asOf !== "2026-08-22") fail("Catalog snapshot must reflect the 2026-08-22 release update");
 if (catalog.releases?.length !== 14) fail("Catalog must contain fourteen releases");
-if (audioLibrary.tracks?.length !== 13
-  || audioLibrary.tracks.some((track, index) => track.catalogId !== catalog.releases?.[index]?.id)) {
-  fail("Audio library must contain the exact PVKH-001 through PVKH-013 catalog sequence");
+const expectedPlayerTrackIds = [
+  ...Array.from({ length: 13 }, (_, index) => `PVKH-${String(index + 1).padStart(3, "0")}`),
+  ...Array.from({ length: 11 }, (_, index) => `PVKH-014.${String(index + 1).padStart(2, "0")}`)
+];
+if (audioLibrary.schemaVersion !== 2
+  || audioLibrary.defaultTrackId !== "PVKH-007"
+  || audioLibrary.tracks?.length !== expectedPlayerTrackIds.length
+  || audioLibrary.tracks.some((track, index) => track.id !== expectedPlayerTrackIds[index])) {
+  fail("Audio library must contain PVKH-001 through PVKH-013 followed by PVKH-014.01 through PVKH-014.11");
 }
 for (const id of ["PVKH-012", "PVKH-013"]) {
   if (catalog.releases?.find((release) => release.id === id)?.status !== "published") {
@@ -655,7 +661,7 @@ for (const pageCase of pageCases) {
   const playerSelects = tagsFor(html, "button").filter((tag) => attribute(tag, "data-player-select") !== null);
   const playerTrays = tagsFor(html, "section").filter((tag) => attribute(tag, "data-player-tray") !== null);
   const playlistToggles = tagsFor(html, "button").filter((tag) => attribute(tag, "data-player-playlist-toggle") !== null);
-  const defaultTrack = audioLibrary.tracks.find((track) => track.catalogId === audioLibrary.defaultCatalogId);
+  const defaultTrack = audioLibrary.tracks.find((track) => track.id === audioLibrary.defaultTrackId);
   if (audioPlayerTags.length !== 1
     || attribute(audioPlayerTags[0], "data-track-count") !== String(audioLibrary.tracks.length)
     || playerTracks.length !== audioLibrary.tracks.length
@@ -677,20 +683,22 @@ for (const pageCase of pageCases) {
   }
   for (const [index, expected] of audioLibrary.tracks.entries()) {
     const release = catalog.releases.find((item) => item.id === expected.catalogId);
+    const catalogTrack = release?.tracks.find((track) => track.position === expected.position);
     const item = playerTracks[index];
-    if (!release || !item
+    if (!release || !catalogTrack || !item
+      || attribute(item, "data-track-id") !== expected.id
       || attribute(item, "data-catalog-id") !== expected.catalogId
       || !attribute(item, "data-src")?.endsWith(`assets/tracks/${expected.file}`)
       || !attribute(item, "data-waveform")?.endsWith(`assets/audio/${expected.waveform}`)
       || attribute(item, "data-duration") !== String(expected.duration)
-      || attribute(item, "data-title") !== escapeHtml(release.title.toUpperCase())
+      || attribute(item, "data-title") !== escapeHtml(catalogTrack.title.toUpperCase())
       || attribute(item, "data-artist") !== escapeHtml(release.artistCredit.toUpperCase())
-      || (attribute(item, "data-player-default") === "true") !== (expected.catalogId === audioLibrary.defaultCatalogId)) {
-      fail(`${label}: player track ${expected.catalogId} does not match the audio library`);
+      || (attribute(item, "data-player-default") === "true") !== (expected.id === audioLibrary.defaultTrackId)) {
+      fail(`${label}: player track ${expected.id} does not match the audio library`);
     }
     const select = playerSelects[index];
-    if (!select || !attribute(select, "aria-label") || (attribute(select, "aria-current") === "true") !== (expected.catalogId === audioLibrary.defaultCatalogId)) {
-      fail(`${label}: player selector ${expected.catalogId} is not keyboard-accessible or has incorrect current state`);
+    if (!select || !attribute(select, "aria-label") || (attribute(select, "aria-current") === "true") !== (expected.id === audioLibrary.defaultTrackId)) {
+      fail(`${label}: player selector ${expected.id} is not keyboard-accessible or has incorrect current state`);
     }
   }
 

@@ -19,6 +19,7 @@ await mkdir(stageRoot, { recursive: true });
 
 try {
   for (const track of library.tracks) {
+    await mkdir(path.dirname(path.join(stageRoot, track.file)), { recursive: true });
     const result = spawnSync("ffmpeg", [
       "-hide_banner", "-loglevel", "error", "-y",
       "-i", path.join(tracksRoot, track.file),
@@ -33,9 +34,9 @@ try {
       path.join(stageRoot, track.file)
     ], { encoding: "utf8" });
     if (result.status !== 0) {
-      throw new Error(`Could not render ${track.catalogId}: ${result.stderr.trim() || "ffmpeg failed"}`);
+      throw new Error(`Could not render ${track.id}: ${result.stderr.trim() || "ffmpeg failed"}`);
     }
-    console.log(`${track.catalogId}: ${track.file}`);
+    console.log(`${track.id}: ${track.file}`);
   }
   await rm(outputRoot, { recursive: true, force: true });
   await rename(stageRoot, outputRoot);

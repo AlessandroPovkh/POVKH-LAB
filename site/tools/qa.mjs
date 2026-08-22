@@ -15,7 +15,7 @@ const catalog = JSON.parse(await readFile(path.join(siteRoot, "data", "catalog.j
 const audioLibrary = JSON.parse(await readFile(path.join(siteRoot, "data", "audio-library.json"), "utf8"));
 const artistLibrary = JSON.parse(await readFile(path.join(siteRoot, "data", "artists.json"), "utf8"));
 const merchLibrary = JSON.parse(await readFile(path.join(siteRoot, "data", "merch.json"), "utf8"));
-const defaultAudioTrack = audioLibrary.tracks.find((track) => track.catalogId === audioLibrary.defaultCatalogId);
+const defaultAudioTrack = audioLibrary.tracks.find((track) => track.id === audioLibrary.defaultTrackId);
 const tinyTexturedGlb = ({ invalidBounds = false } = {}) => {
   const png = Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAYAAABytg0kAAAACXBIWXMAAAPoAAAD6AG1e1JrAAAAEUlEQVQImWP4oKHxH4QZYAwAUJQI/QlXOVQAAAAASUVORK5CYII=", "base64");
   const imageOffset = 60;
@@ -1620,15 +1620,16 @@ try {
   }));
   await audioPage.keyboard.press("Escape");
   const playlistFocusReturned = await audioPage.evaluate(() => document.activeElement?.hasAttribute("data-player-tray-toggle"));
-  await (await advancedControl(audioPage, '[data-player-track][data-catalog-id="PVKH-012"] [data-player-select]')).click();
-  await audioPage.waitForFunction(() => document.querySelector("[data-player-title]")?.textContent === "RUNWAY"
-    && document.querySelector("[data-audio-engine]")?.currentSrc.endsWith("/assets/tracks/pvkh-012-runway.mp3")
+  await (await advancedControl(audioPage, '[data-player-track][data-track-id="PVKH-014.01"] [data-player-select]')).click();
+  await audioPage.waitForFunction(() => document.querySelector("[data-player-title]")?.textContent === "INTRO"
+    && document.querySelector("[data-audio-engine]")?.currentSrc.endsWith("/assets/tracks/pvkh-014/01-intro.mp3")
+    && document.querySelector("[data-audio-player]")?.dataset.waveformState === "ready"
     && document.querySelector("[data-player-tray]")?.hidden === true);
   const directAudio = await audioPage.evaluate(() => ({
     title: document.querySelector("[data-player-title]")?.textContent,
     index: document.querySelector("[data-player-index]")?.textContent,
     currentSrc: document.querySelector("[data-audio-engine]")?.currentSrc,
-    currentCatalogId: document.querySelector('[data-player-select][aria-current="true"]')?.closest("[data-player-track]")?.dataset.catalogId
+    currentTrackId: document.querySelector('[data-player-select][aria-current="true"]')?.closest("[data-player-track]")?.dataset.trackId
   }));
   if (await audioPage.locator("[data-audio-player]").getAttribute("data-playing") === "true") {
     await audioPage.locator("[data-player-toggle]").click();
@@ -1695,7 +1696,7 @@ try {
     await audioPage.locator("[data-player-toggle]").click();
   }
   if (!initialAudio.paused || initialAudio.title !== "OPPORTUNIST" || initialAudio.artist !== "ALESSANDRO POVKH & K/SMOKIN"
-    || initialAudio.index !== "07 / 13" || initialAudio.hudIndex !== "07 / 13" || initialAudio.trackCount !== 13
+    || initialAudio.index !== "07 / 24" || initialAudio.hudIndex !== "07 / 24" || initialAudio.trackCount !== 24
     || initialAudio.peaksReady !== "ready" || initialAudio.mediaTitle !== "OPPORTUNIST"
     || Math.abs(initialAudio.volume - 0.6) > 0.001 || initialAudio.volumeValue !== "60" || initialAudio.volumeExpanded !== "false"
     || volumeOpen.expanded !== "true" || volumeOpen.hidden
@@ -1710,18 +1711,18 @@ try {
     || playingAudio.paused || playingAudio.currentTime <= 0 || playingAudio.state !== "playing"
     || endTime < defaultAudioTrack.duration - 0.2 || homeTime > 0.05 || Math.abs(arrowTime - 5) > 0.15
     || !pausedAudio.paused || pausedAudio.userPaused !== "true"
-    || nextAudio.title !== "ROBERT" || nextAudio.artist !== "LEVO.MP3" || nextAudio.index !== "08 / 13" || nextAudio.hudIndex !== "08 / 13"
+    || nextAudio.title !== "ROBERT" || nextAudio.artist !== "LEVO.MP3" || nextAudio.index !== "08 / 24" || nextAudio.hudIndex !== "08 / 24"
     || !nextAudio.currentSrc?.endsWith("/assets/tracks/pvkh-008-robert.mp3") || nextAudio.mediaTitle !== "ROBERT"
-    || previousAudio.title !== "OPPORTUNIST" || previousAudio.index !== "07 / 13"
+    || previousAudio.title !== "OPPORTUNIST" || previousAudio.index !== "07 / 24"
     || !previousAudio.currentSrc?.endsWith("/assets/tracks/pvkh-007-opportunist.mp3")
-    || playlistOpen.trackButtons !== 13 || playlistOpen.current !== 1 || playlistOpen.activeCatalogId !== "PVKH-007"
+    || playlistOpen.trackButtons !== 24 || playlistOpen.current !== 1 || playlistOpen.activeCatalogId !== "PVKH-007"
     || playlistOpen.hidden || playlistOpen.expanded !== "true" || !playlistFocusReturned
-    || directAudio.title !== "RUNWAY" || directAudio.index !== "12 / 13" || directAudio.currentCatalogId !== "PVKH-012"
-    || !directAudio.currentSrc?.endsWith("/assets/tracks/pvkh-012-runway.mp3")
+    || directAudio.title !== "INTRO" || directAudio.index !== "14 / 24" || directAudio.currentTrackId !== "PVKH-014.01"
+    || !directAudio.currentSrc?.endsWith("/assets/tracks/pvkh-014/01-intro.mp3")
     || !persistentAfter.sameNode || persistentAfter.currentTime < persistentBefore || persistentAfter.playing !== "true"
-    || !persistentAfter.currentSrc?.endsWith("/assets/tracks/pvkh-012-runway.mp3") || persistentAfter.playerCount !== 1 || persistentAfter.routeMainCount !== 1
+    || !persistentAfter.currentSrc?.endsWith("/assets/tracks/pvkh-014/01-intro.mp3") || persistentAfter.playerCount !== 1 || persistentAfter.routeMainCount !== 1
     || Math.abs(persistentAfter.volume - 0.35) > 0.001 || persistentAfter.volumeValue !== "35" || persistentAfter.volumeExpanded !== "false"
-    || !persistentBack.sameNode || persistentBack.title !== "RUNWAY" || persistentBack.playerCount !== 1
+    || !persistentBack.sameNode || persistentBack.title !== "INTRO" || persistentBack.playerCount !== 1
     || !russianVolumeLabel?.startsWith("Громкость:")
     || !russianAfter.sameNode || russianAfter.paused !== russianBefore.paused || russianAfter.playing !== russianBefore.playing
     || russianAfter.currentTime <= russianBefore.currentTime || Math.abs(russianAfter.volume - russianBefore.volume) > 0.001

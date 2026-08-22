@@ -274,9 +274,9 @@ const readAudioLibrary = async (catalog) => {
   const raw = await readFile(path.join(siteRoot, "data", "audio-library.json"), "utf8");
   const library = JSON.parse(raw);
   const format = library.format;
-  if (library.schemaVersion !== 1
+  if (library.schemaVersion !== 2
     || !Array.isArray(library.tracks)
-    || library.tracks.length !== 13
+    || library.tracks.length !== 24
     || format?.container !== "mp3"
     || format?.codec !== "mp3"
     || format?.sampleRate !== 48000
@@ -290,28 +290,38 @@ const readAudioLibrary = async (catalog) => {
   const files = new Set();
   const waveforms = new Set();
   for (const [index, track] of library.tracks.entries()) {
-    const release = catalog.releases[index];
-    if (!release || track.catalogId !== release.id) {
-      throw new Error(`Audio position ${index + 1} must match ${release?.id || "the approved 13-release audio catalog"}`);
+    const expectedId = index < 13
+      ? `PVKH-${String(index + 1).padStart(3, "0")}`
+      : `PVKH-014.${String(index - 12).padStart(2, "0")}`;
+    const release = catalog.releases.find((item) => item.id === track.catalogId);
+    const catalogTrack = release?.tracks.find((item) => item.position === track.position);
+    if (track.id !== expectedId || !release || !catalogTrack
+      || (index < 13 && (track.catalogId !== expectedId || track.position !== 1))
+      || (index >= 13 && (track.catalogId !== "PVKH-014" || track.position !== index - 12))) {
+      throw new Error(`Audio position ${index + 1} must match ${expectedId}`);
     }
-    if (!/^pvkh-\d{3}-[a-z0-9-]+\.mp3$/.test(track.file || "") || files.has(track.file)) {
-      throw new Error(`${track.catalogId} must use a unique safe MP3 filename`);
+    if (!/^(?:pvkh-\d{3}-[a-z0-9-]+|pvkh-\d{3}\/\d{2}-[a-z0-9-]+)\.mp3$/.test(track.file || "") || files.has(track.file)) {
+      throw new Error(`${track.id} must use a unique safe MP3 filename`);
     }
-    if (!/^pvkh-\d{3}-[a-z0-9-]+\.waveform\.json$/.test(track.waveform || "") || waveforms.has(track.waveform)) {
-      throw new Error(`${track.catalogId} must use a unique safe waveform filename`);
+    if (!/^(?:pvkh-\d{3}-[a-z0-9-]+|pvkh-\d{3}\/\d{2}-[a-z0-9-]+)\.waveform\.json$/.test(track.waveform || "") || waveforms.has(track.waveform)) {
+      throw new Error(`${track.id} must use a unique safe waveform filename`);
     }
     if (!Number.isFinite(track.duration) || track.duration <= 0) {
-      throw new Error(`${track.catalogId} must declare a positive duration`);
+      throw new Error(`${track.id} must declare a positive duration`);
+    }
+    const [minutes, seconds] = catalogTrack.duration.split(":").map(Number);
+    if (Math.abs(track.duration - ((minutes * 60) + seconds)) >= 1) {
+      throw new Error(`${track.id} duration must match the catalog track`);
     }
     files.add(track.file);
     waveforms.add(track.waveform);
 
     const source = path.join(siteRoot, "..", "Tracks", track.file);
-    if (!await exists(source)) throw new Error(`${track.catalogId} source is missing: Tracks/${track.file}`);
+    if (!await exists(source)) throw new Error(`${track.id} source is missing: Tracks/${track.file}`);
     const streamingSource = path.join(siteRoot, "..", "Tracks", "streaming", track.file);
-    if (!await exists(streamingSource)) throw new Error(`${track.catalogId} streaming source is missing: Tracks/streaming/${track.file}`);
+    if (!await exists(streamingSource)) throw new Error(`${track.id} streaming source is missing: Tracks/streaming/${track.file}`);
     const waveformPath = path.join(siteRoot, "assets", "audio", track.waveform);
-    if (!await exists(waveformPath)) throw new Error(`${track.catalogId} waveform is missing: assets/audio/${track.waveform}`);
+    if (!await exists(waveformPath)) throw new Error(`${track.id} waveform is missing: assets/audio/${track.waveform}`);
     const waveform = JSON.parse(await readFile(waveformPath, "utf8"));
     if (waveform.schemaVersion !== 1
       || waveform.source !== track.file
@@ -319,11 +329,11 @@ const readAudioLibrary = async (catalog) => {
       || !Array.isArray(waveform.peaks)
       || waveform.peaks.length !== format.waveformPoints
       || waveform.peaks.some((peak) => !Number.isFinite(peak) || peak < 0 || peak > 1)) {
-      throw new Error(`${track.catalogId} waveform data is invalid`);
+      throw new Error(`${track.id} waveform data is invalid`);
     }
   }
-  if (!library.tracks.some((track) => track.catalogId === library.defaultCatalogId)) {
-    throw new Error("audio-library.json defaultCatalogId must identify one playlist track");
+  if (!library.tracks.some((track) => track.id === library.defaultTrackId)) {
+    throw new Error("audio-library.json defaultTrackId must identify one playlist track");
   }
   return library;
 };
@@ -447,6 +457,7 @@ const build = async () => {
   await cp(path.join(siteRoot, "assets"), path.join(stageDir, "assets"), { recursive: true });
   await mkdir(path.join(stageDir, "assets", "tracks"), { recursive: true });
   for (const track of audioLibrary.tracks) {
+    await mkdir(path.dirname(path.join(stageDir, "assets", "tracks", track.file)), { recursive: true });
     await cp(
       path.join(siteRoot, "..", "Tracks", "streaming", track.file),
       path.join(stageDir, "assets", "tracks", track.file)

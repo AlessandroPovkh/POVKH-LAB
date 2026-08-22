@@ -157,21 +157,21 @@ const playerTime = (seconds) => {
   return `${String(minutes).padStart(2, "0")}:${String(remainder).padStart(2, "0")}`;
 };
 
-const audioPlayerMarkup = (locale, prefix, tracks, defaultCatalogId) => {
+const audioPlayerMarkup = (locale, prefix, tracks, defaultTrackId) => {
   const copy = {
     en: { player: "Audio player", prev: "Previous", prevShort: "PREV", play: "Play", playShort: "PLAY", pause: "Pause", pauseShort: "PAUSE", next: "Next", nextShort: "NEXT", volume: "Volume", volumeControl: "Volume control", queue: "Open track list", queueShort: "TRACKS", queueTitle: "Catalog playback", close: "Close track list", select: "Play {title} by {artist}", seek: "Seek through track", loading: "Reading waveform", blocked: "Press play to enable sound", waveformError: "Waveform unavailable", audioError: "Audio unavailable — retry play" },
     it: { player: "Lettore audio", prev: "Precedente", prevShort: "PREC", play: "Riproduci", playShort: "PLAY", pause: "Pausa", pauseShort: "PAUSA", next: "Successivo", nextShort: "SUCC", volume: "Volume", volumeControl: "Controllo volume", queue: "Apri elenco tracce", queueShort: "TRACCE", queueTitle: "Riproduzione catalogo", close: "Chiudi elenco tracce", select: "Riproduci {title} di {artist}", seek: "Sposta la posizione nella traccia", loading: "Lettura forma d’onda", blocked: "Premi play per attivare l’audio", waveformError: "Forma d’onda non disponibile", audioError: "Audio non disponibile — riprova" },
     ru: { player: "Аудиоплеер", prev: "Предыдущий", prevShort: "ПРЕД", play: "Воспроизвести", playShort: "ПУСК", pause: "Пауза", pauseShort: "ПАУЗА", next: "Следующий", nextShort: "СЛЕД", volume: "Громкость", volumeControl: "Регулятор громкости", queue: "Открыть список треков", queueShort: "ТРЕКИ", queueTitle: "Воспроизведение каталога", close: "Закрыть список треков", select: "Воспроизвести {title} — {artist}", seek: "Перемотка по треку", loading: "Чтение формы волны", blocked: "Нажмите play, чтобы включить звук", waveformError: "Форма волны недоступна", audioError: "Аудио недоступно — повторите запуск" }
   }[locale];
-  const defaultIndex = tracks.findIndex((track) => track.id === defaultCatalogId);
-  if (defaultIndex < 0) throw new Error(`${defaultCatalogId} is required for the global audio player`);
+  const defaultIndex = tracks.findIndex((track) => track.id === defaultTrackId);
+  if (defaultIndex < 0) throw new Error(`${defaultTrackId} is required for the global audio player`);
   const defaultTrack = tracks[defaultIndex];
   const artistCredit = defaultTrack.artistCredit.toUpperCase();
   const playlist = tracks.map((track) => {
-    const isDefault = track.id === defaultCatalogId ? ' data-player-default="true"' : "";
-    const current = track.id === defaultCatalogId ? ' aria-current="true"' : "";
+    const isDefault = track.id === defaultTrackId ? ' data-player-default="true"' : "";
+    const current = track.id === defaultTrackId ? ' aria-current="true"' : "";
     const selectLabel = interpolate(copy.select, { title: track.title, artist: track.artistCredit });
-    return `<li data-player-track${isDefault} data-catalog-id="${escapeHtml(track.id)}" data-src="${prefix}assets/tracks/${escapeHtml(track.audio.file)}" data-waveform="${prefix}assets/audio/${escapeHtml(track.audio.waveform)}" data-artist="${escapeHtml(track.artistCredit.toUpperCase())}" data-title="${escapeHtml(track.title.toUpperCase())}" data-duration="${track.audio.duration}">
+    return `<li data-player-track${isDefault} data-track-id="${escapeHtml(track.id)}" data-catalog-id="${escapeHtml(track.audio.catalogId)}" data-src="${prefix}assets/tracks/${escapeHtml(track.audio.file)}" data-waveform="${prefix}assets/audio/${escapeHtml(track.audio.waveform)}" data-artist="${escapeHtml(track.artistCredit.toUpperCase())}" data-title="${escapeHtml(track.title.toUpperCase())}" data-duration="${track.audio.duration}">
         <button type="button" data-player-select${current} aria-label="${escapeHtml(selectLabel)}"><span class="playlist-code">${escapeHtml(track.id)}</span><span class="playlist-name"><strong>${escapeHtml(track.title)}</strong><small>${escapeHtml(track.artistCredit)}</small></span><span class="playlist-duration">${playerTime(track.audio.duration)}</span></button>
       </li>`;
   }).join("\n      ");
@@ -264,10 +264,12 @@ const shell = ({ locale, route, title, description, body, catalog, audioLibrary,
   const audioTracks = audioLibrary.tracks.map((audio) => {
     const release = catalog.releases.find((item) => item.id === audio.catalogId);
     if (!release) throw new Error(`${audio.catalogId} has no matching catalog release`);
-    return { ...release, audio };
+    const catalogTrack = release.tracks.find((track) => track.position === audio.position);
+    if (!catalogTrack) throw new Error(`${audio.id} has no matching catalog track`);
+    return { ...release, id: audio.id, title: catalogTrack.title, audio };
   });
-  const defaultTrackIndex = audioTracks.findIndex((track) => track.id === audioLibrary.defaultCatalogId);
-  if (defaultTrackIndex < 0) throw new Error(`${audioLibrary.defaultCatalogId} is not present in the audio library`);
+  const defaultTrackIndex = audioTracks.findIndex((track) => track.id === audioLibrary.defaultTrackId);
+  if (defaultTrackIndex < 0) throw new Error(`${audioLibrary.defaultTrackId} is not present in the audio library`);
   const organization = {
     "@type": "Organization",
     "@id": `${absoluteUrlFor("/")}#label`,
@@ -357,7 +359,7 @@ const shell = ({ locale, route, title, description, body, catalog, audioLibrary,
     </div>
   </header>
   ${globalHudMarkup(catalog, defaultTrackIndex, audioTracks.length)}
-  ${audioPlayerMarkup(locale, prefix, audioTracks, audioLibrary.defaultCatalogId)}
+  ${audioPlayerMarkup(locale, prefix, audioTracks, audioLibrary.defaultTrackId)}
   <main id="main-content" tabindex="-1" data-route-main>
     <div class="site-ambient" aria-hidden="true">
       <video class="site-ambient-video" muted loop playsinline preload="none" tabindex="-1" data-motion-video>

@@ -51,6 +51,7 @@
       select: item.matches("[data-player-select]")
         ? item
         : item.querySelector("[data-player-select]"),
+      id: item.dataset.trackId,
       catalogId: item.dataset.catalogId,
       src: new URL(item.dataset.src, document.baseURI).href,
       waveform: new URL(item.dataset.waveform, document.baseURI).href,
@@ -122,6 +123,7 @@
       try {
         sessionStorage.setItem(storageKey, JSON.stringify({
           trackIndex,
+          trackId: tracks[trackIndex].id,
           catalogId: tracks[trackIndex].catalogId,
           currentTime: audio.currentTime || pendingRestoreTime || 0,
           userPaused: audioPlayer.dataset.userPaused === "true"
@@ -176,7 +178,7 @@
         const waveform = await response.json();
         if (attempt !== waveformAttempt) return;
         if (waveform?.schemaVersion !== 1
-          || waveform.source !== track.src.split("/").pop()
+          || !new URL(track.src).pathname.endsWith(`/assets/tracks/${waveform.source}`)
           || !Array.isArray(waveform.peaks)
           || waveform.peaks.length !== 160
           || waveform.peaks.some((peak) => !Number.isFinite(peak) || peak < 0 || peak > 1)) {
@@ -602,7 +604,7 @@
 
       for (const track of tracks) {
         const incomingTrack = [...incomingPlayer.querySelectorAll("[data-player-track]")]
-          .find((item) => item.dataset.catalogId === track.catalogId);
+          .find((item) => item.dataset.trackId === track.id);
         const incomingControl = incomingTrack?.matches("[data-player-select]")
           ? incomingTrack
           : incomingTrack?.querySelector("[data-player-select]");
@@ -619,8 +621,8 @@
     };
 
     const saved = readState();
-    const savedTrackIndex = saved?.catalogId
-      ? tracks.findIndex((track) => track.catalogId === saved.catalogId)
+    const savedTrackIndex = saved?.trackId || saved?.catalogId
+      ? tracks.findIndex((track) => track.id === (saved.trackId || saved.catalogId))
       : -1;
     if (savedTrackIndex >= 0) trackIndex = savedTrackIndex;
     audioPlayer.dataset.userPaused = String(Boolean(saved?.userPaused));

@@ -60,11 +60,13 @@ including its localized copy, object order, categories and roadmap. Object detai
 routes remain unpublished until `detailEnabled` is true and approved local
 photography plus complete EN/IT/RU copy are available.
 
-The global HUD audio console contains the 13 available catalog masters in canonical
-PVKH-001 → PVKH-013 order, with PVKH-007 “Opportunist” selected by default.
-Canonical project copies live in the root `Tracks/` folder as tagged stereo MP3
-files at 320 kbps / 48 kHz. Reproducible 192 kbps public-player copies live in
-`Tracks/streaming/`; the 320 kbps masters are not copied into the public build.
+The global HUD audio console contains 24 tracks in canonical order: PVKH-001 →
+PVKH-013, followed by the eleven `Two Faces` tracks as PVKH-014.01 → PVKH-014.11.
+PVKH-007 “Opportunist” remains selected by default. Canonical project copies live
+in the root `Tracks/` folder as tagged stereo MP3 files at 320 kbps / 48 kHz;
+multi-track releases use their own catalog subdirectory. Reproducible 192 kbps
+public-player copies mirror that structure under `Tracks/streaming/`; the 320 kbps
+masters are not copied into the public build.
 Every track has its own precomputed 160-point waveform, so
 the browser never decodes a full file merely to draw the graph. Audible
 autoplay is attempted, but browsers may require the explicit PLAY control.
