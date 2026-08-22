@@ -29,8 +29,8 @@ const stageDir = path.join(siteRoot, `.dist-stage-${process.pid}`);
 const backupDir = path.join(siteRoot, `.dist-backup-${process.pid}`);
 
 const validateStreamingLinks = (release) => {
-  if (!Array.isArray(release.streamingLinks) || release.streamingLinks.length !== 3) {
-    throw new Error(`${release.id} published release must contain exactly three verified streaming links`);
+  if (!Array.isArray(release.streamingLinks) || release.streamingLinks.length < 1 || release.streamingLinks.length > 3) {
+    throw new Error(`${release.id} published release must contain one to three verified streaming links`);
   }
   const services = release.streamingLinks.map((link) => link?.service);
   if (!hasValidStreamingServiceOrder(services)) {
@@ -67,8 +67,8 @@ const readCatalog = async () => {
   if (catalog.label.founded !== 2025 || catalog.label.location !== "Brescia (BS), Italia" || catalog.label.founder !== "Aleksandr Babenko (Povkh)") {
     throw new Error("catalog.json label facts do not match the approved founder, year or location");
   }
-  if (catalog.releases.length !== 13) {
-    throw new Error("Approved catalog must contain exactly 13 releases");
+  if (catalog.releases.length !== 14) {
+    throw new Error("Approved catalog must contain exactly 14 releases");
   }
 
   const seenSlugs = new Set();
@@ -86,7 +86,7 @@ const readCatalog = async () => {
     if (!/^(published|upcoming)$/.test(release.status) || release.public !== true) {
       throw new Error(`${release.id} must be public and marked published or upcoming`);
     }
-    for (const field of ["artistCredit", "title", "tuneCoreId", "releaseDate"]) {
+    for (const field of ["artistCredit", "title", "releaseDate"]) {
       if (typeof release[field] !== "string" || !release[field].trim()) {
         throw new Error(`${release.id} ${field} must be a non-empty string`);
       }
@@ -107,15 +107,19 @@ const readCatalog = async () => {
     if (release.artwork && !await exists(path.join(siteRoot, release.artwork))) {
       throw new Error(`${release.id} artwork is missing: ${release.artwork}`);
     }
-    if (!await exists(path.join(siteRoot, "assets", "releases", "signals", `${release.slug}.svg`))) {
+    if (!release.artwork && !await exists(path.join(siteRoot, "assets", "releases", "signals", `${release.slug}.svg`))) {
       throw new Error(`${release.id} fallback signal visual is missing`);
     }
     if (release.artistCredit !== release.artists.join(" & ")) {
       throw new Error(`${release.id} artistCredit must be derived from artists with an ampersand separator`);
     }
-    if (seenTuneCoreIds.has(release.tuneCoreId)) throw new Error(`Duplicate TuneCore ID: ${release.tuneCoreId}`);
-    seenTuneCoreIds.add(release.tuneCoreId);
-    if (!/^\d+$/.test(release.tuneCoreId)) throw new Error(`${release.id} TuneCore ID must contain digits only`);
+    if (release.tuneCoreId !== null) {
+      if (!/^\d+$/.test(release.tuneCoreId)) throw new Error(`${release.id} TuneCore ID must contain digits only or be null`);
+      if (seenTuneCoreIds.has(release.tuneCoreId)) throw new Error(`Duplicate TuneCore ID: ${release.tuneCoreId}`);
+      seenTuneCoreIds.add(release.tuneCoreId);
+    } else if (release.status !== "upcoming") {
+      throw new Error(`${release.id} published release needs a TuneCore ID`);
+    }
     if (typeof release.tuneCoreIdNeedsOwnerVerification !== "boolean") {
       throw new Error(`${release.id} must declare whether its internal TuneCore ID needs owner verification`);
     }
@@ -145,12 +149,23 @@ const readCatalog = async () => {
     if (!release.editorial || typeof release.editorial.contentBasis !== "string" || typeof release.editorial.genreBasis !== "string" || typeof release.editorial.reviewRequired !== "boolean") {
       throw new Error(`${release.id} must preserve editorial content and genre provenance`);
     }
-    if (!Array.isArray(release.tracks) || release.tracks.length !== 1 || release.trackCount !== 1) {
-      throw new Error(`${release.id} must contain exactly one track`);
+    if (!Array.isArray(release.tracks) || release.tracks.length < 1 || release.trackCount !== release.tracks.length) {
+      throw new Error(`${release.id} trackCount must match its non-empty tracklist`);
     }
-    if (release.tracks[0].title !== release.title) throw new Error(`${release.id} track title must match the single title`);
-    if (release.tracks[0].duration !== null && !/^\d+:[0-5]\d$/.test(release.tracks[0].duration)) {
-      throw new Error(`${release.id} track duration must be null or M:SS`);
+    if (index < 13) {
+      if (release.trackCount !== 1 || release.releaseType != null || release.tracks[0].title !== release.title) {
+        throw new Error(`${release.id} must remain a one-track single with matching release and track titles`);
+      }
+    } else if (release.id !== "PVKH-014" || release.trackCount !== 11 || release.releaseType !== "mixtape") {
+      throw new Error("PVKH-014 must remain the approved 11-track mixtape");
+    }
+    for (const [trackIndex, track] of release.tracks.entries()) {
+      if (track.position !== trackIndex + 1 || typeof track.title !== "string" || !track.title.trim()) {
+        throw new Error(`${release.id} track ${trackIndex + 1} has invalid position or title`);
+      }
+      if (track.duration !== null && !/^\d+:[0-5]\d$/.test(track.duration)) {
+        throw new Error(`${release.id} track ${trackIndex + 1} duration must be null or M:SS`);
+      }
     }
     if (release.status === "published") {
       validateStreamingLinks(release);
@@ -165,11 +180,14 @@ const readCatalog = async () => {
       throw new Error(`${release.id} historical preorder data must remain omitted when it is not officially verified`);
     }
     if (release.status === "upcoming") {
-      const preorderDateObject = new Date(`${release.preorderDate}T00:00:00Z`);
-      if (!/^\d{4}-\d{2}-\d{2}$/.test(release.preorderDate || "") || Number.isNaN(preorderDateObject.valueOf()) || preorderDateObject.toISOString().slice(0, 10) !== release.preorderDate) {
-        throw new Error(`${release.id} upcoming release needs a valid ISO preorder date`);
+      if (release.preorderDate !== null) {
+        const preorderDateObject = new Date(`${release.preorderDate}T00:00:00Z`);
+        if (!/^\d{4}-\d{2}-\d{2}$/.test(release.preorderDate) || Number.isNaN(preorderDateObject.valueOf()) || preorderDateObject.toISOString().slice(0, 10) !== release.preorderDate) {
+          throw new Error(`${release.id} preorder date must be null or a valid ISO date`);
+        }
+        if (Date.parse(`${release.preorderDate}T00:00:00Z`) >= releaseTime) throw new Error(`${release.id} preorder must start before release`);
       }
-      if (Date.parse(`${release.preorderDate}T00:00:00Z`) >= releaseTime) throw new Error(`${release.id} preorder must start before release`);
+      if (release.preorderUrl !== null && release.preorderDate === null) throw new Error(`${release.id} preorder URL requires a preorder date`);
       if (release.preorderUrl !== null) {
         let preorderUrl;
         try {
@@ -258,7 +276,7 @@ const readAudioLibrary = async (catalog) => {
   const format = library.format;
   if (library.schemaVersion !== 1
     || !Array.isArray(library.tracks)
-    || library.tracks.length !== catalog.releases.length
+    || library.tracks.length !== 13
     || format?.container !== "mp3"
     || format?.codec !== "mp3"
     || format?.sampleRate !== 48000
@@ -273,8 +291,8 @@ const readAudioLibrary = async (catalog) => {
   const waveforms = new Set();
   for (const [index, track] of library.tracks.entries()) {
     const release = catalog.releases[index];
-    if (track.catalogId !== release.id) {
-      throw new Error(`Audio position ${index + 1} must match ${release.id}`);
+    if (!release || track.catalogId !== release.id) {
+      throw new Error(`Audio position ${index + 1} must match ${release?.id || "the approved 13-release audio catalog"}`);
     }
     if (!/^pvkh-\d{3}-[a-z0-9-]+\.mp3$/.test(track.file || "") || files.has(track.file)) {
       throw new Error(`${track.catalogId} must use a unique safe MP3 filename`);
@@ -418,7 +436,7 @@ const build = async () => {
     + 11
     + smartLinkPageCount;
   const expectedPageCount = 3 * (basePagesPerLocale + merchLibrary.objects.length);
-  if (expectedPageCount !== 153) throw new Error(`DROP 001 release contract must derive 153 pages; derived ${expectedPageCount}`);
+  if (expectedPageCount !== 162) throw new Error(`DROP 001 release contract must derive 162 pages; derived ${expectedPageCount}`);
   if (pages.size !== expectedPageCount) {
     throw new Error(`The localized site must contain exactly ${expectedPageCount} HTML pages; received ${pages.size}`);
   }

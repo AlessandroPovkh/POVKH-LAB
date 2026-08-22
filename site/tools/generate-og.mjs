@@ -27,7 +27,7 @@ try {
   </style></head><body>
     <img src="${dataUrl("image/svg+xml", logo)}" alt="">
     <h1>Sound.<br>Process. Archive.</h1>
-    <div class="system"><b>Catalog sequence</b><br>PVKH-001 → PVKH-013<br>Independent electronic music label</div>
+    <div class="system"><b>Catalog sequence</b><br>PVKH-001 → PVKH-014<br>Independent electronic music label</div>
     <div class="ref">POVKH LAB / BRESCIA / 2025—2026</div>
   </body></html>`, { waitUntil: "load" });
   await page.screenshot({ path: output, type: "png", animations: "disabled" });

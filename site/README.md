@@ -23,8 +23,8 @@ Playwright and Axe are pinned locally so a clean clone, local machine and CI run
 ## Content model
 
 `data/catalog.json` is the catalog source of truth. It contains the approved
-`PVKH-001`–`PVKH-013` sequence, canonical artist arrays, corrected platform
-dates, published/upcoming state as of 2026-07-15 and EN/IT/RU editorial copy.
+`PVKH-001`–`PVKH-014` sequence, canonical artist arrays, corrected platform
+dates, published/upcoming state as of 2026-08-22 and EN/IT/RU editorial copy.
 Copy carrying `editorial.reviewRequired: true` stays behind the public rendering
 gate until artist approval; those pages expose verified metadata and a localized
 pending-review note instead. TuneCore IDs are stored only as internal distribution
@@ -36,9 +36,10 @@ verified on an official platform; interpretive style vocabulary belongs in
 release status from the ISO `asOf` snapshot instead of hard-coding status
 counts.
 
-Published releases contain exactly three verified direct destinations in
-`streamingLinks`: Apple Music, Spotify and a verified third service. Release
-pages render those destinations plus a fourth local “All services” CTA. That
+Published releases contain one to three verified direct destinations in
+`streamingLinks`, beginning with Apple Music and adding Spotify and a verified
+third service when confirmed. Release pages render those destinations plus a
+local “All services” CTA. That
 CTA opens the label-owned `/listen/pvkh-###/` chooser, so the smart-link flow
 has no client-side API, redirect service or third-party aggregator dependency.
 Upcoming releases keep `streamingLinks: null` until official destinations can
@@ -59,7 +60,7 @@ including its localized copy, object order, categories and roadmap. Object detai
 routes remain unpublished until `detailEnabled` is true and approved local
 photography plus complete EN/IT/RU copy are available.
 
-The global HUD audio console contains all 13 catalog masters in canonical
+The global HUD audio console contains the 13 available catalog masters in canonical
 PVKH-001 → PVKH-013 order, with PVKH-007 “Opportunist” selected by default.
 Canonical project copies live in the root `Tracks/` folder as tagged stereo MP3
 files at 320 kbps / 48 kHz. Reproducible 192 kbps public-player copies live in
@@ -90,17 +91,17 @@ client-side redirects or locale-dependent catalog facts.
 Routes:
 
 - `/` — home;
-- `/catalog/` and `/catalog/pvkh-001/` through `/catalog/pvkh-013/` — catalog and release details;
-- `/listen/pvkh-001/` through `/listen/pvkh-011/` — local service choosers for published releases;
+- `/catalog/` and `/catalog/pvkh-001/` through `/catalog/pvkh-014/` — catalog and release details;
+- `/listen/pvkh-001/` through `/listen/pvkh-013/` — local service choosers for published releases;
 - `/artists/`, five `/artists/{slug}/` files and `/process/` — confirmed catalog roster, derived discographies and working method;
 - `/merch/` and eleven `/merch/{slug}/` routes — the DROP 001 concept overview and non-commercial object galleries;
 - `/about/`, `/contact/`, `/press/` — label context, verified contact and approved press assets;
 - `/links/` — Access Terminal chooser for the label's verified external social channels;
 - `/download/` — Euclidean Echo 0.1.1 macOS Universal test candidate, two classified plugin slots and two classified resident sample packs.
 
-The same 50 content routes exist below `/it/` and `/ru/`. The build also
+The same 53 content routes exist below `/it/` and `/ru/`. The build also
 generates localized `404.html` pages and locale-specific web manifests, for a
-total of 153 HTML pages.
+total of 162 HTML pages.
 
 `SOCIAL_LINKS` from `src/config.mjs` is the only runtime authority for the
 Access Terminal, contact and footer social destinations. Its approved defaults
@@ -109,7 +110,7 @@ optional until a verified HTTPS URL is supplied. An explicitly blank social
 environment value omits that service; production fails closed if no verified
 destination remains.
 
-Confirmed local artwork is published for all thirteen releases. The build also
+Confirmed local artwork is published for all fourteen releases. The build also
 keeps deterministic signal plates generated from the real track waveforms as a
 safe fallback if an artwork field is ever unavailable. `data/artists.json` keeps the confirmed five-name roster
 and approved artist social links. Its ordered `gallery` arrays drive the touch, pointer and keyboard-accessible

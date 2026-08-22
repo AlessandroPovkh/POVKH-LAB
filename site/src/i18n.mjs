@@ -24,6 +24,7 @@ const common = {
     footer: { tagline: "Sound / Process / Archive", version: "Povkh Lab Recordings / catalog preview" },
     tba: "TBA",
     digital: "Digital",
+    releaseTypes: { mixtape: "Mixtape" },
     platformGenrePending: "Awaiting platform confirmation",
     openRelease: "Open release",
     status: { published: "Released", upcoming: "Upcoming" },
@@ -53,6 +54,7 @@ const common = {
     footer: { tagline: "Suono / Processo / Archivio", version: "Povkh Lab Recordings / anteprima catalogo" },
     tba: "DA DEFINIRE",
     digital: "Digitale",
+    releaseTypes: { mixtape: "Mixtape" },
     platformGenrePending: "In attesa di conferma dalla piattaforma",
     openRelease: "Apri l’uscita",
     status: { published: "Pubblicata", upcoming: "In arrivo" },
@@ -82,6 +84,7 @@ const common = {
     footer: { tagline: "Звук / Процесс / Архив", version: "Povkh Lab Recordings / превью каталога" },
     tba: "УТОЧНЯЕТСЯ",
     digital: "Цифровой",
+    releaseTypes: { mixtape: "Микстейп" },
     platformGenrePending: "Ожидает подтверждения платформы",
     openRelease: "Открыть релиз",
     status: { published: "Выпущен", upcoming: "Скоро" },
@@ -109,7 +112,7 @@ export const COPY = {
         heroTitle: ["Sound.", "Process.", "Archive."],
         lede: "Povkh Lab Recordings is a Brescia-based platform for experimental electronic music, where singular sound design, emotional precision and a disciplined visual system form one continuous work.",
         sequenceLabel: "Catalog sequence",
-        sequenceValue: "PVKH-001 → PVKH-013",
+        sequenceValue: "PVKH-001 → PVKH-014",
         catalogCta: "Open catalog",
         featuredEyebrow: "Current signal",
         featuredTitle: "Next release",
@@ -119,15 +122,15 @@ export const COPY = {
         pathsBody: "A compact public layer for releases, people and the method behind each edition.",
         paths: [
           { index: "01 / Catalog", title: "Editions", body: "Numbered releases with verified metadata, credits and listening links when public.", route: "catalog" },
-          { index: "02 / Artists", title: "People", body: "Five confirmed artist identities connected through thirteen catalog positions.", route: "artists" },
+          { index: "02 / Artists", title: "People", body: "Five confirmed artist identities connected through fourteen catalog positions.", route: "artists" },
           { index: "03 / Process", title: "Method", body: "The path from submitted masters to release, documentation and archive.", route: "process" }
         ]
       },
       catalog: {
         title: "Catalog",
-        description: "The Povkh Lab Recordings catalog: thirteen numbered electronic music releases, verified dates and upcoming editions.",
+        description: "The Povkh Lab Recordings catalog: fourteen numbered electronic music releases, verified dates and upcoming editions.",
         eyebrow: "Index / PVKH",
-        lede: "Thirteen positions, one continuous archive. Catalog order remains fixed even when release dates follow a different chronology.",
+        lede: "Fourteen positions, one continuous archive. Catalog order remains fixed even when release dates follow a different chronology.",
         publishedLabel: "Released",
         upcomingLabel: "Upcoming",
         filterLabel: "Filter catalog by release status",
@@ -363,7 +366,7 @@ export const COPY = {
         heroTitle: ["Suono.", "Processo.", "Archivio."],
         lede: "Povkh Lab Recordings è una piattaforma bresciana per la musica elettronica sperimentale, dove sound design personale, precisione emotiva e sistema visivo rigoroso formano un’unica opera continua.",
         sequenceLabel: "Sequenza di catalogo",
-        sequenceValue: "PVKH-001 → PVKH-013",
+        sequenceValue: "PVKH-001 → PVKH-014",
         catalogCta: "Apri il catalogo",
         featuredEyebrow: "Segnale attuale",
         featuredTitle: "Prossima uscita",
@@ -373,15 +376,15 @@ export const COPY = {
         pathsBody: "Un livello pubblico essenziale per uscite, persone e metodo alla base di ogni edizione.",
         paths: [
           { index: "01 / Catalogo", title: "Edizioni", body: "Uscite numerate con metadati e crediti verificati e link di ascolto, quando pubblici.", route: "catalog" },
-          { index: "02 / Artisti", title: "Persone", body: "Cinque identità artistiche confermate collegate attraverso tredici posizioni di catalogo.", route: "artists" },
+          { index: "02 / Artisti", title: "Persone", body: "Cinque identità artistiche confermate collegate attraverso quattordici posizioni di catalogo.", route: "artists" },
           { index: "03 / Processo", title: "Metodo", body: "Il percorso dai master consegnati all’uscita, alla documentazione e all’archivio.", route: "process" }
         ]
       },
       catalog: {
         title: "Catalogo",
-        description: "Il catalogo di Povkh Lab Recordings: tredici uscite numerate, date verificate ed edizioni in arrivo.",
+        description: "Il catalogo di Povkh Lab Recordings: quattordici uscite numerate, date verificate ed edizioni in arrivo.",
         eyebrow: "Indice / PVKH",
-        lede: "Tredici posizioni, un archivio continuo. L’ordine di catalogo resta fisso anche quando le date seguono una cronologia diversa.",
+        lede: "Quattordici posizioni, un archivio continuo. L’ordine di catalogo resta fisso anche quando le date seguono una cronologia diversa.",
         publishedLabel: "Pubblicate",
         upcomingLabel: "In arrivo",
         filterLabel: "Filtra il catalogo per stato dell’uscita",
@@ -617,7 +620,7 @@ export const COPY = {
         heroTitle: ["Звук.", "Процесс.", "Архив."],
         lede: "Povkh Lab Recordings — основанная в Брешии платформа для экспериментальной электронной музыки, где самобытный саунд-дизайн, эмоциональная точность и строгая визуальная система образуют единое произведение.",
         sequenceLabel: "Последовательность каталога",
-        sequenceValue: "PVKH-001 → PVKH-013",
+        sequenceValue: "PVKH-001 → PVKH-014",
         catalogCta: "Открыть каталог",
         featuredEyebrow: "Текущий сигнал",
         featuredTitle: "Следующий релиз",
@@ -627,15 +630,15 @@ export const COPY = {
         pathsBody: "Компактный публичный слой для релизов, людей и метода, стоящего за каждым изданием.",
         paths: [
           { index: "01 / Каталог", title: "Издания", body: "Нумерованные релизы с проверенными метаданными, кредитами и ссылками на прослушивание — после публикации.", route: "catalog" },
-          { index: "02 / Артисты", title: "Люди", body: "Пять подтверждённых артистических имён, связанных тринадцатью позициями каталога.", route: "artists" },
+          { index: "02 / Артисты", title: "Люди", body: "Пять подтверждённых артистических имён, связанных четырнадцатью позициями каталога.", route: "artists" },
           { index: "03 / Процесс", title: "Метод", body: "Путь от переданных мастер-файлов до релиза, документации и архива.", route: "process" }
         ]
       },
       catalog: {
         title: "Каталог",
-        description: "Каталог Povkh Lab Recordings: тринадцать нумерованных позиций, проверенные даты и предстоящие релизы.",
+        description: "Каталог Povkh Lab Recordings: четырнадцать нумерованных позиций, проверенные даты и предстоящие релизы.",
         eyebrow: "Индекс / PVKH",
-        lede: "Тринадцать позиций, один непрерывный архив. Порядок каталога остаётся неизменным, даже когда даты релизов образуют другую хронологию.",
+        lede: "Четырнадцать позиций, один непрерывный архив. Порядок каталога остаётся неизменным, даже когда даты релизов образуют другую хронологию.",
         publishedLabel: "Выпущено",
         upcomingLabel: "Скоро",
         filterLabel: "Фильтр каталога по статусу релиза",

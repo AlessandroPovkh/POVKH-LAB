@@ -1,7 +1,8 @@
-export const hasValidStreamingServiceOrder = (services) => services.length === 3
+export const hasValidStreamingServiceOrder = (services) => services.length >= 1
+  && services.length <= 3
   && services[0] === "appleMusic"
-  && services[1] === "spotify"
-  && ["youtubeMusic", "amazonMusic"].includes(services[2]);
+  && (services.length < 2 || services[1] === "spotify")
+  && (services.length < 3 || ["youtubeMusic", "amazonMusic"].includes(services[2]));
 
 const hasOnlyQueryKeys = (url, expectedKeys) => {
   const actualKeys = [...url.searchParams.keys()];
@@ -11,7 +12,7 @@ const hasOnlyQueryKeys = (url, expectedKeys) => {
 
 const serviceRules = {
   appleMusic: (url) => url.hostname === "music.apple.com"
-    && /^\/[a-z]{2}\/album\/[a-z0-9%().-]+\/\d+$/.test(url.pathname)
+    && /^\/[a-z]{2}\/album\/[^/?#]+\/\d+$/.test(url.pathname)
     && hasOnlyQueryKeys(url, ["i"])
     && /^\d{7,12}$/.test(url.searchParams.get("i") || ""),
   spotify: (url) => url.hostname === "open.spotify.com"

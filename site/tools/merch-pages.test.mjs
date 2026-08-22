@@ -35,7 +35,7 @@ const structuredData = (html) => {
 };
 
 test("renders 33 localized concept detail routes and linked overview cards", () => {
-  assert.equal(pages.size, 153);
+  assert.equal(pages.size, 162);
   assert.ok(pages.has("merch/vinyl/index.html"));
   assert.ok(pages.has("it/merch/vinyl/index.html"));
   assert.ok(pages.has("ru/merch/collector-box-set/index.html"));

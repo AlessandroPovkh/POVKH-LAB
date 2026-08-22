@@ -864,7 +864,7 @@ try {
           const structuredData = [...document.querySelectorAll('script[type="application/ld+json"]')]
             .map((script) => JSON.parse(script.textContent))
             .find((data) => Array.isArray(data["@graph"]));
-          const recording = structuredData?.["@graph"].find((item) => item["@type"] === "MusicRecording");
+          const recording = structuredData?.["@graph"].find((item) => ["MusicRecording", "MusicAlbum"].includes(item["@type"]));
           const streamingCtas = [...document.querySelectorAll('[data-release-cta="streaming"]')];
           const preorderCtas = [...document.querySelectorAll('[data-release-cta="preorder"]')];
           const primaryGenre = document.querySelector("[data-release-primary-genre]");
@@ -917,7 +917,15 @@ try {
             jsonLdGenre: recording?.genre || null,
             jsonLdHasSameAs: Object.hasOwn(recording || {}, "sameAs"),
             jsonLdSameAs: recording?.sameAs || null,
-            jsonLdHasLanguage: Object.hasOwn(recording || {}, "inLanguage")
+            jsonLdHasLanguage: Object.hasOwn(recording || {}, "inLanguage"),
+            jsonLdType: recording?.["@type"] || null,
+            jsonLdTrackCount: recording?.numTracks || null,
+            jsonLdTracks: recording?.track?.map((track) => ({
+              type: track["@type"],
+              position: track.position,
+              name: track.name,
+              duration: track.duration
+            })) || []
           };
         });
         if (!expectedRelease || releaseContract.id !== expectedRelease.id || releaseContract.status !== expectedRelease.status) {
@@ -931,6 +939,22 @@ try {
           fail(`${label}: release title language semantics mismatch ${JSON.stringify(releaseContract)}`);
         }
         if (releaseContract.jsonLdHasLanguage) fail(`${label}: JSON-LD exposes an unverified recording language`);
+        const expectedJsonLdType = expectedRelease?.trackCount === 1 ? "MusicRecording" : "MusicAlbum";
+        if (releaseContract.jsonLdType !== expectedJsonLdType) fail(`${label}: JSON-LD release type is ${releaseContract.jsonLdType}, expected ${expectedJsonLdType}`);
+        if (expectedRelease?.trackCount > 1) {
+          if (releaseContract.jsonLdTrackCount !== expectedRelease.trackCount
+            || releaseContract.jsonLdTracks.length !== expectedRelease.trackCount) {
+            fail(`${label}: album JSON-LD track count does not match source data`);
+          }
+          for (const [trackIndex, track] of expectedRelease.tracks.entries()) {
+            const structuredTrack = releaseContract.jsonLdTracks[trackIndex];
+            if (structuredTrack?.type !== "MusicRecording"
+              || structuredTrack?.position !== track.position
+              || structuredTrack?.name !== track.title) {
+              fail(`${label}: album JSON-LD track ${track.position} does not match source data`);
+            }
+          }
+        }
         const expectedPreorderCtas = expectedRelease?.preorderUrl ? 1 : 0;
         const expectedStreamingLinks = expectedRelease?.streamingLinks || [];
         const expectedStreamingServices = expectedStreamingLinks.length

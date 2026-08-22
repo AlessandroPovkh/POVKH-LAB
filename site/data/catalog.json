@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "asOf": "2026-07-15",
+  "asOf": "2026-08-22",
   "notice": "Approved multilingual catalog snapshot. TuneCore IDs are internal distribution references and are not public catalog numbers.",
   "label": {
     "officialName": "Povkh Lab Recordings",
@@ -897,7 +897,7 @@
     {
       "id": "PVKH-012",
       "slug": "pvkh-012",
-      "status": "upcoming",
+      "status": "published",
       "public": true,
       "artists": [
         "Levo.mp3"
@@ -908,13 +908,18 @@
       "tuneCoreId": "1233925115",
       "tuneCoreIdNeedsOwnerVerification": false,
       "releaseDate": "2026-08-07",
-      "preorderDate": "2026-08-01",
+      "preorderDate": null,
       "formats": [
         "digital"
       ],
       "trackCount": 1,
       "artwork": "assets/releases/pvkh-012-runway.webp",
-      "streamingLinks": null,
+      "streamingLinks": [
+        {
+          "service": "appleMusic",
+          "url": "https://music.apple.com/us/album/runway/6783742559?i=6783742563"
+        }
+      ],
       "tracks": [
         {
           "position": 1,
@@ -942,7 +947,7 @@
           "audience": "Для слушателей визуальной и кинематографической электроники, которым близки темы движения, дизайна, путешествия и импульса вперёд."
         }
       },
-      "primaryGenre": null,
+      "primaryGenre": "Electronic",
       "editorialTags": [
         "Electronica",
         "Cinematic electronica"
@@ -957,7 +962,7 @@
     {
       "id": "PVKH-013",
       "slug": "pvkh-013",
-      "status": "upcoming",
+      "status": "published",
       "public": true,
       "artists": [
         "SUBMRN"
@@ -968,13 +973,18 @@
       "tuneCoreId": "1233944903",
       "tuneCoreIdNeedsOwnerVerification": false,
       "releaseDate": "2026-07-24",
-      "preorderDate": "2026-07-19",
+      "preorderDate": null,
       "formats": [
         "digital"
       ],
       "trackCount": 1,
       "artwork": "assets/releases/pvkh-013-vse-son.webp",
-      "streamingLinks": null,
+      "streamingLinks": [
+        {
+          "service": "appleMusic",
+          "url": "https://music.apple.com/us/album/%D0%B2%D1%81%D1%91-%D1%81%D0%BE%D0%BD/6787443021?i=6787443024"
+        }
+      ],
       "tracks": [
         {
           "position": 1,
@@ -1002,7 +1012,7 @@
           "audience": "Для слушателей альтернативного рэпа, экспериментального хип-хопа и русскоязычной музыки, использующей неоднозначность как часть собственной идентичности."
         }
       },
-      "primaryGenre": null,
+      "primaryGenre": "Hip-Hop/Rap",
       "editorialTags": [
         "Rap",
         "Alternative rap",
@@ -1012,6 +1022,115 @@
       "editorial": {
         "contentBasis": "intentional_title_form_with_editorial_interpretation",
         "genreBasis": "rap_artist_supplied_other_terms_editorial_suggestion",
+        "reviewRequired": true
+      }
+    },
+    {
+      "id": "PVKH-014",
+      "slug": "pvkh-014",
+      "status": "upcoming",
+      "public": true,
+      "artists": [
+        "Alessandro Povkh",
+        "k/smokin"
+      ],
+      "artistCredit": "Alessandro Povkh & k/smokin",
+      "title": "Two Faces",
+      "titleLanguage": "en",
+      "releaseType": "mixtape",
+      "tuneCoreId": null,
+      "tuneCoreIdNeedsOwnerVerification": true,
+      "releaseDate": "2026-10-01",
+      "preorderDate": null,
+      "formats": [
+        "digital"
+      ],
+      "trackCount": 11,
+      "artwork": "assets/releases/pvkh-014-two-faces.webp",
+      "streamingLinks": null,
+      "tracks": [
+        {
+          "position": 1,
+          "title": "Intro",
+          "duration": "0:15"
+        },
+        {
+          "position": 2,
+          "title": "Of us",
+          "duration": "1:48"
+        },
+        {
+          "position": 3,
+          "title": "Red 2",
+          "duration": "2:05"
+        },
+        {
+          "position": 4,
+          "title": "Dec 12 16",
+          "duration": "2:21"
+        },
+        {
+          "position": 5,
+          "title": "Motherland",
+          "duration": "3:09"
+        },
+        {
+          "position": 6,
+          "title": "Water",
+          "duration": "1:55"
+        },
+        {
+          "position": 7,
+          "title": "Redline Malice",
+          "duration": "1:39"
+        },
+        {
+          "position": 8,
+          "title": "Office",
+          "duration": "1:07"
+        },
+        {
+          "position": 9,
+          "title": "Azimuth",
+          "duration": "2:21"
+        },
+        {
+          "position": 10,
+          "title": "Opportunist",
+          "duration": "1:09"
+        },
+        {
+          "position": 11,
+          "title": "Bigger",
+          "duration": "3:19"
+        }
+      ],
+      "content": {
+        "en": {
+          "short": "Two Faces is an eleven-track mixtape by Alessandro Povkh and k/smokin, scheduled for release on 1 October 2026.",
+          "story": "The mixtape brings eleven collaborative tracks together in one release, from Intro through Bigger.",
+          "mood": "A two-artist statement built as one continuous eleven-track sequence.",
+          "audience": "For listeners following Alessandro Povkh, k/smokin and the evolving POVKH LAB catalog."
+        },
+        "it": {
+          "short": "Two Faces è un mixtape di undici tracce di Alessandro Povkh e k/smokin, in uscita il 1 ottobre 2026.",
+          "story": "Il mixtape riunisce undici tracce collaborative in un'unica uscita, da Intro a Bigger.",
+          "mood": "Una dichiarazione a due artisti costruita come un'unica sequenza di undici tracce.",
+          "audience": "Per chi segue Alessandro Povkh, k/smokin e il catalogo in evoluzione di POVKH LAB."
+        },
+        "ru": {
+          "short": "Two Faces — микстейп Alessandro Povkh и k/smokin из 11 треков, релиз которого запланирован на 1 октября 2026 года.",
+          "story": "Микстейп объединяет 11 совместных треков в один релиз — от Intro до Bigger.",
+          "mood": "Совместное высказывание двух артистов, собранное как единая последовательность из 11 треков.",
+          "audience": "Для слушателей Alessandro Povkh, k/smokin и развивающегося каталога POVKH LAB."
+        }
+      },
+      "primaryGenre": null,
+      "editorialTags": [],
+      "preorderUrl": null,
+      "editorial": {
+        "contentBasis": "artist_supplied_release_facts",
+        "genreBasis": "unverified_until_platform_publication",
         "reviewRequired": true
       }
     }

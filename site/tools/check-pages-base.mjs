@@ -70,6 +70,6 @@ for (const relative of htmlFiles) {
   }
 }
 
-assert.equal(htmlFiles.length, 153, "GitHub Pages artifact must contain all 153 localized HTML pages");
+assert.equal(htmlFiles.length, 162, "GitHub Pages artifact must contain all 162 localized HTML pages");
 assert.ok(checkedReferences > 3000, `Expected a complete local-reference audit, checked only ${checkedReferences}`);
 console.log(`GitHub Pages base-path QA passed for ${basePath}: ${htmlFiles.length} pages, ${checkedReferences} local references.`);

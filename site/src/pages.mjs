@@ -408,6 +408,15 @@ const durationToIso = (duration) => {
   return `PT${minutes ? `${minutes}M` : ""}${seconds}S`;
 };
 
+const totalTrackDuration = (tracks) => {
+  if (tracks.some((track) => !track.duration)) return null;
+  const seconds = tracks.reduce((total, track) => {
+    const [minutes, remainder] = track.duration.split(":").map(Number);
+    return total + minutes * 60 + remainder;
+  }, 0);
+  return `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, "0")}`;
+};
+
 const GENRE_LABELS = {
   it: {
     Ambient: "Ambient",
@@ -772,8 +781,9 @@ const createLocalePages = (locale, catalog, audioLibrary, artistLibrary, merchLi
     const editorialApproved = release.editorial?.reviewRequired !== true;
     const previous = releases[releaseIndex - 1] || null;
     const next = releases[releaseIndex + 1] || null;
+    const releaseDuration = totalTrackDuration(release.tracks);
     const recordingData = {
-      "@type": "MusicRecording",
+      "@type": release.trackCount === 1 ? "MusicRecording" : "MusicAlbum",
       "@id": `${absoluteUrlFor(publicPathFor(locale, route))}#recording`,
       name: release.title,
       byArtist: release.artists.map((name) => ({
@@ -783,7 +793,14 @@ const createLocalePages = (locale, catalog, audioLibrary, artistLibrary, merchLi
       })),
       datePublished: release.releaseDate,
       genre: release.primaryGenre || undefined,
-      duration: durationToIso(release.tracks[0].duration),
+      duration: durationToIso(releaseDuration),
+      numTracks: release.trackCount === 1 ? undefined : release.trackCount,
+      track: release.trackCount === 1 ? undefined : release.tracks.map((track) => ({
+        "@type": "MusicRecording",
+        position: track.position,
+        name: track.title,
+        duration: durationToIso(track.duration)
+      })),
       url: absoluteUrlFor(publicPathFor(locale, route)),
       sameAs: release.streamingLinks
         ? release.streamingLinks
@@ -823,11 +840,11 @@ const createLocalePages = (locale, catalog, audioLibrary, artistLibrary, merchLi
             <div><dt>${escapeHtml(releaseCopy.fields.artist)}</dt><dd>${artistCreditMarkup({ artists: release.artists, artistByName, locale, currentRoute: route })}</dd></div>
             <div><dt>${escapeHtml(releaseCopy.fields.date)}</dt><dd><time datetime="${release.releaseDate}">${escapeHtml(formatDate(release.releaseDate, locale))}</time></dd></div>
             ${release.preorderDate ? `<div><dt>${escapeHtml(releaseCopy.fields.preorder)}</dt><dd><time datetime="${release.preorderDate}">${escapeHtml(formatDate(release.preorderDate, locale))}</time></dd></div>` : ""}
-            <div><dt>${escapeHtml(releaseCopy.fields.format)}</dt><dd>${escapeHtml(t.common.digital)}</dd></div>
+            <div><dt>${escapeHtml(releaseCopy.fields.format)}</dt><dd>${escapeHtml([t.common.digital, t.common.releaseTypes[release.releaseType]].filter(Boolean).join(" / "))}</dd></div>
             <div><dt>${escapeHtml(releaseCopy.fields.tracks)}</dt><dd>${release.trackCount}</dd></div>
             <div><dt>${escapeHtml(releaseCopy.fields.primaryGenre)}</dt><dd data-release-primary-genre data-verified="${release.primaryGenre ? "true" : "false"}">${escapeHtml(release.primaryGenre ? genreLabel(release.primaryGenre, locale) : t.common.platformGenrePending)}</dd></div>
             ${editorialApproved && release.editorialTags.length ? `<div><dt>${escapeHtml(releaseCopy.fields.editorialTags)}</dt><dd data-release-editorial-tags>${escapeHtml(release.editorialTags.map((tag) => genreLabel(tag, locale)).join(" / "))}</dd></div>` : ""}
-            <div><dt>${escapeHtml(releaseCopy.fields.duration)}</dt><dd>${escapeHtml(release.tracks[0].duration || t.common.tba)}</dd></div>
+            <div><dt>${escapeHtml(releaseCopy.fields.duration)}</dt><dd>${escapeHtml(releaseDuration || t.common.tba)}</dd></div>
           </dl>
         </div>
       </section>
@@ -850,7 +867,7 @@ const createLocalePages = (locale, catalog, audioLibrary, artistLibrary, merchLi
       </nav>`, {
         title: `${release.id} — ${release.title}`,
         description: conciseMetaDescription(localized.short),
-        ogType: "music.song",
+        ogType: release.trackCount === 1 ? "music.song" : "music.album",
         pageClass: "page-release",
         structuredDataExtra: recordingData
       });
