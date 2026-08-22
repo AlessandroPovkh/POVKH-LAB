@@ -420,7 +420,7 @@ const expectedPlayerTrackIds = [
   ...Array.from({ length: 11 }, (_, index) => `PVKH-014.${String(index + 1).padStart(2, "0")}`)
 ];
 if (audioLibrary.schemaVersion !== 2
-  || audioLibrary.defaultTrackId !== "PVKH-007"
+  || audioLibrary.defaultTrackId !== "PVKH-014.01"
   || audioLibrary.tracks?.length !== expectedPlayerTrackIds.length
   || audioLibrary.tracks.some((track, index) => track.id !== expectedPlayerTrackIds[index])) {
   fail("Audio library must contain PVKH-001 through PVKH-013 followed by PVKH-014.01 through PVKH-014.11");

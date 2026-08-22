@@ -62,7 +62,7 @@ photography plus complete EN/IT/RU copy are available.
 
 The global HUD audio console contains 24 tracks in canonical order: PVKH-001 →
 PVKH-013, followed by the eleven `Two Faces` tracks as PVKH-014.01 → PVKH-014.11.
-PVKH-007 “Opportunist” remains selected by default. Canonical project copies live
+PVKH-014.01 “Intro” is selected by default. Canonical project copies live
 in the root `Tracks/` folder as tagged stereo MP3 files at 320 kbps / 48 kHz;
 multi-track releases use their own catalog subdirectory. Reproducible 192 kbps
 public-player copies mirror that structure under `Tracks/streaming/`; the 320 kbps

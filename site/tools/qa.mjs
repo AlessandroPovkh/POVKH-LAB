@@ -1587,9 +1587,9 @@ try {
     }
   }
   await (await advancedControl(audioPage, "[data-player-next]")).click();
-  await audioPage.waitForFunction(() => document.querySelector("[data-player-title]")?.textContent === "ROBERT"
+  await audioPage.waitForFunction(() => document.querySelector("[data-player-title]")?.textContent === "OF US"
     && document.querySelector("[data-audio-player]")?.dataset.waveformState === "ready"
-    && document.querySelector("[data-audio-engine]")?.currentSrc.endsWith("/assets/tracks/pvkh-008-robert.mp3"));
+    && document.querySelector("[data-audio-engine]")?.currentSrc.endsWith("/assets/tracks/pvkh-014/02-of-us.mp3"));
   const nextAudio = await audioPage.evaluate(() => ({
     title: document.querySelector("[data-player-title]")?.textContent,
     artist: document.querySelector("[data-player-artist]")?.textContent,
@@ -1602,9 +1602,9 @@ try {
     await audioPage.locator("[data-player-toggle]").click();
   }
   await (await advancedControl(audioPage, "[data-player-prev]")).click();
-  await audioPage.waitForFunction(() => document.querySelector("[data-player-title]")?.textContent === "OPPORTUNIST"
+  await audioPage.waitForFunction(() => document.querySelector("[data-player-title]")?.textContent === "INTRO"
     && document.querySelector("[data-audio-player]")?.dataset.waveformState === "ready"
-    && document.querySelector("[data-audio-engine]")?.currentSrc.endsWith("/assets/tracks/pvkh-007-opportunist.mp3"));
+    && document.querySelector("[data-audio-engine]")?.currentSrc.endsWith("/assets/tracks/pvkh-014/01-intro.mp3"));
   const previousAudio = await audioPage.evaluate(() => ({
     title: document.querySelector("[data-player-title]")?.textContent,
     index: document.querySelector("[data-player-index]")?.textContent,
@@ -1695,9 +1695,9 @@ try {
   if (await audioPage.locator("[data-audio-player]").getAttribute("data-playing") === "true") {
     await audioPage.locator("[data-player-toggle]").click();
   }
-  if (!initialAudio.paused || initialAudio.title !== "OPPORTUNIST" || initialAudio.artist !== "ALESSANDRO POVKH & K/SMOKIN"
-    || initialAudio.index !== "07 / 24" || initialAudio.hudIndex !== "07 / 24" || initialAudio.trackCount !== 24
-    || initialAudio.peaksReady !== "ready" || initialAudio.mediaTitle !== "OPPORTUNIST"
+  if (!initialAudio.paused || initialAudio.title !== "INTRO" || initialAudio.artist !== "ALESSANDRO POVKH & K/SMOKIN"
+    || initialAudio.index !== "14 / 24" || initialAudio.hudIndex !== "14 / 24" || initialAudio.trackCount !== 24
+    || initialAudio.peaksReady !== "ready" || initialAudio.mediaTitle !== "INTRO"
     || Math.abs(initialAudio.volume - 0.6) > 0.001 || initialAudio.volumeValue !== "60" || initialAudio.volumeExpanded !== "false"
     || volumeOpen.expanded !== "true" || volumeOpen.hidden
     || Math.abs(volumeChanged.audio - 0.35) > 0.001 || volumeChanged.value !== "35" || volumeChanged.percent !== "35%"
@@ -1711,11 +1711,11 @@ try {
     || playingAudio.paused || playingAudio.currentTime <= 0 || playingAudio.state !== "playing"
     || endTime < defaultAudioTrack.duration - 0.2 || homeTime > 0.05 || Math.abs(arrowTime - 5) > 0.15
     || !pausedAudio.paused || pausedAudio.userPaused !== "true"
-    || nextAudio.title !== "ROBERT" || nextAudio.artist !== "LEVO.MP3" || nextAudio.index !== "08 / 24" || nextAudio.hudIndex !== "08 / 24"
-    || !nextAudio.currentSrc?.endsWith("/assets/tracks/pvkh-008-robert.mp3") || nextAudio.mediaTitle !== "ROBERT"
-    || previousAudio.title !== "OPPORTUNIST" || previousAudio.index !== "07 / 24"
-    || !previousAudio.currentSrc?.endsWith("/assets/tracks/pvkh-007-opportunist.mp3")
-    || playlistOpen.trackButtons !== 24 || playlistOpen.current !== 1 || playlistOpen.activeCatalogId !== "PVKH-007"
+    || nextAudio.title !== "OF US" || nextAudio.artist !== "ALESSANDRO POVKH & K/SMOKIN" || nextAudio.index !== "15 / 24" || nextAudio.hudIndex !== "15 / 24"
+    || !nextAudio.currentSrc?.endsWith("/assets/tracks/pvkh-014/02-of-us.mp3") || nextAudio.mediaTitle !== "OF US"
+    || previousAudio.title !== "INTRO" || previousAudio.index !== "14 / 24"
+    || !previousAudio.currentSrc?.endsWith("/assets/tracks/pvkh-014/01-intro.mp3")
+    || playlistOpen.trackButtons !== 24 || playlistOpen.current !== 1 || playlistOpen.activeCatalogId !== "PVKH-014"
     || playlistOpen.hidden || playlistOpen.expanded !== "true" || !playlistFocusReturned
     || directAudio.title !== "INTRO" || directAudio.index !== "14 / 24" || directAudio.currentTrackId !== "PVKH-014.01"
     || !directAudio.currentSrc?.endsWith("/assets/tracks/pvkh-014/01-intro.mp3")
@@ -3399,7 +3399,7 @@ try {
       artist: document.querySelector("[data-player-artist]")?.textContent,
       waveform: document.querySelector("[data-audio-player]")?.dataset.waveformState
     }));
-    if (webkitAudio.paused || webkitAudio.playing !== "true" || !webkitAudio.currentSrc?.endsWith("/assets/tracks/pvkh-007-opportunist.mp3")
+    if (webkitAudio.paused || webkitAudio.playing !== "true" || !webkitAudio.currentSrc?.endsWith("/assets/tracks/pvkh-014/01-intro.mp3")
       || webkitAudio.artist !== "ALESSANDRO POVKH & K/SMOKIN"
       || webkitAudio.waveform !== "ready"
       || Math.abs(webkitVolumeOpen.volume - 0.6) > 0.001 || webkitVolumeOpen.popupHidden
