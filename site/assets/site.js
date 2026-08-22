@@ -227,8 +227,6 @@
 
     const prepareAudio = (track, attempt = mediaAttempt) => {
       if (audio.getAttribute("src") === track.src) return;
-      audio.src = track.src;
-      audio.loop = tracks.length === 1;
       audio.addEventListener("loadedmetadata", () => {
         if (attempt !== mediaAttempt) return;
         if (pendingRestoreTime > 0 && pendingRestoreTime < audio.duration) {
@@ -237,6 +235,8 @@
         pendingRestoreTime = 0;
         syncPlaybackUi();
       }, { once: true });
+      audio.src = track.src;
+      audio.loop = tracks.length === 1;
     };
 
     const attemptPlayback = async () => {
@@ -317,7 +317,7 @@
       const duration = Number.isFinite(audio.duration) ? audio.duration : tracks[trackIndex].duration;
       if (!duration) return;
       const nextTime = Math.max(0, Math.min(duration, ratio * duration));
-      if (audio.getAttribute("src")) audio.currentTime = nextTime;
+      if (audio.readyState >= HTMLMediaElement.HAVE_METADATA) audio.currentTime = nextTime;
       else pendingRestoreTime = nextTime;
       syncPlaybackUi();
       saveState();
