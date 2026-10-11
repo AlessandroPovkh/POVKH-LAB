@@ -3171,9 +3171,11 @@ body.audio-player-ready {
   position: absolute;
   right: 0;
   bottom: 100%;
+  display: flex;
+  flex-direction: column;
   width: min(42rem, 100vw);
   max-height: calc(100dvh - var(--player-height, 0px) - 0.75rem);
-  overflow-y: auto;
+  overflow: hidden;
   overscroll-behavior: contain;
   border: 1px solid var(--signal);
   border-right: 0;
@@ -3188,6 +3190,11 @@ body.audio-player-ready {
 }
 
 .hud-player-tray-body {
+  display: flex;
+  min-height: 0;
+  flex: 1 1 auto;
+  flex-direction: column;
+  overflow: hidden;
   padding: 0 var(--space-2) var(--space-2);
 }
 
@@ -3208,7 +3215,10 @@ body.audio-player-ready {
 }
 
 .hud-player-tray .hud-audio-playlist {
+  min-height: 0;
+  flex: 1 1 auto;
   max-height: none;
+  overflow-y: auto;
 }
 
 .merch-detail {
@@ -4706,9 +4716,11 @@ body.audio-player-ready {
   position: absolute;
   right: 0;
   bottom: 100%;
+  display: flex;
+  flex-direction: column;
   width: min(42rem, 100vw);
   max-height: calc(100dvh - var(--player-height, 0px) - 0.75rem);
-  overflow-y: auto;
+  overflow: hidden;
   overscroll-behavior: contain;
 }
 

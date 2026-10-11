@@ -37,7 +37,10 @@
     "test:merch-model-builds": "node --test tools/merch-3d/*.test.mjs",
     "test:interface-hierarchy": "node --test tests/interface-hierarchy.test.mjs",
     "test:download": "node --test tests/download-page.test.mjs",
-    "test": "npm run test:merch && npm run test:merch-assets && npm run test:merch-pages && npm run test:social-links && npm run test:workflow && npm run test:merch-registration && npm run test:merch-motion && npm run test:merch-viewer-contract && npm run test:product-viewer-runtime && npm run test:product-viewer-camera && npm run test:product-viewer-catalog && npm run test:merch-model-assets && npm run test:merch-model-builds && npm run test:interface-hierarchy && npm run test:download && npm run build && npm run check && npm run qa"
+    "test": "npm run test:merch && npm run test:merch-assets && npm run test:merch-pages && npm run test:social-links && npm run test:workflow && npm run test:merch-registration && npm run test:merch-motion && npm run test:merch-viewer-contract && npm run test:product-viewer-runtime && npm run test:product-viewer-camera && npm run test:product-viewer-catalog && npm run test:merch-model-assets && npm run test:merch-model-builds && npm run test:interface-hierarchy && npm run test:download && npm run test:releases && npm run test:admin && npm run build && npm run check && npm run qa",
+    "test:releases": "node --test tests/streaming.test.mjs tests/release-catalog.test.mjs tests/release-updates.test.mjs",
+    "admin": "node tools/admin-serve.mjs",
+    "test:admin": "node --test tests/admin.test.mjs ../deployment/timeweb/oauth.test.mjs"
   },
   "devDependencies": {
     "@axe-core/playwright": "4.10.2",

@@ -1,0 +1,21 @@
+#admin-status { font: 16px/1.5 system-ui,sans-serif; padding: 18px; background:#f6f4ed; color:#171717; }
+#admin-status:empty { display:none; }
+/* Overrides target the named components in pinned Decap 3.16.3. */
+#admin-status:not(:empty) { position:fixed; z-index:10000; bottom:0; left:0; right:0; padding:6px 12px; font-size:12px; pointer-events:none; border-top:1px solid #d7d4ca; }
+@media(max-width:799px) {
+ body [class*="-EditorContainer"], body [class*="-ToolbarContainer"] { min-width:0 !important; width:100%; }
+ body [class*="-ToolbarContainer"] { height:66px; }
+ body [class*="-ToolbarSectionMain"] { flex:1; min-width:0; padding:0 4px; }
+ body [class*="-ToolbarSubSection"] { margin:0; }
+ body [class*="-ToolbarSectionMain"] button { margin:0 3px; padding:0 8px; }
+ body [class*="-PreviewButtonContainer"] { display:none; }
+ body [class*="-BackCollection"] { max-width:160px; }
+ body [class*="-ToolbarSectionBackLink"] { padding:0 6px; min-width:0; flex:0 1 170px; }
+ body [class*="-BackArrow"] { margin-right:6px; }
+ body [class*="-BackCollection"], body [class*="-BackStatus"] { white-space:normal; font-size:11px; }
+ body [class*="-ToolbarSectionMeta"] { min-width:0; padding:0 6px; }
+ body [class*="-AppHeaderSiteLink"] { display:none; }
+ body .SplitPane > .Pane1 { width:100% !important; flex:1 !important; }
+ body .SplitPane > .Pane2, body .SplitPane > .Resizer, body [class*="-ViewControls"] { display:none; }
+ body [class*="-ControlPaneContainer"] { padding-bottom:60px; }
+}

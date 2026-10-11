@@ -15,7 +15,7 @@ const catalog = JSON.parse(await readFile(path.join(siteRoot, "data", "catalog.j
 const audioLibrary = JSON.parse(await readFile(path.join(siteRoot, "data", "audio-library.json"), "utf8"));
 const artistLibrary = JSON.parse(await readFile(path.join(siteRoot, "data", "artists.json"), "utf8"));
 const merchLibrary = JSON.parse(await readFile(path.join(siteRoot, "data", "merch.json"), "utf8"));
-const defaultAudioTrack = audioLibrary.tracks.find((track) => track.catalogId === audioLibrary.defaultCatalogId);
+const defaultAudioTrack = audioLibrary.tracks.find((track) => track.id === audioLibrary.defaultTrackId);
 const tinyTexturedGlb = ({ invalidBounds = false } = {}) => {
   const png = Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAYAAABytg0kAAAACXBIWXMAAAPoAAAD6AG1e1JrAAAAEUlEQVQImWP4oKHxH4QZYAwAUJQI/QlXOVQAAAAASUVORK5CYII=", "base64");
   const imageOffset = 60;
@@ -121,6 +121,10 @@ const screenshotCases = new Map([
   ["/listen/pvkh-001/@375", "smartlink-en-mobile-375.png"],
   ["/listen/pvkh-001/@1440", "smartlink-en-desktop-1440.png"],
   ["/listen/pvkh-011/@1440", "smartlink-amazon-en-desktop-1440.png"],
+  ["/ru/listen/pvkh-014/@375", "two-faces-services-ru-mobile-375.png"],
+  ["/ru/catalog/pvkh-014/@1440", "two-faces-ru-desktop-1440.png"],
+  ["/ru/catalog/pvkh-015/@375", "out-the-box-ru-mobile-375.png"],
+  ["/ru/catalog/pvkh-016/@375", "pena-ru-mobile-375.png"],
   ["/catalog/pvkh-013/@375", "release-upcoming-en-mobile-375.png"],
   ["/it/catalog/@375", "catalog-it-mobile-375.png"],
   ["/ru/catalog/pvkh-001/@1440", "release-ru-desktop-1440.png"],
@@ -1432,8 +1436,9 @@ try {
   if (await interactionPage.locator('[data-smart-release-id="PVKH-001"]').count() !== 1) {
     fail("Smart link: keyboard navigation did not preserve release identity");
   }
-  if (await interactionPage.locator('[data-release-cta="streaming"]').count() !== 3) {
-    fail("Smart link: service chooser must expose exactly three direct destinations");
+  const expectedChooserLinks = catalog.releases.find((release) => release.id === "PVKH-001").streamingLinks.length;
+  if (await interactionPage.locator('[data-release-cta="streaming"]').count() !== expectedChooserLinks) {
+    fail(`Smart link: service chooser must expose its ${expectedChooserLinks} verified direct destinations`);
   }
   await interactionPage.locator("[data-site-index] > summary").click();
   await Promise.all([
@@ -1587,9 +1592,9 @@ try {
     }
   }
   await (await advancedControl(audioPage, "[data-player-next]")).click();
-  await audioPage.waitForFunction(() => document.querySelector("[data-player-title]")?.textContent === "ROBERT"
+  await audioPage.waitForFunction(() => document.querySelector("[data-player-title]")?.textContent === "OF US"
     && document.querySelector("[data-audio-player]")?.dataset.waveformState === "ready"
-    && document.querySelector("[data-audio-engine]")?.currentSrc.endsWith("/assets/tracks/pvkh-008-robert.mp3"));
+    && document.querySelector("[data-audio-engine]")?.currentSrc.endsWith("/assets/tracks/pvkh-014/02-of-us.mp3"));
   const nextAudio = await audioPage.evaluate(() => ({
     title: document.querySelector("[data-player-title]")?.textContent,
     artist: document.querySelector("[data-player-artist]")?.textContent,
@@ -1602,9 +1607,9 @@ try {
     await audioPage.locator("[data-player-toggle]").click();
   }
   await (await advancedControl(audioPage, "[data-player-prev]")).click();
-  await audioPage.waitForFunction(() => document.querySelector("[data-player-title]")?.textContent === "OPPORTUNIST"
+  await audioPage.waitForFunction(() => document.querySelector("[data-player-title]")?.textContent === "INTRO"
     && document.querySelector("[data-audio-player]")?.dataset.waveformState === "ready"
-    && document.querySelector("[data-audio-engine]")?.currentSrc.endsWith("/assets/tracks/pvkh-007-opportunist.mp3"));
+    && document.querySelector("[data-audio-engine]")?.currentSrc.endsWith("/assets/tracks/pvkh-014/01-intro.mp3"));
   const previousAudio = await audioPage.evaluate(() => ({
     title: document.querySelector("[data-player-title]")?.textContent,
     index: document.querySelector("[data-player-index]")?.textContent,
@@ -1620,15 +1625,16 @@ try {
   }));
   await audioPage.keyboard.press("Escape");
   const playlistFocusReturned = await audioPage.evaluate(() => document.activeElement?.hasAttribute("data-player-tray-toggle"));
-  await (await advancedControl(audioPage, '[data-player-track][data-catalog-id="PVKH-012"] [data-player-select]')).click();
-  await audioPage.waitForFunction(() => document.querySelector("[data-player-title]")?.textContent === "RUNWAY"
-    && document.querySelector("[data-audio-engine]")?.currentSrc.endsWith("/assets/tracks/pvkh-012-runway.mp3")
+  await (await advancedControl(audioPage, '[data-player-track][data-track-id="PVKH-014.01"] [data-player-select]')).click();
+  await audioPage.waitForFunction(() => document.querySelector("[data-player-title]")?.textContent === "INTRO"
+    && document.querySelector("[data-audio-engine]")?.currentSrc.endsWith("/assets/tracks/pvkh-014/01-intro.mp3")
+    && document.querySelector("[data-audio-player]")?.dataset.waveformState === "ready"
     && document.querySelector("[data-player-tray]")?.hidden === true);
   const directAudio = await audioPage.evaluate(() => ({
     title: document.querySelector("[data-player-title]")?.textContent,
     index: document.querySelector("[data-player-index]")?.textContent,
     currentSrc: document.querySelector("[data-audio-engine]")?.currentSrc,
-    currentCatalogId: document.querySelector('[data-player-select][aria-current="true"]')?.closest("[data-player-track]")?.dataset.catalogId
+    currentTrackId: document.querySelector('[data-player-select][aria-current="true"]')?.closest("[data-player-track]")?.dataset.trackId
   }));
   if (await audioPage.locator("[data-audio-player]").getAttribute("data-playing") === "true") {
     await audioPage.locator("[data-player-toggle]").click();
@@ -1694,9 +1700,9 @@ try {
   if (await audioPage.locator("[data-audio-player]").getAttribute("data-playing") === "true") {
     await audioPage.locator("[data-player-toggle]").click();
   }
-  if (!initialAudio.paused || initialAudio.title !== "OPPORTUNIST" || initialAudio.artist !== "ALESSANDRO POVKH & K/SMOKIN"
-    || initialAudio.index !== "07 / 13" || initialAudio.hudIndex !== "07 / 13" || initialAudio.trackCount !== 13
-    || initialAudio.peaksReady !== "ready" || initialAudio.mediaTitle !== "OPPORTUNIST"
+  if (!initialAudio.paused || initialAudio.title !== "INTRO" || initialAudio.artist !== "ALESSANDRO POVKH & K/SMOKIN"
+    || initialAudio.index !== "14 / 24" || initialAudio.hudIndex !== "14 / 24" || initialAudio.trackCount !== 24
+    || initialAudio.peaksReady !== "ready" || initialAudio.mediaTitle !== "INTRO"
     || Math.abs(initialAudio.volume - 0.6) > 0.001 || initialAudio.volumeValue !== "60" || initialAudio.volumeExpanded !== "false"
     || volumeOpen.expanded !== "true" || volumeOpen.hidden
     || Math.abs(volumeChanged.audio - 0.35) > 0.001 || volumeChanged.value !== "35" || volumeChanged.percent !== "35%"
@@ -1710,18 +1716,18 @@ try {
     || playingAudio.paused || playingAudio.currentTime <= 0 || playingAudio.state !== "playing"
     || endTime < defaultAudioTrack.duration - 0.2 || homeTime > 0.05 || Math.abs(arrowTime - 5) > 0.15
     || !pausedAudio.paused || pausedAudio.userPaused !== "true"
-    || nextAudio.title !== "ROBERT" || nextAudio.artist !== "LEVO.MP3" || nextAudio.index !== "08 / 13" || nextAudio.hudIndex !== "08 / 13"
-    || !nextAudio.currentSrc?.endsWith("/assets/tracks/pvkh-008-robert.mp3") || nextAudio.mediaTitle !== "ROBERT"
-    || previousAudio.title !== "OPPORTUNIST" || previousAudio.index !== "07 / 13"
-    || !previousAudio.currentSrc?.endsWith("/assets/tracks/pvkh-007-opportunist.mp3")
-    || playlistOpen.trackButtons !== 13 || playlistOpen.current !== 1 || playlistOpen.activeCatalogId !== "PVKH-007"
+    || nextAudio.title !== "OF US" || nextAudio.artist !== "ALESSANDRO POVKH & K/SMOKIN" || nextAudio.index !== "15 / 24" || nextAudio.hudIndex !== "15 / 24"
+    || !nextAudio.currentSrc?.endsWith("/assets/tracks/pvkh-014/02-of-us.mp3") || nextAudio.mediaTitle !== "OF US"
+    || previousAudio.title !== "INTRO" || previousAudio.index !== "14 / 24"
+    || !previousAudio.currentSrc?.endsWith("/assets/tracks/pvkh-014/01-intro.mp3")
+    || playlistOpen.trackButtons !== 24 || playlistOpen.current !== 1 || playlistOpen.activeCatalogId !== "PVKH-014"
     || playlistOpen.hidden || playlistOpen.expanded !== "true" || !playlistFocusReturned
-    || directAudio.title !== "RUNWAY" || directAudio.index !== "12 / 13" || directAudio.currentCatalogId !== "PVKH-012"
-    || !directAudio.currentSrc?.endsWith("/assets/tracks/pvkh-012-runway.mp3")
+    || directAudio.title !== "INTRO" || directAudio.index !== "14 / 24" || directAudio.currentTrackId !== "PVKH-014.01"
+    || !directAudio.currentSrc?.endsWith("/assets/tracks/pvkh-014/01-intro.mp3")
     || !persistentAfter.sameNode || persistentAfter.currentTime < persistentBefore || persistentAfter.playing !== "true"
-    || !persistentAfter.currentSrc?.endsWith("/assets/tracks/pvkh-012-runway.mp3") || persistentAfter.playerCount !== 1 || persistentAfter.routeMainCount !== 1
+    || !persistentAfter.currentSrc?.endsWith("/assets/tracks/pvkh-014/01-intro.mp3") || persistentAfter.playerCount !== 1 || persistentAfter.routeMainCount !== 1
     || Math.abs(persistentAfter.volume - 0.35) > 0.001 || persistentAfter.volumeValue !== "35" || persistentAfter.volumeExpanded !== "false"
-    || !persistentBack.sameNode || persistentBack.title !== "RUNWAY" || persistentBack.playerCount !== 1
+    || !persistentBack.sameNode || persistentBack.title !== "INTRO" || persistentBack.playerCount !== 1
     || !russianVolumeLabel?.startsWith("Громкость:")
     || !russianAfter.sameNode || russianAfter.paused !== russianBefore.paused || russianAfter.playing !== russianBefore.playing
     || russianAfter.currentTime <= russianBefore.currentTime || Math.abs(russianAfter.volume - russianBefore.volume) > 0.001
@@ -3398,7 +3404,7 @@ try {
       artist: document.querySelector("[data-player-artist]")?.textContent,
       waveform: document.querySelector("[data-audio-player]")?.dataset.waveformState
     }));
-    if (webkitAudio.paused || webkitAudio.playing !== "true" || !webkitAudio.currentSrc?.endsWith("/assets/tracks/pvkh-007-opportunist.mp3")
+    if (webkitAudio.paused || webkitAudio.playing !== "true" || !webkitAudio.currentSrc?.endsWith("/assets/tracks/pvkh-014/01-intro.mp3")
       || webkitAudio.artist !== "ALESSANDRO POVKH & K/SMOKIN"
       || webkitAudio.waveform !== "ready"
       || Math.abs(webkitVolumeOpen.volume - 0.6) > 0.001 || webkitVolumeOpen.popupHidden

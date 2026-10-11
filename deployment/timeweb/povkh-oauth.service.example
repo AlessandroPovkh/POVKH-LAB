@@ -1,0 +1,15 @@
+[Unit]
+Description=POVKH LAB Decap GitHub login
+After=network.target
+[Service]
+User=povkh
+WorkingDirectory=/opt/povkh-admin
+EnvironmentFile=/etc/povkh-admin.env
+ExecStart=/usr/bin/node /opt/povkh-admin/oauth.mjs
+Restart=on-failure
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+[Install]
+WantedBy=multi-user.target

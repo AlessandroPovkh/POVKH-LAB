@@ -35,7 +35,9 @@ const structuredData = (html) => {
 };
 
 test("renders 33 localized concept detail routes and linked overview cards", () => {
-  assert.equal(pages.size, 162);
+  const expectedPageCount = 3 * (11 + catalog.releases.length + artistLibrary.artists.length + merchLibrary.objects.length
+    + catalog.releases.filter((release) => release.streamingLinks).length);
+  assert.equal(pages.size, expectedPageCount);
   assert.ok(pages.has("merch/vinyl/index.html"));
   assert.ok(pages.has("it/merch/vinyl/index.html"));
   assert.ok(pages.has("ru/merch/collector-box-set/index.html"));

@@ -13,7 +13,7 @@ import {
   SOCIAL_LINKS
 } from "../src/config.mjs";
 import { validateMerchLibrary } from "../src/merch.mjs";
-import { hasValidStreamingServiceOrder, isOfficialStreamingUrl } from "../src/streaming.mjs";
+import { STREAMING_SERVICES, hasValidStreamingServiceOrder, isOfficialStreamingUrl } from "../src/streaming.mjs";
 
 const siteRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const distDir = path.join(siteRoot, "dist");
@@ -281,7 +281,11 @@ for (const [service, url] of [
 
 const expectedPageFiles = pageCases.map(({ relative }) => relative).sort();
 const allDistFiles = await listFiles(distDir);
-const htmlFiles = allDistFiles.filter((file) => file.endsWith(".html")).sort();
+const htmlFiles = allDistFiles.filter((file) => file.endsWith(".html") && file !== "admin/index.html").sort();
+const adminHtml = await readFile(path.join(distDir, "admin/index.html"), "utf8");
+if (!adminHtml.includes('content="noindex,nofollow"') || !adminHtml.includes("./app.mjs")) fail("Admin must be non-indexable and load its local entry point");
+const adminSettings = JSON.parse(await readFile(path.join(distDir, "admin/settings.json"), "utf8"));
+if (adminSettings.local !== false) fail("Public build must never enable the local editor backend");
 
 if (JSON.stringify(htmlFiles) !== JSON.stringify(expectedPageFiles)) {
   const missing = expectedPageFiles.filter((file) => !htmlFiles.includes(file));
@@ -301,7 +305,8 @@ if (catalog.label?.officialName !== "Povkh Lab Recordings" || catalog.label?.pub
 if (catalog.label?.founder !== "Aleksandr Babenko (Povkh)" || catalog.label?.founded !== 2025 || catalog.label?.location !== "Brescia (BS), Italia") {
   fail("Approved founder, year or location is incorrect");
 }
-if (!Array.isArray(catalog.releases) || catalog.releases.length !== 14) fail("Catalog must contain exactly 14 releases");
+if (!Array.isArray(catalog.releases) || catalog.releases.length < 1) fail("Catalog must contain at least one release");
+if (!catalog.releases?.some((release) => release.id === catalog.featuredReleaseId && release.public === true)) fail("Featured release must identify a public catalog release");
 const releaseByRoute = new Map();
 const smartReleaseByRoute = new Map();
 const seenTuneCoreIds = new Set();
@@ -311,16 +316,13 @@ for (const [index, release] of (catalog.releases || []).entries()) {
   if (!/^(published|upcoming)$/.test(release.status) || release.public !== true) fail(`${release.id}: invalid public status`);
   if (!Array.isArray(release.artists) || release.artistCredit !== release.artists.join(" & ")) fail(`${release.id}: invalid artist identity model`);
   if (typeof release.title !== "string" || !release.title.trim()) fail(`${release.id}: release title is missing`);
-  const expectedTitleLanguage = release.id === "PVKH-013" ? "ru" : "en";
-  if (release.titleLanguage !== expectedTitleLanguage) {
-    fail(`${release.id}: titleLanguage must be ${expectedTitleLanguage}`);
-  }
+  if (!/^(?:en|ru)$/.test(release.titleLanguage || "")) fail(`${release.id}: titleLanguage must be en or ru`);
   if (release.tuneCoreId !== null) {
     if (seenTuneCoreIds.has(release.tuneCoreId)) fail(`${release.id}: duplicate TuneCore ID`);
     seenTuneCoreIds.add(release.tuneCoreId);
-    if (!/^\d+$/.test(release.tuneCoreId)) fail(`${release.id}: invalid TuneCore ID`);
-  } else if (release.status !== "upcoming") {
-    fail(`${release.id}: published release needs a TuneCore ID`);
+    if (typeof release.tuneCoreId !== "string" || !/^\d+$/.test(release.tuneCoreId)) fail(`${release.id}: invalid TuneCore ID`);
+  } else if (release.tuneCoreIdNeedsOwnerVerification !== true) {
+    fail(`${release.id}: missing internal TuneCore ID must remain flagged for owner verification`);
   }
   if (typeof release.tuneCoreIdNeedsOwnerVerification !== "boolean") fail(`${release.id}: TuneCore ID verification flag must be boolean`);
   if (!isIsoDate(release.releaseDate)) fail(`${release.id}: invalid release date`);
@@ -333,11 +335,12 @@ for (const [index, release] of (catalog.releases || []).entries()) {
   if (!Array.isArray(release.tracks) || release.tracks.length < 1 || release.trackCount !== release.tracks.length) {
     fail(`${release.id}: trackCount must match its non-empty tracklist`);
   } else {
-    if (index < 13) {
-      if (release.trackCount !== 1 || release.releaseType != null || release.tracks[0].title !== release.title) {
-        fail(`${release.id}: must remain a one-track single with matching release and track titles`);
-      }
-    } else if (release.id !== "PVKH-014" || release.trackCount !== 11 || release.releaseType !== "mixtape") {
+    if (release.releaseType == null || release.releaseType === "single") {
+      if (release.trackCount !== 1 || release.tracks[0].title !== release.title) fail(`${release.id}: single must have one track with the release title`);
+    } else if (release.releaseType !== "mixtape" || release.trackCount < 2) {
+      fail(`${release.id}: releaseType must identify a single or a multi-track mixtape`);
+    }
+    if (release.id === "PVKH-014" && (release.trackCount !== 11 || release.releaseType !== "mixtape")) {
       fail("PVKH-014: must remain the approved 11-track mixtape");
     }
     for (const [trackIndex, track] of release.tracks.entries()) {
@@ -360,8 +363,8 @@ for (const [index, release] of (catalog.releases || []).entries()) {
     fail(`${release.id}: editorial provenance is incomplete`);
   }
   if (release.status === "published") {
-    if (!Array.isArray(release.streamingLinks) || release.streamingLinks.length < 1 || release.streamingLinks.length > 3) {
-      fail(`${release.id}: published release must have one to three verified streaming links`);
+    if (!Array.isArray(release.streamingLinks) || release.streamingLinks.length < 1 || release.streamingLinks.length > STREAMING_SERVICES.length) {
+      fail(`${release.id}: published release must have verified links from the supported streaming services`);
     } else {
       const services = release.streamingLinks.map((link) => link?.service);
       if (!hasValidStreamingServiceOrder(services)) {
@@ -399,6 +402,7 @@ for (const [index, release] of (catalog.releases || []).entries()) {
   for (const locale of locales) {
     const localized = release.content?.[locale.id];
     for (const field of ["short", "story", "mood", "audience"]) {
+      if (["mood", "audience"].includes(field) && localized?.[field] === null && release.editorial?.reviewRequired === true) continue;
       if (typeof localized?.[field] !== "string" || !localized[field].trim()) fail(`${release.id}: content.${locale.id}.${field} is missing`);
     }
   }
@@ -413,11 +417,15 @@ for (const [id, expectedDate] of [["PVKH-001", "2025-07-11"], ["PVKH-002", "2025
 }
 if (catalog.releases?.find((release) => release.id === "PVKH-009")?.title !== "Near (Slowed)") fail("PVKH-009: official title regressed");
 if (catalog.releases?.find((release) => release.id === "PVKH-013")?.title !== "Все сон") fail("PVKH-013: intentional title spelling regressed");
-if (catalog.asOf !== "2026-08-22") fail("Catalog snapshot must reflect the 2026-08-22 release update");
-if (catalog.releases?.length !== 14) fail("Catalog must contain fourteen releases");
-if (audioLibrary.tracks?.length !== 13
-  || audioLibrary.tracks.some((track, index) => track.catalogId !== catalog.releases?.[index]?.id)) {
-  fail("Audio library must contain the exact PVKH-001 through PVKH-013 catalog sequence");
+const expectedPlayerTrackIds = [
+  ...Array.from({ length: 13 }, (_, index) => `PVKH-${String(index + 1).padStart(3, "0")}`),
+  ...Array.from({ length: 11 }, (_, index) => `PVKH-014.${String(index + 1).padStart(2, "0")}`)
+];
+if (audioLibrary.schemaVersion !== 2
+  || audioLibrary.defaultTrackId !== "PVKH-014.01"
+  || audioLibrary.tracks?.length !== expectedPlayerTrackIds.length
+  || audioLibrary.tracks.some((track, index) => track.id !== expectedPlayerTrackIds[index])) {
+  fail("Audio library must contain PVKH-001 through PVKH-013 followed by PVKH-014.01 through PVKH-014.11");
 }
 for (const id of ["PVKH-012", "PVKH-013"]) {
   if (catalog.releases?.find((release) => release.id === id)?.status !== "published") {
@@ -429,7 +437,9 @@ if (!twoFaces
   || twoFaces.title !== "Two Faces"
   || twoFaces.artistCredit !== "Alessandro Povkh & k/smokin"
   || twoFaces.releaseDate !== "2026-10-01"
-  || twoFaces.status !== "upcoming"
+  || twoFaces.status !== "published"
+  || twoFaces.primaryGenre !== "Electronic"
+  || catalog.featuredReleaseId !== twoFaces.id
   || twoFaces.trackCount !== 11
   || twoFaces.tracks?.length !== 11) {
   fail("PVKH-014: Two Faces mixtape metadata is incomplete");
@@ -655,7 +665,7 @@ for (const pageCase of pageCases) {
   const playerSelects = tagsFor(html, "button").filter((tag) => attribute(tag, "data-player-select") !== null);
   const playerTrays = tagsFor(html, "section").filter((tag) => attribute(tag, "data-player-tray") !== null);
   const playlistToggles = tagsFor(html, "button").filter((tag) => attribute(tag, "data-player-playlist-toggle") !== null);
-  const defaultTrack = audioLibrary.tracks.find((track) => track.catalogId === audioLibrary.defaultCatalogId);
+  const defaultTrack = audioLibrary.tracks.find((track) => track.id === audioLibrary.defaultTrackId);
   if (audioPlayerTags.length !== 1
     || attribute(audioPlayerTags[0], "data-track-count") !== String(audioLibrary.tracks.length)
     || playerTracks.length !== audioLibrary.tracks.length
@@ -677,20 +687,22 @@ for (const pageCase of pageCases) {
   }
   for (const [index, expected] of audioLibrary.tracks.entries()) {
     const release = catalog.releases.find((item) => item.id === expected.catalogId);
+    const catalogTrack = release?.tracks.find((track) => track.position === expected.position);
     const item = playerTracks[index];
-    if (!release || !item
+    if (!release || !catalogTrack || !item
+      || attribute(item, "data-track-id") !== expected.id
       || attribute(item, "data-catalog-id") !== expected.catalogId
       || !attribute(item, "data-src")?.endsWith(`assets/tracks/${expected.file}`)
       || !attribute(item, "data-waveform")?.endsWith(`assets/audio/${expected.waveform}`)
       || attribute(item, "data-duration") !== String(expected.duration)
-      || attribute(item, "data-title") !== escapeHtml(release.title.toUpperCase())
+      || attribute(item, "data-title") !== escapeHtml(catalogTrack.title.toUpperCase())
       || attribute(item, "data-artist") !== escapeHtml(release.artistCredit.toUpperCase())
-      || (attribute(item, "data-player-default") === "true") !== (expected.catalogId === audioLibrary.defaultCatalogId)) {
-      fail(`${label}: player track ${expected.catalogId} does not match the audio library`);
+      || (attribute(item, "data-player-default") === "true") !== (expected.id === audioLibrary.defaultTrackId)) {
+      fail(`${label}: player track ${expected.id} does not match the audio library`);
     }
     const select = playerSelects[index];
-    if (!select || !attribute(select, "aria-label") || (attribute(select, "aria-current") === "true") !== (expected.catalogId === audioLibrary.defaultCatalogId)) {
-      fail(`${label}: player selector ${expected.catalogId} is not keyboard-accessible or has incorrect current state`);
+    if (!select || !attribute(select, "aria-label") || (attribute(select, "aria-current") === "true") !== (expected.id === audioLibrary.defaultTrackId)) {
+      fail(`${label}: player selector ${expected.id} is not keyboard-accessible or has incorrect current state`);
     }
   }
 
@@ -936,7 +948,7 @@ for (const pageCase of pageCases) {
 
   const statusMarkerCount = (html.match(/\sdata-release-status="(?:published|upcoming)"/g) || []).length;
   const expectedStatusMarkerCount = pageCase.route === ""
-    ? 1
+    ? 1 + upcomingReleases.length
     : pageCase.route === "catalog"
       ? catalog.releases.length
       : releaseByRoute.has(pageCase.route)

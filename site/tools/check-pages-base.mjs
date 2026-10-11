@@ -8,6 +8,11 @@ const distDir = path.join(siteRoot, "dist");
 const basePath = process.env.POVKH_SITE_BASE_PATH || "";
 const testOrigin = "https://pages.invalid";
 const siteOrigin = process.env.POVKH_SITE_ORIGIN || "https://povkh-lab.example";
+const catalog = JSON.parse(await readFile(path.join(siteRoot, "data", "catalog.json"), "utf8"));
+const artists = JSON.parse(await readFile(path.join(siteRoot, "data", "artists.json"), "utf8"));
+const merch = JSON.parse(await readFile(path.join(siteRoot, "data", "merch.json"), "utf8"));
+const expectedPageCount = 3 * (11 + catalog.releases.length + artists.artists.length + merch.objects.length
+  + catalog.releases.filter((release) => release.streamingLinks).length);
 
 assert.match(
   basePath,
@@ -39,7 +44,17 @@ const localTargetFor = (pathname) => {
   return target;
 };
 
-const htmlFiles = await listHtml(distDir);
+const htmlFiles = (await listHtml(distDir)).filter(file => file !== "admin/index.html");
+const adminHtml = await readFile(path.join(distDir, "admin/index.html"), "utf8");
+assert.match(adminHtml, /noindex,nofollow/);
+const adminSettings = JSON.parse(await readFile(path.join(distDir, "admin/settings.json"), "utf8"));
+assert.equal(adminSettings.basePath, basePath);
+for (const [,reference] of adminHtml.matchAll(/\s(?:href|src)="([^"]+)"/g)) {
+  const url = new URL(reference, `${testOrigin}${basePath}/admin/`);
+  if (url.origin !== testOrigin) continue;
+  assert.ok(url.pathname.startsWith(`${basePath}/admin/`));
+  assert.ok((await stat(path.join(distDir, localTargetFor(url.pathname)))).isFile());
+}
 let checkedReferences = 0;
 
 for (const relative of htmlFiles) {
@@ -70,6 +85,6 @@ for (const relative of htmlFiles) {
   }
 }
 
-assert.equal(htmlFiles.length, 162, "GitHub Pages artifact must contain all 162 localized HTML pages");
+assert.equal(htmlFiles.length, expectedPageCount, `GitHub Pages artifact must contain all ${expectedPageCount} localized HTML pages`);
 assert.ok(checkedReferences > 3000, `Expected a complete local-reference audit, checked only ${checkedReferences}`);
 console.log(`GitHub Pages base-path QA passed for ${basePath}: ${htmlFiles.length} pages, ${checkedReferences} local references.`);

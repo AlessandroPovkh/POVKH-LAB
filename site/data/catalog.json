@@ -1,6 +1,7 @@
 {
   "schemaVersion": 2,
-  "asOf": "2026-08-22",
+  "asOf": "2026-10-11",
+  "featuredReleaseId": "PVKH-014",
   "notice": "Approved multilingual catalog snapshot. TuneCore IDs are internal distribution references and are not public catalog numbers.",
   "label": {
     "officialName": "Povkh Lab Recordings",
@@ -1028,7 +1029,7 @@
     {
       "id": "PVKH-014",
       "slug": "pvkh-014",
-      "status": "upcoming",
+      "status": "published",
       "public": true,
       "artists": [
         "Alessandro Povkh",
@@ -1047,7 +1048,32 @@
       ],
       "trackCount": 11,
       "artwork": "assets/releases/pvkh-014-two-faces.webp",
-      "streamingLinks": null,
+      "streamingLinks": [
+        {
+          "service": "appleMusic",
+          "url": "https://music.apple.com/us/album/two-faces-mixtape/6804368976"
+        },
+        {
+          "service": "spotify",
+          "url": "https://open.spotify.com/album/3DVh5E77CD0OL8XcEzrzhT"
+        },
+        {
+          "service": "amazonMusic",
+          "url": "https://music.amazon.ca/albums/B0HG76FXVM"
+        },
+        {
+          "service": "yandexMusic",
+          "url": "https://music.yandex.ru/album/43660869"
+        },
+        {
+          "service": "vkMusic",
+          "url": "https://music.vk.com/link/sNz9i"
+        },
+        {
+          "service": "kionMusic",
+          "url": "https://music.mts.ru/album/43660869"
+        }
+      ],
       "tracks": [
         {
           "position": 1,
@@ -1107,22 +1133,80 @@
       ],
       "content": {
         "en": {
-          "short": "Two Faces is an eleven-track mixtape by Alessandro Povkh and k/smokin, scheduled for release on 1 October 2026.",
+          "short": "Two Faces is an eleven-track mixtape by Alessandro Povkh and k/smokin, released on 1 October 2026.",
           "story": "The mixtape brings eleven collaborative tracks together in one release, from Intro through Bigger.",
           "mood": "A two-artist statement built as one continuous eleven-track sequence.",
           "audience": "For listeners following Alessandro Povkh, k/smokin and the evolving POVKH LAB catalog."
         },
         "it": {
-          "short": "Two Faces è un mixtape di undici tracce di Alessandro Povkh e k/smokin, in uscita il 1 ottobre 2026.",
+          "short": "Two Faces è un mixtape di undici tracce di Alessandro Povkh e k/smokin, pubblicato il 1 ottobre 2026.",
           "story": "Il mixtape riunisce undici tracce collaborative in un'unica uscita, da Intro a Bigger.",
           "mood": "Una dichiarazione a due artisti costruita come un'unica sequenza di undici tracce.",
           "audience": "Per chi segue Alessandro Povkh, k/smokin e il catalogo in evoluzione di POVKH LAB."
         },
         "ru": {
-          "short": "Two Faces — микстейп Alessandro Povkh и k/smokin из 11 треков, релиз которого запланирован на 1 октября 2026 года.",
+          "short": "Two Faces — микстейп Alessandro Povkh и k/smokin из 11 треков, вышедший 1 октября 2026 года.",
           "story": "Микстейп объединяет 11 совместных треков в один релиз — от Intro до Bigger.",
           "mood": "Совместное высказывание двух артистов, собранное как единая последовательность из 11 треков.",
           "audience": "Для слушателей Alessandro Povkh, k/smokin и развивающегося каталога POVKH LAB."
+        }
+      },
+      "primaryGenre": "Electronic",
+      "editorialTags": [],
+      "preorderUrl": null,
+      "editorial": {
+        "contentBasis": "artist_supplied_release_facts",
+        "genreBasis": "apple_music_release_page",
+        "reviewRequired": true
+      }
+    },
+    {
+      "id": "PVKH-015",
+      "slug": "pvkh-015",
+      "status": "upcoming",
+      "public": true,
+      "artists": [
+        "Levo.mp3"
+      ],
+      "artistCredit": "Levo.mp3",
+      "title": "Out the box",
+      "titleLanguage": "en",
+      "releaseType": "single",
+      "tuneCoreId": null,
+      "tuneCoreIdNeedsOwnerVerification": true,
+      "releaseDate": "2026-10-16",
+      "preorderDate": null,
+      "formats": [
+        "digital"
+      ],
+      "trackCount": 1,
+      "artwork": "assets/releases/pvkh-015-out-the-box.webp",
+      "streamingLinks": null,
+      "tracks": [
+        {
+          "position": 1,
+          "title": "Out the box",
+          "duration": null
+        }
+      ],
+      "content": {
+        "en": {
+          "short": "Out the box by Levo.mp3 is scheduled for release on 16 October 2026.",
+          "story": "Levo.mp3’s upcoming track Out the box is due on 16 October 2026.",
+          "mood": null,
+          "audience": null
+        },
+        "it": {
+          "short": "Out the box di Levo.mp3 uscirà il 16 ottobre 2026.",
+          "story": "Il brano Out the box di Levo.mp3 è in uscita il 16 ottobre 2026.",
+          "mood": null,
+          "audience": null
+        },
+        "ru": {
+          "short": "Out the box — трек Levo.mp3, который выйдет 16 октября 2026 года.",
+          "story": "Релиз трека Out the box от Levo.mp3 запланирован на 16 октября 2026 года.",
+          "mood": null,
+          "audience": null
         }
       },
       "primaryGenre": null,
@@ -1130,7 +1214,65 @@
       "preorderUrl": null,
       "editorial": {
         "contentBasis": "artist_supplied_release_facts",
-        "genreBasis": "unverified_until_platform_publication",
+        "genreBasis": "not_supplied",
+        "reviewRequired": true
+      }
+    },
+    {
+      "id": "PVKH-016",
+      "slug": "pvkh-016",
+      "status": "upcoming",
+      "public": true,
+      "artists": [
+        "SUBMRN"
+      ],
+      "artistCredit": "SUBMRN",
+      "title": "пена",
+      "titleLanguage": "ru",
+      "releaseType": "single",
+      "tuneCoreId": null,
+      "tuneCoreIdNeedsOwnerVerification": true,
+      "releaseDate": "2026-11-13",
+      "preorderDate": null,
+      "formats": [
+        "digital"
+      ],
+      "trackCount": 1,
+      "artwork": "assets/releases/pvkh-016-pena.webp",
+      "streamingLinks": null,
+      "tracks": [
+        {
+          "position": 1,
+          "title": "пена",
+          "duration": null
+        }
+      ],
+      "content": {
+        "en": {
+          "short": "пена by SUBMRN is scheduled for release on 13 November 2026.",
+          "story": "SUBMRN’s upcoming track пена is due on 13 November 2026.",
+          "mood": null,
+          "audience": null
+        },
+        "it": {
+          "short": "пена di SUBMRN uscirà il 13 novembre 2026.",
+          "story": "Il brano пена di SUBMRN è in uscita il 13 novembre 2026.",
+          "mood": null,
+          "audience": null
+        },
+        "ru": {
+          "short": "«пена» — трек SUBMRN, который выйдет 13 ноября 2026 года.",
+          "story": "Релиз трека «пена» от SUBMRN запланирован на 13 ноября 2026 года.",
+          "mood": null,
+          "audience": null
+        }
+      },
+      "primaryGenre": null,
+      "editorialTags": [],
+      "preorderUrl": null,
+      "editorial": {
+        "contentBasis": "artist_supplied_release_facts",
+        "genreBasis": "not_supplied",
         "reviewRequired": true
       }
     }

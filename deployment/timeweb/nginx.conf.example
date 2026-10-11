@@ -1,0 +1,16 @@
+# Merge inside an existing HTTPS server block after setting your real domain/TLS.
+# Deploy directory: /srv/povkh-lab; site root always points at the current release.
+root /srv/povkh-lab/current;
+index index.html;
+location / { try_files $uri $uri/ =404; }
+location ^~ /admin/auth {
+    proxy_pass http://127.0.0.1:4180;
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-Proto https;
+    access_log off;
+}
+location /admin/ {
+    add_header Cache-Control "no-store" always;
+    add_header Cross-Origin-Opener-Policy "same-origin-allow-popups" always;
+    try_files $uri $uri/ =404;
+}

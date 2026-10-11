@@ -1,0 +1,64 @@
+name: Build and publish to Timeweb
+on:
+  push:
+    branches: [main]
+    paths: ['site/**', 'deployment/timeweb/**', '.github/workflows/timeweb.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: timeweb-production
+  cancel-in-progress: false
+jobs:
+  publish:
+    # Remains off until the hosting connection is configured and checked.
+    if: vars.TIMEWEB_DEPLOY_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    environment: timeweb-production
+    env:
+      POVKH_SITE_MODE: production
+      POVKH_SITE_ORIGIN: ${{ vars.POVKH_SITE_ORIGIN }}
+      POVKH_SITE_BASE_PATH: ''
+      POVKH_CONTACT_EMAIL: ${{ vars.POVKH_CONTACT_EMAIL }}
+      POVKH_SOCIAL_TELEGRAM: ${{ vars.POVKH_SOCIAL_TELEGRAM }}
+      POVKH_SOCIAL_TIKTOK: ${{ vars.POVKH_SOCIAL_TIKTOK }}
+      POVKH_SOCIAL_INSTAGRAM: ${{ vars.POVKH_SOCIAL_INSTAGRAM }}
+      POVKH_SOCIAL_YOUTUBE: ${{ vars.POVKH_SOCIAL_YOUTUBE }}
+      POVKH_SOCIAL_SOUNDCLOUD: ${{ vars.POVKH_SOCIAL_SOUNDCLOUD }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: site/package-lock.json
+      - run: npm ci
+        working-directory: site
+      - run: npm run test:admin && npm run test:releases && npm run build && npm run check
+        working-directory: site
+      - uses: actions/upload-artifact@v4
+        with:
+          name: povkh-site-${{ github.sha }}
+          path: site/dist
+          include-hidden-files: true
+          retention-days: 14
+      - name: Configure SSH
+        env:
+          DEPLOY_KEY: ${{ secrets.TIMEWEB_SSH_KEY }}
+          KNOWN_HOSTS: ${{ secrets.TIMEWEB_KNOWN_HOSTS }}
+        run: |
+          test -n "$DEPLOY_KEY" && test -n "$KNOWN_HOSTS"
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$DEPLOY_KEY" > ~/.ssh/id_ed25519
+          printf '%s\n' "$KNOWN_HOSTS" > ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/id_ed25519 ~/.ssh/known_hosts
+      - name: Upload and atomically activate checked release
+        env:
+          TIMEWEB_HOST: ${{ secrets.TIMEWEB_HOST }}
+          TIMEWEB_USER: ${{ secrets.TIMEWEB_USER }}
+          TIMEWEB_PORT: ${{ vars.TIMEWEB_PORT }}
+          TIMEWEB_ROOT: ${{ vars.TIMEWEB_ROOT }}
+        run: bash deployment/timeweb/deploy.sh
+      - name: Remove runner credentials
+        if: always()
+        run: rm -f ~/.ssh/id_ed25519 ~/.ssh/known_hosts

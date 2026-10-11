@@ -21,7 +21,7 @@ import {
   SITE_ORIGIN,
   SOCIAL_LINKS
 } from "../src/config.mjs";
-import { hasValidStreamingServiceOrder, isOfficialStreamingUrl } from "../src/streaming.mjs";
+import { STREAMING_SERVICES, hasValidStreamingServiceOrder, isOfficialStreamingUrl } from "../src/streaming.mjs";
 
 const siteRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const distDir = path.join(siteRoot, "dist");
@@ -29,12 +29,12 @@ const stageDir = path.join(siteRoot, `.dist-stage-${process.pid}`);
 const backupDir = path.join(siteRoot, `.dist-backup-${process.pid}`);
 
 const validateStreamingLinks = (release) => {
-  if (!Array.isArray(release.streamingLinks) || release.streamingLinks.length < 1 || release.streamingLinks.length > 3) {
-    throw new Error(`${release.id} published release must contain one to three verified streaming links`);
+  if (!Array.isArray(release.streamingLinks) || release.streamingLinks.length < 1 || release.streamingLinks.length > STREAMING_SERVICES.length) {
+    throw new Error(`${release.id} published release must contain verified links from the supported streaming services`);
   }
   const services = release.streamingLinks.map((link) => link?.service);
   if (!hasValidStreamingServiceOrder(services)) {
-    throw new Error(`${release.id} streaming order must be Apple Music, Spotify and one verified third service`);
+    throw new Error(`${release.id} streaming links must follow the supported service order without duplicates`);
   }
   if (new Set(services).size !== services.length) throw new Error(`${release.id} streaming services must be unique`);
   const urls = new Set();
@@ -67,8 +67,11 @@ const readCatalog = async () => {
   if (catalog.label.founded !== 2025 || catalog.label.location !== "Brescia (BS), Italia" || catalog.label.founder !== "Aleksandr Babenko (Povkh)") {
     throw new Error("catalog.json label facts do not match the approved founder, year or location");
   }
-  if (catalog.releases.length !== 14) {
-    throw new Error("Approved catalog must contain exactly 14 releases");
+  if (catalog.releases.length < 1) {
+    throw new Error("Approved catalog must contain at least one release");
+  }
+  if (!catalog.releases.some((release) => release.id === catalog.featuredReleaseId && release.public === true)) {
+    throw new Error("catalog.json featuredReleaseId must identify a public catalog release");
   }
 
   const seenSlugs = new Set();
@@ -94,15 +97,11 @@ const readCatalog = async () => {
     if (!/^(?:en|ru)$/.test(release.titleLanguage || "")) {
       throw new Error(`${release.id} titleLanguage must be en or ru`);
     }
-    const expectedTitleLanguage = release.id === "PVKH-013" ? "ru" : "en";
-    if (release.titleLanguage !== expectedTitleLanguage) {
-      throw new Error(`${release.id} titleLanguage must be ${expectedTitleLanguage}`);
-    }
     if (!Array.isArray(release.artists) || release.artists.length < 1 || release.artists.some((artist) => typeof artist !== "string" || !artist.trim())) {
       throw new Error(`${release.id} artists must contain at least one canonical artist name`);
     }
-    if (release.artwork !== null && !/^assets\/releases\/[a-z0-9-]+\.webp$/.test(release.artwork || "")) {
-      throw new Error(`${release.id} artwork must be null or a safe approved WebP asset path`);
+    if (release.artwork !== null && !/^assets\/releases\/[a-z0-9][a-z0-9._-]*\.(webp|jpe?g|png)$/i.test(release.artwork || "")) {
+      throw new Error(`${release.id} artwork must be null or a safe release image asset path`);
     }
     if (release.artwork && !await exists(path.join(siteRoot, release.artwork))) {
       throw new Error(`${release.id} artwork is missing: ${release.artwork}`);
@@ -114,11 +113,11 @@ const readCatalog = async () => {
       throw new Error(`${release.id} artistCredit must be derived from artists with an ampersand separator`);
     }
     if (release.tuneCoreId !== null) {
-      if (!/^\d+$/.test(release.tuneCoreId)) throw new Error(`${release.id} TuneCore ID must contain digits only or be null`);
+      if (typeof release.tuneCoreId !== "string" || !/^\d+$/.test(release.tuneCoreId)) throw new Error(`${release.id} TuneCore ID must contain digits only or be null`);
       if (seenTuneCoreIds.has(release.tuneCoreId)) throw new Error(`Duplicate TuneCore ID: ${release.tuneCoreId}`);
       seenTuneCoreIds.add(release.tuneCoreId);
-    } else if (release.status !== "upcoming") {
-      throw new Error(`${release.id} published release needs a TuneCore ID`);
+    } else if (release.tuneCoreIdNeedsOwnerVerification !== true) {
+      throw new Error(`${release.id} missing internal TuneCore ID must remain flagged for owner verification`);
     }
     if (typeof release.tuneCoreIdNeedsOwnerVerification !== "boolean") {
       throw new Error(`${release.id} must declare whether its internal TuneCore ID needs owner verification`);
@@ -152,11 +151,14 @@ const readCatalog = async () => {
     if (!Array.isArray(release.tracks) || release.tracks.length < 1 || release.trackCount !== release.tracks.length) {
       throw new Error(`${release.id} trackCount must match its non-empty tracklist`);
     }
-    if (index < 13) {
-      if (release.trackCount !== 1 || release.releaseType != null || release.tracks[0].title !== release.title) {
-        throw new Error(`${release.id} must remain a one-track single with matching release and track titles`);
+    if (release.releaseType == null || release.releaseType === "single") {
+      if (release.trackCount !== 1 || release.tracks[0].title !== release.title) {
+        throw new Error(`${release.id} single must have one track with the release title`);
       }
-    } else if (release.id !== "PVKH-014" || release.trackCount !== 11 || release.releaseType !== "mixtape") {
+    } else if (release.releaseType !== "mixtape" || release.trackCount < 2) {
+      throw new Error(`${release.id} releaseType must identify a single or a multi-track mixtape`);
+    }
+    if (release.id === "PVKH-014" && (release.trackCount !== 11 || release.releaseType !== "mixtape")) {
       throw new Error("PVKH-014 must remain the approved 11-track mixtape");
     }
     for (const [trackIndex, track] of release.tracks.entries()) {
@@ -202,6 +204,7 @@ const readCatalog = async () => {
     for (const locale of ["en", "it", "ru"]) {
       const localized = release.content?.[locale];
       for (const field of ["short", "story", "mood", "audience"]) {
+        if (["mood", "audience"].includes(field) && localized?.[field] === null && release.editorial.reviewRequired === true) continue;
         if (typeof localized?.[field] !== "string" || !localized[field].trim()) {
           throw new Error(`${release.id} content.${locale}.${field} must be a non-empty string`);
         }
@@ -274,9 +277,9 @@ const readAudioLibrary = async (catalog) => {
   const raw = await readFile(path.join(siteRoot, "data", "audio-library.json"), "utf8");
   const library = JSON.parse(raw);
   const format = library.format;
-  if (library.schemaVersion !== 1
+  if (library.schemaVersion !== 2
     || !Array.isArray(library.tracks)
-    || library.tracks.length !== 13
+    || library.tracks.length !== 24
     || format?.container !== "mp3"
     || format?.codec !== "mp3"
     || format?.sampleRate !== 48000
@@ -290,28 +293,38 @@ const readAudioLibrary = async (catalog) => {
   const files = new Set();
   const waveforms = new Set();
   for (const [index, track] of library.tracks.entries()) {
-    const release = catalog.releases[index];
-    if (!release || track.catalogId !== release.id) {
-      throw new Error(`Audio position ${index + 1} must match ${release?.id || "the approved 13-release audio catalog"}`);
+    const expectedId = index < 13
+      ? `PVKH-${String(index + 1).padStart(3, "0")}`
+      : `PVKH-014.${String(index - 12).padStart(2, "0")}`;
+    const release = catalog.releases.find((item) => item.id === track.catalogId);
+    const catalogTrack = release?.tracks.find((item) => item.position === track.position);
+    if (track.id !== expectedId || !release || !catalogTrack
+      || (index < 13 && (track.catalogId !== expectedId || track.position !== 1))
+      || (index >= 13 && (track.catalogId !== "PVKH-014" || track.position !== index - 12))) {
+      throw new Error(`Audio position ${index + 1} must match ${expectedId}`);
     }
-    if (!/^pvkh-\d{3}-[a-z0-9-]+\.mp3$/.test(track.file || "") || files.has(track.file)) {
-      throw new Error(`${track.catalogId} must use a unique safe MP3 filename`);
+    if (!/^(?:pvkh-\d{3}-[a-z0-9-]+|pvkh-\d{3}\/\d{2}-[a-z0-9-]+)\.mp3$/.test(track.file || "") || files.has(track.file)) {
+      throw new Error(`${track.id} must use a unique safe MP3 filename`);
     }
-    if (!/^pvkh-\d{3}-[a-z0-9-]+\.waveform\.json$/.test(track.waveform || "") || waveforms.has(track.waveform)) {
-      throw new Error(`${track.catalogId} must use a unique safe waveform filename`);
+    if (!/^(?:pvkh-\d{3}-[a-z0-9-]+|pvkh-\d{3}\/\d{2}-[a-z0-9-]+)\.waveform\.json$/.test(track.waveform || "") || waveforms.has(track.waveform)) {
+      throw new Error(`${track.id} must use a unique safe waveform filename`);
     }
     if (!Number.isFinite(track.duration) || track.duration <= 0) {
-      throw new Error(`${track.catalogId} must declare a positive duration`);
+      throw new Error(`${track.id} must declare a positive duration`);
+    }
+    const [minutes, seconds] = catalogTrack.duration.split(":").map(Number);
+    if (Math.abs(track.duration - ((minutes * 60) + seconds)) >= 1) {
+      throw new Error(`${track.id} duration must match the catalog track`);
     }
     files.add(track.file);
     waveforms.add(track.waveform);
 
     const source = path.join(siteRoot, "..", "Tracks", track.file);
-    if (!await exists(source)) throw new Error(`${track.catalogId} source is missing: Tracks/${track.file}`);
+    if (!await exists(source)) throw new Error(`${track.id} source is missing: Tracks/${track.file}`);
     const streamingSource = path.join(siteRoot, "..", "Tracks", "streaming", track.file);
-    if (!await exists(streamingSource)) throw new Error(`${track.catalogId} streaming source is missing: Tracks/streaming/${track.file}`);
+    if (!await exists(streamingSource)) throw new Error(`${track.id} streaming source is missing: Tracks/streaming/${track.file}`);
     const waveformPath = path.join(siteRoot, "assets", "audio", track.waveform);
-    if (!await exists(waveformPath)) throw new Error(`${track.catalogId} waveform is missing: assets/audio/${track.waveform}`);
+    if (!await exists(waveformPath)) throw new Error(`${track.id} waveform is missing: assets/audio/${track.waveform}`);
     const waveform = JSON.parse(await readFile(waveformPath, "utf8"));
     if (waveform.schemaVersion !== 1
       || waveform.source !== track.file
@@ -319,11 +332,11 @@ const readAudioLibrary = async (catalog) => {
       || !Array.isArray(waveform.peaks)
       || waveform.peaks.length !== format.waveformPoints
       || waveform.peaks.some((peak) => !Number.isFinite(peak) || peak < 0 || peak > 1)) {
-      throw new Error(`${track.catalogId} waveform data is invalid`);
+      throw new Error(`${track.id} waveform data is invalid`);
     }
   }
-  if (!library.tracks.some((track) => track.catalogId === library.defaultCatalogId)) {
-    throw new Error("audio-library.json defaultCatalogId must identify one playlist track");
+  if (!library.tracks.some((track) => track.id === library.defaultTrackId)) {
+    throw new Error("audio-library.json defaultTrackId must identify one playlist track");
   }
   return library;
 };
@@ -436,7 +449,6 @@ const build = async () => {
     + 11
     + smartLinkPageCount;
   const expectedPageCount = 3 * (basePagesPerLocale + merchLibrary.objects.length);
-  if (expectedPageCount !== 162) throw new Error(`DROP 001 release contract must derive 162 pages; derived ${expectedPageCount}`);
   if (pages.size !== expectedPageCount) {
     throw new Error(`The localized site must contain exactly ${expectedPageCount} HTML pages; received ${pages.size}`);
   }
@@ -445,8 +457,20 @@ const build = async () => {
   }
 
   await cp(path.join(siteRoot, "assets"), path.join(stageDir, "assets"), { recursive: true });
+  // Keep administration separate from the localized public-page contract.
+  await cp(path.join(siteRoot, "admin"), path.join(stageDir, "admin"), { recursive: true });
+  await cp(path.join(siteRoot, "src/streaming.mjs"), path.join(stageDir, "admin/streaming.mjs"));
+  await writeFile(path.join(stageDir, "admin/settings.json"), JSON.stringify({local:false,basePath:SITE_BASE_PATH,releases:catalog.releases.map(({id,title})=>({id,title})),artists:artistLibrary.artists.map(({name})=>({name}))}));
+  const sharp = (await import("sharp")).default;
+  for (const release of catalog.releases) {
+    if (!release.artwork || !/\.(jpe?g|png)$/i.test(release.artwork)) continue;
+    const bytes = await sharp(path.join(siteRoot, release.artwork), {limitInputPixels:40000000}).rotate().resize({width:1200,height:1200,fit:"inside",withoutEnlargement:true}).toBuffer();
+    await writeFile(path.join(stageDir, release.artwork), bytes);
+  }
+
   await mkdir(path.join(stageDir, "assets", "tracks"), { recursive: true });
   for (const track of audioLibrary.tracks) {
+    await mkdir(path.dirname(path.join(stageDir, "assets", "tracks", track.file)), { recursive: true });
     await cp(
       path.join(siteRoot, "..", "Tracks", "streaming", track.file),
       path.join(stageDir, "assets", "tracks", track.file)

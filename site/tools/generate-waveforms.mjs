@@ -1,5 +1,5 @@
 import { spawnSync } from "node:child_process";
-import { readFile, writeFile } from "node:fs/promises";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -49,6 +49,7 @@ for (const track of library.tracks) {
     duration: track.duration,
     peaks
   };
+  await mkdir(path.dirname(path.join(waveformRoot, track.waveform)), { recursive: true });
   await writeFile(path.join(waveformRoot, track.waveform), `${JSON.stringify(waveform, null, 2)}\n`, "utf8");
-  console.log(`${track.catalogId}: ${track.waveform}`);
+  console.log(`${track.id}: ${track.waveform}`);
 }
