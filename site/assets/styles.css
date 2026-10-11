@@ -1270,6 +1270,11 @@ html[lang="ru"] .page-title {
   font-size: min(clamp(0.75rem, calc(12cqi + 0.25rem), 5.5rem), calc(7.5vw + 0.2rem));
 }
 
+/* Preserve announcement heading size while allowing root-font zoom to grow it. */
+html:not([lang="ru"]) [data-upcoming-releases] .section-title {
+  font-size: min(clamp(0.75rem, calc(12cqi + 0.25rem), 5.5rem), calc(7.03125vw + 0.5rem));
+}
+
 .release-code {
   max-width: 100%;
   font-size: clamp(1.5rem, calc(12.5vw + 0.5rem), 12rem);
